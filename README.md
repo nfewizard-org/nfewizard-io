@@ -89,6 +89,7 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 ## Documentação
 
 - Para a documentação completa acesse [NFeWizard - Docs](https://nfewizard.github.io/)
+- Você também encontrará exemplos em **src/exemplos**
 
 ## Observações
 
