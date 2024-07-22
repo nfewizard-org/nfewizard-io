@@ -14,7 +14,7 @@
     "module": "esnext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true, /* Enable all strict type-checking options. */
+    "strict": true,
     "skipLibCheck": true,
     "declaration": true,
     "sourceMap": true,

@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "tsx src/testes.ts",
     "test": "jest",
-    "build": "tsc"
+    "build": "tsc && tsc-alias"
   },
   "files": [
     "dist"
@@ -46,6 +46,7 @@
     "pem": "^1.14.8",
     "request": "^2.88.2",
     "soap": "^1.0.0",
+    "tsc-alias": "^1.8.10",
     "xml-crypto": "^4.1.0",
     "xml-js": "^1.6.11",
     "xml2js": "^0.6.2",

@@ -131,7 +131,7 @@ class Environment {
                 const pfxPassword = this.config.dfe.senhaCertificado;
 
                 const pfxFile = fs.readFileSync(pfxPath);
-                const certsDir = './certs';
+                const certsDir = '../certs';
                 const caCerts = fs.readdirSync(certsDir).map(filename => {
                     const tmp = `${certsDir}/${filename}`;
                     return fs.readFileSync(tmp);

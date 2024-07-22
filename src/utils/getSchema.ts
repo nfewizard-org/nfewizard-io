@@ -24,7 +24,7 @@ interface SchemaProps {
 }
 
 export const getSchema = (metodo: string) => {
-  const pathSchemas = './schemas';
+  const pathSchemas = '../schemas';
 
   const schema: SchemaProps = {
     NFEStatusServico: `${pathSchemas}/consStatServ_v4.00.xsd`,
