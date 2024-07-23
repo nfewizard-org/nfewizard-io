@@ -15,7 +15,6 @@
  * along with NFeWizard. If not, see <https://www.gnu.org/licenses/>.
  */
 import NFeWizard from './classes/NFeWizard';
-import * as protocols from './protocols';
 
 export { NFeWizard as default };
 export * from './protocols';
