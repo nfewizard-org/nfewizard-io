@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "tsx src/testes.ts",
     "test": "jest",
-    "build": "tsc && tsc-alias"
+    "build": "node build.mjs"
   },
   "files": [
     "dist"

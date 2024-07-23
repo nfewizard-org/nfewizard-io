@@ -14,6 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard. If not, see <https://www.gnu.org/licenses/>.
  */
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 
 /**
  * Efetua a leitura do Schema
@@ -24,7 +30,7 @@ interface SchemaProps {
 }
 
 export const getSchema = (metodo: string) => {
-  const pathSchemas = '../schemas';
+  const pathSchemas = path.resolve(__dirname, '../schemas/');
 
   const schema: SchemaProps = {
     NFEStatusServico: `${pathSchemas}/consStatServ_v4.00.xsd`,

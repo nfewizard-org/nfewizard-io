@@ -114,7 +114,7 @@ class NFERetornoAutorizacao extends BaseNFE {
             this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
 
             const { protNFe } = this.utility.getProtNFe(xmlRetorno.data);
-            console.log({protNFe})
+
             if (!protNFe) {
                 throw new Error(`Não foi possível encontrar a tag 'protNFe'. Talvez a NFe ainda não tenha sido processada.`)
             }

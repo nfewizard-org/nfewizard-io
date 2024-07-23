@@ -1,17 +1,12 @@
 {
-  "include": [
-    "**/*.ts",
-    "src/classes/protocols"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "outDir": "./dist", // Diretório onde os arquivos compilados serão colocados
+    "rootDir": "./src", // Diretório de origem dos arquivos TypeScript
     "experimentalDecorators": true,
     "target": "ES2020",
-    "module": "esnext",
+    "module": "ESNext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -36,7 +31,7 @@
       ],
       "@Utils/*": [
         "src/utils/*"
-      ],
-    }
-  }
+      ]
+    },
+  },
 }

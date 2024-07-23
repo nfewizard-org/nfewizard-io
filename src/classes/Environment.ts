@@ -22,6 +22,14 @@ import forge from 'node-forge';
 import { NFeWizardProps } from '@Protocols'
 import axios from 'axios';
 
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
+
+// Obtém o diretório atual do arquivo
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+
 class Environment {
     config: NFeWizardProps;
     certificate: string;
@@ -131,7 +139,7 @@ class Environment {
                 const pfxPassword = this.config.dfe.senhaCertificado;
 
                 const pfxFile = fs.readFileSync(pfxPath);
-                const certsDir = '../certs';
+                const certsDir = path.resolve(__dirname, '../certs/');
                 const caCerts = fs.readdirSync(certsDir).map(filename => {
                     const tmp = `${certsDir}/${filename}`;
                     return fs.readFileSync(tmp);
