@@ -24,8 +24,9 @@ NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação 
 ## Exemplo de Utilização
 
 ```typescript
+import NFeWizard from 'nfewizard-io';
 // Instanciar
-const nfeWizard = new NFeWizard-io();
+const nfeWizard = new NFeWizard();
 
 // Inicializar
 await nfeWizard.NFE_LoadEnvironment({
