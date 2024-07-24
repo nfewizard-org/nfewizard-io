@@ -1,23 +1,23 @@
 /*
- * This file is part of NFeWizard.
+ * This file is part of NFeWizard-io.
  * 
- * NFeWizard is free software: you can redistribute it and/or modify
+ * NFeWizard-io is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * NFeWizard is distributed in the hope that it will be useful,
+ * NFeWizard-io is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with NFeWizard. If not, see <https://www.gnu.org/licenses/>.
+ * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard from '@Classes/NFeWizard';
+import NFeWizard-io from '@Classes/NFeWizard-io';
 
 const callNFEjs = async () => {
-    const nfeWizard = new NFeWizard();
+    const nfeWizard = new NFeWizard-io();
 
     // Inicializa a Lib
     await nfeWizard.NFE_LoadEnvironment({

@@ -1,18 +1,18 @@
 /*
- * This file is part of NFeWizard.
+ * This file is part of NFeWizard-io.
  * 
- * NFeWizard is free software: you can redistribute it and/or modify
+ * NFeWizard-io is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * NFeWizard is distributed in the hope that it will be useful,
+ * NFeWizard-io is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with NFeWizard. If not, see <https://www.gnu.org/licenses/>.
+ * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import NFERecepcaoEvento from '../controllers/DFe/NFe/NFERecepcaoEvento/NFERecepcaoEvento';
@@ -58,7 +58,7 @@ import NFEEpec from '@Controllers/DFe/NFe/NFERecepcaoEvento/NFEEpec';
 import { AxiosInstance } from 'axios';
 import MailController from '@Controllers/Email/MailController';
 
-class NFeWizard {
+class NFeWizard-io {
     private config: NFeWizardProps;
     private certificate = null;
     private cert_key = null;
@@ -77,7 +77,7 @@ class NFeWizard {
 
         if (new.target) {
             return new Proxy(this, {
-                get(target: NFeWizard, prop: string | symbol, receiver: any): any {
+                get(target: NFeWizard-io, prop: string | symbol, receiver: any): any {
                     const origMethod: any = target[prop as keyof typeof target];
                     if (typeof origMethod === 'function') {
                         return async function (...args: any[]): Promise<any> {
@@ -418,4 +418,4 @@ class NFeWizard {
 
 }
 
-export default NFeWizard;
+export default NFeWizard-io;

@@ -1,2 +1,2 @@
-export * from './NFeWizard'
+export * from './NFeWizard-io'
 export * from './NFEDanfeGenerator'

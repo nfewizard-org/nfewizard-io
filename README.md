@@ -2,9 +2,9 @@
   <img src="./src/assets/logo.jpg" />
 </div>
 
-# NFeWizard
+# NFeWizard-io
 
-NFeWizard é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
+NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
 
 - **Autorização (Emissão de NFe)**: Submissão de notas fiscais eletrônicas para autorização.
 - **Distribuição DFe**: Consulta e Download de DF-e (Documentos fiscais eletrônicos), facilitando o acesso a documentos fiscais eletrônicos.
@@ -25,7 +25,7 @@ NFeWizard é uma biblioteca Node.js projetada para simplificar a interação com
 
 ```typescript
 // Instanciar
-const nfeWizard = new NFeWizard();
+const nfeWizard = new NFeWizard-io();
 
 // Inicializar
 await nfeWizard.NFE_LoadEnvironment({
@@ -87,7 +87,7 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 
 ## Documentação
 
-- Para a documentação completa acesse [NFeWizard - Docs](https://nfewizard.github.io/)
+- Para a documentação completa acesse [NFeWizard-io - Docs](https://nfewizard.github.io/)
 - Você também encontrará exemplos em **src/exemplos**
 
 ## Observações

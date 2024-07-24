@@ -1,12 +1,12 @@
 {
   "type": "module",
-  "name": "nfewizard",
+  "name": "nfewizard-io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nfewizard/nfewizard"
+    "url": "https://github.com/nfewizard-org/nfewizard-io"
   },
   "version": "0.0.1",
-  "description": "NFeWizard é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e).",
+  "description": "NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e).",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "maurelima",
