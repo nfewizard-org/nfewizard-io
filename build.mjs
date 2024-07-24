@@ -8,7 +8,7 @@ const copyFiles = () => {
 
 const build = async () => {
     try {
-        execSync('npx tsc && tsc-alias');
+        execSync('rm -rf dist/ && npx tsc && tsc-alias');
         copyFiles();
     } catch (error) {
         console.error('Build failed:', error);
