@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard-io from '@Classes/NFeWizard-io';
+import NFeWizard from '@Classes/NFeWizard';
 import { Cancelamento, CartaDeCorrecao, CienciaDaOperacao, ConfirmacaoDaOperacao, DesconhecimentoDaOperacao, EPEC, EventoNFe, OperacaoNaoRealizada } from '@Protocols/Controllers';
 import { format } from 'date-fns-tz';
 
 
 const callnfeWizard = async () => {
-    const nfeWizard = new NFeWizard-io();
+    const nfeWizard = new NFeWizard();
 
     // Inicializa a Lib
     await nfeWizard.NFE_LoadEnvironment({

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard-io from './classes/NFeWizard-io';
+import NFeWizard from './classes/NFeWizard';
 
-export { NFeWizard-io as default };
+export { NFeWizard as default };
 export * from './protocols';

@@ -58,7 +58,7 @@ import NFEEpec from '@Controllers/DFe/NFe/NFERecepcaoEvento/NFEEpec';
 import { AxiosInstance } from 'axios';
 import MailController from '@Controllers/Email/MailController';
 
-class NFeWizard-io {
+class NFeWizard {
     private config: NFeWizardProps;
     private certificate = null;
     private cert_key = null;
@@ -77,7 +77,7 @@ class NFeWizard-io {
 
         if (new.target) {
             return new Proxy(this, {
-                get(target: NFeWizard-io, prop: string | symbol, receiver: any): any {
+                get(target: NFeWizard, prop: string | symbol, receiver: any): any {
                     const origMethod: any = target[prop as keyof typeof target];
                     if (typeof origMethod === 'function') {
                         return async function (...args: any[]): Promise<any> {
@@ -418,4 +418,4 @@ class NFeWizard-io {
 
 }
 
-export default NFeWizard-io;
+export default NFeWizard;
