@@ -11,6 +11,10 @@
   "types": "dist/index.d.ts",
   "author": "maurelima",
   "license": "GPL-3.0",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/Maurelima?frequency=recurring&sponsor=Maurelima"
+  },
   "scripts": {
     "dev": "tsx src/testes.ts",
     "test": "jest",

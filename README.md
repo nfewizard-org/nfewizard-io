@@ -114,7 +114,7 @@ Primeiramente, obrigado por considerar contribuir para nossa biblioteca! Nosso p
 
 Você pode contribuir através das seguintes plataformas:
 
-- [GitHub Sponsors - Pendente](https://NFeWizard-org.github.io/)
+- [GitHub Sponsors](https://github.com/sponsors/Maurelima?frequency=recurring&sponsor=Maurelima)
 - **Pix**: Se preferir doar via Pix, utilize a seguinte chave:
 
     ```
