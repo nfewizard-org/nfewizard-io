@@ -50,8 +50,8 @@ class XmlBuilder {
             implicitTransforms: ['http://www.w3.org/TR/2001/REC-xml-c14n-20010315']
         });
 
-        signedXmlObj.addReference({ xpath: `//*[local-name(.)='${tagAssinar}']`, transforms });
-
+        signedXmlObj.addReference({ xpath: `//*[local-name(.)='${tagAssinar}']`, digestAlgorithm: 'http://www.w3.org/2000/09/xmldsig#sha1', transforms });
+        signedXmlObj.signatureAlgorithm = 'http://www.w3.org/2000/09/xmldsig#rsa-sha1';
         // Assinar o XML
         signedXmlObj.computeSignature(xml);
 
