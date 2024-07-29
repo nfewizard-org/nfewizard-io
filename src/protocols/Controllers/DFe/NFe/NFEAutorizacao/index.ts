@@ -185,10 +185,10 @@ export type Ide = {
      */
     serie: string;
     /**
-     * @param {number} nNF - Número do Documento Fiscal
+     * @param {number | string} nNF - Número do Documento Fiscal
      * Número do Documento Fiscal.
      */
-    nNF: number;
+    nNF: number | string;
     /**
      * @param {string} dhEmi - Data e hora de emissão do Documento Fiscal
      * Data e hora no formato UTC (Universal Coordinated Time): AAAA-MM-DDThh:mm:ssTZD

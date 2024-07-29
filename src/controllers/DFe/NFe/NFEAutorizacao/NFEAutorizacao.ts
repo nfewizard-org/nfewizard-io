@@ -181,7 +181,7 @@ class NFEAutorizacao extends BaseNFE {
         const anoMes = this.anoMesEmissao(dhEmi);
 
         // Montando a sequência para o cálculo do dígito verificador
-        const sequencia = `${cUF}${anoMes}${CNPJCPF}${mod}${String(serie).padStart(3, '0')}${nNF}${tpEmis}${cNF}`;
+        const sequencia = `${cUF}${anoMes}${CNPJCPF}${mod}${String(serie).padStart(3, '0')}${String(nNF).padStart(9, '0')}${tpEmis}${cNF}`;
 
         // Calculando o dígito verificador
         const dv = this.calcularModulo11(sequencia);
@@ -355,12 +355,15 @@ class NFEAutorizacao extends BaseNFE {
             protNFe: ProtNFe
         }[];
     }> {
+        let xmlConsulta = '';
+        let soapXML = '';
         try {
             // Gerando XML para consulta de Status do Serviço
-            const xmlConsulta = this.gerarXmlNFeAutorizacao(data);
+            xmlConsulta = this.gerarXmlNFeAutorizacao(data);
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta(xmlConsulta);
-
+            soapXML = soapXML
+            
             // Salva XML de Consulta
             this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);
 
@@ -396,6 +399,8 @@ class NFEAutorizacao extends BaseNFE {
             }
 
         } catch (error: any) {
+            // Salva XML de Consulta
+            this.utility.salvaConsulta(xmlConsulta, soapXML, this.metodo);
             throw new Error(error.message)
         }
     }
