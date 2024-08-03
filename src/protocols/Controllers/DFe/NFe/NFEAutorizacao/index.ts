@@ -75,6 +75,11 @@ type InfNFe = {
      */
     dest: Dest;
     /**
+     * @param {AutXml} autXML - Pessoas autorizadas a acessar o XML da NF-e
+     * Max: 10 ocorrências
+     */
+    autXML?: AutXml[] | AutXml;
+    /**
      * @param {Retirada} retirada - Identificação do Destinatário da NF-e
      */
     retirada?: Retirada;
@@ -82,11 +87,6 @@ type InfNFe = {
      * @param {Entrega} entrega - Identificação do Local de entrega	
      */
     entrega?: Entrega;
-    /**
-     * @param {AutXml} autXml - Pessoas autorizadas a acessar o XML da NF-e
-     * Max: 10 ocorrências
-     */
-    autXml?: AutXml[] | AutXml;
     /**
      * @param {DetProd[]} det - Detalhamento de Produtos e Serviços
      */
