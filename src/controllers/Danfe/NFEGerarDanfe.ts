@@ -92,9 +92,10 @@ class NFEGerarDanfe {
                 includetext: false,    // Incluir texto
             });
             const barcode = png.toString('base64');
-            const barcodePath = path.join(this.barcodePath, 'barcode.png');
-            this.createDir(barcodePath);
-            fs.writeFileSync(barcodePath, Buffer.from(barcode, 'base64'));
+            const barcodeDir = this.barcodePath;
+            const barcodeFilePath = path.join(barcodeDir, 'barcode.png');
+            this.createDir(barcodeDir);
+            fs.writeFileSync(barcodeFilePath, Buffer.from(barcode, 'base64'));
         } catch (err) {
             console.error('Erro ao gerar código de barras:', err);
             return null;
