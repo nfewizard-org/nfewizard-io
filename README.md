@@ -145,7 +145,41 @@ Agradecemos imensamente seu apoio e contribuição. Juntos, podemos construir e 
 **Muito obrigado!**
 
 
-## Devs
+# Contribuidores
+
+## Contribuidores de Código
+
+Agradecemos aos seguintes desenvolvedores por suas contribuições ao projeto:
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/ThalesAugusto0"><img src="https://github.com/ThalesAugusto0.png" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>ThalesAugusto0</b></sub></a></td>
+  </tr>
+</table>
+
+## Patrocínios
+
+Agradecemos imensamente aos nossos patrocinadores pela sua generosidade.
+
+### Contribuições
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/italosll"><img src="https://github.com/italosll.png" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>italosll</b></sub></a></td>
+    <!-- Adicione mais contribuidores conforme necessário -->
+  </tr>
+</table>
+
+### Contribuições Mensais
+
+<table>
+  <tr>
+    <!-- <td align="center"><a href="https://github.com/user5"><img src="https://github.com/user5.png" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>User5</b></sub></a></td> -->
+    <!-- Adicione mais contribuidores conforme necessário -->
+  </tr>
+</table>
+
+## Criadores
 
 | [<img src="https://avatars.githubusercontent.com/u/59918400?s=400&u=3554ebcf0f75263637516867945ebd371e68da71&v=4" width="75px;"/>](https://github.com/Maurelima) |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: |
