@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.9] - 2024-08-05
+
+### Fixed
+- Corrigida criação de diretório para armazenamento temporário do código de barras na geração da DANFE.
+
 ## [0.0.8] - 2024-08-03
 
 ### Changed

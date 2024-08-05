@@ -97,6 +97,12 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 - `NodeJs`: Testado com versões 16 ou superiores.
 - `UF`: Testado apenas para São Paulo. Por favor, abra uma issue caso encontre problemas com outros estados.
 
+## Em Desenvolvimento
+
+### Novas Features Planejadas
+
+- Testes de NFC-e
+- Implementação de DANFE com QR Code
 
 ## Contribua para Nossa Biblioteca Open Source
 
