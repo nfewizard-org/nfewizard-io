@@ -165,20 +165,20 @@ class Utility {
     /**
      * Define o ambiente (UF e Produção ou Homologação) para geração das chaves de recuperação da URL do webservice
      */
-    setAmbiente(metodo: string, ambienteNacional = false, versao: string) {
+    setAmbiente(metodo: string, ambienteNacional = false, versao: string, mod: string) {
         const config = this.environment.getConfig();
         const ambiente = config.nfe.ambiente === 2 ? 'H' : 'P';
 
         const versaoDF = versao !== "" ? versao : config.nfe.versaoDF;
 
         if (ambienteNacional) {
-            const chaveMae = `NFe_AN_${ambiente}`;
+            const chaveMae = `${mod}_AN_${ambiente}`;
             const chaveFilha = `${metodo}_${versaoDF}`;
 
             return { chaveMae, chaveFilha };
         }
 
-        const chaveMae = `NFe_${config.dfe.UF}_${ambiente}`;
+        const chaveMae = `${mod}_${config.dfe.UF}_${ambiente}`;
         const chaveFilha = `${metodo}_${versaoDF}`;
 
         return { chaveMae, chaveFilha };
@@ -187,10 +187,11 @@ class Utility {
     /**
      * Retorna a url correta do webservice
      */
-    getWebServiceUrl(metodo: string, ambienteNacional = false, versao = ""): string {
-        const { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao);
+    getWebServiceUrl(metodo: string, ambienteNacional = false, versao = "", mod = "NFe"): string {
+        const { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao, mod);
         const urls = NFeServicosUrl as NFeServicosUrlType;
-
+        console.log({ chaveMae, chaveFilha })
+        console.log({ chaveMae: urls[chaveMae], chaveFilha: urls[chaveMae][chaveFilha] })
         const url = urls[chaveMae] && urls[chaveMae][chaveFilha];
         if (!url) {
             throw new Error(`Não foi possível recuperar a url para o webservice: ${chaveFilha}`);
@@ -252,7 +253,7 @@ class Utility {
         // Gera erro em caso de Rejeição
         const xMotivo = this.findInObj(responseInJson, 'xMotivo');
         const infProt = this.findInObj(responseInJson, 'infProt');
-        
+
         // Salva XML de retorno
         this.salvaRetorno(data, responseInJson, metodo, name);
 
@@ -309,6 +310,8 @@ class Utility {
                 return `NFEInutilizacao-${tipo}`
             case 'NFEAutorizacao':
                 return `NFEAutorizacao-${tipo}`
+            case 'NFCEAutorizacao':
+                return `NFCEAutorizacao-${tipo}`
             case 'NFERetornoAutorizacao':
                 return `NFERetornoAutorizacao-${tipo}`
 

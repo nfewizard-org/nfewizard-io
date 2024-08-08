@@ -267,10 +267,10 @@ export type Ide = {
      */
     verProc?: string;
     /**
-     * @param {Date} dhCont - Data e Hora da entrada em contingência
+     * @param {string} dhCont - Data e Hora da entrada em contingência
      * Data e hora no formato UTC (Universal Coordinated Time): AAAA-MM-DDThh:mm:ssTZD
      */
-    dhCont?: Date;
+    dhCont?: string;
     /**
      * @param {string} xJust - Justificativa da entrada em contingência
      * (v2.0)

@@ -57,6 +57,7 @@ import NFEDesconhecimentoDaOperacao from '@Controllers/DFe/NFe/NFERecepcaoEvento
 import NFEEpec from '@Controllers/DFe/NFe/NFERecepcaoEvento/NFEEpec';
 import { AxiosInstance } from 'axios';
 import MailController from '@Controllers/Email/MailController';
+import NFCEAutorizacao from '@Controllers/DFe/NFe/NFCEAutorizacao/NFCEAutorizacao';
 
 class NFeWizard {
     private config: NFeWizardProps;
@@ -347,6 +348,20 @@ class NFeWizard {
             return response.xmls
         } catch (error: any) {
             throw new Error(`NFE_Autorizacao: ${error.message}`)
+        }
+    }
+    async NFCE_Autorizacao(data: NFe) {
+        try {
+            const distribuicaoDFe = new NFCEAutorizacao(this.environment, this.utility, this.xmlBuilder, this.axios);
+            const response = await distribuicaoDFe.Exec(data);
+
+            console.log('Retorno NFCE_Autorizacao');
+            console.table(response.xMotivo);
+            console.log('===================================');
+
+            return response.xmls
+        } catch (error: any) {
+            throw new Error(`NFCE_Autorizacao: ${error.message}`)
         }
     }
 

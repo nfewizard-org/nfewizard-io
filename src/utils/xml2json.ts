@@ -19,7 +19,7 @@ import { GenericObject } from '@Protocols';
 import convert from "xml-js";
 
 export class Json {
-    constructor() {}
+    constructor() { }
 
     findInObj = (obj: GenericObject, chave: string): any => {
         if (obj.hasOwnProperty(chave)) {
@@ -51,7 +51,8 @@ export class Json {
         }
     }
 
-    getStatusServicoBody(jsonData: any): any {;
+    getStatusServicoBody(jsonData: any): any {
+        ;
         return this.findInObj(jsonData, 'retConsStatServ');
     }
     getConsultaProtocoloBody(jsonData: any): any {
@@ -72,7 +73,8 @@ export class Json {
     getDistribuicaoDFeEventBody(jsonData: any): any {
         return this.findInObj(jsonData, 'evento');
     }
-    getAutorizacaoEventBody(jsonData: any): any {;
+    getAutorizacaoEventBody(jsonData: any): any {
+        ;
         return this.findInObj(jsonData, 'retEnviNFe');
     }
     getAutorizacaoFinalEventBody(jsonData: any): any {
@@ -102,7 +104,7 @@ export class Json {
 
             const jsonData = JSON.parse(jsonAsString);
             let jsonBody: any;
-
+            console.log({ metodo })
             switch (metodo) {
                 case 'NFEStatusServico':
                     jsonBody = this.getStatusServicoBody(jsonData)
@@ -129,6 +131,9 @@ export class Json {
                     jsonBody = this.getAutorizacaoEventBody(jsonData)
                     break;
                 case 'NFEAutorizacaoFinal':
+                    jsonBody = this.getAutorizacaoFinalEventBody(jsonData)
+                    break;
+                case 'NFCEAutorizacaoFinal':
                     jsonBody = this.getAutorizacaoFinalEventBody(jsonData)
                     break;
                 case 'NFERetornoAutorizacao':
