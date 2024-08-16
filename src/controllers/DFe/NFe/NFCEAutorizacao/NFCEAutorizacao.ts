@@ -24,6 +24,7 @@ import NFEAutorizacaoHandler from './util/NFEAutorizacaoHandler.js';
 import { GenericObject, LayoutNFe, NFe, ProtNFe } from '@Protocols';
 import BaseNFE from '../BaseNFe/BaseNFe.js';
 import { format } from 'date-fns';
+import { generateQRCodeURLOffline, generateQRCodeURLOnline } from './util/NFCEQRCode.js';
 
 class NFCEAutorizacao extends BaseNFE {
     xmlNFe: string[];
@@ -211,6 +212,8 @@ class NFCEAutorizacao extends BaseNFE {
         return tipoDoDocumento;
     }
 
+
+
     private gerarXmlNFCEAutorizacao(data: NFe) {
 
         const createXML = (NFe: LayoutNFe) => {
@@ -284,11 +287,27 @@ class NFCEAutorizacao extends BaseNFE {
                         Id: chaveAcesso,
                     },
                     ...NFe.infNFe
+                },
+                // Adiciona infNFeSupl
+                infNFeSupl: {
+                    qrCode: 'https://www.homologacao.nfce.fazenda.sp.gov.br/qrcode?p=35240808819185000172650011452380611650831616|2|2|1|ceb6f639b9e77ebb8362dde927e738c20fe1bba5',
+                    urlChave: 'https://www.homologacao.nfce.fazenda.sp.gov.br/consulta',
                 }
             }
 
             const eventoXML = this.xmlBuilder.gerarXml(xmlObject, 'NFe')
             const xmlAssinado = this.xmlBuilder.assinarXML(eventoXML, 'infNFe')
+
+            // URL ONLINE FUNCIONANDO
+            // prod a23fe9ca48d0463c98d35cfea1fcd760
+            // hm 9cf44de0502d4351bf180843e6528e22 - 
+            // https://www.homologacao.nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?p=35240808819185000172650011452380611650831616|2|2|1|CEB6F639B9E77EBB8362DDE927E738C20FE1BBA5
+            const teste = generateQRCodeURLOnline(chaveAcesso, '2', '2', '1', '9cf44de0-502d-4351-bf18-0843e6528e22');
+            console.log(teste)
+            // URL OFFLINE A TESTAR
+            // const teste2 = generateQRCodeURLOffline(chaveAcesso, '2', '2', '8', '20', 'K9AhK39inkZNs7DHUaZiIUWFubA', '1', '9cf44de0502d4351bf180843e6528e22');
+            // console.log(teste2)
+
             this.xmlNFe.push(xmlAssinado);
         }
 
@@ -372,6 +391,7 @@ class NFCEAutorizacao extends BaseNFE {
                 headers: {
                     'Content-Type': 'text/xml; charset=utf-8',
                     'SOAPAction': action,
+                    'CSC': '9cf44de0-502d-4351-bf18-0843e6528e22',
                 },
                 httpsAgent: agent
             });

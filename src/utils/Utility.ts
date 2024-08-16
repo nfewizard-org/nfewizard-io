@@ -190,8 +190,7 @@ class Utility {
     getWebServiceUrl(metodo: string, ambienteNacional = false, versao = "", mod = "NFe"): string {
         const { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao, mod);
         const urls = NFeServicosUrl as NFeServicosUrlType;
-        console.log({ chaveMae, chaveFilha })
-        console.log({ chaveMae: urls[chaveMae], chaveFilha: urls[chaveMae][chaveFilha] })
+        console.log({ chaveFilha: urls[chaveMae][chaveFilha] })
         const url = urls[chaveMae] && urls[chaveMae][chaveFilha];
         if (!url) {
             throw new Error(`Não foi possível recuperar a url para o webservice: ${chaveFilha}`);
