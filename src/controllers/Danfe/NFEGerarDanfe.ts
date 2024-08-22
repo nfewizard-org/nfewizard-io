@@ -1020,7 +1020,7 @@ class NFEGerarDanfe {
                 width: 23,
             });
 
-            const quant = parseFloat(String(item.prod.qCom || item.prod.uCom)).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
+            const quant = parseFloat(String(item.prod.qCom || item.prod.qTrib)).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
             this.doc.rect(left + 276, top, 25, itemHeight).stroke();
             this.doc.text(String(quant || ''), left + 274.5, top + 5.9, {
                 width: 25,

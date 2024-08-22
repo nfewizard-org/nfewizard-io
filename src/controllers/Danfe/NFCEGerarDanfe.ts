@@ -15,12 +15,16 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import bwipjs from 'bwip-js';
-import path from 'path';
+import path, { dirname } from 'path';
 import fs from 'fs';
 import { ICMS, IPI, DetProd, NFEGerarDanfeProps, Ide, Dest, Emit, Total, Transp, InfAdic, Vol, ProtNFe } from '@Protocols';
 import { format } from 'date-fns';
 import ValidaCPFCNPJ from '@Utils/ValidaCPFCNPJ';
 import PDFDocument from 'pdfkit';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 class NFCEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
@@ -73,7 +77,7 @@ class NFCEGerarDanfe {
         function calculateHeight(itemsLength: number, itemHeight: number) {
             console.log({ itemsLength })
             const headerHeight = 34.22975675056; // Altura do cabeçalho
-            const footerHeight = 2; // Altura do rodapé
+            const footerHeight = 34.22975675056; // Altura do rodapé
 
             // Altura total é a soma das alturas dos itens + cabeçalho + rodapé
             return headerHeight + footerHeight + (itemsLength * itemHeight) + 5;
@@ -102,14 +106,20 @@ class NFCEGerarDanfe {
         console.log({ pageHeight })
         console.log({ itemHeight: this.itemHeight })
 
+        const fontPath = path.resolve(__dirname, '../../assets/fonts/ARIAL.TTF');
+        const fontPathBold = path.resolve(__dirname, '../../assets/fonts/ARIALBD.TTF');
+        console.log({ fontPath })
+
         // Área útil ignorando margem à direita (22.68) e esquerda (5.67) = 566.93
         this.doc = new PDFDocument({
             margins: { top: 5.67, right: 5.67, bottom: 5.67, left: 5.67 },
             size: [this.documentWidth, pageHeight], // 158.74, 300 // tamanho mínimo
             bufferPages: true,
             layout: 'portrait',
-            font: 'Times-Roman',
+            // font: 'Times-Roman',
         });
+        this.doc.registerFont('Arial', fontPath)
+        this.doc.registerFont('Arial-bold', fontPathBold)
     }
 
     createDir(path: string) {
@@ -179,11 +189,11 @@ class NFCEGerarDanfe {
             characterSpacing: 1.5,
             align: 'center'
         });
-        this.doc.fontSize(8.8).font('Times-Bold').text(`Nº ${String(this.ide.nNF).padStart(2, '0')}`, 480, 40.5, {
+        this.doc.fontSize(8.8).font('Arial-bold').text(`Nº ${String(this.ide.nNF).padStart(2, '0')}`, 480, 40.5, {
             characterSpacing: 1.5,
             align: 'center',
         });
-        this.doc.fontSize(8.5).font('Times-Roman').text(`SÉRIE ${this.ide.serie.padStart(3, '0')}`, 480, 53, {
+        this.doc.fontSize(8.5).font('Arial').text(`SÉRIE ${this.ide.serie.padStart(3, '0')}`, 480, 53, {
             characterSpacing: 1.5,
             align: 'center',
         });
@@ -230,12 +240,12 @@ class NFCEGerarDanfe {
             const centeredPosEnd = this.centeredPos(identificationJoined)
             const centeredPosText = this.centeredPos('Documento Auxiliar da Nota Fiscal de Consumidor Eletrônica')
 
-            this.doc.fontSize(this.fontSize).text(`CNPJ: ${documento} `, centeredPosEmit, 2, {
+            this.doc.font('Arial').fontSize(this.fontSize).text(`CNPJ: ${documento} `, centeredPosEmit, 2, {
                 lineBreak: false,
             })
-                .font('Times-Bold').text(this.emit.xNome)
+                .font('Arial-bold').text(this.emit.xNome)
                 .fontSize(this.fontSize)
-                .font('Times-Roman')
+                .font('Arial')
                 .text(identificationJoined, centeredPosEnd)
                 .text('Documento Auxiliar da Nota Fiscal de Consumidor Eletrônica', centeredPosText)
         }
@@ -256,7 +266,7 @@ class NFCEGerarDanfe {
             if (Number(this.ide.tpAmb) !== 2) {
                 xNome = String(this.dest.xNome);
             }
-            this.doc.fontSize(5).font('Times-Roman').text('NOME / RAZÃO SOCIAL', left + 4, topDestinatario + 125, {
+            this.doc.fontSize(5).font('Arial').text('NOME / RAZÃO SOCIAL', left + 4, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
             this.doc.fontSize(8).text(xNome, left + 5, topDestinatario + 135, {
@@ -354,7 +364,7 @@ class NFCEGerarDanfe {
             });
         }
 
-        this.doc.fontSize(6).font('Times-Bold').text('DESTINATÁRIO / REMETENTE', left, topDestinatario + 114, {
+        this.doc.fontSize(6).font('Arial-bold').text('DESTINATÁRIO / REMETENTE', left, topDestinatario + 114, {
             characterSpacing: 0.5,
         });
         _buildDestPessoa();
@@ -373,7 +383,7 @@ class NFCEGerarDanfe {
         const _buildCalcImposto = () => {
             /** LINHA 1 */
             this.doc.rect(left, topDestinatario + 120, 86, 23).stroke();
-            this.doc.fontSize(5).font('Times-Roman').text('BASE DE CÁLCULO DO ICMS', left + 4, topDestinatario + 125, {
+            this.doc.fontSize(5).font('Arial').text('BASE DE CÁLCULO DO ICMS', left + 4, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
             this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vBC)).toFixed(2), left - 8, topDestinatario + 135, {
@@ -487,7 +497,7 @@ class NFCEGerarDanfe {
             });
         }
 
-        this.doc.fontSize(6).font('Times-Bold').text('CÁLCULO DO IMPOSTO', left, topDestinatario + 114, {
+        this.doc.fontSize(6).font('Arial-bold').text('CÁLCULO DO IMPOSTO', left, topDestinatario + 114, {
             characterSpacing: 0.5,
         });
         _buildCalcImposto();
@@ -602,7 +612,7 @@ class NFCEGerarDanfe {
         const _buildCalcImposto = () => {
             /** LINHA 1 */
             this.doc.rect(left, topDestinatario + 120, 248.5, 23).stroke();
-            this.doc.fontSize(5).font('Times-Roman').text('RAZÃO SOCIAL', left + 4, topDestinatario + 125, {
+            this.doc.fontSize(5).font('Arial').text('RAZÃO SOCIAL', left + 4, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
             this.doc.fontSize(8).text(this.transp.transporta?.xNome || '', left + 5, topDestinatario + 135, {
@@ -676,7 +686,7 @@ class NFCEGerarDanfe {
             });
         }
 
-        this.doc.fontSize(6).font('Times-Bold').text('TRANSPORTADOR / VOLUMES TRANSPORTADOS', left, topDestinatario + 114, {
+        this.doc.fontSize(6).font('Arial-bold').text('TRANSPORTADOR / VOLUMES TRANSPORTADOS', left, topDestinatario + 114, {
             characterSpacing: 0.5,
         });
         _buildCalcImposto();
@@ -695,7 +705,7 @@ class NFCEGerarDanfe {
         // console.log(console.log('Altura da página:', this.doc.y))
 
         const header = (top: number) => {
-            this.doc.font('Times-Bold').fontSize(this.fontSize).text('Código', 2, top);
+            this.doc.font('Arial-bold').fontSize(this.fontSize).text('Código', 2, top);
             this.doc.text('Descrição', this.ajustarPosicao(30, this.documentWidth), top);
             this.doc.text('Qtde UN', this.ajustarPosicao(136.77, this.documentWidth), top);
             this.doc.text('VL Unit', this.ajustarPosicao(166.77, this.documentWidth), top);
@@ -792,15 +802,15 @@ class NFCEGerarDanfe {
             // });
             // const itemHeight = Math.max(defaultItemHeight, textHeight + 10);
 
-            const quant = parseFloat(String(item.prod.qCom || item.prod.uCom)).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
+            const quant = parseFloat(String(item.prod.qCom || item.prod.qTrib)).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
             const valUnit = parseFloat(String(item.prod.vUnCom || item.prod.vUnTrib || '0')).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             const valLiq = parseFloat(String(item.prod.vProd || '0')).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 
-            this.doc.font('Times-Roman').fontSize(this.fontSize).text(item.prod.cProd, 2, top);
+            this.doc.font('Arial').fontSize(this.fontSize).text(item.prod.cProd, 2, top);
             this.doc.text(item.prod.xProd.slice(0, 30), this.ajustarPosicao(30, this.documentWidth), top);
-            this.doc.text(quant, this.ajustarPosicao(136.77, this.documentWidth), top, {
-                width: this.ajustarPosicao(20, this.documentWidth),
+            this.doc.text(`${quant} ${item.prod.uCom}`, this.ajustarPosicao(135, this.documentWidth), top, {
+                width: this.ajustarPosicao(25, this.documentWidth),
                 align: 'right'
             });
             this.doc.text(valUnit, this.ajustarPosicao(166.77, this.documentWidth), top, {
@@ -834,6 +844,21 @@ class NFCEGerarDanfe {
             createTable(this.det);
         }
     }
+    _buildTotais() {
+        // const { top, left } = this.doc.page.margins;
+
+        const tableTop = this.doc.y + 5;
+        const defaultItemHeight = 5;
+        let y = tableTop;
+        let currentPage = 0;
+
+        this.doc.text('Qtd. total de itens', 2, tableTop);
+        this.doc.text('Valor total R$', 2, tableTop + this.itemHeight);
+        this.doc.text('Valor total R$', 2, tableTop + this.itemHeight);
+        // this.doc.text('Qtde UN', this.ajustarPosicao(136.77, this.documentWidth), tableTop);
+        // this.doc.text('VL Unit', this.ajustarPosicao(166.77, this.documentWidth), tableTop);
+        // this.doc.text('VL Total', this.ajustarPosicao(196.77, this.documentWidth), tableTop);
+    }
 
     _buildFooter() {
         const { left } = this.doc.page.margins;
@@ -841,11 +866,11 @@ class NFCEGerarDanfe {
         this.setLineStyle(0.75, '#1c1c1c');
         const topDestinatario = 820.45 - 88.5;
 
-        this.doc.fontSize(6).font('Times-Bold').text('DADOS ADICIONAIS', left, topDestinatario - 5, {
+        this.doc.fontSize(6).font('Arial-bold').text('DADOS ADICIONAIS', left, topDestinatario - 5, {
             characterSpacing: 0.5,
         });
         this.doc.rect(left, topDestinatario, 408, 95).stroke();
-        this.doc.fontSize(5).font('Times-Roman').text('INFORMAÇÕES COMPLEMENTARES', 10, topDestinatario + 4.5, {
+        this.doc.fontSize(5).font('Arial').text('INFORMAÇÕES COMPLEMENTARES', 10, topDestinatario + 4.5, {
             characterSpacing: 0.5
         });
         this.doc.fontSize(8).text(this.infAdic?.infCpl || '', 13, topDestinatario + 13, {
@@ -864,13 +889,13 @@ class NFCEGerarDanfe {
         if (this.exibirMarcaDaguaDanfe) {
             const topPosition = Number(Number(this.ide.tpAmb)) !== 2 ? topDestinatario + 38 : topDestinatario + 58;
             const leftPosition = Number(Number(this.ide.tpAmb)) !== 2 ? left + 150 : left + 100;
-            this.doc.fontSize(26).font('Times-Bold').fillColor('#c7c7c7').text('NFeWizard-io', leftPosition, topPosition, {
+            this.doc.fontSize(26).font('Arial-bold').fillColor('#c7c7c7').text('NFeWizard-io', leftPosition, topPosition, {
                 characterSpacing: 0.5,
             });
         }
 
         if (Number(Number(this.ide.tpAmb)) === 2) {
-            this.doc.fontSize(14).font('Times-Bold').fillColor('grey').text('AMBIENTE DE HOMOLOGAÇÃO - NF-E SEM VALOR FISCAL', left + 100, topDestinatario + 45, {
+            this.doc.fontSize(14).font('Arial-bold').fillColor('grey').text('AMBIENTE DE HOMOLOGAÇÃO - NF-E SEM VALOR FISCAL', left + 100, topDestinatario + 45, {
                 characterSpacing: 1
             });
         }
@@ -889,6 +914,8 @@ class NFCEGerarDanfe {
             this.drawHeader(true);
 
             this._buildProdutos();
+
+            this._buildTotais();
 
 
             // Desenha o quadrado do QR Code
