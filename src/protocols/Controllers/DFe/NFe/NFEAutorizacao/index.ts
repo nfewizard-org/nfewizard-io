@@ -3630,10 +3630,12 @@ type RetTransp = {
 type veicTransp = {
     /**
      * @param {string} placa - Placa do Veículo  
+     * Informar somente letras e dígitos
      */
     placa: string;
     /**
      * @param {string} UF - Sigla da UF  
+     * Informar a sigla da UF do registro do veículo, pode ser omitido quando tratar-se de placa do Mercosul
      */
     UF?: string;
     /**
@@ -3644,10 +3646,12 @@ type veicTransp = {
 type Reboque = {
     /**
      * @param {string} placa - Placa do Veículo  
+     * Informar somente letras e dígitos
      */
     placa: string;
     /**
      * @param {string} UF - Sigla da UF  
+     * Informar a sigla da UF do registro do veículo, pode ser omitido quando tratar-se de placa do Mercosul
      */
     UF?: string;
     /**
