@@ -998,7 +998,7 @@ class NFEGerarDanfe {
             });
 
             this.doc.rect(left + 178, top, 30, itemHeight).stroke();
-            this.doc.text(String(item.prod.NCM) || '', left + 178, top + 4, {
+            this.doc.text(String(item.prod.NCM) || '', left + 178, top + 5.9, {
                 width: 30,
                 align: 'center'
             });
