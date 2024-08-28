@@ -290,7 +290,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('NATUREZA DE OPERAÇÃO', left + 4, topIdentificacao_1 + 102, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text('(-) 5929 LANC EFET EMISSAO D FISCA', left + 4, topIdentificacao_1 + 112, {
+            this.doc.fontSize(8).text(this.ide.natOp, left + 4, topIdentificacao_1 + 112, {
                 characterSpacing: 1,
             });
 
