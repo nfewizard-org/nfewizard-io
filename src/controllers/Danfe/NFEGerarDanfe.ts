@@ -608,7 +608,7 @@ class NFEGerarDanfe {
             // * 3=Transporte Próprio por conta do Remetente
             // * 4=Transporte Próprio por conta do Destinatário
             // * 9=Sem Ocorrência de Transporte. (Atualizado na NT 2016/002)
-            const modFrete = this.transp.modFrete;
+            const modFrete = parseInt(String(this.transp.modFrete));
             switch (modFrete) {
                 case 0:
                     return `${modFrete} - REMETENTE`;
@@ -622,7 +622,6 @@ class NFEGerarDanfe {
                     return `${modFrete} - DESTINATÁRIO`;
                 case 9:
                     return '';
-
                 default:
                     return '';
             }
