@@ -285,6 +285,8 @@ class NFCEAutorizacao extends BaseNFE {
             // https://www.homologacao.nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?p=35240808819185000172650011452380611650831616|2|2|1|CEB6F639B9E77EBB8362DDE927E738C20FE1BBA5
             const teste = generateQRCodeURLOnline(chaveAcesso, '2', NFe.infNFe.ide.tpAmb, Number(idCSC), String(tokenCSC));
             console.log(teste)
+
+            // const webServiceUrl = this.utility.getWebServiceUrl('URL-ConsultaNFCe', false, '', 'NFCe');
             /**
              * Automatizar a busca pela chave urlChave
              */

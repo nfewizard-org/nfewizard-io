@@ -180,7 +180,7 @@ class Utility {
 
         const chaveMae = `${mod}_${config.dfe.UF}_${ambiente}`;
         const chaveFilha = `${metodo}_${versaoDF}`;
-
+        console.log(chaveMae, chaveFilha )
         return { chaveMae, chaveFilha };
     }
 
