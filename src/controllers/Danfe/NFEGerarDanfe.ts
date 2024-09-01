@@ -290,7 +290,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('NATUREZA DE OPERAÇÃO', left + 4, topIdentificacao_1 + 102, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text('(-) 5929 LANC EFET EMISSAO D FISCA', left + 4, topIdentificacao_1 + 112, {
+            this.doc.fontSize(8).text(this.ide.natOp, left + 4, topIdentificacao_1 + 112, {
                 characterSpacing: 1,
             });
 
@@ -608,7 +608,7 @@ class NFEGerarDanfe {
             // * 3=Transporte Próprio por conta do Remetente
             // * 4=Transporte Próprio por conta do Destinatário
             // * 9=Sem Ocorrência de Transporte. (Atualizado na NT 2016/002)
-            const modFrete = this.transp.modFrete;
+            const modFrete = parseInt(String(this.transp.modFrete));
             switch (modFrete) {
                 case 0:
                     return `${modFrete} - REMETENTE`;
@@ -622,7 +622,6 @@ class NFEGerarDanfe {
                     return `${modFrete} - DESTINATÁRIO`;
                 case 9:
                     return '';
-
                 default:
                     return '';
             }

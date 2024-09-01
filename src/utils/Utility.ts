@@ -188,9 +188,12 @@ class Utility {
      * Retorna a url correta do webservice
      */
     getWebServiceUrl(metodo: string, ambienteNacional = false, versao = "", mod = "NFe"): string {
-        const { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao, mod);
+        let { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao, mod);
         const urls = NFeServicosUrl as NFeServicosUrlType;
-        console.log({ chaveFilha: urls[chaveMae][chaveFilha] })
+
+        if ('Usar' in urls[chaveMae])
+            chaveMae = urls[chaveMae].Usar
+
         const url = urls[chaveMae] && urls[chaveMae][chaveFilha];
         if (!url) {
             throw new Error(`Não foi possível recuperar a url para o webservice: ${chaveFilha}`);
