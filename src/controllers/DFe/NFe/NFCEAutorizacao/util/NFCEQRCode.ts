@@ -9,8 +9,8 @@ function generateSHA1Hash(input: string): string {
 export function generateQRCodeURLOnline(
     chaveAcesso: string,
     versaoQRCode: string,
-    tipoAmbiente: string,
-    identificadorCSC: string,
+    tipoAmbiente: number,
+    identificadorCSC: number,
     csc: string
 ): string {
     // Passo 1: Concatenar parâmetros
