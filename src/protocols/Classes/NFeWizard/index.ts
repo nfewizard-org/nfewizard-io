@@ -97,6 +97,14 @@ export type NFeWizardProps = {
          * @param {string} versaoDF - Versão (testado apenas com 4.00)
          */
         versaoDF: string;
+        /**
+         * @param {string} tokenCSC - Código de Segurança do Contribuinte (Utilizado para NFCe)
+         */
+        tokenCSC?: string;
+        /**
+         * @param {number} idCSC - Identificador do Código de Segurança do Contribuinte (Utilizado para NFCe)
+         */
+        idCSC?: number;
     };
         /**
          * @param email -Preencher para casos onde for necessário utilizar envio de e-mail;
