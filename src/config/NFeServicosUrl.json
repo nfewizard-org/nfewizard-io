@@ -1150,7 +1150,7 @@
     "URL-ConsultaNFCe_2.00": "https://sat.sef.sc.gov.br/nfce/consulta"
   },
   "NFCe_SC_H": {
-    "Usar": "NFCe_SVRS_H",
+    "Usar": "NFCe_SP_H",
     "URL-QRCode": "https://hom.sat.sef.sc.gov.br/nfce/consulta?p=",
     "URL-ConsultaNFCe": "https://hom.sat.sef.sc.gov.br/nfce/consulta",
     "URL-ConsultaNFCe_2.00": "https://hom.sat.sef.sc.gov.br/nfce/consulta"

@@ -55,6 +55,8 @@ class XmlBuilder {
         // Assinar o XML
         signedXmlObj.computeSignature(xml);
 
+        console.log(signedXmlObj)
+
         // Obter o XML assinado
         return signedXmlObj.getSignedXml();
     }
