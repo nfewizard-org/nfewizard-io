@@ -31,11 +31,11 @@ export function generateQRCodeURLOnline(
 export function generateQRCodeURLOffline(
     chaveAcesso: string,
     versaoQRCode: string,
-    tipoAmbiente: string,
+    tipoAmbiente: number,
     diaDataEmissao: string,
     valorTotalNfce: string,
     digVal: string,
-    identificadorCSC: string,
+    identificadorCSC: number,
     csc: string
 ): string {
     // Passo 1: Converter DigestValue para HEXA (já deve estar em formato hexadecimal)

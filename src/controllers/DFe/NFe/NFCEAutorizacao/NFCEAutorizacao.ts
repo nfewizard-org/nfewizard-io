@@ -212,7 +212,13 @@ class NFCEAutorizacao extends BaseNFE {
         return tipoDoDocumento;
     }
 
-
+    private extrairDigestValue(xmlAssinado: string): string {
+        const match = xmlAssinado.match(/<DigestValue>([^<]+)<\/DigestValue>/);
+        if (match && match[1]) {
+            return match[1];
+        }
+        throw new Error('DigestValue não encontrado no XML assinado.');
+    }
 
     private gerarXmlNFCEAutorizacao(data: NFe) {
 
@@ -279,28 +285,26 @@ class NFCEAutorizacao extends BaseNFE {
 
             const { nfe: { idCSC, tokenCSC } } = this.environment.getConfig();
 
+            let qrCode = '';
+            if (![4, 9].includes(NFe.infNFe.ide.tpEmis)) {
+                qrCode = generateQRCodeURLOnline(chaveAcesso, '2', NFe.infNFe.ide.tpAmb, Number(idCSC), String(tokenCSC));
+            }
+
             // URL ONLINE FUNCIONANDO
             // prod a23fe9ca48d0463c98d35cfea1fcd760
             // hm 9cf44de0502d4351bf180843e6528e22 - 
             // https://www.homologacao.nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?p=35240808819185000172650011452380611650831616|2|2|1|CEB6F639B9E77EBB8362DDE927E738C20FE1BBA5
-            const teste = generateQRCodeURLOnline(chaveAcesso, '2', NFe.infNFe.ide.tpAmb, Number(idCSC), String(tokenCSC));
-            console.log(teste)
 
-            // const webServiceUrl = this.utility.getWebServiceUrl('URL-ConsultaNFCe', false, '', 'NFCe');
-            /**
-             * Automatizar a busca pela chave urlChave
-             */
+            const urlConsultaNFCe = this.utility.getUrlConsultaNFCe('URL-ConsultaNFCe', false, '');
+
             const nfeWithQrCode = {
                 ... NFe,
                 infNFeSupl: {
-                    qrCode: teste,
-                    urlChave: 'https://www.homologacao.nfce.fazenda.sp.gov.br/consulta',
+                    qrCode: qrCode,
+                    urlChave: urlConsultaNFCe,
                 }
             }
             NFe = nfeWithQrCode;
-            // URL OFFLINE A TESTAR
-            // const teste2 = generateQRCodeURLOffline(chaveAcesso, '2', '2', '8', '20', 'K9AhK39inkZNs7DHUaZiIUWFubA', '1', '9cf44de0502d4351bf180843e6528e22');
-            // console.log(teste2)
 
             const xmlObject = {
                 $: {
@@ -313,18 +317,19 @@ class NFCEAutorizacao extends BaseNFE {
                     },
                     ...NFe.infNFe
                 },
-                // Adiciona infNFeSupl
                 infNFeSupl: {
                     ...NFe.infNFeSupl
                 }
-                // infNFeSupl: {
-                //    qrCode: 'https://www.homologacao.nfce.fazenda.sp.gov.br/qrcode?p=35240808819185000172650011452380611650831616|2|2|1|ceb6f639b9e77ebb8362dde927e738c20fe1bba5',
-                //   urlChave: 'https://www.homologacao.nfce.fazenda.sp.gov.br/consulta',
-                //}
             }
 
             const eventoXML = this.xmlBuilder.gerarXml(xmlObject, 'NFe')
             const xmlAssinado = this.xmlBuilder.assinarXML(eventoXML, 'infNFe')
+
+            // capturar digestValue
+            const digestValue = this.extrairDigestValue(xmlAssinado);
+            // substituir digestValue na tag qrcode
+            qrCode = generateQRCodeURLOffline(chaveAcesso, '2', NFe.infNFe.ide.tpAmb, '1', '45.13', digestValue, Number(idCSC), String(tokenCSC));
+            console.log(qrCode)
 
             this.xmlNFe.push(xmlAssinado);
         }

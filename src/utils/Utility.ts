@@ -162,6 +162,32 @@ class Utility {
         };
     }
 
+
+    getLatestURLConsultaNFCe(data: Record<string, string>): string | null {
+        // Obtem todas as chaves do objeto
+        const keys = Object.keys(data);
+
+        // Filtra as chaves que começam com 'URL-ConsultaNFCe_' e extrai as versões
+        const versions = keys
+            .map(key => {
+                const match = key.match(/^URL-ConsultaNFCe_(\d+\.\d+)$/);
+                return match ? parseFloat(match[1]) : null; // Extrai a versão como número
+            })
+            .filter(version => version !== null) // Remove versões que não existem
+            .sort((a, b) => b - a); // Ordena em ordem decrescente
+
+        // Busca a primeira URL que corresponder à versão mais alta
+        for (let version of versions) {
+            const key = `URL-ConsultaNFCe_${version.toFixed(2)}`; // Formata a chave
+            if (data[key]) {
+                return data[key]; // Retorna a URL encontrada
+            }
+        }
+
+        // Caso não encontre nenhuma versão numerada, retorna a URL sem versão
+        return data["URL-ConsultaNFCe"] || null;
+    };
+
     /**
      * Define o ambiente (UF e Produção ou Homologação) para geração das chaves de recuperação da URL do webservice
      */
@@ -180,7 +206,7 @@ class Utility {
 
         const chaveMae = `${mod}_${config.dfe.UF}_${ambiente}`;
         const chaveFilha = `${metodo}_${versaoDF}`;
-        console.log(chaveMae, chaveFilha )
+  
         return { chaveMae, chaveFilha };
     }
 
@@ -199,6 +225,21 @@ class Utility {
             throw new Error(`Não foi possível recuperar a url para o webservice: ${chaveFilha}`);
         }
         return url;
+    }
+
+    getUrlConsultaNFCe(metodo: string, ambienteNacional = false, versao = ""): string {
+        let { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao, 'NFCe');
+        const urls = NFeServicosUrl as NFeServicosUrlType;
+
+        if ('Usar' in urls[chaveMae])
+            chaveMae = urls[chaveMae].Usar
+
+            const url = urls[chaveMae] && this.getLatestURLConsultaNFCe(urls[chaveMae])
+
+            if (!url) {
+                throw new Error(`Não foi possível recuperar a url para consulta de NFCe: ${chaveFilha}`);
+            }
+            return url;
     }
 
     /**
