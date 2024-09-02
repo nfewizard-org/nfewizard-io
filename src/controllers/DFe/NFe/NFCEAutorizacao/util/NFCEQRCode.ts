@@ -1,8 +1,13 @@
 import { createHash } from 'crypto';
+import sha1 from 'sha1';
 
 // Função para gerar o hash SHA-1 em formato hexadecimal
 function generateSHA1Hash(input: string): string {
     return createHash('sha1').update(input).digest('hex');
+}
+
+function calcularDigestValueHex(digVal: string): string {
+    return Buffer.from(digVal).toString('hex');
 }
 
 // Função para gerar a URL do QR Code para emissão ONLINE
@@ -19,10 +24,10 @@ export function generateQRCodeURLOnline(
 
     // Passo 2: Adicionar o CSC
     const stringToHash = `${baseString}${csc}`; // Sem o separador pipe antes do CSC
-    
+
     // Passo 3: Gerar o hash
     const codigoHash = generateSHA1Hash(stringToHash);
-    
+
     // Montar a URL final
     return `https://www.homologacao.nfce.fazenda.sp.gov.br/qrcode?p=${baseString}|${codigoHash}`;
 }
@@ -36,22 +41,30 @@ export function generateQRCodeURLOffline(
     valorTotalNfce: string,
     digVal: string,
     identificadorCSC: number,
-    csc: string
+    csc: string,
+    xml: string
 ): string {
-    // Passo 1: Converter DigestValue para HEXA (já deve estar em formato hexadecimal)
-    const digestValueHex = digVal; // Supondo que digVal já esteja em formato hexadecimal
+    chaveAcesso = chaveAcesso.replace('NFe', '');
+    
+    // Passo 1: Converter DigestValue para HEXA
+    const digestValueHex = calcularDigestValueHex(digVal)
+    console.log({digestValueHex})
 
     // Passo 2: Concatenar parâmetros
     const baseString = `${chaveAcesso}|${versaoQRCode}|${tipoAmbiente}|${diaDataEmissao}|${valorTotalNfce}|${digestValueHex}|${identificadorCSC}`;
-    
+
     // Passo 3: Adicionar o CSC
-    const stringToHash = `${baseString}|${csc}`;
-    
+    const stringToHash = `${baseString}${csc}`;
+    console.log(stringToHash)
+    const teste = sha1(stringToHash).toUpperCase();
+    //teste = calcularDigestValueHex(teste)
+    console.log(sha1(stringToHash))
+    //console.log(teste)
     // Passo 4: Gerar o hash
     const codigoHash = generateSHA1Hash(stringToHash);
-    
+
     // Montar URL
-    return `https://www.homologacao.nfce.fazenda.sp.gov.br/qrcode?p=${baseString}|${codigoHash}`;
+    return `https://www.homologacao.nfce.fazenda.sp.gov.br/qrcode?p=${baseString}|${teste}`;
 }
 
 // Exemplo de uso

@@ -25,6 +25,7 @@ import { GenericObject, LayoutNFe, NFe, ProtNFe } from '@Protocols';
 import BaseNFE from '../BaseNFe/BaseNFe.js';
 import { format } from 'date-fns';
 import { generateQRCodeURLOffline, generateQRCodeURLOnline } from './util/NFCEQRCode.js';
+import xml2js, { parseStringPromise, Builder } from 'xml2js';
 
 class NFCEAutorizacao extends BaseNFE {
     xmlNFe: string[];
@@ -220,6 +221,27 @@ class NFCEAutorizacao extends BaseNFE {
         throw new Error('DigestValue não encontrado no XML assinado.');
     }
 
+    async atualizarQRCode(xml: string, novoValor: string): Promise<string> {
+        try {
+            // Converter a string XML para um objeto JavaScript
+            const xmlObject = await parseStringPromise(xml);
+            console.log(xmlObject.NFe.infNFeSupl[0].qrCode);
+            // Navegar até o qrCode e atualizar o valor
+            if (xmlObject.NFe?.infNFeSupl[0]?.qrCode) {
+                xmlObject.NFe.infNFeSupl[0].qrCode[0] = novoValor; // Atualiza o valor
+            } else {
+                throw new Error('Tag qrCode não encontrada no XML.');
+            }
+
+            // Converter o objeto JavaScript de volta para uma string XML
+            const builder = new Builder();
+            return builder.buildObject(xmlObject);
+        } catch (error) {
+            console.error('Erro ao atualizar o QR Code:', error);
+            throw error;
+        }
+    }
+
     private gerarXmlNFCEAutorizacao(data: NFe) {
 
         const createXML = (NFe: LayoutNFe) => {
@@ -298,7 +320,7 @@ class NFCEAutorizacao extends BaseNFE {
             const urlConsultaNFCe = this.utility.getUrlConsultaNFCe('URL-ConsultaNFCe', false, '');
 
             const nfeWithQrCode = {
-                ... NFe,
+                ...NFe,
                 infNFeSupl: {
                     qrCode: qrCode,
                     urlChave: urlConsultaNFCe,
@@ -323,14 +345,41 @@ class NFCEAutorizacao extends BaseNFE {
             }
 
             const eventoXML = this.xmlBuilder.gerarXml(xmlObject, 'NFe')
-            const xmlAssinado = this.xmlBuilder.assinarXML(eventoXML, 'infNFe')
+            let xmlAssinado = this.xmlBuilder.assinarXML(eventoXML, 'infNFe')
 
-            // capturar digestValue
-            const digestValue = this.extrairDigestValue(xmlAssinado);
-            // substituir digestValue na tag qrcode
-            qrCode = generateQRCodeURLOffline(chaveAcesso, '2', NFe.infNFe.ide.tpAmb, '1', '45.13', digestValue, Number(idCSC), String(tokenCSC));
-            console.log(qrCode)
+            if ([4, 9].includes(NFe.infNFe.ide.tpEmis)) {
+                // capturar digestValue
+                const digestValue = this.extrairDigestValue(xmlAssinado);
+                console.log({ digestValue })
+               
+                // substituir digestValue na tag qrcode
+                const tpAmb = NFe.infNFe.ide.tpAmb;
+                const valNF = NFe.infNFe.total.ICMSTot.vNF;
+                qrCode = generateQRCodeURLOffline(chaveAcesso, '2', tpAmb, '02', valNF, digestValue, Number(idCSC), String(tokenCSC), eventoXML);
+                console.log(qrCode)
 
+                xml2js.parseString(xmlAssinado, (err, result) => {
+                    if (err) {
+                        console.error('Erro ao parsear o XML para atualização do qrCode:', err);
+                    } else {
+                        if (result.NFe?.infNFeSupl[0]?.qrCode) {
+                            result.NFe.infNFeSupl[0].qrCode[0] = qrCode; // Atualiza o valor
+                           
+                            const builder = new Builder({
+                                headless: true, renderOpts: {
+                                    pretty: false
+                                },
+                            });
+                            xmlAssinado = builder.buildObject(result)
+                        } else {
+                            throw new Error('Tag qrCode não encontrada no XML.');
+                        }
+                    }
+                });
+
+
+            }
+            //console.log(xmlAssinado)
             this.xmlNFe.push(xmlAssinado);
         }
 
