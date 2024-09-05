@@ -512,7 +512,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('VALOR APROX. DOS TRIBUTOS', left + 327, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vTotTrib)).toFixed(2), left + 323 - 6, topDestinatario + 135, {
+            this.doc.fontSize(8).text(parseFloat(this.total.ICMSTot.vTotTrib || '0').toFixed(2), left + 323 - 6, topDestinatario + 135, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
