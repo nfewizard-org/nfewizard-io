@@ -6,7 +6,8 @@
 
 NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
 
-- **Autorização (Emissão de NFe)**: Submissão de notas fiscais eletrônicas para autorização.
+- **Autorização (Emissão de NFe e NFCe)**: Submissão de Notas Fiscais Eletrônicas e Notas Fiscais de Consumidor Eletrônica
+para autorização.
 - **Distribuição DFe**: Consulta e Download de DF-e (Documentos fiscais eletrônicos), facilitando o acesso a documentos fiscais eletrônicos.
 - **Consulta de Protocolo**: Verificação da situação atual da NF-e na Base de Dados do Portal da Secretaria de Fazenda Estadual.
 - **Inutilização de NFe**: Processo de inutilização de números de NF-e que não serão utilizados, assegurando a conformidade fiscal.
@@ -90,6 +91,15 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 
 - Para a documentação completa acesse [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
 - Você também encontrará exemplos em **src/exemplos**
+- 
+## Última Release (0.1.0)
+
+- Criada classe para Autorização de NFCe.
+- Efetuados testes para homologação de NFCe normal e em contingência (tpEmis = 9).
+- Remove texto fixado no campo natOp na geração da DANFE NFe.
+- Efetua parse do valor modFrete para number na definição do remetente (frete) da DANFE NFe.
+- Corrige definição de URL dos WebServices que deveriam apontar para outro estado.
+- Outras pequenas correções.
 
 ## Observações
 
@@ -153,6 +163,7 @@ Agradecemos aos seguintes desenvolvedores por suas contribuições ao projeto:
 
 <table>
   <tr>
+    <td align="center"><a href="https://github.com/dliocode"><img src="https://github.com/dliocode.png" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>dliocode</b></sub></a></td>
     <td align="center"><a href="https://github.com/ThalesAugusto0"><img src="https://github.com/ThalesAugusto0.png" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>ThalesAugusto0</b></sub></a></td>
   </tr>
 </table>
@@ -183,7 +194,7 @@ Agradecemos imensamente aos nossos patrocinadores pela sua generosidade.
 
 | [<img src="https://avatars.githubusercontent.com/u/59918400?s=400&u=3554ebcf0f75263637516867945ebd371e68da71&v=4" width="75px;"/>](https://github.com/Maurelima) |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|                                                            [Marco Lima](https://github.com/Maurelima)                                                     
+|                                                            [Marco Lima](https://github.com/Maurelima)                                                            |
 
 ## Licença
 

@@ -114,7 +114,7 @@ class NFCEAutorizacao extends BaseNFE {
              * Captura o valor nRec e protNFe
              */
             const { nRec, protNFe } = this.utility.getProtNFe(xmlRetorno);
-
+            
             /**
              * 0 - assíncrona
              * 1 - síncrona
@@ -152,9 +152,15 @@ class NFCEAutorizacao extends BaseNFE {
         return ano + mes;
     }
 
-    private gerarCodigoNumerico() {
-        // Lógica para gerar um código numérico aleatório de 8 dígitos
-        return Math.floor(Math.random() * 100000000).toString().padStart(8, '0');
+    private diaEmissao(dhEmi: string) {
+        // Converte a string para uma data
+        const dataAtual = new Date(dhEmi);
+            
+        // Extrai o dia com dois dígitos
+        const dia = dataAtual.getDate().toString().padStart(2, '0'); 
+
+        // Retorna o dia
+        return dia;
     }
 
     private calcularModulo11(sequencia: string) {
@@ -219,27 +225,6 @@ class NFCEAutorizacao extends BaseNFE {
             return match[1];
         }
         throw new Error('DigestValue não encontrado no XML assinado.');
-    }
-
-    async atualizarQRCode(xml: string, novoValor: string): Promise<string> {
-        try {
-            // Converter a string XML para um objeto JavaScript
-            const xmlObject = await parseStringPromise(xml);
-            console.log(xmlObject.NFe.infNFeSupl[0].qrCode);
-            // Navegar até o qrCode e atualizar o valor
-            if (xmlObject.NFe?.infNFeSupl[0]?.qrCode) {
-                xmlObject.NFe.infNFeSupl[0].qrCode[0] = novoValor; // Atualiza o valor
-            } else {
-                throw new Error('Tag qrCode não encontrada no XML.');
-            }
-
-            // Converter o objeto JavaScript de volta para uma string XML
-            const builder = new Builder();
-            return builder.buildObject(xmlObject);
-        } catch (error) {
-            console.error('Erro ao atualizar o QR Code:', error);
-            throw error;
-        }
     }
 
     private gerarXmlNFCEAutorizacao(data: NFe) {
@@ -309,13 +294,8 @@ class NFCEAutorizacao extends BaseNFE {
 
             let qrCode = '';
             if (![4, 9].includes(NFe.infNFe.ide.tpEmis)) {
-                qrCode = generateQRCodeURLOnline(chaveAcesso, '2', NFe.infNFe.ide.tpAmb, Number(idCSC), String(tokenCSC));
+                qrCode = generateQRCodeURLOnline(chaveAcesso, '2', NFe.infNFe.ide.tpAmb, Number(idCSC), String(tokenCSC), this.utility);
             }
-
-            // URL ONLINE FUNCIONANDO
-            // prod a23fe9ca48d0463c98d35cfea1fcd760
-            // hm 9cf44de0502d4351bf180843e6528e22 - 
-            // https://www.homologacao.nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?p=35240808819185000172650011452380611650831616|2|2|1|CEB6F639B9E77EBB8362DDE927E738C20FE1BBA5
 
             const urlConsultaNFCe = this.utility.getUrlNFCe('URL-ConsultaNFCe', false, '');
 
@@ -350,20 +330,20 @@ class NFCEAutorizacao extends BaseNFE {
             if ([4, 9].includes(NFe.infNFe.ide.tpEmis)) {
                 // capturar digestValue
                 const digestValue = this.extrairDigestValue(xmlAssinado);
-                console.log({ digestValue })
                
-                // substituir digestValue na tag qrcode
+                // substituir tag qrcode
                 const tpAmb = NFe.infNFe.ide.tpAmb;
                 const valNF = NFe.infNFe.total.ICMSTot.vNF;
-                qrCode = generateQRCodeURLOffline(chaveAcesso, '2', tpAmb, '02', valNF, digestValue, Number(idCSC), String(tokenCSC), eventoXML);
-                console.log(qrCode)
+ 
+                const diaEmissao = this.diaEmissao(NFe.infNFe.ide.dhEmi);
+                qrCode = generateQRCodeURLOffline(chaveAcesso, '2', tpAmb, diaEmissao, valNF, digestValue, Number(idCSC), String(tokenCSC), this.utility);
 
                 xml2js.parseString(xmlAssinado, (err, result) => {
                     if (err) {
-                        console.error('Erro ao parsear o XML para atualização do qrCode:', err);
+                        throw new Error('Erro ao parsear o XML para atualização do qrCode:');
                     } else {
                         if (result.NFe?.infNFeSupl[0]?.qrCode) {
-                            result.NFe.infNFeSupl[0].qrCode[0] = qrCode; // Atualiza o valor
+                            result.NFe.infNFeSupl[0].qrCode[0] = qrCode;
                            
                             const builder = new Builder({
                                 headless: true, renderOpts: {
@@ -379,7 +359,7 @@ class NFCEAutorizacao extends BaseNFE {
 
 
             }
-            //console.log(xmlAssinado)
+
             this.xmlNFe.push(xmlAssinado);
         }
 
@@ -416,7 +396,7 @@ class NFCEAutorizacao extends BaseNFE {
 
             // Capturando a url do método para o namespace xmlns
             const { method, action } = this.utility.getSoapInfo(this.metodo);
-            console.log({ method, action })
+
             // Criando envelop SOAP (estrutura para e envio do XML)
             const xmlFormated = this.xmlBuilder.buildSoapEnvelope(xmlConsulta, method);
 
@@ -453,7 +433,7 @@ class NFCEAutorizacao extends BaseNFE {
             xmlConsulta = this.gerarXmlNFCEAutorizacao(data);
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta(xmlConsulta);
-            soapXML = soapXML
+            soapXML = xmlFormated
 
             // Salva XML de Consulta
             this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);
@@ -467,7 +447,7 @@ class NFCEAutorizacao extends BaseNFE {
                 },
                 httpsAgent: agent
             });
-
+            
             /**
              * Verifica se houve rejeição no processamento do lote
              */
@@ -492,7 +472,6 @@ class NFCEAutorizacao extends BaseNFE {
 
         } catch (error: any) {
             // Salva XML de Consulta
-            // console.log(error)
             this.utility.salvaConsulta(xmlConsulta, soapXML, this.metodo);
             throw new Error(error.message)
         }
