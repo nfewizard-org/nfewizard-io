@@ -74,7 +74,6 @@ export class Json {
         return this.findInObj(jsonData, 'evento');
     }
     getAutorizacaoEventBody(jsonData: any): any {
-        ;
         return this.findInObj(jsonData, 'retEnviNFe');
     }
     getAutorizacaoFinalEventBody(jsonData: any): any {
@@ -104,7 +103,7 @@ export class Json {
 
             const jsonData = JSON.parse(jsonAsString);
             let jsonBody: any;
-            console.log({ metodo })
+
             switch (metodo) {
                 case 'NFEStatusServico':
                     jsonBody = this.getStatusServicoBody(jsonData)
