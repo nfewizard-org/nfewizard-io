@@ -55,7 +55,9 @@ const copyFiles = () => {
 const build = async () => {
     try {
         // Exclui diretório de saída, compila o projeto TypeScript e ajusta os aliases
-        execSync('rm -rf dist/ && npx tsc && npx tsc-alias');
+        execSync('rm -rf dist/');
+        execSync('npx tsc', { stdio: 'inherit' });
+        execSync('npx tsc-alias', { stdio: 'inherit' });
         // Adiciona as extensões .js aos imports e asserções de tipo para imports JSON
         addJsExtensions('dist');
         // Chama a função para copiar os arquivos

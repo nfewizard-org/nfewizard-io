@@ -425,7 +425,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('FONE / FAX', left + 250.5, topDestinatario + 171, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(this.dest.enderDest?.fone, left + 250.5, topDestinatario + 181, {
+            this.doc.fontSize(8).text(this.dest.enderDest?.fone  || '', left + 250.5, topDestinatario + 181, {
                 characterSpacing: 1,
             });
 
