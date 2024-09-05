@@ -38,4 +38,9 @@ export type NFEGerarDanfeProps = {
      * @param {string} outputPath - Local onde a DANFE será gravada
      */
     outputPath: string;
+    /**
+     * @param {number} pageWidth - Largura da Página
+     */
+    // pageWidth: 226.772 | 158.74;
+    pageWidth?: number;
 };

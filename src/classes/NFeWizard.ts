@@ -57,6 +57,8 @@ import NFEDesconhecimentoDaOperacao from '@Controllers/DFe/NFe/NFERecepcaoEvento
 import NFEEpec from '@Controllers/DFe/NFe/NFERecepcaoEvento/NFEEpec';
 import { AxiosInstance } from 'axios';
 import MailController from '@Controllers/Email/MailController';
+import NFCEAutorizacao from '@Controllers/DFe/NFe/NFCEAutorizacao/NFCEAutorizacao';
+import NFCEGerarDanfe from '@Controllers/Danfe/NFCEGerarDanfe';
 
 class NFeWizard {
     private config: NFeWizardProps;
@@ -349,6 +351,20 @@ class NFeWizard {
             throw new Error(`NFE_Autorizacao: ${error.message}`)
         }
     }
+    async NFCE_Autorizacao(data: NFe) {
+        try {
+            const distribuicaoDFe = new NFCEAutorizacao(this.environment, this.utility, this.xmlBuilder, this.axios);
+            const response = await distribuicaoDFe.Exec(data);
+
+            console.log('Retorno NFCE_Autorizacao');
+            console.table(response.xMotivo);
+            console.log('===================================');
+
+            return response.xmls
+        } catch (error: any) {
+            throw new Error(`NFCE_Autorizacao: ${error.message}`)
+        }
+    }
 
     /**
      * Inutilização
@@ -385,6 +401,21 @@ class NFeWizard {
             return response
         } catch (error: any) {
             throw new Error(`NFE_GerarDanfe: ${error.message}`)
+        }
+    }
+    async NFCE_GerarDanfe(data: NFEGerarDanfeProps) {
+        try {
+            const { dfe: { exibirMarcaDaguaDanfe } } = this.environment.getConfig();
+            const distribuicaoDFe = new NFCEGerarDanfe(data);
+            const response = await distribuicaoDFe.generatePDF(exibirMarcaDaguaDanfe);
+
+            console.log('Retorno NFCE_GerarDanfe');
+            console.log(response.message);
+            console.log('===================================');
+
+            return response
+        } catch (error: any) {
+            throw new Error(`NFCE_GerarDanfe: ${error.message}`)
         }
     }
 

@@ -162,23 +162,53 @@ class Utility {
         };
     }
 
+
+    getLatestURLConsulta(data: Record<string, string>, metodo: string): string | null {
+        // Obtem todas as chaves do objeto
+        const keys = Object.keys(data);
+    
+        // Monta o prefixo dinâmico com base no método fornecido
+        const prefix = `${metodo}_`;
+    
+        // Filtra as chaves que começam com o prefixo dinâmico e extrai as versões
+        const versions = keys
+            .map(key => {
+                const match = key.match(new RegExp(`^${prefix}(\\d+\\.\\d+)$`));
+                return match ? parseFloat(match[1]) : null; // Extrai a versão como número
+            })
+            .filter(version => version !== null) // Remove versões que não existem
+            .sort((a, b) => b - a); // Ordena em ordem decrescente
+    
+        // Busca a primeira URL que corresponder à versão mais alta
+        for (let version of versions) {
+            const key = `${prefix}${version.toFixed(2)}`; // Formata a chave
+            if (data[key]) {
+                return data[key]; // Retorna a URL encontrada
+            }
+        }
+    
+        // Caso não encontre nenhuma versão numerada, retorna a URL sem versão
+        return data[metodo] || null;
+    };
+    
+
     /**
      * Define o ambiente (UF e Produção ou Homologação) para geração das chaves de recuperação da URL do webservice
      */
-    setAmbiente(metodo: string, ambienteNacional = false, versao: string) {
+    setAmbiente(metodo: string, ambienteNacional = false, versao: string, mod: string) {
         const config = this.environment.getConfig();
         const ambiente = config.nfe.ambiente === 2 ? 'H' : 'P';
 
         const versaoDF = versao !== "" ? versao : config.nfe.versaoDF;
 
         if (ambienteNacional) {
-            const chaveMae = `NFe_AN_${ambiente}`;
+            const chaveMae = `${mod}_AN_${ambiente}`;
             const chaveFilha = `${metodo}_${versaoDF}`;
 
             return { chaveMae, chaveFilha };
         }
 
-        const chaveMae = `NFe_${config.dfe.UF}_${ambiente}`;
+        const chaveMae = `${mod}_${config.dfe.UF}_${ambiente}`;
         const chaveFilha = `${metodo}_${versaoDF}`;
 
         return { chaveMae, chaveFilha };
@@ -187,8 +217,8 @@ class Utility {
     /**
      * Retorna a url correta do webservice
      */
-    getWebServiceUrl(metodo: string, ambienteNacional = false, versao = ""): string {
-        let { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao);
+    getWebServiceUrl(metodo: string, ambienteNacional = false, versao = "", mod = "NFe"): string {
+        let { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao, mod);
         const urls = NFeServicosUrl as NFeServicosUrlType;
 
         if ('Usar' in urls[chaveMae])
@@ -197,6 +227,22 @@ class Utility {
         const url = urls[chaveMae] && urls[chaveMae][chaveFilha];
         if (!url) {
             throw new Error(`Não foi possível recuperar a url para o webservice: ${chaveFilha}`);
+        }
+        return url;
+    }
+
+    getUrlNFCe(metodo: string, ambienteNacional = false, versao = ""): string {
+        let { chaveMae } = this.setAmbiente(metodo, ambienteNacional, versao, 'NFCe');
+        const urls = NFeServicosUrl as NFeServicosUrlType;
+
+        if ('Usar' in urls[chaveMae])
+            chaveMae = urls[chaveMae].Usar
+
+        const chaveFilha = this.getLatestURLConsulta(urls[chaveMae], metodo);
+        const url = urls[chaveMae] && this.getLatestURLConsulta(urls[chaveMae], metodo)
+
+        if (!url) {
+            throw new Error(`Não foi possível recuperar a url para consulta de NFCe: ${chaveFilha}`);
         }
         return url;
     }
@@ -255,7 +301,7 @@ class Utility {
         // Gera erro em caso de Rejeição
         const xMotivo = this.findInObj(responseInJson, 'xMotivo');
         const infProt = this.findInObj(responseInJson, 'infProt');
-        
+
         // Salva XML de retorno
         this.salvaRetorno(data, responseInJson, metodo, name);
 
@@ -264,7 +310,7 @@ class Utility {
             throw new Error(xMotivo);
         }
         if (infProt && (infProt?.xMotivo.includes('Rejeição') || infProt?.xMotivo.includes('Rejeicao'))) {
-            throw new Error(xMotivo);
+            throw new Error(infProt?.xMotivo);
         }
         // if (infEvento && (infEvento?.xMotivo.includes('Rejeição') || infEvento?.xMotivo.includes('Rejeicao'))) {
         //     throw new Error(xMotivo);
@@ -312,6 +358,8 @@ class Utility {
                 return `NFEInutilizacao-${tipo}`
             case 'NFEAutorizacao':
                 return `NFEAutorizacao-${tipo}`
+            case 'NFCEAutorizacao':
+                return `NFCEAutorizacao-${tipo}`
             case 'NFERetornoAutorizacao':
                 return `NFERetornoAutorizacao-${tipo}`
 
