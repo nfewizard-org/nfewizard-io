@@ -317,7 +317,7 @@ class NFCEAutorizacao extends BaseNFE {
             // hm 9cf44de0502d4351bf180843e6528e22 - 
             // https://www.homologacao.nfce.fazenda.sp.gov.br/NFCeConsultaPublica/Paginas/ConsultaQRCode.aspx?p=35240808819185000172650011452380611650831616|2|2|1|CEB6F639B9E77EBB8362DDE927E738C20FE1BBA5
 
-            const urlConsultaNFCe = this.utility.getUrlConsultaNFCe('URL-ConsultaNFCe', false, '');
+            const urlConsultaNFCe = this.utility.getUrlNFCe('URL-ConsultaNFCe', false, '');
 
             const nfeWithQrCode = {
                 ...NFe,

@@ -227,7 +227,7 @@ class Utility {
         return url;
     }
 
-    getUrlConsultaNFCe(metodo: string, ambienteNacional = false, versao = ""): string {
+    getUrlNFCe(metodo: string, ambienteNacional = false, versao = ""): string {
         let { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao, 'NFCe');
         const urls = NFeServicosUrl as NFeServicosUrlType;
 
