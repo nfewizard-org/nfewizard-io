@@ -18,6 +18,7 @@ export function generateQRCodeURLOnline(
     identificadorCSC: number,
     csc: string
 ): string {
+    const urlConsultaNFCe = this.utility.getUrlNFCe('URL-ConsultaNFCe', false, '');
     // Passo 1: Concatenar parâmetros
     chaveAcesso = chaveAcesso.replace('NFe', '');
     const baseString = `${chaveAcesso}|${versaoQRCode}|${tipoAmbiente}|${identificadorCSC}`;
