@@ -403,21 +403,21 @@ class NFeWizard {
             throw new Error(`NFE_GerarDanfe: ${error.message}`)
         }
     }
-    async NFCE_GerarDanfe(data: NFEGerarDanfeProps) {
-        try {
-            const { dfe: { exibirMarcaDaguaDanfe } } = this.environment.getConfig();
-            const distribuicaoDFe = new NFCEGerarDanfe(data);
-            const response = await distribuicaoDFe.generatePDF(exibirMarcaDaguaDanfe);
+    // async NFCE_GerarDanfe(data: NFEGerarDanfeProps) {
+    //     try {
+    //         const { dfe: { exibirMarcaDaguaDanfe } } = this.environment.getConfig();
+    //         const distribuicaoDFe = new NFCEGerarDanfe(data);
+    //         const response = await distribuicaoDFe.generatePDF(exibirMarcaDaguaDanfe);
 
-            console.log('Retorno NFCE_GerarDanfe');
-            console.log(response.message);
-            console.log('===================================');
+    //         console.log('Retorno NFCE_GerarDanfe');
+    //         console.log(response.message);
+    //         console.log('===================================');
 
-            return response
-        } catch (error: any) {
-            throw new Error(`NFCE_GerarDanfe: ${error.message}`)
-        }
-    }
+    //         return response
+    //     } catch (error: any) {
+    //         throw new Error(`NFCE_GerarDanfe: ${error.message}`)
+    //     }
+    // }
 
     /**
      * Método para envio de e-mail
