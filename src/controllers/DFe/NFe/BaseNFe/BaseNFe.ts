@@ -17,7 +17,6 @@
 import Environment from '@Classes/Environment';
 import XmlBuilder from '@Classes/XmlBuilder.js';
 import Utility from '@Utils/Utility.js';
-import { Json } from '../../../../utils/xml2json.js';
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { GenericObject } from '@Protocols/index.js';
 import { format } from 'date-fns';
@@ -131,11 +130,14 @@ abstract class BaseNFE {
      * @throws {Error} Lança um erro se houver uma rejeição ou se ocorrer qualquer outro erro durante a execução.
      */
     async Exec(data?: any): Promise<any> {
+        let xmlConsulta = '';
+        let soapXML = '';
         try {
             // Gerando XML específico
-            const xmlConsulta = this.gerarXml(data);
+            xmlConsulta = this.gerarXml(data);
 
             const { xmlFormated, agent, webServiceUrl } = await this.gerarConsulta(xmlConsulta);
+            soapXML = xmlFormated
 
             // Salva XML de Consulta
             this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);
@@ -149,8 +151,8 @@ abstract class BaseNFE {
             });
 
             // Instanciando classe de utilitários com lib xml-js e convertendo XML para Json
-            const json = new Json();
-            const responseInJson = json.convertXmlToJson(xmlRetorno.data, this.metodo);
+            console.log("salvar retorno")
+            const responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
 
             // Salva XML de Retorno
             this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
@@ -164,6 +166,9 @@ abstract class BaseNFE {
 
             return responseInJson;
         } catch (error: any) {
+            console.log(error)
+            // console.log(JSON.stringify(error, null, 2));
+            this.utility.salvaConsulta(xmlConsulta, soapXML, this.metodo);
             throw new Error(error.message)
         }
     }

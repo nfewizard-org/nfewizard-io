@@ -225,6 +225,7 @@ class Utility {
             chaveMae = urls[chaveMae].Usar
 
         const url = urls[chaveMae] && urls[chaveMae][chaveFilha];
+        console.log({ chaveMae, chaveFilha, url })
         if (!url) {
             throw new Error(`Não foi possível recuperar a url para o webservice: ${chaveFilha}`);
         }
