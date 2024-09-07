@@ -145,7 +145,7 @@ abstract class BaseNFE {
             // Efetua requisição para o webservice NFEStatusServico
             const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
                 headers: {
-                    'Content-Type': 'text/xml; charset=utf-8',
+                    'Content-Type': 'application/soap+xml; charset=utf-8',
                 },
                 httpsAgent: agent
             });

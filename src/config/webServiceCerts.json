@@ -1,9 +1,16 @@
 {
     "11": {
-        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt", "AC-SOLUTI-SSL-EV-G4.crt"],
-        "https://nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx'": ["ICP-Brasilv10.crt", "AC-SOLUTI-SSL-EV-G4.crt"]
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
     },
-    
+    "12": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "13": {
+        "https://nfe.sefaz.am.gov.br/services2/services/NfeStatusServico4": ["ICP-Brasilv10.crt"],
+        "hhttps://homnfe.sefaz.am.gov.br/services2/services/NfeStatusServico4": ["ICP-Brasilv10.crt"]
+    },
     "29": {
         "https://hnfe.sefaz.ba.gov.br/webservices/NFeStatusServico4/NFeStatusServico4.asmx": ["ICP-Brasilv10", "AC_Soluti_Multipla_v1", "AC_SOLUTI_Multipla_v5", "AC_Soluti_v5"],
         "https://nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx'": ["ICP-Brasilv10", "AC_Soluti_Multipla_v1", "AC_SOLUTI_Multipla_v5", "AC_Soluti_v5"]
@@ -11,5 +18,8 @@
     "35": {
         "https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx": [ "ICP-Brasilv10.crt", "AC-SOLUTI-SSL-EV-G4.crt"],
         "https://nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx'": ["ICP-Brasilv10.crt", "AC-SOLUTI-SSL-EV-G4.crt"]
+    },
+    "50": {
+        "https://hom.nfe.sefaz.ms.gov.br/ws/NFeStatusServico4": []
     }
 }
