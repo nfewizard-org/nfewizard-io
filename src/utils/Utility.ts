@@ -223,9 +223,9 @@ class Utility {
 
         if ('Usar' in urls[chaveMae])
             chaveMae = urls[chaveMae].Usar
-
+        console.log({chaveMae, chaveFilha})
         const url = urls[chaveMae] && urls[chaveMae][chaveFilha];
-        console.log({ chaveMae, chaveFilha, url })
+
         if (!url) {
             throw new Error(`Não foi possível recuperar a url para o webservice: ${chaveFilha}`);
         }
@@ -236,11 +236,8 @@ class Utility {
         let { chaveMae } = this.setAmbiente(metodo, ambienteNacional, versao, 'NFCe');
         const urls = NFeServicosUrl as NFeServicosUrlType;
 
-        if ('Usar' in urls[chaveMae])
-            chaveMae = urls[chaveMae].Usar
-
         const chaveFilha = this.getLatestURLConsulta(urls[chaveMae], metodo);
-        const url = urls[chaveMae] && this.getLatestURLConsulta(urls[chaveMae], metodo)
+        const url = urls[chaveMae] && chaveFilha
 
         if (!url) {
             throw new Error(`Não foi possível recuperar a url para consulta de NFCe: ${chaveFilha}`);
