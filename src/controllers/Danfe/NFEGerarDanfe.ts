@@ -180,7 +180,7 @@ class NFEGerarDanfe {
     _buildHeader(pos: number) {
         const { top, left } = this.doc.page.margins;
         const page = this.doc.bufferedPageRange();
-        const documento = this.documento.mascaraCnpjCpf(this.emit.CNPJ || this.emit.CPF)
+        const documento = this.documento.mascaraCnpjCpf(this.emit.CNPJCPF || this.emit.CNPJ || this.emit.CPF)
         this.setLineStyle(0.75, '#1c1c1c');
 
         const topIdentificacao_1 = top + pos;
@@ -345,7 +345,7 @@ class NFEGerarDanfe {
 
     _buildDestinatario() {
         const { top, left } = this.doc.page.margins;
-        const docDest = this.documento.mascaraCnpjCpf(this.dest.CNPJ || this.dest.CPF)
+        const docDest = this.documento.mascaraCnpjCpf(this.dest.CNPJCPF || this.dest.CNPJ || this.dest.CPF)
         this.setLineStyle(0.75, '#1c1c1c');
         const topDestinatario = top + 90;
 
