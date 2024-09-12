@@ -180,7 +180,7 @@ class NFEGerarDanfe {
     _buildHeader(pos: number) {
         const { top, left } = this.doc.page.margins;
         const page = this.doc.bufferedPageRange();
-        const documento = this.documento.mascaraCnpjCpf(String(this.emit.CNPJCPF))
+        const documento = this.documento.mascaraCnpjCpf(this.emit.CNPJCPF || this.emit.CNPJ || this.emit.CPF)
         this.setLineStyle(0.75, '#1c1c1c');
 
         const topIdentificacao_1 = top + pos;
@@ -345,8 +345,7 @@ class NFEGerarDanfe {
 
     _buildDestinatario() {
         const { top, left } = this.doc.page.margins;
-        const page = this.doc.bufferedPageRange();
-        const docDest = this.documento.mascaraCnpjCpf(String(this.dest.CNPJCPF))
+        const docDest = this.documento.mascaraCnpjCpf(this.dest.CNPJCPF || this.dest.CNPJ || this.dest.CPF)
         this.setLineStyle(0.75, '#1c1c1c');
         const topDestinatario = top + 90;
 
@@ -465,8 +464,6 @@ class NFEGerarDanfe {
 
     _builCalculoImposto() {
         const { top, left } = this.doc.page.margins;
-        const page = this.doc.bufferedPageRange();
-        const docDest = this.documento.mascaraCnpjCpf(String(this.dest.CNPJCPF))
         this.setLineStyle(0.75, '#1c1c1c');
         const topDestinatario = top + 173;
 
@@ -596,8 +593,6 @@ class NFEGerarDanfe {
 
     _builTransporte() {
         const { top, left } = this.doc.page.margins;
-        const page = this.doc.bufferedPageRange();
-        const docDest = this.documento.mascaraCnpjCpf(String(this.dest.CNPJCPF))
         this.setLineStyle(0.75, '#1c1c1c');
         const topDestinatario = top + 233;
 
@@ -749,7 +744,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('ENDEREÇO', left + 4, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(this.transp.transporta?.xEnder || '', left - 8, topDestinatario + 158, {
+            this.doc.fontSize(8).text(this.transp.transporta?.xEnder || '', left + 4, topDestinatario + 158, {
                 characterSpacing: 1,
             });
             this.doc.rect(left + 338.5, topDestinatario + 143, 112, 23).stroke();
@@ -770,7 +765,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('INSCRIÇÃO ESTADUAL', left + 476.5, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(this.transp?.transporta?.IE || '', left + 476.5 - 16, topDestinatario + 158, {
+            this.doc.fontSize(8).text(this.transp?.transporta?.IE || '', left + 476.5, topDestinatario + 158, {
                 characterSpacing: 1,
             });
         }
