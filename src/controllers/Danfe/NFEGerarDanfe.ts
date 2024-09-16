@@ -130,7 +130,7 @@ class NFEGerarDanfe {
         this.doc.fontSize(5).text(`RECEBEMOS DE ${this.emit.xNome} OS PRODUTOS / SERVIÇOS CONSTANTES DA NOTA FISCAL INDICADO AO LADO`, 10, 26, {
             characterSpacing: 0.5
         });
-        this.doc.fontSize(6).text(`EMISSÃO: ${format(new Date(this.ide.dhEmi), 'dd-MM-yyyy')} -  DEST. / REM.: ${this.dest.xNome}  -  VALOR TOTAL: R$ ${parseFloat(String(this.total.ICMSTot.vNF)).toFixed(2)}`, 46, 33.5, {
+        this.doc.fontSize(6).text(`EMISSÃO: ${format(new Date(this.ide.dhEmi), 'dd-MM-yyyy')} -  DEST. / REM.: ${this.dest.xNome}  -  VALOR TOTAL: R$ ${parseFloat(String(this.total.ICMSTot.vNF)).toFixed(2)}`, 10, 33.5, {
             characterSpacing: 0.5
         });
         /** RIGHT */
