@@ -1,3 +1,4 @@
+import { ValidaCPFCNPJ } from '@Utils/ValidaCPFCNPJ';
 /*
  * This file is part of NFeWizard-io.
  * 
@@ -700,7 +701,7 @@ class NFEGerarDanfe {
         }
 
         const _buildCalcImposto = () => {
-            const documento = this.documento.mascaraCnpjCpf(this.transp.transporta?.CNPJ || this.transp.transporta?.CPF) || '';
+            const documento = this.documento.mascaraCnpjCpf(this.transp.transporta?.CNPJCPF || this.transp.transporta?.CNPJ || this.transp.transporta?.CPF) || '';
 
             /** LINHA 1 */
             this.doc.rect(left, topDestinatario + 120, 248.5, 23).stroke();
