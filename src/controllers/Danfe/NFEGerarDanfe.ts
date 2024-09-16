@@ -1,3 +1,4 @@
+import { ValidaCPFCNPJ } from '@Utils/ValidaCPFCNPJ';
 /*
  * This file is part of NFeWizard-io.
  * 
@@ -694,6 +695,8 @@ class NFEGerarDanfe {
         }
 
         const _buildCalcImposto = () => {
+            const documento = this.documento.mascaraCnpjCpf(this.transp.transporta?.CNPJCPF || this.transp.transporta?.CNPJ || this.transp.transporta?.CPF) || '';
+
             /** LINHA 1 */
             this.doc.rect(left, topDestinatario + 120, 248.5, 23).stroke();
             this.doc.fontSize(5).font('Times-Roman').text('RAZÃO SOCIAL', left + 4, topDestinatario + 125, {
@@ -735,7 +738,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('CNPJ / CPF', left + 476.5, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(this.transp.transporta?.CNPJCPF || '', left + 477.5, topDestinatario + 135, {
+            this.doc.fontSize(8).text(documento, left + 477.5, topDestinatario + 135, {
                 characterSpacing: 1,
             });
 
