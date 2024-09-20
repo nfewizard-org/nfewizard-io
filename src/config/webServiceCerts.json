@@ -9,7 +9,55 @@
     },
     "13": {
         "https://nfe.sefaz.am.gov.br/services2/services/NfeStatusServico4": ["ICP-Brasilv10.crt"],
-        "hhttps://homnfe.sefaz.am.gov.br/services2/services/NfeStatusServico4": ["ICP-Brasilv10.crt"]
+        "https://homnfe.sefaz.am.gov.br/services2/services/NfeStatusServico4": ["ICP-Brasilv10.crt"]
+    },
+    "14": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "15": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "16": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "17": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "21": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "22": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "23": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "24": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "25": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "26": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "27": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
+    },
+    "28": {
+        "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"],
+        "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx": ["ICP-Brasilv10.crt"]
     },
     "29": {
         "https://hnfe.sefaz.ba.gov.br/webservices/NFeStatusServico4/NFeStatusServico4.asmx": ["ICP-Brasilv10", "AC_Soluti_Multipla_v1", "AC_SOLUTI_Multipla_v5", "AC_Soluti_v5"],

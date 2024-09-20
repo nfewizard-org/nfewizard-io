@@ -223,7 +223,7 @@ class Utility {
 
         if ('Usar' in urls[chaveMae])
             chaveMae = urls[chaveMae].Usar
-
+        
         const url = urls[chaveMae] && urls[chaveMae][chaveFilha];
         console.log(url)
         if (!url) {

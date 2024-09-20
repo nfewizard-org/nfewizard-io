@@ -140,6 +140,7 @@ class NFeWizard {
         }
     }
 
+
     /**
      * Consulta Protocolo
      */
