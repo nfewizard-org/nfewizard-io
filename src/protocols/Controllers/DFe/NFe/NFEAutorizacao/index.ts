@@ -3577,6 +3577,10 @@ type Transporta = {
      */
     CNPJCPF?: string;
     /**
+     * @param {string} CNPJ - CNPJ do Transportador  
+     */
+    CNPJ?: string;
+    /**
      * @param {string} CPF - CPF do Transportador  
      */
     CPF?: string;
