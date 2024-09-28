@@ -18,7 +18,10 @@
   "scripts": {
     "dev": "tsx src/testes.ts",
     "test": "jest",
-    "build": "node build.mjs"
+    "build": "node build.mjs",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs-esm": "yarn build:cjs && yarn build:esm"  
   },
   "files": [
     "dist"
@@ -75,6 +78,6 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.1.4",
     "tsx": "^4.7.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.6.2"
   }
 }

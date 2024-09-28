@@ -12,3 +12,5 @@ tmp
 certificado.pfx
 
 *:Zone.Identifier
+package-lock.json
+yarn.lock

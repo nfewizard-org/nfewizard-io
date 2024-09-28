@@ -1,4 +1,3 @@
-import { ValidaCPFCNPJ } from '@Utils/ValidaCPFCNPJ';
 /*
  * This file is part of NFeWizard-io.
  * 
@@ -181,9 +180,11 @@ class NFEGerarDanfe {
     _buildHeader(pos: number) {
         const { top, left } = this.doc.page.margins;
         const page = this.doc.bufferedPageRange();
-        const documento = this.documento.mascaraCnpjCpf(this.emit.CNPJCPF || this.emit.CNPJ || this.emit.CPF)
-        this.setLineStyle(0.75, '#1c1c1c');
-
+        const CNPJCPF = this.emit.CNPJCPF?.toString() 
+        const CNPJ = this.emit.CNPJ?.toString() 
+        const CPF = this.emit.CPF?.toString()
+        const documento = this.documento.mascaraCnpjCpf(CNPJCPF || CNPJ || CPF || '')
+         
         const topIdentificacao_1 = top + pos;
         const identificationJoined = `\nCEP: ${this.emit.enderEmit.CEP} - ${this.emit.enderEmit.xBairro} - ${this.emit.enderEmit.UF}\nTEL: ${this.emit.enderEmit.fone} - FAX: ${this.emit.enderEmit.fone}`
 
@@ -346,7 +347,7 @@ class NFEGerarDanfe {
 
     _buildDestinatario() {
         const { top, left } = this.doc.page.margins;
-        const docDest = this.documento.mascaraCnpjCpf(this.dest.CNPJCPF || this.dest.CNPJ || this.dest.CPF)
+        const docDest = this.documento.mascaraCnpjCpf(this.dest.CNPJCPF || this.dest.CNPJ || this.dest.CPF || '')
         this.setLineStyle(0.75, '#1c1c1c');
         const topDestinatario = top + 90;
 
@@ -695,7 +696,7 @@ class NFEGerarDanfe {
         }
 
         const _buildCalcImposto = () => {
-            const documento = this.documento.mascaraCnpjCpf(this.transp.transporta?.CNPJCPF || this.transp.transporta?.CNPJ || this.transp.transporta?.CPF) || '';
+            const documento = this.documento.mascaraCnpjCpf(this.transp.transporta?.CNPJCPF || this.transp.transporta?.CNPJ || this.transp.transporta?.CPF || '');
 
             /** LINHA 1 */
             this.doc.rect(left, topDestinatario + 120, 248.5, 23).stroke();
