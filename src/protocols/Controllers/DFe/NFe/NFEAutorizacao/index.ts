@@ -577,16 +577,16 @@ type Avulsa = {
  * GRUPO E
  */
 export type Dest = {
-    // /**
-    // * @param {string} CNPJ - CNPJ do destinatário
-    // * Informar o CNPJ ou o CPF do destinatário, preenchendo os zeros não significativos.
-    // * No caso de operação com o exterior, ou para comprador estrangeiro informar a tag "idEstrangeiro”.
-    // */
-    // CNPJ?: string;
-    // /**
-    //  * @param {string} CPF - CPF do destinatário
-    //  */
-    // CPF?: string;
+    /**
+    * @param {string} CNPJ - CNPJ do destinatário
+    * Informar o CNPJ ou o CPF do destinatário, preenchendo os zeros não significativos.
+    * No caso de operação com o exterior, ou para comprador estrangeiro informar a tag "idEstrangeiro”.
+    */
+    CNPJ?: string;
+    /**
+     * @param {string} CPF - CPF do destinatário
+     */
+    CPF?: string;
     /**
      * @param {string} CNPJCPF - CNPJ ou CPF do destinatário
      * Informar o CNPJ ou o CPF do destinatário, preenchendo os zeros não significativos.
