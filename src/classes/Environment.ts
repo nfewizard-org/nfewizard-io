@@ -64,6 +64,10 @@ class Environment {
         return this.agent;
     }
 
+    setUF(UF: string) {
+        this.config.dfe.UF = UF;
+    }
+
     private checkRequiredSettings() {
         try {
             const requiredConfigFields: { [K in keyof NFeWizardProps]: string[] } = {

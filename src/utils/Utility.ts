@@ -207,7 +207,7 @@ class Utility {
 
             return { chaveMae, chaveFilha };
         }
-
+        console.log({ UF: config.dfe.UF })
         const chaveMae = `${mod}_${config.dfe.UF}_${ambiente}`;
         const chaveFilha = `${metodo}_${versaoDF}`;
 

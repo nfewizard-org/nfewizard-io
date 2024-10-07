@@ -59,6 +59,7 @@ import { AxiosInstance } from 'axios';
 import MailController from '@Controllers/Email/MailController';
 import NFCEAutorizacao from '@Controllers/DFe/NFe/NFCEAutorizacao/NFCEAutorizacao';
 import NFCEGerarDanfe from '@Controllers/Danfe/NFCEGerarDanfe';
+import BaseNFe from '@Controllers/DFe/NFe/BaseNFe/BaseNFe';
 
 class NFeWizard {
     private config: NFeWizardProps;
@@ -436,6 +437,29 @@ class NFeWizard {
             return response
         } catch (error: any) {
             throw new Error(`NFE_EnviaEmail: ${error.message}`)
+        }
+    }
+
+    /**
+    * Método para testes de certificado
+    */
+    async genericMethod<T extends BaseNFe>(
+        ClassType: new (environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: any) => T,
+        params: any,
+        UF: any,
+    ): Promise<any> {
+        try {
+            this.environment.setUF(UF);
+            const instance = new ClassType(this.environment, this.utility, this.xmlBuilder, this.axios);
+            const response = await instance.Exec(params);
+
+            console.log(`Retorno ${ClassType.name}`);
+            console.log(`   ${response.xMotivo}`);
+            console.log('===================================');
+
+            return response;
+        } catch (error: any) {
+            throw new Error(`${ClassType.name}: ${error.message}`);
         }
     }
 
