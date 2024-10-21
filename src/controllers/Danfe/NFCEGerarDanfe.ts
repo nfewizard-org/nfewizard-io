@@ -845,16 +845,28 @@ class NFCEGerarDanfe {
         }
     }
     _buildTotais() {
-        // const { top, left } = this.doc.page.margins;
+        const { right } = this.doc.page.margins;
+        const [ pageWidth ] = this.doc.page.size;
 
-        const tableTop = this.doc.y + 5;
+        let tableTop = this.doc.y + 5;
         const defaultItemHeight = 5;
-        let y = tableTop;
         let currentPage = 0;
-
+        console.log({pageWidth, right})
         this.doc.text('Qtd. total de itens', 2, tableTop);
-        this.doc.text('Valor total R$', 2, tableTop + this.itemHeight);
-        this.doc.text('Valor total R$', 2, tableTop + this.itemHeight);
+        this.doc.text('2', 220.102, tableTop);
+        tableTop += this.itemHeight;
+
+        // this.doc.text('Valor total R$', 2, tableTop);
+        // this.doc.text('20,00', Number(pageWidth) - 10, tableTop);
+        // tableTop += this.itemHeight;
+
+        // this.doc.text('Desconto R$', 2, tableTop);
+        // this.doc.text('10,00', Number(pageWidth) - 10, tableTop);
+        // tableTop += this.itemHeight;
+
+        // this.doc.text('Desconto R$', 2, tableTop + this.itemHeight);
+        // this.doc.text('Valor a Pagar R$', 2, tableTop + this.itemHeight);
+        
         // this.doc.text('Qtde UN', this.ajustarPosicao(136.77, this.documentWidth), tableTop);
         // this.doc.text('VL Unit', this.ajustarPosicao(166.77, this.documentWidth), tableTop);
         // this.doc.text('VL Total', this.ajustarPosicao(196.77, this.documentWidth), tableTop);
