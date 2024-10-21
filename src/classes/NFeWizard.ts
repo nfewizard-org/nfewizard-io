@@ -447,15 +447,30 @@ class NFeWizard {
         ClassType: new (environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: any) => T,
         params: any,
         UF: any,
+        exec: number
     ): Promise<any> {
         try {
-            this.environment.setUF(UF);
-            const instance = new ClassType(this.environment, this.utility, this.xmlBuilder, this.axios);
-            const response = await instance.Exec(params);
+            let response: any
+            if (exec === 0) {
+                this.environment.setAmbiente(2)
+                this.environment.setUF(UF);
+                const instance = new ClassType(this.environment, this.utility, this.xmlBuilder, this.axios);
+                const response = await instance.Exec(params);
+    
+                console.log(`Retorno ${ClassType.name}`);
+                console.log(`   ${response.xMotivo}`);
+                console.log('===================================');
+            } else {
+                this.environment.setAmbiente(1)
+                this.environment.setUF(UF);
+                const instance = new ClassType(this.environment, this.utility, this.xmlBuilder, this.axios);
+                const response = await instance.Exec(params);
+    
+                console.log(`Retorno ${ClassType.name}`);
+                console.log(`   ${response.xMotivo}`);
+                console.log('===================================');
+            }
 
-            console.log(`Retorno ${ClassType.name}`);
-            console.log(`   ${response.xMotivo}`);
-            console.log('===================================');
 
             return response;
         } catch (error: any) {

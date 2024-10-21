@@ -67,6 +67,9 @@ class Environment {
     setUF(UF: string) {
         this.config.dfe.UF = UF;
     }
+    setAmbiente(amb: number) {
+        this.config.nfe.ambiente = amb;
+    }
 
     private checkRequiredSettings() {
         try {
@@ -74,18 +77,18 @@ class Environment {
                 dfe: ['pathCertificado', 'senhaCertificado'],
                 nfe: ['ambiente']
             };
-    
+
             let missingConfigurations: any = {
                 dfe: [],
                 nfe: []
             };
-    
+
             let errors: string[] = [];
             let tableData: any[] = [];
-    
+
             (Object.keys(requiredConfigFields) as (keyof NFeWizardProps)[]).forEach((categoryKey) => {
                 const category = this.config[categoryKey as keyof typeof this.config];
-    
+
                 // Verifica se a chave principal existe
                 if (!category) {
                     errors.push(`Chave principal faltando: '${categoryKey}'.`);
@@ -98,7 +101,7 @@ class Environment {
                             if (!missingConfigurations[categoryKey]) {
                                 missingConfigurations[categoryKey] = [];
                             }
-    
+
                             // Verifica se o campo está presente
                             if (category[fieldKey as keyof typeof category] === undefined) {
                                 // Garante que a propriedade está definida
@@ -108,7 +111,7 @@ class Environment {
                                 missingConfigurations[categoryKey].push(fieldKey);
                             }
                         });
-    
+
                         // Garante que missingConfigurations[categoryKey] é um array
                         const missingConfig = missingConfigurations[categoryKey];
                         if (missingConfig && missingConfig.length > 0) {
@@ -118,13 +121,13 @@ class Environment {
                     }
                 }
             });
-    
+
             if (errors.length > 0) {
                 console.log("Configurações necessárias faltando:");
                 console.table(tableData);
                 throw new Error(`Erro ao validar configurações: ${errors.join(' ')}`);
             }
-    
+
             return {
                 missingConfigurations,
                 message: 'Todas as configurações necessárias estão presentes.',
@@ -134,7 +137,7 @@ class Environment {
             throw new Error(`Erro ao validar configurações: ${error.message}`);
         }
     }
-    
+
     private loadCertificate() {
         return new Promise((resolve, reject) => {
             try {
