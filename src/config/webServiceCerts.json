@@ -205,81 +205,119 @@
         "BA": {
             "homologacao": {
                 "url": "https://hnfe.sefaz.ba.gov.br/webservices/NFeStatusServico4/NFeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10", "AC_Soluti_Multipla_v1", "AC_SOLUTI_Multipla_v5", "AC_Soluti_v5"]
+                "certs": [
+                    "ICP-Brasilv10",
+                    "AC_Soluti_Multipla_v1",
+                    "AC_SOLUTI_Multipla_v5",
+                    "AC_Soluti_v5"
+                ]
             },
             "producao": {
                 "url": "https://nfe.sefaz.ba.gov.br/webservices/NFeStatusServico4/NFeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10", "AC_Soluti_Multipla_v1", "AC_SOLUTI_Multipla_v5", "AC_Soluti_v5"]
+                "certs": [
+                    "ICP-Brasilv10",
+                    "AC_Soluti_Multipla_v1",
+                    "AC_SOLUTI_Multipla_v5",
+                    "AC_Soluti_v5"
+                ]
             }
         },
         "MG": {
             "homologacao": {
                 "url": "https://hnfe.fazenda.mg.gov.br/nfe2/services/NFeStatusServico4",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             },
             "producao": {
                 "url": "https://nfe.fazenda.mg.gov.br/nfe2/services/NFeStatusServico4",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             }
         },
         "ES": {
             "homologacao": {
                 "url": "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             },
             "producao": {
                 "url": "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             }
         },
         "RJ": {
             "homologacao": {
                 "url": "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             },
             "producao": {
                 "url": "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             }
         },
         "SP": {
             "homologacao": {
                 "url": "https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             },
             "producao": {
                 "url": "https://nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             }
         },
         "PR": {
             "homologacao": {
                 "url": "https://homologacao.nfe.sefa.pr.gov.br/nfe/NFeStatusServico4?wsdl",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             },
             "producao": {
                 "url": "https://nfe.sefa.pr.gov.br/nfe/NFeStatusServico4?wsdl",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             }
         },
         "SC": {
             "homologacao": {
                 "url": "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             },
             "producao": {
                 "url": "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             }
         },
         "RS": {
             "homologacao": {
                 "url": "https://nfe-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             },
             "producao": {
                 "url": "https://nfe.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             }
         },
         "MS": {
@@ -305,21 +343,35 @@
         "GO": {
             "homologacao": {
                 "url": "https://homolog.sefaz.go.gov.br/nfe/services/NFeStatusServico4?wsdl",
-                "certs": ["ICP-Brasilv10", "AC_Soluti_Multipla_v1", "AC_SOLUTI_Multipla_v5", "AC_Soluti_v5"]
+                "certs": [
+                    "ICP-Brasilv10",
+                    "AC_Soluti_Multipla_v1",
+                    "AC_SOLUTI_Multipla_v5",
+                    "AC_Soluti_v5"
+                ]
             },
             "producao": {
                 "url": "https://nfe.sefaz.go.gov.br/nfe/services/NFeStatusServico4?wsdl",
-                "certs": ["ICP-Brasilv10", "AC_Soluti_Multipla_v1", "AC_SOLUTI_Multipla_v5", "AC_Soluti_v5"]
+                "certs": [
+                    "ICP-Brasilv10",
+                    "AC_Soluti_Multipla_v1",
+                    "AC_SOLUTI_Multipla_v5",
+                    "AC_Soluti_v5"
+                ]
             }
         },
         "DF": {
             "homologacao": {
                 "url": "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             },
             "producao": {
                 "url": "https://nfe.svrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx",
-                "certs": ["ICP-Brasilv10"]
+                "certs": [
+                    "ICP-Brasilv10"
+                ]
             }
         }
     }
