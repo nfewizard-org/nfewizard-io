@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import path, { dirname } from 'path';
+import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+const baseDir = path.dirname(fileURLToPath(import.meta.url))
 
 
 /**
@@ -30,7 +30,7 @@ interface SchemaProps {
 }
 
 export const getSchema = (metodo: string) => {
-  const pathSchemas = path.resolve(__dirname, '../schemas/');
+  const pathSchemas = path.resolve(baseDir, './schemas/');
 
   const schema: SchemaProps = {
     NFEStatusServico: `${pathSchemas}/consStatServ_v4.00.xsd`,

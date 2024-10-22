@@ -16,7 +16,7 @@
  */
 
 import { GenericObject } from '@Protocols';
-import convert from "xml-js";
+import * as convert from "xml-js";
 
 export class Json {
     constructor() { }

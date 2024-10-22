@@ -270,11 +270,13 @@ class Utility {
 
                 xsdValidator.validateXML(xml, xsdData, (err, validationResult) => {
                     if (err) {
+                        console.log({err})
                         reject({
                             success: false,
                             message: this.formatErrorMessage(err.message),
                         });
                     } else if (!validationResult.valid) {
+                        console.log({validationResult})
                         reject({
                             success: false,
                             message: this.formatErrorMessage(validationResult.messages[0]),
@@ -287,6 +289,7 @@ class Utility {
                     }
                 });
             } catch (error: any) {
+                console.log(error)
                 reject({
                     success: false,
                     message: this.formatErrorMessage(error.message),
