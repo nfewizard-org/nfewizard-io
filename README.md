@@ -1,5 +1,5 @@
 <div style="height: 200px; display: flex; justify-content: center; align-items: center; width: 100%;">
-  <img src="./src/assets/logo.jpg" />
+  <img src="./src/assets/logo.jpg" style="height: 200px;width: 200px;" />
 </div>
 
 # NFeWizard-io

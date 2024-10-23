@@ -8,6 +8,7 @@ src/classes/FieldOrganizer.ts
 src/testes.ts
 src/utils/ini2json.ts
 tmp
+package-lock.json
 
 certificado.pfx
 

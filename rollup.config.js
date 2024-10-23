@@ -43,6 +43,6 @@ export default {
                 { src: 'src/schemas/*', dest: 'dist/schemas' },
             ],
         }),
-        // terser(),
+        terser(),
     ],
 };

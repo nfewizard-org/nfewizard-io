@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2] - 2024-10-23
+
+### Fixed
+- Corrigidos problemas de tipagem que impediam a build e geração de DANFE.
+
+### Changed
+- Adicionado método de build com rollup.
+
 ## [0.1.0] - 2024-09-05
 
 ### Changed
