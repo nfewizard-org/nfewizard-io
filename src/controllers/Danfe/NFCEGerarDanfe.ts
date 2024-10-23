@@ -15,7 +15,7 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import bwipjs from 'bwip-js';
-import path, { dirname } from 'path';
+import path from 'path';
 import fs from 'fs';
 import { ICMS, IPI, DetProd, NFEGerarDanfeProps, Ide, Dest, Emit, Total, Transp, InfAdic, Vol, ProtNFe } from '@Protocols';
 import { format } from 'date-fns';
@@ -23,8 +23,11 @@ import ValidaCPFCNPJ from '@Utils/ValidaCPFCNPJ';
 import PDFDocument from 'pdfkit';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+const baseDir = path.dirname(fileURLToPath(import.meta.url))
+const fontDir = process.env.NODE_ENV === 'production' ? 'assets/fonts/ARIAL.TTF' : '../../assets/fonts/ARIAL.TTF';
+const fontDirBold = process.env.NODE_ENV === 'production' ? 'assets/fonts/ARIALBD.TTF' : '../../assets/fonts/ARIALBD.TTF';
+
 
 class NFCEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
@@ -56,6 +59,10 @@ class NFCEGerarDanfe {
         this.outputPath = outputPath;
         this.enviada = false; // Valor padrão
         this.barcodePath = './src/assets'; // Caminho padrão
+        if (process.env.NODE_ENV === 'production') {
+            this.barcodePath = 'assets'; // Caminho padrão
+        }
+        console.log({assets: this.barcodePath})
         this.documento = new ValidaCPFCNPJ(); // Inicialização correta
         this.protNFe = data.protNFe;
 
@@ -106,8 +113,8 @@ class NFCEGerarDanfe {
         console.log({ pageHeight })
         console.log({ itemHeight: this.itemHeight })
 
-        const fontPath = path.resolve(__dirname, '../../assets/fonts/ARIAL.TTF');
-        const fontPathBold = path.resolve(__dirname, '../../assets/fonts/ARIALBD.TTF');
+        const fontPath = path.resolve(baseDir, fontDir);
+        const fontPathBold = path.resolve(baseDir, fontDirBold);
         console.log({ fontPath })
 
         // Área útil ignorando margem à direita (22.68) e esquerda (5.67) = 566.93
@@ -118,6 +125,8 @@ class NFCEGerarDanfe {
             layout: 'portrait',
             // font: 'Times-Roman',
         });
+        console.log(fontPath)
+        console.log(fontPathBold)
         this.doc.registerFont('Arial', fontPath)
         this.doc.registerFont('Arial-bold', fontPathBold)
     }

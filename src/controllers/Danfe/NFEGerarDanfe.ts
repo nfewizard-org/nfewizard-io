@@ -48,6 +48,9 @@ class NFEGerarDanfe {
         this.outputPath = outputPath;
         this.enviada = false; // Valor padrão
         this.barcodePath = './src/assets'; // Caminho padrão
+        if (process.env.NODE_ENV === 'production') {
+            this.barcodePath = 'assets'; // Caminho padrão
+        }
         this.documento = new ValidaCPFCNPJ(); // Inicialização correta
         this.protNFe = data.protNFe;
 

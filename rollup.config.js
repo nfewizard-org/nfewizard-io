@@ -1,17 +1,13 @@
 import alias from '@rollup/plugin-alias';
 import typescript from 'rollup-plugin-typescript2';
-// import { terser } from 'rollup-plugin-terser';
+import { terser } from 'rollup-plugin-terser';
 import json from '@rollup/plugin-json';
-import nodeResolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import dynamicImportVars from '@rollup/plugin-dynamic-import-vars';
+// import nodeResolve from '@rollup/plugin-node-resolve';
+// import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import copy from 'rollup-plugin-copy';
 
-import { fileURLToPath } from 'url';
-import path, { dirname } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import path from 'path';
 
 export default {
     input: 'src/index.ts',
@@ -19,8 +15,9 @@ export default {
         dir: 'dist',
         format: 'esm',
         sourcemap: true,
+        compact: true,
     },
-    external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator'],
+    external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem'],
     plugins: [
         alias({
             entries: [
@@ -32,19 +29,13 @@ export default {
             ],
         }),
         json(),
-        nodeResolve(),
-        commonjs(),
+        // nodeResolve(),
+        // commonjs(),
         typescript(),
-        dynamicImportVars({
-            __dirname: 'dirname',
-        }),
         replace({
+            'process.env.NODE_ENV': JSON.stringify('production'), // Substitui NODE_ENV por 'production'
             preventAssignment: true,
-            values: {
-                __dirname: JSON.stringify(path.resolve(__dirname, './src')),
-            },
         }),
-        // terser(),
         copy({
             targets: [
                 { src: 'src/assets/*', dest: 'dist/assets' },
@@ -52,5 +43,6 @@ export default {
                 { src: 'src/schemas/*', dest: 'dist/schemas' },
             ],
         }),
+        // terser(),
     ],
 };

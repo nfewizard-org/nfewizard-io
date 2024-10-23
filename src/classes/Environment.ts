@@ -27,8 +27,8 @@ import path from 'path';
 
 // Obtém o diretório atual do arquivo
 
-const baseDir = path.dirname(fileURLToPath(import.meta.url))
-
+const baseDir = path.dirname(fileURLToPath(import.meta.url));
+const dir = process.env.NODE_ENV === 'production' ? 'certs' : '../certs';
 class Environment {
     config: NFeWizardProps;
     certificate: string;
@@ -138,7 +138,7 @@ class Environment {
                 const pfxPassword = this.config.dfe.senhaCertificado;
 
                 const pfxFile = fs.readFileSync(pfxPath);
-                const certsDir = path.resolve(baseDir, './certs');
+                const certsDir = path.resolve(baseDir, dir);
                 const caCerts = fs.readdirSync(certsDir).map(filename => {
                     const tmp = `${certsDir}/${filename}`;
                     return fs.readFileSync(tmp);

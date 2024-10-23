@@ -2,7 +2,7 @@
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "outDir": "./dist", // Diretório onde os arquivos compilados serão colocados
+    "outDir": "dist", // Diretório onde os arquivos compilados serão colocados
     "rootDir": "./src", // Diretório de origem dos arquivos TypeScript
     "experimentalDecorators": true,
     "target": "ES2020",

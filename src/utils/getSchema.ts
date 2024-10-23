@@ -19,7 +19,7 @@ import { fileURLToPath } from 'url';
 
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
-
+const dir = process.env.NODE_ENV === 'production' ? 'schemas' : '../schemas/';
 
 /**
  * Efetua a leitura do Schema
@@ -30,7 +30,7 @@ interface SchemaProps {
 }
 
 export const getSchema = (metodo: string) => {
-  const pathSchemas = path.resolve(baseDir, './schemas/');
+  const pathSchemas = path.resolve(baseDir, dir);
 
   const schema: SchemaProps = {
     NFEStatusServico: `${pathSchemas}/consStatServ_v4.00.xsd`,
