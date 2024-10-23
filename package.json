@@ -62,7 +62,7 @@
     "pdfkit": "^0.15.0",
     "pdfmake": "^0.2.10",
     "pem": "^1.14.8",
-    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-builtins": "^2.0.0",
     "sha1": "^1.1.1",
     "soap": "^1.0.0",
     "tsc-alias": "^1.8.10",
