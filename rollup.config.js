@@ -11,12 +11,20 @@ import path from 'path';
 
 export default {
     input: 'src/index.ts',
-    output: {
-        dir: 'dist',
-        format: 'esm',
-        sourcemap: true,
-        compact: true,
-    },
+    output: [
+        {
+            dir: 'dist/esm',
+            format: 'esm',
+            sourcemap: true,
+            compact: true,
+        },
+        {
+            dir: 'dist/cjs',
+            format: 'cjs',
+            sourcemap: true,
+            compact: true,
+        },
+    ],
     external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem'],
     plugins: [
         alias({
@@ -38,9 +46,14 @@ export default {
         }),
         copy({
             targets: [
-                { src: 'src/assets/*', dest: 'dist/assets' },
-                { src: 'src/certs/*', dest: 'dist/certs' },
-                { src: 'src/schemas/*', dest: 'dist/schemas' },
+                // ESM
+                { src: 'src/assets/*', dest: 'dist/esm/assets' },
+                { src: 'src/certs/*', dest: 'dist/esm/certs' },
+                { src: 'src/schemas/*', dest: 'dist/esm/schemas' },
+                // CJS
+                { src: 'src/assets/*', dest: 'dist/cjs/assets' },
+                { src: 'src/certs/*', dest: 'dist/cjs/certs' },
+                { src: 'src/schemas/*', dest: 'dist/cjs/schemas' },
             ],
         }),
         terser(),
