@@ -21,6 +21,7 @@ import { ICMS, IPI, DetProd, NFEGerarDanfeProps, Ide, Dest, Emit, Total, Transp,
 import { format } from 'date-fns';
 import ValidaCPFCNPJ from '@Utils/ValidaCPFCNPJ';
 import PDFDocument from 'pdfkit';
+import QRCode from 'qrcode';
 import { fileURLToPath } from 'url';
 
 
@@ -34,7 +35,7 @@ class NFCEGerarDanfe {
     chave: string;
     enviada: boolean;
     outputPath: string
-    barcodePath: string;
+    qrcodePath: string;
     documento: ValidaCPFCNPJ;
     protNFe: ProtNFe | undefined;
     det: DetProd | DetProd[];
@@ -58,11 +59,11 @@ class NFCEGerarDanfe {
         this.chave = chave.trim();
         this.outputPath = outputPath;
         this.enviada = false; // Valor padrão
-        this.barcodePath = './src/assets'; // Caminho padrão
+        this.qrcodePath = './src/assets'; // Caminho padrão
         if (process.env.NODE_ENV === 'production') {
-            this.barcodePath = 'assets'; // Caminho padrão
+            this.qrcodePath = 'assets'; // Caminho padrão
         }
-        console.log({assets: this.barcodePath})
+        console.log({assets: this.qrcodePath})
         this.documento = new ValidaCPFCNPJ(); // Inicialização correta
         this.protNFe = data.protNFe;
 
@@ -84,7 +85,7 @@ class NFCEGerarDanfe {
         function calculateHeight(itemsLength: number, itemHeight: number) {
             console.log({ itemsLength })
             const headerHeight = 34.22975675056; // Altura do cabeçalho
-            const footerHeight = 34.22975675056; // Altura do rodapé
+            const footerHeight = 176; // Altura do rodapé -> 34.22975675056
 
             // Altura total é a soma das alturas dos itens + cabeçalho + rodapé
             return headerHeight + footerHeight + (itemsLength * itemHeight) + 5;
@@ -117,6 +118,8 @@ class NFCEGerarDanfe {
         const fontPathBold = path.resolve(baseDir, fontDirBold);
         console.log({ fontPath })
 
+        // this.saveQRCode('https://www.homologacao.nfce.fazenda.sp.gov.br/qrcode?p=NFe35240808819185000172650011452380619650831611|2|2|1|49f93ae0071a511388510ea51e01a6f111fbc9fc')
+
         // Área útil ignorando margem à direita (22.68) e esquerda (5.67) = 566.93
         this.doc = new PDFDocument({
             margins: { top: 5.67, right: 5.67, bottom: 5.67, left: 5.67 },
@@ -130,6 +133,30 @@ class NFCEGerarDanfe {
         this.doc.registerFont('Arial', fontPath)
         this.doc.registerFont('Arial-bold', fontPathBold)
     }
+
+     saveQRCode = async (text: string) => {
+        // Caminho para salvar o QR code na pasta src/assets
+        const filePath = path.join(this.qrcodePath, 'qrcode.png');
+      
+        try {
+          await QRCode.toFile(filePath, text, {
+            color: {
+              dark: '#000000', // Cor do código
+              light: '#FFFFFF', // Cor de fundo
+            },
+            width: 300, // Largura da imagem
+          });
+
+        //   const barcode = png.toString('base64');
+        //   const qrcodeDir = this.qrcodePath;
+        //   const barcodeFilePath = path.join(qrcodeDir, 'barcode.png');
+        //   this.createDir(qrcodeDir);
+        //   fs.writeFileSync(barcodeFilePath, Buffer.from(barcode, 'base64'));
+          console.log('QR code salvo com sucesso em:', filePath);
+        } catch (error) {
+          console.error('Erro ao gerar o QR code:', error);
+        }
+      };
 
     createDir(path: string) {
         if (!fs.existsSync(path)) {
@@ -147,7 +174,7 @@ class NFCEGerarDanfe {
                 includetext: false,    // Incluir texto
             });
             const barcode = png.toString('base64');
-            const barcodeDir = this.barcodePath;
+            const barcodeDir = this.qrcodePath;
             const barcodeFilePath = path.join(barcodeDir, 'barcode.png');
             this.createDir(barcodeDir);
             fs.writeFileSync(barcodeFilePath, Buffer.from(barcode, 'base64'));
@@ -170,6 +197,14 @@ class NFCEGerarDanfe {
 
     ajustarPosicao(posicaoOriginal: number, novaLargura: number) {
         return posicaoOriginal * (novaLargura / this.larguraPadrao);
+    }
+
+    calculaPosicao(text: string) {
+        const { right, left } = this.doc.page.margins;
+        const [ pageWidth ] = this.doc.page.size;
+
+        const textWidth = this.doc.widthOfString(text);
+        return Number(pageWidth) - textWidth - right - left;
     }
 
     drawHeader(isFirstPage: boolean) {
@@ -853,74 +888,90 @@ class NFCEGerarDanfe {
             createTable(this.det);
         }
     }
+    
     _buildTotais() {
-        const { right } = this.doc.page.margins;
+        const { right, left } = this.doc.page.margins;
         const [ pageWidth ] = this.doc.page.size;
 
         let tableTop = this.doc.y + 5;
-        const defaultItemHeight = 5;
-        let currentPage = 0;
-        console.log({pageWidth, right})
+        
+        console.log({pageWidth, right, left});
+        
         this.doc.text('Qtd. total de itens', 2, tableTop);
-        this.doc.text('2', 220.102, tableTop);
+        this.doc.text('200.00', this.calculaPosicao('200.00'), tableTop, {
+            align: 'right',
+        });
         tableTop += this.itemHeight;
 
-        // this.doc.text('Valor total R$', 2, tableTop);
-        // this.doc.text('20,00', Number(pageWidth) - 10, tableTop);
-        // tableTop += this.itemHeight;
+        this.doc.text('Valor total R$', 2, tableTop);
+        this.doc.text('20,00', this.calculaPosicao('20.00'), tableTop, {
+            align: 'right',
+        });
+        tableTop += this.itemHeight;
 
-        // this.doc.text('Desconto R$', 2, tableTop);
-        // this.doc.text('10,00', Number(pageWidth) - 10, tableTop);
-        // tableTop += this.itemHeight;
+        this.doc.text('Desconto R$', 2, tableTop);
+        this.doc.text('10,00', this.calculaPosicao('10.00'), tableTop, {
+            align: 'right',
+        });
+        tableTop += this.itemHeight + 2;
 
-        // this.doc.text('Desconto R$', 2, tableTop + this.itemHeight);
-        // this.doc.text('Valor a Pagar R$', 2, tableTop + this.itemHeight);
-        
-        // this.doc.text('Qtde UN', this.ajustarPosicao(136.77, this.documentWidth), tableTop);
-        // this.doc.text('VL Unit', this.ajustarPosicao(166.77, this.documentWidth), tableTop);
-        // this.doc.text('VL Total', this.ajustarPosicao(196.77, this.documentWidth), tableTop);
-    }
+        this.doc.text('FORMA PAGAMENTO', 2, tableTop);
+        this.doc.text('Dinheiro', 2, tableTop + this.itemHeight);
+
+        this.doc.text('VALOR PAGO R$', this.calculaPosicao('VALOR PAGO R$'), tableTop, {
+            align: 'right',
+        });
+        this.doc.text('150.00', this.calculaPosicao('150.00'), tableTop + this.itemHeight, {
+            align: 'right',
+        });
+
+        tableTop += 2 * this.itemHeight;
+
+        this.doc.text('Troco R$', 2, tableTop);
+        this.doc.text('20.00', this.calculaPosicao('20.00'), tableTop, {
+            align: 'right',
+        });
+
+       }
 
     _buildFooter() {
-        const { left } = this.doc.page.margins;
+        const { right, left } = this.doc.page.margins;
+        const [ pageWidth ] = this.doc.page.size;
 
-        this.setLineStyle(0.75, '#1c1c1c');
-        const topDestinatario = 820.45 - 88.5;
+        let tableTop = this.doc.y + 5;
+        
+        console.log({pageWidth, right, left});
+        this.doc.font('Arial-bold').text('Consulte pela Chave de Acesso em', 0, tableTop, {
+            align: 'center'
+        });
+        tableTop += this.itemHeight;
 
-        this.doc.fontSize(6).font('Arial-bold').text('DADOS ADICIONAIS', left, topDestinatario - 5, {
-            characterSpacing: 0.5,
+        this.doc.font('Arial').text('url', 0, tableTop, {
+            align: 'center'
         });
-        this.doc.rect(left, topDestinatario, 408, 95).stroke();
-        this.doc.fontSize(5).font('Arial').text('INFORMAÇÕES COMPLEMENTARES', 10, topDestinatario + 4.5, {
-            characterSpacing: 0.5
-        });
-        this.doc.fontSize(8).text(this.infAdic?.infCpl || '', 13, topDestinatario + 13, {
-            characterSpacing: 1,
-            width: 400,
-        });
-        this.doc.rect(left + 408, topDestinatario, 158.93, 95).stroke();
-        this.doc.fontSize(5).text('RESERVADO AO FISCO', 408 + 10, topDestinatario + 4.5, {
-            characterSpacing: 0.5
-        });
-        this.doc.fontSize(8).text(String(this.infAdic?.infAdFisco || ''), 13, topDestinatario + 13, {
-            characterSpacing: 1,
-            width: 400,
+        tableTop += this.itemHeight;
+
+        this.doc.text('0000 0000 0000 0000 0000 0000 0000 0000 0000 0000', 0, tableTop, {
+            align: 'center'
         });
 
-        if (this.exibirMarcaDaguaDanfe) {
-            const topPosition = Number(Number(this.ide.tpAmb)) !== 2 ? topDestinatario + 38 : topDestinatario + 58;
-            const leftPosition = Number(Number(this.ide.tpAmb)) !== 2 ? left + 150 : left + 100;
-            this.doc.fontSize(26).font('Arial-bold').fillColor('#c7c7c7').text('NFeWizard-io', leftPosition, topPosition, {
-                characterSpacing: 0.5,
-            });
-        }
+        tableTop += this.itemHeight;
+        console.log(`${this.qrcodePath}/qrcode.png`)
+        const qrcodePNG = `${this.qrcodePath}/qrcode.png`;
+        this.doc.image(`${this.qrcodePath}/qrcode.png`, 2, tableTop, { width: 70.87, height: 70.87 });
 
-        if (Number(Number(this.ide.tpAmb)) === 2) {
-            this.doc.fontSize(14).font('Arial-bold').fillColor('grey').text('AMBIENTE DE HOMOLOGAÇÃO - NF-E SEM VALOR FISCAL', left + 100, topDestinatario + 45, {
-                characterSpacing: 1
-            });
-        }
-        // .rotate(45, { origin: [0, 0] })
+        tableTop += 4;
+
+        this.doc.font('Arial-bold').text(`CONSUMIDOR - CPF 000.000.000-00`, 75, tableTop, {
+            align: 'left'
+        }).font('Arial')
+        .text(' - Marco Aurélio Silva Lima -')
+        .text('Rua Teste teste teste, 262, Bairro Teste, Taubaté - SP');
+
+
+        // QRCode.toDataURL('https://www.homologacao.nfce.fazenda.sp.gov.br/qrcode?p=NFe35240808819185000172650011452380619650831611|2|2|1|49f93ae0071a511388510ea51e01a6f111fbc9fc', function (err, url) {
+        //     console.log(url)
+        // })
     }
 
     async generatePDF(exibirMarcaDaguaDanfe?: boolean) {
@@ -965,7 +1016,7 @@ class NFCEGerarDanfe {
             // this.doc.on('pageAdded', () => {
             //     this.drawHeader(false);
             // });
-            // this.drawFooter();
+            this.drawFooter();
             // this.doc.on('pageAdded', () => {
             //     this.drawFooter();
             // });
