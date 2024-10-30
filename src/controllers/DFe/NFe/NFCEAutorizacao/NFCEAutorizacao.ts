@@ -253,7 +253,7 @@ class NFCEAutorizacao extends BaseNFE {
             NFe.infNFe.emit = Object.assign({ [this.validaDocumento(String(NFe.infNFe.emit.CNPJCPF), 'emitente')]: NFe.infNFe.emit.CNPJCPF }, NFe.infNFe.emit)
             delete NFe.infNFe.emit.CNPJCPF;
             // Valida Documento do destinatário
-            NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest.CNPJCPF), 'destinatário')]: NFe.infNFe.dest.CNPJCPF }, NFe.infNFe.dest)
+            NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF  || ''), 'destinatário')]: NFe.infNFe.dest?.CNPJCPF  || '' }, NFe.infNFe.dest)
             delete NFe.infNFe.dest.CNPJCPF;
             // Valida Documento do transportador
             if (NFe.infNFe.transp.transporta) {

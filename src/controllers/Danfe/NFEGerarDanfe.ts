@@ -32,7 +32,7 @@ class NFEGerarDanfe {
     protNFe: ProtNFe | undefined;
     det: DetProd | DetProd[];
     ide: Ide;
-    dest: Dest;
+    dest: Dest | undefined;
     emit: Emit;
     total: Total;
     transp: Transp;
@@ -60,10 +60,10 @@ class NFEGerarDanfe {
         this.det = det;
         this.ide = ide;
         this.emit = emit;
-        this.dest = dest;
         this.total = total;
         this.transp = transp;
         this.infAdic = infAdic;
+        if (dest) this.dest = dest;
 
         if (this.protNFe?.infProt.nProt) {
             this.enviada = true;
@@ -133,7 +133,7 @@ class NFEGerarDanfe {
         this.doc.fontSize(5).text(`RECEBEMOS DE ${this.emit.xNome} OS PRODUTOS / SERVIÇOS CONSTANTES DA NOTA FISCAL INDICADO AO LADO`, 10, 26, {
             characterSpacing: 0.5
         });
-        this.doc.fontSize(6).text(`EMISSÃO: ${format(new Date(this.ide.dhEmi), 'dd-MM-yyyy')} -  DEST. / REM.: ${this.dest.xNome}  -  VALOR TOTAL: R$ ${parseFloat(String(this.total.ICMSTot.vNF)).toFixed(2)}`, 10, 33.5, {
+        this.doc.fontSize(6).text(`EMISSÃO: ${format(new Date(this.ide.dhEmi), 'dd-MM-yyyy')} -  DEST. / REM.: ${this.dest?.xNome || ''}  -  VALOR TOTAL: R$ ${parseFloat(String(this.total.ICMSTot.vNF)).toFixed(2)}`, 10, 33.5, {
             characterSpacing: 0.5
         });
         /** RIGHT */
@@ -351,7 +351,7 @@ class NFEGerarDanfe {
 
     _buildDestinatario() {
         const { top, left } = this.doc.page.margins;
-        const docDest = this.documento.mascaraCnpjCpf(this.dest.CNPJCPF || this.dest.CNPJ || this.dest.CPF || '')
+        const docDest = this.documento.mascaraCnpjCpf(this.dest?.CNPJCPF || this.dest?.CNPJ || this.dest?.CPF || '')
         this.setLineStyle(0.75, '#1c1c1c');
         const topDestinatario = top + 90;
 
@@ -359,7 +359,7 @@ class NFEGerarDanfe {
             this.doc.rect(left, topDestinatario + 120, 398, 23).stroke();
             let xNome = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL';
             if (Number(this.ide.tpAmb) !== 2) {
-                xNome = String(this.dest.xNome);
+                xNome = String(this.dest?.xNome || '');
             }
             this.doc.fontSize(5).font('Times-Roman').text('NOME / RAZÃO SOCIAL', left + 4, topDestinatario + 125, {
                 characterSpacing: 0.5,
@@ -389,7 +389,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('ENDEREÇO', left + 4, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(`${this.dest.enderDest?.xLgr}, ${this.dest.enderDest?.nro}`, left + 5, topDestinatario + 158, {
+            this.doc.fontSize(8).text(`${this.dest?.enderDest?.xLgr  || ''}, ${this.dest?.enderDest?.nro  || ''}`, left + 5, topDestinatario + 158, {
                 characterSpacing: 1,
             });
 
@@ -397,7 +397,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('BAIRRO / DISTRITO', left + 324, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(String(this.dest.enderDest?.xBairro), left + 326, topDestinatario + 158, {
+            this.doc.fontSize(8).text(String(this.dest?.enderDest?.xBairro  || ''), left + 326, topDestinatario + 158, {
                 characterSpacing: 1,
             });
 
@@ -405,7 +405,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('CEP', left + 442.5, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(String(this.dest.enderDest?.CEP), left + 443.5, topDestinatario + 158, {
+            this.doc.fontSize(8).text(String(this.dest?.enderDest?.CEP  || ''), left + 443.5, topDestinatario + 158, {
                 characterSpacing: 1,
             });
 
@@ -422,7 +422,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('MUNICÍPIO', left + 4, topDestinatario + 171, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(String(this.dest.enderDest?.xMun), left + 5, topDestinatario + 181, {
+            this.doc.fontSize(8).text(String(this.dest?.enderDest?.xMun || ''), left + 5, topDestinatario + 181, {
                 characterSpacing: 1,
             });
 
@@ -430,7 +430,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('FONE / FAX', left + 250.5, topDestinatario + 171, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(this.dest.enderDest?.fone  || '', left + 250.5, topDestinatario + 181, {
+            this.doc.fontSize(8).text(this.dest?.enderDest?.fone  || '', left + 250.5, topDestinatario + 181, {
                 characterSpacing: 1,
             });
 
@@ -438,7 +438,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('UF', left + 363.5, topDestinatario + 171, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(String(this.dest.enderDest?.UF), left + 363.5, topDestinatario + 181, {
+            this.doc.fontSize(8).text(String(this.dest?.enderDest?.UF || ''), left + 363.5, topDestinatario + 181, {
                 characterSpacing: 1,
             });
 
@@ -446,7 +446,7 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('INSCRIÇÃO ESTADUAL', left + 403.5, topDestinatario + 171, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(String(this.dest.indIEDest), left + 403.5, topDestinatario + 181, {
+            this.doc.fontSize(8).text(String(this.dest?.indIEDest || ''), left + 403.5, topDestinatario + 181, {
                 characterSpacing: 1,
             });
 

@@ -40,7 +40,7 @@ export interface LayoutNFe {
  * Informações da NF-e 
  * GRUPO A
  */
-type InfNFe = {
+export type InfNFe = {
     /**
      * @param {4.00} versao - Versão do leiaute	
      *  Versão do leiaute (4.00)
@@ -73,7 +73,7 @@ type InfNFe = {
     /**
      * @param {Dest} dest - Identificação do Destinatário da NF-e	
      */
-    dest: Dest;
+    dest?: Dest;
     /**
      * @param {AutXml} autXML - Pessoas autorizadas a acessar o XML da NF-e
      * Max: 10 ocorrências
@@ -283,7 +283,7 @@ export type Ide = {
  * Informação de Documentos Fiscais referenciados
  * GRUPO BA
  */
-type NFref = {
+export type NFref = {
     /**
      * @param {string} refNFe - Chave de acesso da NF-e referenciada
      * Referencia uma NF-e (modelo 55) emitida anteriormente, vinculada a NF-e atual, ou uma NFC-e (modelo 65)
@@ -310,7 +310,7 @@ type NFref = {
 
 }
 /** [refNF] - Informação da NF modelo 1/1A ou NF modelo 2 referenciada (alterado pela NT2016.002)*/
-type RefNF = {
+export type RefNF = {
     /**
     * @param {number} cUF - Código da UF do emitente
     * Utilizar a Tabela de código de UF do IBGE
@@ -343,7 +343,7 @@ type RefNF = {
     nNF: number;
 }
 /** [refNFP] - Informações da NF de produtor rural referenciada	*/
-type refNFP = {
+export type refNFP = {
     /**
     * @param {number} cUF - Código da UF do emitente
     * Utilizar a Tabela de código de UF do IBGE
@@ -386,7 +386,7 @@ type refNFP = {
     refCTe: string;
 }
 /** [refECF] - Informações do Cupom Fiscal referenciado	*/
-type refECF = {
+export type refECF = {
     /**
      * @param {number} mod - Modelo do Documento Fiscal
      * "2B"=Cupom Fiscal emitido por máquina registradora (não ECF);
@@ -463,7 +463,7 @@ export type Emit = {
     [key: string]: string | number | EnderEmit | undefined;
 }
 /** [EnderEmit] - Endereço do emitente */
-type EnderEmit = {
+export type EnderEmit = {
     /**
     * @param {string} xLgr - Logradouro
     */
@@ -520,7 +520,7 @@ type EnderEmit = {
  * Informações do fisco emitente (uso exclusivo do fisco)
  * GRUPO D
  */
-type Avulsa = {
+export type Avulsa = {
     /**
     * @param {string} CNPJ - CNPJ do órgão emitente
     * Informar os zeros não significativos.
@@ -645,7 +645,7 @@ export type Dest = {
     email?: string;
 }
 /** [EnderDest] - Endereço do destinatário */
-type EnderDest = {
+export type EnderDest = {
     /**
     * @param {string} xLgr - Logradouro
     */
@@ -703,7 +703,7 @@ type EnderDest = {
  * Identificação do Local de retirada	
  * GRUPO F
  */
-type Retirada = {
+export type Retirada = {
     /**
     * @param {string} CNPJ - CNPJ
     * Informar CNPJ ou CPF. Preencher os zeros não significativos.
@@ -785,7 +785,7 @@ type Retirada = {
  * Identificação do Local de entrega	
  * GRUPO G
  */
-type Entrega = {
+export type Entrega = {
     /**
      * @param {string} CNPJ - CNPJ
      * Informar CNPJ ou CPF. Preencher os zeros não significativos. (v2.0)
@@ -1093,7 +1093,7 @@ export type Prod = {
  * Tributos incidentes no Produto ou Serviço	
  * GRUPO I
  */
-type Imposto = {
+export type Imposto = {
     /**
      * @param {ICMS} ICMS - Informações do ICMS da Operação própria e ST
      */
@@ -1265,7 +1265,7 @@ export type ICMS = {
     ICMSSN900?: ICMSSN900;
 }
 /** [ICMS00] - Tributação do ICMS = 00	*/
-type ICMS00 = {
+export type ICMS00 = {
     /**
      * @param {'00'} CST - Tributação do ICMS = 00
      */
@@ -1316,7 +1316,7 @@ type ICMS00 = {
     vFCP?: number;
 }
 /** [ICMS02] - Grupo Tributação do ICMS monofásico */
-type ICMS02 = {
+export type ICMS02 = {
     /**
      * @param {'02'} CST - Tributação do ICMS
      * 02= Tributação monofásica própria sobre combustíveis;
@@ -1352,7 +1352,7 @@ type ICMS02 = {
     vICMSMono: number;
 }
 /** [ICMS10] - Grupo Tributação do ICMS = 10 */
-type ICMS10 = {
+export type ICMS10 = {
     /**
      * @param {'10'} CST - Tributação do ICMS
      * 10=Tributada e com cobrança do ICMS por substituição tributária
@@ -1441,7 +1441,7 @@ type ICMS10 = {
     motDesICMS?: 3 | 9 | 12;
 }
 /** [ICMS15] - Grupo Tributação do ICMS monofásico */
-type ICMS15 = {
+export type ICMS15 = {
     /**
      * @param {'15'} CST - Tributação do ICMS
      * 15=Tributação monofásica própria e com responsabilidade pela retenção sobre combustíveis
@@ -1504,7 +1504,7 @@ type ICMS15 = {
     motRedAdRem?: 1 | 9;
 }
 /** [ICMS20] - Grupo Tributação do ICMS = 20 */
-type ICMS20 = {
+export type ICMS20 = {
     /**
      * @param {'20'} CST - Tributação do ICMS
      * 20=Com redução de base de cálculo
@@ -1585,7 +1585,7 @@ type ICMS20 = {
     indDeduzDeson?: boolean;
 }
 /** [ICMS30] - Grupo Tributação do ICMS = 30 */
-type ICMS30 = {
+export type ICMS30 = {
     /**
      * @param {'30'} CST - Tributação do ICMS
      * 30=Isenta ou não tributada e com cobrança do ICMS por substituição tributária
@@ -1674,7 +1674,7 @@ type ICMS30 = {
     indDeduzDeson?: boolean;
 }
 /** [ICMS40] - Grupo Tributação ICMS = 40, 41, 50 */
-type ICMS40 = {
+export type ICMS40 = {
     /**
      * @param {'40' | '41' | '50'} CST - Tributação do ICMS
      * 40=Isenta
@@ -1731,7 +1731,7 @@ type ICMS40 = {
     indDeduzDeson?: boolean;
 }
 /** [ICMS51] - Grupo Tributação do ICMS = 51 */
-type ICMS51 = {
+export type ICMS51 = {
     /**
      * @param {'51'} CST - Tributação do ICMS
      * 51=Diferimento
@@ -1825,7 +1825,7 @@ type ICMS51 = {
     vFCPEfet?: number;
 }
 /** [ICMS53] - Grupo Tributação do ICMS monofásico */
-type ICMS53 = {
+export type ICMS53 = {
     /**
      * @param {'53'} CST - Tributação do ICMS
      * 53= Tributação monofásica própria sobre combustíveis com recolhimento diferido;
@@ -1886,7 +1886,7 @@ type ICMS53 = {
     adRemICMSDif?: number;
 }
 /** [ICMS60] - Grupo Tributação do ICMS = 60 */
-type ICMS60 = {
+export type ICMS60 = {
     /**
      * @param {'60'} CST - Tributação do ICMS
      * 60=ICMS cobrado anteriormente por substituição tributária
@@ -1963,7 +1963,7 @@ type ICMS60 = {
     vICMSEfet?: number;
 }
 /** [ICMS61] - Grupo Tributação do ICMS monofásico */
-type ICMS61 = {
+export type ICMS61 = {
     /**
      * @param {'61'} CST - Tributação do ICMS
      * 61= Tributação monofásica sobre combustíveis cobrada anteriormente;
@@ -1999,7 +1999,7 @@ type ICMS61 = {
     vICMSMonoRet: number;
 }
 /** [ICMS70] - Grupo Tributação do ICMS = 70 */
-type ICMS70 = {
+export type ICMS70 = {
     /**
      * @param {'70'} CST - Tributação do ICMS
      * 70=Com redução de base de cálculo e cobrança do ICMS por substituição tributária
@@ -2074,7 +2074,7 @@ type ICMS70 = {
     vICMSST: number;
 }
 /** [ICMS90] - Grupo Tributação do ICMS = 90 */
-type ICMS90 = {
+export type ICMS90 = {
     /**
      * @param {'90'} CST - Tributação do ICMS
      * 90=Outros
@@ -2149,7 +2149,7 @@ type ICMS90 = {
     vICMSST: number;
 }
 /** [ICMSPart] - Grupo de Partilha do ICMS entre a UF de origem e UF de destino ou a UF definida na legislação. */
-type ICMSPart = {
+export type ICMSPart = {
     /**
      * @param {number} orig - Origem da mercadoria
      * 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8
@@ -2234,7 +2234,7 @@ type ICMSPart = {
     UFST: string;
 }
 /** [ICMSST] - Grupo de Repasse de ICMS ST retido anteriormente em operações interestaduais com repasses através do Substituto Tributário */
-type ICMSST = {
+export type ICMSST = {
     /**
      * @param {number} orig - Origem da mercadoria
      * 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8
@@ -2283,7 +2283,7 @@ type ICMSST = {
     vICMSSTDest: number;
 }
 /** [ICMSSN101] - Grupo CRT=1 – Simples Nacional e CSOSN=101 */
-type ICMSSN101 = {
+export type ICMSSN101 = {
     /**
      * @param {number} orig - Origem da mercadoria
      * 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8
@@ -2312,7 +2312,7 @@ type ICMSSN101 = {
     vCredICMSSN: number;
 }
 /** [ICMSSN102] - Grupo CRT=1 – Simples Nacional, CRT=4 – MEI e CSOSN=102, 103, 300 ou 400 */
-type ICMSSN102 = {
+export type ICMSSN102 = {
     /**
      * @param {number} orig - Origem da mercadoria
      * 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8
@@ -2336,7 +2336,7 @@ type ICMSSN102 = {
     CSOSN: 102 | 103 | 300 | 400;
 }
 /** [ICMSSN201] - Grupo CRT=1 – Simples Nacional e CSOSN=201 */
-type ICMSSN201 = {
+export type ICMSSN201 = {
     /**
      * @param {number} orig - Origem da mercadoria
      * 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8
@@ -2396,7 +2396,7 @@ type ICMSSN201 = {
     vCredICMSSN?: number;
 }
 /** [ICMSSN202] - Grupo CRT=1 – Simples Nacional e CSOSN=202 ou 203 */
-type ICMSSN202 = {
+export type ICMSSN202 = {
     /**
      * @param {number} orig - Origem da mercadoria
      * 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8
@@ -2457,7 +2457,7 @@ type ICMSSN202 = {
     vCredICMSSN?: number;
 }
 /** [ICMSSN500] - Grupo CRT=1 – Simples Nacional e CSOSN = 500 */
-type ICMSSN500 = {
+export type ICMSSN500 = {
     /**
      * @param {number} orig - Origem da mercadoria
      * 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8
@@ -2533,7 +2533,7 @@ type ICMSSN500 = {
     vICMSEfet?: number;
 }
 /** [ICMSSN900] - Grupo CRT=1 – Simples Nacional, CRT=4 – MEI e CSOSN=900 */
-type ICMSSN900 = {
+export type ICMSSN900 = {
     /**
      * @param {number} orig - Origem da mercadoria
      * 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8
@@ -2642,7 +2642,7 @@ type ICMSSN900 = {
     vCredICMSSN?: number;
 }
 /** [ICMSUFDest] - Informação do ICMS Interestadual	 */
-type ICMSUFDest = {
+export type ICMSUFDest = {
     /**
      * @param {number} vBCUFDest - Valor da BC do ICMS na UF de destino
      * Valor da Base de Cálculo do ICMS na UF de destino.
@@ -2745,7 +2745,7 @@ export type IPI = {
      */
     IPINT?: IPINT;
 };
-type IPITrib = {
+export type IPITrib = {
     /**
      * @param {number} CST - Código da situação tributária do IPI
      * 00=Entrada com recuperação de crédito
@@ -2776,7 +2776,7 @@ type IPITrib = {
      */
     vIPI: string;
 };
-type IPINT = {
+export type IPINT = {
     /**
      * @param {number} CST - Código da situação tributária do IPI
      * 01=Entrada tributada com alíquota zero
@@ -2798,7 +2798,7 @@ type IPINT = {
  * Grupo Imposto de Importação	
  * GRUPO OP
  */
-type II = {
+export type II = {
     /**
      * @param {number} vBC - Valor BC do Imposto de Importação
      */
@@ -2822,7 +2822,7 @@ type II = {
  * Grupo PIS
  * GRUPO Q
  */
-type PIS = {
+export type PIS = {
     /**
      * @param {PISAliq} PISAliq - Grupo PIS tributado pela alíquota
      */
@@ -2840,7 +2840,7 @@ type PIS = {
      */
     PISOutr?: PISOutr;
 };
-type PISAliq = {
+export type PISAliq = {
     /**
      * @param {string} CST - Código de Situação Tributária do PIS
      * 01=Operação Tributável (base de cálculo = valor da operação alíquota normal (cumulativo/não cumulativo))
@@ -2860,7 +2860,7 @@ type PISAliq = {
      */
     vPIS: string;
 }
-type PISQtde = {
+export type PISQtde = {
     /**
      * @param {string} CST - Código de Situação Tributária do PIS
      * @observation 03=Operação Tributável (base de cálculo = quantidade vendida x alíquota por unidade de produto)
@@ -2879,7 +2879,7 @@ type PISQtde = {
      */
     vPIS: string;
 }
-type PISNT = {
+export type PISNT = {
     /**
      * @param {string} CST - Código de Situação Tributária do PIS
      * @observation 04=Operação Tributável (tributação monofásica (alíquota zero))
@@ -2891,7 +2891,7 @@ type PISNT = {
      */
     CST: string
 }
-type PISOutr = {
+export type PISOutr = {
     /**
      * @param {string} CST -Código de Situação Tributária do PIS
      * @observation 49=Outras Operações de Saída
@@ -2947,7 +2947,7 @@ type PISOutr = {
  * Grupo PIS Substituição Tributária	
  * GRUPO R
  */
-type PISST = {
+export type PISST = {
     /**
      * @param {number} vBC - Valor da Base de Cálculo do PIS
      */
@@ -2981,7 +2981,7 @@ type PISST = {
  * Grupo COFINS	
  * GRUPO S
  */
-type COFINS = {
+export type COFINS = {
     /**
      * @param {COFINSAliq} COFINSAliq - Grupo COFINS tributado pela alíquota
      */
@@ -2999,7 +2999,7 @@ type COFINS = {
      */
     COFINSOutr?: COFINSOutr;
 };
-type COFINSAliq = {
+export type COFINSAliq = {
     /**
      * @param {string} CST - Código de Situação Tributária da COFINS
      * @observation 01=Operação Tributável (base de cálculo = valor da operação alíquota normal (cumulativo/não cumulativo))
@@ -3019,7 +3019,7 @@ type COFINSAliq = {
      */
     vCOFINS: string;
 };
-type COFINSQtde = {
+export type COFINSQtde = {
     /**
      * @param {string} CST - Código de Situação Tributária da COFINS
      * @observation 03=Operação Tributável (base de cálculo = quantidade vendida x alíquota por unidade de produto)
@@ -3038,7 +3038,7 @@ type COFINSQtde = {
      */
     vCOFINS: string;
 };
-type COFINSNT = {
+export type COFINSNT = {
     /**
      * @param {string} CST - Código de Situação Tributária da COFINS
      * @observation 04=Operação Tributável (tributação monofásica, alíquota zero)
@@ -3050,7 +3050,7 @@ type COFINSNT = {
      */
     CST: string;
 };
-type COFINSOutr = {
+export type COFINSOutr = {
     /**
      * @param {number} CST - Código de Situação Tributária da COFINS
      * @observation 49=Outras Operações de Saída
@@ -3106,7 +3106,7 @@ type COFINSOutr = {
  * Grupo COFINS Substituição Tributária
  * GRUPO T
  */
-type COFINSST = {
+export type COFINSST = {
     /**
      * @param {number} vBC - Valor da Base de Cálculo da COFINS
      */
@@ -3140,7 +3140,7 @@ type COFINSST = {
  * Grupo ISSQN	
  * GRUPO U
  */
-type ISSQN = {
+export type ISSQN = {
     /**
      * @param {number} vBC - Valor da Base de Cálculo do ISSQN
      */
@@ -3221,7 +3221,7 @@ type ISSQN = {
  * Grupo ISSQN	
  * GRUPO U
  */
-type impostoDevol = {
+export type impostoDevol = {
     /**
      * @param {number} pDevol - Percentual da mercadoria devolvida
      * O valor máximo deste percentual é 100%, no caso de devolução total da mercadoria.
@@ -3233,7 +3233,7 @@ type impostoDevol = {
     IPI: IPIDevol;
 
 };
-type IPIDevol = {
+export type IPIDevol = {
     /**
     * @param {number} vIPIDevol - Valor do IPI devolvido
     */
@@ -3245,7 +3245,7 @@ type IPIDevol = {
  * Grupo de observações de uso livre (para o item da NF-e)	
  * GRUPO VA
  */
-type ObsItem = {
+export type ObsItem = {
     /**
      * @param {string} obsItem - Grupo de observações de uso livre (para o item da NF-e)
      */
@@ -3259,7 +3259,7 @@ type ObsItem = {
      */
     obsFisco?: ObsFisco;
 };
-type ObsCont = {
+export type ObsCont = {
     /**
      * @param {string} xCampo - Identificação do campo
      */
@@ -3269,7 +3269,7 @@ type ObsCont = {
      */
     xTexto: string;
 };
-type ObsFisco = {
+export type ObsFisco = {
     /**
      * @param {string} xCampo - Identificação do campo
      */
@@ -3300,7 +3300,7 @@ export type Total = {
      */
     retTrib?: RetTrib;
 }
-type ICMSTot = {
+export type ICMSTot = {
     /**
      * @param {string} vBC - Base de Cálculo do ICMS
      * 
@@ -3432,7 +3432,7 @@ type ICMSTot = {
      */
     vTotTrib?: string;
 }
-type ISSQNtot = {
+export type ISSQNtot = {
     /**
      * @param {number} vServ - Valor total dos Serviços sob não- incidência ou não tributados pelo ICMS
      * 
@@ -3496,7 +3496,7 @@ type ISSQNtot = {
      */
     cRegTrib?: 1 | 2 | 3 | 4 | 5 | 6;
 }
-type RetTrib = {
+export type RetTrib = {
     /**
      * @param {number} vRetPIS - Valor Retido de PIS  
      */
@@ -3573,7 +3573,7 @@ export type Transp = {
      */
     vol?: Vol[] | Vol;
 }
-type Transporta = {
+export type Transporta = {
     /**
      * @param {string} CNPJCPF - CNPJ/CPF do Transportador  
      */
@@ -3607,7 +3607,7 @@ type Transporta = {
      */
     UF?: string;
 }
-type RetTransp = {
+export type RetTransp = {
     /**
      * @param {number} vServ - Valor do Serviço  
      */
@@ -3633,7 +3633,7 @@ type RetTransp = {
      */
     cMunFG: string;
 }
-type veicTransp = {
+export type veicTransp = {
     /**
      * @param {string} placa - Placa do Veículo  
      * Informar somente letras e dígitos
@@ -3649,7 +3649,7 @@ type veicTransp = {
      */
     RNTC?: string;
 }
-type Reboque = {
+export type Reboque = {
     /**
      * @param {string} placa - Placa do Veículo  
      * Informar somente letras e dígitos
@@ -3695,7 +3695,7 @@ export type Vol = {
      */
     lacres?: Lacres[] | Lacres;
 }
-type Lacres = {
+export type Lacres = {
     /**
      * @param {string} nLacre - Número dos Lacres  
      */
@@ -3707,7 +3707,7 @@ type Lacres = {
  * Grupo Cobrança	
  * GRUPO Y
  */
-type Cobr = {
+export type Cobr = {
     /**
      * @param {Fatura} fat - Grupo Fatura
      */
@@ -3717,7 +3717,7 @@ type Cobr = {
      */
     dup?: Parcela[] | Parcela;
 }
-type Fatura = {
+export type Fatura = {
     /**
      * @param {string} nFat - Número da Fatura
      * Observação: este padrão de preenchimento será obrigatório somente a partir de 03/09/2018
@@ -3736,7 +3736,7 @@ type Fatura = {
      */
     vLiq?: number;
 }
-type Parcela = {
+export type Parcela = {
     /**
      * @param {string} nDup - Número da Parcela
      * Observação: este padrão de preenchimento será obrigatório somente a partir de 03/09/2018
@@ -3758,13 +3758,13 @@ type Parcela = {
  * Grupo de Informações de Pagamento
  * GRUPO YA
  */
-type Pag = {
+export type Pag = {
     /**
      * @param {DetPag[]} detPag - Grupo Detalhamento do Pagamento
      */
     detPag: DetPag[] | DetPag;
 }
-type DetPag = {
+export type DetPag = {
     /**
      * @param {0 | 1} indPag - Indicador da Forma de Pagamento  
      * 0= Pagamento à Vista
@@ -3772,11 +3772,11 @@ type DetPag = {
      */
     indPag: number;
     /**
-     * @param {number} tPag - Meio de pagamento  
+     * @param {string} tPag - Meio de pagamento  
      * Utilizar a Tabela de códigos dos meios de pagamentos publicada no Portal Nacional da Nota Fiscal Eletrônica
      * Atualizado na NT 2020.006
      */
-    tPag: number;
+    tPag: string;
     /**
      * @param {string} xPag - Descrição do Meio de Pagamento  
      * Descrição do meio de pagamento. Preencher informando o meio de pagamento utilizado quando o código do meio de pagamento for informado como 99-outros.
@@ -3806,10 +3806,10 @@ type DetPag = {
      */
     card?: Card;
     /**
-     * @param {number} vTroco - Valor do troco  
+     * @param {string} vTroco - Valor do troco  
      * Valor do troco (Incluído na NT 2016/002)
      */
-    vTroco?: number;
+    vTroco?: string;
     /**
      * @param {string} CNPJReceb - CNPJ do beneficiário do pagamento  
      * Informar o CNPJ do estabelecimento beneficiário do pagamento
@@ -3821,7 +3821,7 @@ type DetPag = {
      */
     idTermPag?: string;
 }
-type Card = {
+export type Card = {
     /**
      * @param {string} tpIntegra - Tipo de Integração para pagamento  
      * Tipo de Integração do processo de pagamento com o sistema de automação da empresa:
@@ -3851,7 +3851,7 @@ type Card = {
  * Grupo Grupo do Intermediador da Transação	
  * GRUPO YB
  */
-type InfIntermed = {
+export type InfIntermed = {
     /**
      * @param {string} CNPJ - CNPJ do Intermediador da Transação
      * Ocor.
@@ -3893,13 +3893,13 @@ export type InfAdic = {
      */
     procRef?: ProcRef[] | ProcRef;
 }
-type InfAdFisco = {
+export type InfAdFisco = {
     /**
      * @param {string} infAdFisco - Informações Adicionais de Interesse do Fisco
      */
     infAdFisco: string;
 }
-type ProcRef = {
+export type ProcRef = {
     /**
      * @param {string} nProc - Identificador do processo ou ato concessório
      */
@@ -3919,7 +3919,7 @@ type ProcRef = {
  * Grupo Exportação	
  * GRUPO ZA
  */
-type Exporta = {
+export type Exporta = {
     /**
      * @param {string} UFSaidaPais - Sigla da UF de Embarque ou de transposição de fronteira
      */
@@ -3939,7 +3939,7 @@ type Exporta = {
  * Grupo Compra	
  * GRUPO ZB
  */
-type Compra = {
+export type Compra = {
     /**
      * @param {string} xNEmp - Nota de Empenho
      */
@@ -3959,7 +3959,7 @@ type Compra = {
  * Grupo Compra	
  * GRUPO ZC
  */
-type Cana = {
+export type Cana = {
     /**
      * @param {string} safra - Identificação da safra
      */
@@ -4001,7 +4001,7 @@ type Cana = {
      */
     vLiqFor: number;
 }
-type forDia = {
+export type forDia = {
     /**
      * @param {number} dia - Dia
      */
@@ -4011,7 +4011,7 @@ type forDia = {
      */
     qtde: number;
 }
-type Deducao = {
+export type Deducao = {
     /**
      * @param {string} xDed - Descrição da Dedução
      */
@@ -4027,7 +4027,7 @@ type Deducao = {
  * Informações do Responsável Técnico pela emissão do DF-e	
  * GRUPO ZD
  */
-type InfRespTec = {
+export type InfRespTec = {
     /**
      * @param {string} CNPJ - CNPJ da pessoa jurídica responsável pelo sistema utilizado na emissão do documento fiscal eletrônico
      */
@@ -4049,7 +4049,7 @@ type InfRespTec = {
      */
     CSRT?: CSRT;
 }
-type CSRT = {
+export type CSRT = {
     /**
      * @param {number} idCSRT - Identificador do CSRT
      */
@@ -4065,7 +4065,7 @@ type CSRT = {
  * Informações de solicitação da NFF (NT 2021.002)	
  * GRUPO ZE
  */
-type InfSolicNFF = {
+export type InfSolicNFF = {
     /**
      * @param {string} xSolic - Solicitação de pedido de emissão da NFF	
      * Campos do pedido preenchidos no aplicativo móvel (app) da NFF, no formato JSON
@@ -4078,7 +4078,7 @@ type InfSolicNFF = {
  * Informações de solicitação da NFF (NT 2021.002)	
  * GRUPO ZX
  */
-type InfNFeSupl = {
+export type InfNFeSupl = {
     /**
      * @param {string} qrCode - Texto com o QR-Code impresso no DANFE NFC-e
      */
