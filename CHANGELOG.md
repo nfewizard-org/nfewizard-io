@@ -1,12 +1,19 @@
 # Changelog
 
-## [0.1.2] - 2024-10-23
+## [0.1.2] - 2024-10-30
 
 ### Fixed
-- Corrigidos problemas de tipagem que impediam a build e geração de DANFE.
+- Corrigidos problemas de tipagem que impediam a *build* e a geração de DANFE.
 
 ### Changed
-- Adicionado método de build com rollup.
+- **Build e Exportação:**
+  - Adicionado método de *build* com Rollup, incluindo suporte para exportação em formato CJS.
+  - Adicionada exportação de todos os tipos e interfaces relacionadas a NFe.
+  
+- **Geração de XML e DANFE:**
+  - Implementados métodos para geração automática dos grupos tributários ICMS, PIS e COFINS na criação do XML de NFe e NFCe.
+  - Adicionada geração de QR Code para DANFE NFC-e em versão beta.
+  - Exportados os métodos para geração automática dos grupos ICMS, PIS e COFINS.
 
 ## [0.1.0] - 2024-09-05
 

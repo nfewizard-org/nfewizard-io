@@ -24,6 +24,7 @@ import NFEAutorizacaoHandler from './util/NFEAutorizacaoHandler';
 import { GenericObject, LayoutNFe, NFe, ProtNFe } from '@Protocols';
 import BaseNFE from '../BaseNFe/BaseNFe.js';
 import { format } from 'date-fns';
+import { mountCOFINS, mountICMS, mountPIS } from '@Utils/NFEImposto.js';
 
 class NFEAutorizacao extends BaseNFE {
     xmlNFe: string[];
@@ -212,12 +213,23 @@ class NFEAutorizacao extends BaseNFE {
     }
 
     private gerarXmlNFeAutorizacao(data: NFe) {
-
         const createXML = (NFe: LayoutNFe) => {
             // Verificando se existe mais de um produto
             if (NFe?.infNFe?.det instanceof Array) {
                 // Adicionando indice ao item
                 const formatedItens = NFe.infNFe.det.map((det, index) => {
+                    if (det.imposto.ICMS.dadosICMS) {
+                        const icms = mountICMS(det.imposto.ICMS.dadosICMS);
+                        det.imposto.ICMS = icms;
+                    }
+                    if (det.imposto.PIS.dadosPIS) {
+                        const pis = mountPIS(det.imposto.PIS.dadosPIS);
+                        det.imposto.PIS = pis;
+                    }
+                    if (det.imposto.COFINS.dadosCOFINS) {
+                        const cofins = mountCOFINS(det.imposto.COFINS.dadosCOFINS);
+                        det.imposto.COFINS = cofins
+                    }
                     return {
                         $: {
                             nItem: index + 1,

@@ -18,12 +18,12 @@ export default {
             sourcemap: true,
             compact: true,
         },
-        {
-            dir: 'dist/cjs',
-            format: 'cjs',
-            sourcemap: true,
-            compact: true,
-        },
+        // {
+        //     dir: 'dist/cjs',
+        //     format: 'cjs',
+        //     sourcemap: true,
+        //     compact: true,
+        // },
     ],
     external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem'],
     plugins: [

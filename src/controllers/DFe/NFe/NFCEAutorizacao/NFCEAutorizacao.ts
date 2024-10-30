@@ -26,6 +26,7 @@ import BaseNFE from '../BaseNFe/BaseNFe.js';
 import { format } from 'date-fns';
 import { generateQRCodeURLOffline, generateQRCodeURLOnline } from './util/NFCEQRCode.js';
 import xml2js, { parseStringPromise, Builder } from 'xml2js';
+import { mountCOFINS, mountICMS, mountPIS } from '@Utils/NFEImposto.js';
 
 class NFCEAutorizacao extends BaseNFE {
     xmlNFe: string[];
@@ -114,7 +115,7 @@ class NFCEAutorizacao extends BaseNFE {
              * Captura o valor nRec e protNFe
              */
             const { nRec, protNFe } = this.utility.getProtNFe(xmlRetorno);
-            
+
             /**
              * 0 - assíncrona
              * 1 - síncrona
@@ -155,9 +156,9 @@ class NFCEAutorizacao extends BaseNFE {
     private diaEmissao(dhEmi: string) {
         // Converte a string para uma data
         const dataAtual = new Date(dhEmi);
-            
+
         // Extrai o dia com dois dígitos
-        const dia = dataAtual.getDate().toString().padStart(2, '0'); 
+        const dia = dataAtual.getDate().toString().padStart(2, '0');
 
         // Retorna o dia
         return dia;
@@ -234,6 +235,18 @@ class NFCEAutorizacao extends BaseNFE {
             if (NFe?.infNFe?.det instanceof Array) {
                 // Adicionando indice ao item
                 const formatedItens = NFe.infNFe.det.map((det, index) => {
+                    if (det.imposto.ICMS.dadosICMS) {
+                        const icms = mountICMS(det.imposto.ICMS.dadosICMS);
+                        det.imposto.ICMS = icms;
+                    }
+                    if (det.imposto.PIS.dadosPIS) {
+                        const pis = mountPIS(det.imposto.PIS.dadosPIS);
+                        det.imposto.PIS = pis;
+                    }
+                    if (det.imposto.COFINS.dadosCOFINS) {
+                        const cofins = mountCOFINS(det.imposto.COFINS.dadosCOFINS);
+                        det.imposto.COFINS = cofins
+                    }
                     return {
                         $: {
                             nItem: index + 1,
@@ -253,7 +266,7 @@ class NFCEAutorizacao extends BaseNFE {
             NFe.infNFe.emit = Object.assign({ [this.validaDocumento(String(NFe.infNFe.emit.CNPJCPF), 'emitente')]: NFe.infNFe.emit.CNPJCPF }, NFe.infNFe.emit)
             delete NFe.infNFe.emit.CNPJCPF;
             // Valida Documento do destinatário
-            NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF  || ''), 'destinatário')]: NFe.infNFe.dest?.CNPJCPF  || '' }, NFe.infNFe.dest)
+            NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF || ''), 'destinatário')]: NFe.infNFe.dest?.CNPJCPF || '' }, NFe.infNFe.dest)
             delete NFe.infNFe.dest.CNPJCPF;
             // Valida Documento do transportador
             if (NFe.infNFe.transp.transporta) {
@@ -330,11 +343,11 @@ class NFCEAutorizacao extends BaseNFE {
             if ([4, 9].includes(NFe.infNFe.ide.tpEmis)) {
                 // capturar digestValue
                 const digestValue = this.extrairDigestValue(xmlAssinado);
-               
+
                 // substituir tag qrcode
                 const tpAmb = NFe.infNFe.ide.tpAmb;
                 const valNF = NFe.infNFe.total.ICMSTot.vNF;
- 
+
                 const diaEmissao = this.diaEmissao(NFe.infNFe.ide.dhEmi);
                 qrCode = generateQRCodeURLOffline(chaveAcesso, '2', tpAmb, diaEmissao, valNF, digestValue, Number(idCSC), String(tokenCSC), this.utility);
 
@@ -344,7 +357,7 @@ class NFCEAutorizacao extends BaseNFE {
                     } else {
                         if (result.NFe?.infNFeSupl[0]?.qrCode) {
                             result.NFe.infNFeSupl[0].qrCode[0] = qrCode;
-                           
+
                             const builder = new Builder({
                                 headless: true, renderOpts: {
                                     pretty: false
@@ -447,7 +460,7 @@ class NFCEAutorizacao extends BaseNFE {
                 },
                 httpsAgent: agent
             });
-            
+
             /**
              * Verifica se houve rejeição no processamento do lote
              */

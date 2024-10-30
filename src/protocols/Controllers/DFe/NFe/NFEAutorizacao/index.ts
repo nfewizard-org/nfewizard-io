@@ -1263,6 +1263,11 @@ export type ICMS = {
      * Tributação ICMS pelo Simples Nacional, CSOSN=900 (v2.0)
      */
     ICMSSN900?: ICMSSN900;
+    /**
+     * @param {dadosICMS} data - Caso não tenha certeza do grupo do ICMS a ser utilizado
+     * Informe os dados dentro da tag 'dadosICMS' que a lib tentará definir automaticamente.
+     */
+    dadosICMS?: dadosICMS;
 }
 /** [ICMS00] - Tributação do ICMS = 00	*/
 export type ICMS00 = {
@@ -2697,6 +2702,293 @@ export type ICMSUFDest = {
     vICMSUFRemet: number;
 };
 
+export type dadosICMS = {
+    /**
+     * @param {number} orig - Origem da mercadoria
+     * 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8
+     * 1 - Estrangeira - Importação direta, exceto a indicada no código 6
+     * 2 - Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7
+     * 3 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 40% e inferior ou igual a 70%
+     * 4 - Nacional, cuja produção tenha sido feita em conformidade com os processos produtivos básicos de que tratam as legislações citadas nos Ajustes
+     * 5 - Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%
+     * 6 - Estrangeira - Importação direta, sem similar nacional, constante em lista da CAMEX e gás natural
+     * 7 - Estrangeira - Adquirida no mercado interno, sem similar nacional, constante lista CAMEX e gás natural
+     * 8 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 70%
+     */
+    orig?: number;
+    /**
+     * @param {string} CST - Tributação do ICMS
+     */
+    CST: string;
+    /**
+     * @param {number} modBC - Modalidade de determinação da BC do ICMS
+     * 0=Margem Valor Agregado (%)
+     * 1=Pauta (Valor)
+     * 2=Preço Tabelado Máx. (valor)
+     * 3=Valor da operação.
+     */
+    modBC?: number;
+    /**
+     * @param {number} vBC - Valor da BC do ICMS
+     */
+    vBC?: string;
+    /**
+     * @param {number} vICMS - Valor do ICMS
+     */
+    vICMS?: string;
+    /**
+     * @param {number} pFCP - Percentual do ICMS relativo ao Fundo de Combate à Pobreza (FCP)
+     * Percentual relativo ao Fundo de Combate à Pobreza (FCP).
+     */
+    pFCP?: number;
+    /**
+     * @param {number} vFCP - Valor do Fundo de Combate à Pobreza (FCP)
+     * Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP).
+     */
+    vFCP?: number;
+    /**
+     * @param {number} pICMS - Alíquota do imposto
+     * Alíquota do ICMS sem o FCP. Quando for o caso, informar a alíquota do FCP no campo pFCP
+     */
+    pICMS?: string;
+    /**
+     * @param {number} vBCFCP - Valor da Base de Cálculo do FCP
+     * Informar o valor da Base de Cálculo do FCP
+     */
+    vBCFCP?: number;
+    /**
+     * @param {number} qBCMono - Quantidade Tributada
+     * Informar a BC do ICMS em quantidade conforme unidade de medida estabelecida na legislação para o produto.
+     */
+    qBCMono?: number;
+    /**
+     * @param {number} adRemICMSRet - Alíquota ad rem do imposto retido anteriormente
+     * Alíquota ad rem do ICMS, estabelecida na legislação para o produto.
+     */
+    adRemICMSRet?: number;
+    /**
+     * @param {number} vICMSMono - Valor do ICMS próprio devido
+     * O valor do ICMS próprio devido é o resultado do valor do ICMS da operação menos valor do ICMS diferido.
+     */
+    vICMSMono?: number;
+    /**
+     * @param {number} modBCST - Modalidade de determinação da BC do ICMS ST
+     * 0=Preço tabelado ou máximo sugerido
+     * 1=Lista Negativa (valor)
+     * 2=Lista Positiva (valor)
+     * 3=Lista Neutra (valor)
+     * 4=Margem Valor Agregado (%)
+     * 5=Pauta (valor)
+     */
+    modBCST?: number;
+    /**
+     * @param {number} pMVAST - Percentual da margem de valor Adicionado do ICMS ST
+     * (v2.0)
+     */
+    pMVAST?: number;
+    /**
+     * @param {number} pRedBCST - Percentual da Redução de BC do ICMS ST
+     * (v2.0)
+     */
+    pRedBCST?: number;
+    /**
+     * @param {number} vBCST - Valor da BC do ICMS ST
+     * (v2.0)
+     */
+    vBCST?: string;
+    /**
+     * @param {number} pICMSST - Alíquota do imposto do ICMS ST
+     * Alíquota do ICMS ST sem o FCP. Quando for o caso, informar a alíquota do FCP no campo pFCP
+     */
+    pICMSST?: number;
+    /**
+     * @param {number} vICMSST - Valor do ICMS ST
+     * Valor do ICMS ST retido(v2.0)
+     */
+    vICMSST?: number;
+    /**
+     * @param {number} vICMSSTDeson - 
+     */
+    vICMSSTDeson?: number;
+    /**
+     * @param {string} motDesICMSST - 
+     */
+    motDesICMSST?: string;
+    /**
+     * @param {number} vICMSDeson - Valor do ICMS
+     * Informar nas operações:
+     * a) com produtos beneficiados com a desoneração condicional do ICMS.
+     * b) destinadas à SUFRAMA, informando-se o valor que seria devido se não houvesse isenção.
+     * c) de venda a órgão da administração pública direta e suas fundações e autarquias com isenção do ICMS. (NT 2011/004
+     * d) demais casos solicitados pelo Fisco. (NT 2016/002)
+     */
+    vICMSDeson?: number;
+    /**
+     * @param {number} motDesICMS - Motivo da desoneração do ICMS
+     * Campo será preenchido quando o campo anterior estiver preenchido. Informar o motivo da desoneração:
+     * 1=Táxi
+     * 3=Produtor Agropecuário
+     * 4=Frotista/Locadora
+     * 5=Diplomático/Consular
+     * 6=Utilitários e Motocicletas da Amazônia Ocidental e Áreas de Livre Comércio (Resolução 714/88 e 790/94 – CONTRAN e suas alterações)
+     * 7=SUFRAMA
+     * 8=Venda a Órgão Público
+     * 9=Outros. (NT 2011/004)
+     * 10=Deficiente Condutor (Convênio ICMS 38/12)
+     * 11=Deficiente Não Condutor (Convênio ICMS 38/12)
+     * 16=Olimpíadas Rio 2016 (NT 2015.002)
+     * 90=Solicitado pelo Fisco (NT 2016/002)
+     * Revogada a partir da versão 3.10 a possibilidade de usar o motivo 2=Deficiente Físico
+     */
+    motDesICMS?: number;
+    /**
+     * @param {boolean} indDeduzDeson - Indica se o valor do ICMS desonerado (vICMSDeson) deduz do valor do item (vProd)
+     * O campo só pode ser preenchido com:
+     * 0=Valor do ICMS desonerado (vICMSDeson) não deduz do valor do item (vProd) / total da NF-e.
+     * 1=Valor do ICMS desonerado (vICMSDeson) deduz do valor do item (vProd) / total da NF-e.
+     */
+    indDeduzDeson?: boolean;
+    /**
+     * @param {number} qBCMonoReten - Quantidade tributada sujeita a retenção
+     * Informar a BC do ICMS sujeita a retenção em quantidade conforme unidade de medida estabelecida na legislação para o produto.
+     */
+    qBCMonoReten?: number;
+    /**
+     * @param {number} adRemICMSReten - Alíquota ad rem do imposto com retenção
+     * Alíquota ad rem do ICMS sobre o biocombustível a ser adicionado para a composição da mistura vendida a consumidor final estabelecida na legislação para o produto.
+     */
+    adRemICMSReten?: number;
+    /**
+     * @param {number} vICMSMonoReten - Valor do ICMS com retenção
+     * O valor do ICMS é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida na legislação.
+     */
+    vICMSMonoReten?: number;
+    /**
+     * @param {number} pRedAdRem - Percentual de redução do valor da alíquota adrem do ICMS
+     * Informar o percentual de redução do valor da alíquota ad rem do ICMS.
+     */
+    pRedAdRem?: number;
+    /**
+     * @param {number} ICMSOp - 
+     */
+    ICMSOp?: number,
+    /**
+     * @param {number} pDif - Percentual do diferimento
+     * No caso de diferimento total, informar o percentual de diferimento "100".
+     */
+    pDif?: number;
+    /**
+     * @param {number} vICMSDif - Valor do ICMS diferido
+     */
+    vICMSDif?: number;
+    /**
+     * @param {number} vICMSMonoOp - Valor do ICMS da operação
+     * O valor do ICMS é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida em legislação, como se não houvesse o diferimento
+     */
+    vICMSMonoOp?: number;
+    /**
+     * @param {number} vICMSMonoDif - Valor do ICMS diferido
+     * O valor do ICMS é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida, multiplicado pelo percentual de diferimento.
+     */
+    vICMSMonoDif?: number;
+    /**
+     * @param {number} qBCMonoDif - Quantidade tributada diferida
+     * Informar a BC do ICMS diferido em quantidade conforme unidade de medida estabelecida na legislação para o produto.
+     */
+    qBCMonoDif?: number;
+    /**
+     * @param {number} adRemICMSDif - Alíquota ad rem do imposto diferido
+     * Alíquota ad rem do ICMS estabelecida na legislação para o produto.
+     */
+    adRemICMSDif?: number;
+    /**
+     * @param {number} vBCSTRet - Valor da BC do ICMS ST retido
+     * Valor da BC do ICMS ST cobrado anteriormente por ST (v2.0). O valor pode ser omitido quando a legislação não exigir a sua informação.
+     */
+    vBCSTRet?: number;
+    /**
+     * @param {number} pST - Alíquota suportada pelo Consumidor Final
+     * Deve ser informada a alíquota do cálculo do ICMS-ST, já incluso o FCP.
+     */
+    pST?: number;
+    /**
+     * @param {number} vICMSSubstituto - Valor do ICMS próprio do Substituto
+     * Valor do ICMS próprio do Substituto cobrado em operação anterior
+     */
+    vICMSSubstituto?: number;
+    /**
+     * @param {number} vICMSSTRet - Valor do ICMS ST retido
+     * Valor do ICMS ST cobrado anteriormente por ST (v2.0). O valor pode ser omitido quando a legislação não exigir a sua informação.
+     */
+    vICMSSTRet?: number;
+    /**
+     * @param {number} vBCFCPSTRet - Valor da Base de Cálculo do FCP retido anteriormente
+     * Informar o valor da Base de Cálculo do FCP retido anteriormente por ST
+     */
+    vBCFCPSTRet?: number;
+    /**
+     * @param {number} pFCPSTRet - Percentual do FCP retido anteriormente por Substituição Tributária
+     * Percentual relativo ao Fundo de Combate à Pobreza.
+     */
+    pFCPSTRet?: number;
+    /**
+     * @param {number} vFCPSTRet - Valor do FCP retido anteriormente por Substituição Tributária
+     * Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
+     */
+    vFCPSTRet?: number;
+    /**
+     * @param {number} pRedBCEfet - Percentual de redução da base de cálculo efetiva
+     * Percentual de redução, caso estivesse submetida ao regime comum de tributação, para obtenção da base de cálculo efetiva (vBCEfet).
+     */
+    pRedBCEfet?: number;
+    /**
+     * @param {number} vBCEfet - Valor da base de cálculo efetiva
+     * Valor da base de cálculo que seria atribuída à operação própria do contribuinte substituído, caso estivesse submetida ao regime comum de tributação, obtida pelo produto do Vprod por (1- pRedBCEfet).
+     */
+    vBCEfet?: number;
+    /**
+     * @param {number} pICMSEfet - Alíquota do ICMS efetiva
+     * Alíquota do ICMS na operação a consumidor final, caso estivesse submetida ao regime comum de tributação.
+     */
+    pICMSEfet?: number;
+    /**
+     * @param {number} vICMSEfet - Valor do ICMS efetivo
+     * Obtido pelo produto do valor do campo pICMSEfet pelo valor do campo vBCEfet, caso estivesse submetida ao regime comum de tributação.
+     */
+    vICMSEfet?: number;
+    /**
+     * @param {number} vBCSTDest - Valor da BC do ICMS ST da UF destino
+     */
+    vBCSTDest?: number;
+    /**
+     * @param {number} vICMSSTDest - Valor do ICMS ST da UF destino
+     */
+    vICMSSTDest?: number;
+    /**
+     * @param {number} CSOSN - Código de Situação da Operação
+     */
+    CSOSN?: number;
+    /**
+     * @param {number} pCredSN - Alíquota aplicável de cálculo do crédito (Simples Nacional)
+     * (v2.0)
+     */
+    pCredSN?: number;
+    /**
+     * @param {number} vCredICMSSN - Valor crédito do ICMS que pode ser aproveitado nos termos do art. 23 da LC 123/2006 (Simples Nacional)
+     * (v2.0)
+     */
+    vCredICMSSN?: number;
+    /**
+     * @param {number} pBCOp - Percentual da BC operação própria
+     */
+    pBCOp?: number;
+    /**
+     * @param {string} UFST - UF para qual é devido o ICMS ST
+     * Sigla da UF para qual é devido o ICMS ST da operação. Informar "EX" para Exterior.
+     */
+    UFST?: string;
+}
+
 /**
  * [IPI] 
  * Grupo IPI
@@ -2839,6 +3131,11 @@ export type PIS = {
      * @param {PISQtde} PISQtde - Grupo PIS Outras Operações
      */
     PISOutr?: PISOutr;
+    /**
+     * @param {dadosPIS} dadosPIS - Caso não tenha certeza do grupo do PIS a ser utilizado
+     * Informe os dados dentro da tag 'dadosPIS' que a lib tentará definir automaticamente
+     */
+    dadosPIS?: dadosPIS;
 };
 export type PISAliq = {
     /**
@@ -2941,6 +3238,32 @@ export type PISOutr = {
      */
     vPIS?: number;
 }
+export type dadosPIS = {
+    /**
+     * @param {string} CST - Código de Situação Tributária do PIS
+     */
+    CST: string;
+    /**
+     * @param {number} vBC - Valor da Base de Cálculo do PIS	
+     */
+    vBC?: string;
+    /**
+     * @param {number} pPIS - Alíquota do PIS (em percentual)	
+     */
+    pPIS?: string;
+    /**
+     * @param {number} vPIS - Valor do PIS	
+     */
+    vPIS?: string;
+    /**
+     * @param {number} qBCProd - Quantidade Vendida	
+     */
+    qBCProd?: string;
+    /**
+     * @param {number} vAliqProd - Alíquota do PIS (em reais)
+     */
+    vAliqProd?: string;
+}
 
 /**
  * [PISST] 
@@ -2998,6 +3321,11 @@ export type COFINS = {
      * @param {COFINSOutr} COFINSOutr - Grupo COFINS Outras Operações
      */
     COFINSOutr?: COFINSOutr;
+    /**
+     * @param {dadosCOFINS} dadosCOFINS - Caso não tenha certeza do grupo do COFINS a ser utilizado
+     * Informe os dados dentro da tag 'dadosCOFINS' que a lib tentará definir automaticamente
+     */
+    dadosCOFINS?: dadosCOFINS;
 };
 export type COFINSAliq = {
     /**
@@ -3100,6 +3428,32 @@ export type COFINSOutr = {
      */
     vCOFINS?: number;
 };
+export type dadosCOFINS = {
+    /**
+     * @param {string} CST - Código de Situação Tributária do COFINS
+     */
+    CST: string;
+    /**
+     * @param {number} vBC - Valor da Base de Cálculo do COFINS	
+     */
+    vBC?: string;
+    /**
+     * @param {number} pPIS - Alíquota do COFINS (em percentual)	
+     */
+    pCOFINS?: string;
+    /**
+     * @param {number} vPIS - Valor do COFINS	
+     */
+    vCOFINS?: string;
+    /**
+     * @param {number} qBCProd - Quantidade Vendida	
+     */
+    qBCProd?: string;
+    /**
+     * @param {number} vAliqProd - Alíquota do COFINS (em reais)
+     */
+    vAliqProd?: string;
+}
 
 /**
  * [COFINSST] 
@@ -4134,4 +4488,4 @@ export type NFe = {
 export type NFeDanfe = {
     NFe: LayoutNFe[] | LayoutNFe;
     protNFe?: ProtNFe;
-  } & Record<string, any>;
+} & Record<string, any>;

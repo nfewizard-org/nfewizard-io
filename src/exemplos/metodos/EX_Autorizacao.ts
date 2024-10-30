@@ -194,7 +194,7 @@ const callNFeWizard = async () => {
                         detPag: [
                             {
                                 indPag: 1,
-                                tPag: 99,
+                                tPag: '99',
                                 xPag: "Outros",
                                 vPag: "845.13"
                             }

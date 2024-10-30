@@ -18,3 +18,4 @@ import NFeWizard from './classes/NFeWizard';
 
 export { NFeWizard as default };
 export * from './protocols';
+export * from './utils/NFEImposto'
