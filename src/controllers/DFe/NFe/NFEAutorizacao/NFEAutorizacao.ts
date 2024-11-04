@@ -249,8 +249,10 @@ class NFEAutorizacao extends BaseNFE {
             NFe.infNFe.emit = Object.assign({ [this.validaDocumento(String(NFe.infNFe.emit.CNPJCPF), 'emitente')]: NFe.infNFe.emit.CNPJCPF }, NFe.infNFe.emit)
             delete NFe.infNFe.emit.CNPJCPF;
             // Valida Documento do destinatário
-            NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF  || ''), 'destinatário')]: NFe.infNFe.dest?.CNPJCPF  || '' }, NFe.infNFe.dest)
-            delete NFe.infNFe.dest.CNPJCPF;
+            if (NFe.infNFe.dest) {
+                NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF || ''), 'destinatário')]: NFe.infNFe.dest?.CNPJCPF || '' }, NFe.infNFe.dest)
+                delete NFe.infNFe.dest.CNPJCPF;
+            }
             // Valida Documento do transportador
             if (NFe.infNFe.transp.transporta) {
                 NFe.infNFe.transp.transporta = Object.assign({ [this.validaDocumento(String(NFe.infNFe.transp.transporta?.CNPJCPF), 'transportador')]: NFe.infNFe.transp.transporta?.CNPJCPF }, NFe.infNFe.transp.transporta)
@@ -282,8 +284,10 @@ class NFEAutorizacao extends BaseNFE {
             }
 
             // Caso Seja hambiente de homologação
-            if (NFe.infNFe.ide.tpAmb === 2) {
-                NFe.infNFe.dest.xNome = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL';
+            if (NFe.infNFe.dest) {
+                if (NFe.infNFe.ide.tpAmb === 2) {
+                    NFe.infNFe.dest.xNome = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL';
+                }
             }
 
             const xmlObject = {
@@ -375,7 +379,7 @@ class NFEAutorizacao extends BaseNFE {
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta(xmlConsulta);
             soapXML = xmlFormated
-            
+
             // Salva XML de Consulta
             this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);
 

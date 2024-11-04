@@ -1,6 +1,6 @@
-<div style="height: 200px; display: flex; justify-content: center; align-items: center; width: 100%;">
+<!-- <div style="height: 200px; display: flex; justify-content: center; align-items: center; width: 100%;">
   <img src="./src/assets/logo.jpg" style="height: 200px;width: 200px;" />
-</div>
+</div> -->
 
 # NFeWizard-io
 
@@ -90,16 +90,16 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 ## Documentação
 
 - Para a documentação completa acesse [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
-- Você também encontrará exemplos em **src/exemplos**
-- 
-## Última Release (0.1.0)
+  
 
-- Criada classe para Autorização de NFCe.
-- Efetuados testes para homologação de NFCe normal e em contingência (tpEmis = 9).
-- Remove texto fixado no campo natOp na geração da DANFE NFe.
-- Efetua parse do valor modFrete para number na definição do remetente (frete) da DANFE NFe.
-- Corrige definição de URL dos WebServices que deveriam apontar para outro estado.
-- Outras pequenas correções.
+## Última Release (0.1.1)
+
+- Corrigidos problemas de tipagem que impediam a *build* e a geração de DANFE.
+- Adicionado método de *build* com Rollup, incluindo suporte para exportação em formato CJS.
+- Adicionada exportação de todos os tipos e interfaces relacionadas a NFe.
+- Implementados métodos para geração automática dos grupos tributários ICMS, PIS e COFINS na criação do XML de NFe e NFCe.
+- Adicionada geração de QR Code para DANFE NFC-e em versão beta.
+- Exportados os métodos para geração automática dos grupos ICMS, PIS e COFINS.
 
 ## Observações
 
@@ -109,10 +109,11 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 
 ## Em Desenvolvimento
 
-### Novas Features Planejadas
+### Próximos passos
 
-- Testes de NFC-e
-- Implementação de DANFE com QR Code
+- Adicionar Testes
+- Aplicar SOLID
+- Adicionar tratamento de LOGs
 
 ## Contribua para Nossa Biblioteca Open Source
 
