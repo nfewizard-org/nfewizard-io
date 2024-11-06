@@ -93,7 +93,7 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 - Para a documentação completa acesse [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
   
 
-## Última Release (0.1.7)
+## Última Release (0.1.8)
 
 - Alterado arquivo rollup.config.js para manter a build CJS como padrão.
 - Adicionada flag useOpenSSL (config - lib - useOpenSSL). Caso true utiliza a lib PEM para leitura do certificado digital. Caso false utiliza node-forge. (Permite trabalhar em ambientes sem o openssl) - Default true.

@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.3] - [0.1.7] - 2024-11-05
+## [0.1.3] - [0.1.8] - 2024-11-05
 
 ### Fixed
 - Alterado arquivo rollup.config.js para manter a build CJS como padrão.
