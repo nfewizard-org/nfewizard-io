@@ -69,18 +69,18 @@ class Environment {
                 dfe: ['pathCertificado', 'senhaCertificado'],
                 nfe: ['ambiente']
             };
-    
+
             let missingConfigurations: any = {
                 dfe: [],
                 nfe: []
             };
-    
+
             let errors: string[] = [];
             let tableData: any[] = [];
-    
+
             (Object.keys(requiredConfigFields) as (keyof NFeWizardProps)[]).forEach((categoryKey) => {
                 const category = this.config[categoryKey as keyof typeof this.config];
-    
+
                 // Verifica se a chave principal existe
                 if (!category) {
                     errors.push(`Chave principal faltando: '${categoryKey}'.`);
@@ -93,7 +93,7 @@ class Environment {
                             if (!missingConfigurations[categoryKey]) {
                                 missingConfigurations[categoryKey] = [];
                             }
-    
+
                             // Verifica se o campo está presente
                             if (category[fieldKey as keyof typeof category] === undefined) {
                                 // Garante que a propriedade está definida
@@ -103,7 +103,7 @@ class Environment {
                                 missingConfigurations[categoryKey].push(fieldKey);
                             }
                         });
-    
+
                         // Garante que missingConfigurations[categoryKey] é um array
                         const missingConfig = missingConfigurations[categoryKey];
                         if (missingConfig && missingConfig.length > 0) {
@@ -113,13 +113,13 @@ class Environment {
                     }
                 }
             });
-    
+
             if (errors.length > 0) {
                 console.log("Configurações necessárias faltando:");
                 console.table(tableData);
                 throw new Error(`Erro ao validar configurações: ${errors.join(' ')}`);
             }
-    
+
             return {
                 missingConfigurations,
                 message: 'Todas as configurações necessárias estão presentes.',
@@ -129,8 +129,8 @@ class Environment {
             throw new Error(`Erro ao validar configurações: ${error.message}`);
         }
     }
-    
-    private loadCertificate() {
+
+    private loadCertificateWithPEM() {
         return new Promise((resolve, reject) => {
             try {
 
@@ -155,8 +155,10 @@ class Environment {
 
                     const key = result.key;
                     this.cert_key = key;
+
                     const cert = result.cert;
                     this.certificate = cert;
+
                     const certForge = forge.pki.certificateFromPem(cert);
                     const now = new Date();
                     if (now < certForge.validity.notBefore || now > certForge.validity.notAfter) {
@@ -180,6 +182,74 @@ class Environment {
         });
     }
 
+    private loadCertificateWithNodeForge() {
+        return new Promise((resolve, reject) => {
+            try {
+                const pfxPath = this.config.dfe.pathCertificado;
+                const pfxPassword = this.config.dfe.senhaCertificado;
+
+                // Lê o arquivo PFX
+                const pfxFile = fs.readFileSync(pfxPath);
+
+                // Decodifica o arquivo PFX (PKCS#12)
+                const p12Asn1 = forge.asn1.fromDer(pfxFile.toString('binary'));
+                const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, pfxPassword);
+
+                // Extrai a chave privada e o certificado
+                const keyBags = p12.getBags({ bagType: forge.pki.oids.pkcs8ShroudedKeyBag });
+
+                const certBags = p12.getBags({ bagType: forge.pki.oids.certBag });
+
+                // Verificar se o 'keyBags' contém a chave esperada
+                const key = keyBags[forge.pki.oids.pkcs8ShroudedKeyBag]?.[0]?.key;
+                if (!key) {
+                    return reject(new Error("Erro ao carregar chave privada do certificado."));
+                }
+                const keyPem = forge.pki.privateKeyToPem(key);
+                this.cert_key = keyPem;
+
+                // Verificar se o 'certBags' contém o certificado esperado
+                const cert = certBags[forge.pki.oids.certBag]?.[0]?.cert;
+                if (!cert) {
+                    return reject(new Error("Erro ao carregar certificado."));
+                }
+                const certPem = forge.pki.certificateToPem(cert);
+                this.certificate = certPem;
+
+                // Converte o certificado para o formato Forge
+                const certForge = forge.pki.certificateFromPem(forge.pki.certificateToPem(cert));
+
+                // Valida a data de validade
+                const now = new Date();
+                if (now < certForge.validity.notBefore || now > certForge.validity.notAfter) {
+                    return reject(new Error("Erro ao carregar o certificado: O certificado fornecido expirou ou ainda não é válido."));
+                }
+
+                // Carrega os certificados da CA
+                const certsDir = path.resolve(baseDir, dir);
+                const caCerts = fs.readdirSync(certsDir).map(filename => {
+                    const tmp = `${certsDir}/${filename}`;
+                    return fs.readFileSync(tmp);
+                });
+         
+                // Configura o agente HTTPS
+                this.agent = new https.Agent({
+                    key: keyPem,
+                    cert: certPem,
+                    ca: caCerts,
+                });
+
+                resolve({
+                    success: true,
+                    message: 'Certificado Carregado com Sucesso.'
+                });
+            } catch (error: any) {
+                reject(new Error(error.message));
+            }
+        });
+    }
+
+
     private configAxios() {
         try {
             const axiosConfig = {
@@ -198,7 +268,11 @@ class Environment {
 
     async loadEnvironment() {
         this.checkRequiredSettings();
-        await this.loadCertificate();
+        if (this.config.lib?.useOpenSSL || this.config.lib?.useOpenSSL === undefined) {
+            await this.loadCertificateWithPEM();
+        } else {
+            await this.loadCertificateWithNodeForge();
+        }
         const axios = this.configAxios();
         this.isLoaded = true;
         return { axios }

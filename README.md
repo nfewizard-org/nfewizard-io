@@ -92,14 +92,12 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 - Para a documentação completa acesse [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
   
 
-## Última Release (0.1.1)
+## Última Release (0.1.7)
 
-- Corrigidos problemas de tipagem que impediam a *build* e a geração de DANFE.
-- Adicionado método de *build* com Rollup, incluindo suporte para exportação em formato CJS.
-- Adicionada exportação de todos os tipos e interfaces relacionadas a NFe.
-- Implementados métodos para geração automática dos grupos tributários ICMS, PIS e COFINS na criação do XML de NFe e NFCe.
-- Adicionada geração de QR Code para DANFE NFC-e em versão beta.
-- Exportados os métodos para geração automática dos grupos ICMS, PIS e COFINS.
+- Alterado arquivo rollup.config.js para manter a build CJS como padrão.
+- Adicionada flag useOpenSSL (config - lib - useOpenSSL). Caso true utiliza a lib PEM para leitura do certificado digital. Caso false utiliza node-forge. (Permite trabalhar em ambientes sem o openssl) - Default true.
+ - Adicionado método de *loadCertificateWithNodeForge* para leitura do certificado sem utilização do OpenSSL.
+- Alterado nome do método de *loadCertificate* para *loadCertificateWithPEM* - utiliza OpenSSL.
 
 ## Observações
 

@@ -155,6 +155,7 @@ export type NFeWizardProps = {
         },
         log?: {
             exibirLogNoConsole?: boolean;
-        }
+        },
+        useOpenSSL?: boolean;
     };
 };

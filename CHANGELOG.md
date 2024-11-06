@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.3] - [0.1.7] - 2024-11-05
+
+### Fixed
+- Alterado arquivo rollup.config.js para manter a build CJS como padrão.
+
+### Changed
+  
+- **Carregamento do Ambiente:**
+  - Adicionada flag useOpenSSL (config - lib - useOpenSSL). Caso true utiliza a lib PEM para leitura do certificado digital. Caso false utiliza node-forge. (Permite trabalhar em ambientes sem o openssl) - Default true.
+
+- **Leitura de certificado:**
+  - Adicionado método de *loadCertificateWithNodeForge* para leitura do certificado sem utilização do OpenSSL.
+  - Alterado nome do método de *loadCertificate* para *loadCertificateWithPEM* - utiliza OpenSSL.
+
 ## [0.1.2] - 2024-10-30
 
 ### Fixed

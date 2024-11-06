@@ -231,6 +231,7 @@ class NFCEAutorizacao extends BaseNFE {
     private gerarXmlNFCEAutorizacao(data: NFe) {
 
         const createXML = (NFe: LayoutNFe) => {
+
             // Verificando se existe mais de um produto
             if (NFe?.infNFe?.det instanceof Array) {
                 // Adicionando indice ao item
