@@ -71,6 +71,7 @@ await nfeWizard.NFE_LoadEnvironment({
             connection: {
                 timeout: 30000,
             },
+            useOpenSSL: false,
         }
     }
 });
