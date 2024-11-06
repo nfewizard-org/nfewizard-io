@@ -25,6 +25,7 @@ import Environment from '@Classes/Environment';
 import { NFeWizardProps, GenericObject, SoapMethod, NFeServicosUrlType, SaveXMLProps, SaveJSONProps, ProtNFe } from '@Protocols';
 import { Json } from './xml2json';
 import xml2js from 'xml2js';
+import path from 'path';
 
 class Utility {
     environment;
@@ -166,10 +167,10 @@ class Utility {
     getLatestURLConsulta(data: Record<string, string>, metodo: string): string | null {
         // Obtem todas as chaves do objeto
         const keys = Object.keys(data);
-    
+
         // Monta o prefixo dinâmico com base no método fornecido
         const prefix = `${metodo}_`;
-    
+
         // Filtra as chaves que começam com o prefixo dinâmico e extrai as versões
         const versions = keys
             .map(key => {
@@ -178,7 +179,7 @@ class Utility {
             })
             .filter(version => version !== null) // Remove versões que não existem
             .sort((a, b) => b - a); // Ordena em ordem decrescente
-    
+
         // Busca a primeira URL que corresponder à versão mais alta
         for (let version of versions) {
             const key = `${prefix}${version.toFixed(2)}`; // Formata a chave
@@ -186,11 +187,11 @@ class Utility {
                 return data[key]; // Retorna a URL encontrada
             }
         }
-    
+
         // Caso não encontre nenhuma versão numerada, retorna a URL sem versão
         return data[metodo] || null;
     };
-    
+
 
     /**
      * Define o ambiente (UF e Produção ou Homologação) para geração das chaves de recuperação da URL do webservice
@@ -263,12 +264,69 @@ class Utility {
         }
     }
 
-    validateSchema(xml: any, metodo: string) {
+    async readXSD(filePath: string, firstFile: boolean): Promise<string> {
         return new Promise((resolve, reject) => {
-            try {
-                const xsdData = getSchema(metodo);
+            fs.readFile(filePath, 'utf8', (err, data) => {
+                if (err) {
+                    return reject(err);
+                }
+    
+                // Remover declaração XML dos arquivos incluídos
+                if (!firstFile) {
+                    data = data.replace(/<\?xml.*?\?>\s*/i, '');
+                }
+    
+                // Remover tags <xs:schema> de arquivos incluídos
+                if (!firstFile) {
+                    data = data.replace(/<xs:schema[^>]*>/i, '').replace(/<\/xs:schema>/i, '');
+                }
+    
+                resolve(data);
+            });
+        });
+    }
+    
 
-                xsdValidator.validateXML(xml, xsdData, (err, validationResult) => {
+    extractIncludes(xsdContent: string): Array<any> {
+        const includes = [];
+        const includeRegex = /<xs:include\s+schemaLocation="([^"]+)"\s*\/?>/g;
+        let match;
+
+        while ((match = includeRegex.exec(xsdContent)) !== null) {
+            includes.push({
+                schemaLocation: match[1],
+                original: match[0],  // Guardar o include original para substituição posterior
+            });
+        }
+
+        return includes;
+    }
+
+    async resolveXSDIncludes(xsdPath: string,  firstFile: boolean, basePath = '.') {
+        let schemaContent = await this.readXSD(xsdPath, firstFile);
+        const includes = this.extractIncludes(schemaContent);
+        console.log({includes})
+        // Resolver todos os includes de forma recursiva
+        for (const include of includes) {
+            const includePath = path.resolve(basePath, include.schemaLocation);
+            // console.log({includePath})
+            const includedXSD = await this.resolveXSDIncludes(includePath,  false, basePath);
+            // console.log({includedXSD})
+            schemaContent = schemaContent.replace(include.original, includedXSD);
+        }
+        // console.log(schemaContent)
+        return schemaContent;
+    }
+
+    validateSchema(xml: any, metodo: string) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { basePath, schemaPath } = getSchema(metodo);
+                console.log(schemaPath)
+                const completeXSD = await this.resolveXSDIncludes(schemaPath, true, basePath);
+                console.log('XSD Completo com Includes Resolvidos:\n', completeXSD);
+                throw new Error('teste')
+                xsdValidator.validateXML(xml, schemaPath, (err, validationResult) => {
                     if (err) {
                         reject({
                             success: false,

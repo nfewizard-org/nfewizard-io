@@ -43,7 +43,10 @@ export const getSchema = (metodo: string) => {
   }
 
   try {
-    return schema[metodo]
+    return {
+      basePath: pathSchemas,
+      schemaPath: schema[metodo]
+    }
   } catch (error: any) {
     throw new Error(error.message);
   }
