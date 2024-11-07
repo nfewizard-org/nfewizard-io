@@ -31,6 +31,8 @@ import libxmljs from 'libxmljs';
 class Utility {
     environment;
     json: Json;
+    private schemaAttributes: { [key: string]: string } = {}; // Armazena atributos únicos do primeiro xs:schema
+
     constructor(environment: Environment) {
         this.environment = environment;
         this.json = new Json();
@@ -271,22 +273,29 @@ class Utility {
                 if (err) {
                     return reject(err);
                 }
-    
+
+                if (firstFile) {
+                    this.extractSchemaAttributes(data); // Extrair atributos do primeiro xs:schema
+                } else {
+                    this.mergeSchemaAttributes(data); // Mesclar atributos dos demais xs:schema
+                }
+
                 // Remover declaração XML dos arquivos incluídos
                 if (!firstFile) {
                     data = data.replace(/<\?xml.*?\?>\s*/i, '');
                 }
-    
+
                 // Remover tags <xs:schema> de arquivos incluídos
                 if (!firstFile) {
                     data = data.replace(/<xs:schema[^>]*>/i, '').replace(/<\/xs:schema>/i, '');
                 }
-    
+
+
+
                 resolve(data);
             });
         });
     }
-    
 
     extractIncludes(xsdContent: string): Array<any> {
         const includes = [];
@@ -303,49 +312,91 @@ class Utility {
         return includes;
     }
 
-    async resolveXSDIncludes(xsdPath: string,  firstFile: boolean, basePath = '.') {
+    // Extrair atributos do primeiro xs:schema e armazená-los no objeto schemaAttributes
+    private extractSchemaAttributes(schemaContent: string) {
+        const schemaTagMatch = schemaContent.match(/<xs:schema([^>]*)>/i);
+        if (schemaTagMatch) {
+            const attributes = schemaTagMatch[1].trim().split(/\s+/);
+            for (const attr of attributes) {
+                const [key, value] = attr.split('=');
+                if (key && value && !this.schemaAttributes[key]) {
+                    this.schemaAttributes[key] = value;
+                }
+            }
+        }
+    }
+
+    // Mesclar atributos dos demais xs:schema ao primeiro, garantindo que não haja duplicatas
+    private mergeSchemaAttributes(schemaContent: string) {
+        const schemaTagMatch = schemaContent.match(/<xs:schema([^>]*)>/i);
+        if (schemaTagMatch) {
+            const attributes = schemaTagMatch[1].trim().split(/\s+/);
+            for (const attr of attributes) {
+                const [key, value] = attr.split('=');
+                if (key && value && !this.schemaAttributes[key]) {
+                    this.schemaAttributes[key] = value;
+                }
+            }
+        }
+    }
+
+    async resolveXSDIncludes(xsdPath: string, firstFile: boolean, basePath = '.') {
         let schemaContent = await this.readXSD(xsdPath, firstFile);
         const includes = this.extractIncludes(schemaContent);
 
         // Resolver todos os includes de forma recursiva
         for (const include of includes) {
             const includePath = path.resolve(basePath, include.schemaLocation);
-            // console.log({includePath})
-            const includedXSD = await this.resolveXSDIncludes(includePath,  false, basePath);
-            // console.log({includedXSD})
+            const includedXSD = await this.resolveXSDIncludes(includePath, false, basePath);
             schemaContent = schemaContent.replace(include.original, includedXSD);
         }
-        // console.log(schemaContent)
-        return schemaContent;
+
+        return firstFile ? this.applySchemaAttributes(schemaContent) : schemaContent;
     }
 
-    async teste(schemaPath: string, basePath: string) {
-        // const completeXSD = await this.resolveXSDIncludes(schemaPath, true, basePath);
-        // console.log(completeXSD)
-        // const xsd = 
+    // Aplica os atributos mesclados ao primeiro xs:schema
+    private applySchemaAttributes(schemaContent: string): string {
+        console.log({ schemaAtt: this.schemaAttributes })
+        const schemaTagMatch = schemaContent.match(/<xs:schema[^>]*>/i);
+        if (schemaTagMatch) {
+            const updatedSchemaTag = `<xs:schema ${Object.entries(this.schemaAttributes)
+                .map(([key, value]) => `${key}=${value}`)
+                .join(' ')}>`;
+            return schemaContent.replace(schemaTagMatch[0], updatedSchemaTag);
+        }
+        return schemaContent;
     }
 
     validateSchema(xml: any, metodo: string) {
         return new Promise(async (resolve, reject) => {
             try {
                 const { basePath, schemaPath } = getSchema(metodo);
-
+                console.log(schemaPath)
                 const completeXSD = await this.resolveXSDIncludes(schemaPath, true, basePath);
-
                 console.log(completeXSD)
+                // const completeXSD = `<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns="http://www.portalfiscal.inf.br/nfe" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.portalfiscal.inf.br/nfe" elementFormDefault="qualified" attributeFormDefault="unqualified"><xs:complexType name="TConsStatServ"><xs:annotation><xs:documentation>Tipo Pedido de Consulta do Status do Serviço</xs:documentation></xs:annotation><xs:sequence><xs:element name="tpAmb" type="TAmb"><xs:annotation><xs:documentation>Identificação do Ambiente: 1 - Produção 2 - Homologação</xs:documentation></xs:annotation></xs:element><xs:element name="cUF" type="TCodUfIBGE"><xs:annotation><xs:documentation>Sigla da UF consultada</xs:documentation></xs:annotation></xs:element><xs:element name="xServ"><xs:annotation><xs:documentation>Serviço Solicitado</xs:documentation></xs:annotation><xs:simpleType><xs:restriction base="TServ"><xs:enumeration value="STATUS"/></xs:restriction></xs:simpleType></xs:element></xs:sequence><xs:attribute name="versao" type="TVerConsStatServ" use="required"/></xs:complexType><xs:complexType name="TRetConsStatServ"><xs:annotation><xs:documentation>Tipo Resultado da Consulta do Status do Serviço</xs:documentation></xs:annotation><xs:sequence><xs:element name="tpAmb" type="TAmb"><xs:annotation><xs:documentation>Identificação do Ambiente: 1 - Produção 2 - Homologação</xs:documentation></xs:annotation></xs:element><xs:element name="verAplic" type="TVerAplic"><xs:annotation><xs:documentation>Versão do Aplicativo que processou a NF-e</xs:documentation></xs:annotation></xs:element><xs:element name="cStat" type="TStat"><xs:annotation><xs:documentation>Código do status da mensagem enviada.</xs:documentation></xs:annotation></xs:element><xs:element name="xMotivo" type="TMotivo"><xs:annotation><xs:documentation>Descrição literal do status do serviço solicitado.</xs:documentation></xs:annotation></xs:element><xs:element name="cUF" type="TCodUfIBGE"><xs:annotation><xs:documentation>Código da UF responsável pelo serviço</xs:documentation></xs:annotation></xs:element><xs:element name="dhRecbto" type="TDateTimeUTC"><xs:annotation><xs:documentation>Data e hora do recebimento da consulta no formato AAAA-MM-DDTHH:MM:SSTZD</xs:documentation></xs:annotation></xs:element><xs:element name="tMed" type="TMed" minOccurs="0"><xs:annotation><xs:documentation>Tempo médio de resposta do serviço (em segundos) dos últimos 5 minutos</xs:documentation></xs:annotation></xs:element><xs:element name="dhRetorno" type="TDateTimeUTC" minOccurs="0"><xs:annotation><xs:documentation>AAAA-MM-DDTHH:MM:SSDeve ser preenchida com data e hora previstas para o retorno dos serviços prestados.</xs:documentation></xs:annotation></xs:element><xs:element name="xObs" type="TMotivo" minOccurs="0"><xs:annotation><xs:documentation>Campo observação utilizado para incluir informações ao contribuinte</xs:documentation></xs:annotation></xs:element></xs:sequence><xs:attribute name="versao" type="TVerConsStatServ" use="required"/></xs:complexType><xs:simpleType name="TVerConsStatServ"><xs:annotation><xs:documentation>Tipo versão do leiuate da Consulta Status do Serviço 4.00</xs:documentation></xs:annotation><xs:restriction base="xs:token"><xs:pattern value="4\.00"/></xs:restriction></xs:simpleType><xs:element name="consStatServ" type="TConsStatServ"><xs:annotation><xs:documentation>Schema XML de validação do Pedido de Consulta do Status do Serviço</xs:documentation></xs:annotation></xs:element></xs:schema>`
 
+                // const teste: string = await new Promise((resolve, reject) => {
+                //     fs.readFile(schemaPath, 'utf8', (err, data) => {
+                //         if (err) {
+                //             return reject(err);
+                //         }
+                //         resolve(data);
+                //     });
+                // })
+                // console.log({ teste })
                 const xmlDoc = libxmljs.parseXml(xml);
                 const xsdDoc = libxmljs.parseXml(completeXSD);
-                
+                console.log(xsdDoc)
                 const isValid = xmlDoc.validate(xsdDoc);
 
                 if (isValid) {
-                  console.log('O XML é válido!');
+                    console.log('O XML é válido!');
                 } else {
-                  console.log('O XML não é válido. Erros:');
-                  console.log(xmlDoc.validationErrors);
+                    console.log('O XML não é válido. Erros:');
+                    console.log(xmlDoc.validationErrors);
                 }
-
+                // console.log('XSD Completo com Includes Resolvidos:\n', completeXSD);
                 throw new Error('teste')
                 xsdValidator.validateXML(xml, schemaPath, (err, validationResult) => {
                     if (err) {
