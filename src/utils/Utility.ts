@@ -373,11 +373,14 @@ class Utility {
             try {
                 const { schemaPath } = getSchema(metodo);
                 console.log(schemaPath)
-                const completeXSD = await xsdAssembler.assemble(schemaPath);
-                fs.writeFileSync('/home/marco/Documents/projetos/nodejs/nfewizard/nfewizard-io/src/utils/teste.txt', completeXSD)
+                // const completeXSD = await xsdAssembler.assemble(schemaPath);
+                // const completeXSD = ``
+                // fs.writeFileSync('/usr/projetos/nfewizard/nfewizard-io/src/utils/teste.txt', completeXSD)
                 // console.log(completeXSD)
+                const completeXSD = fs.readFileSync('/usr/projetos/nfewizard/nfewizard-io/src/utils/teste.xsd');
+                // const completeXSD = '/usr/projetos/nfewizard/nfewizard-io/src/utils/teste.xsd'
                 const xmlDoc = libxmljs.parseXml(xml);
-                const xsdDoc = libxmljs.parseXml(completeXSD);
+                const xsdDoc = libxmljs.parseXml(completeXSD, { baseUrl: '/usr/projetos/nfewizard/nfewizard-io/src/utils/' });
 
                 const isValid = xmlDoc.validate(xsdDoc);
 
@@ -405,6 +408,8 @@ class Utility {
         return new Promise(async (resolve, reject) => {
             try {
                 const { schemaPath } = getSchema(metodo);
+
+                // const teste = '/usr/projetos/nfewizard/nfewizard-io/src/utils/teste.xsd'
 
                 xsdValidator.validateXML(xml, schemaPath, (err, validationResult) => {
                     if (err) {
