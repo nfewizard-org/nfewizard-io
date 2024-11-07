@@ -370,26 +370,26 @@ class Utility {
 
     validateSchemaJsBased(xml: any, metodo: string) {
         return new Promise(async (resolve, reject) => {
-            console.log('a')
             try {
                 const { schemaPath } = getSchema(metodo);
 
                 const completeXSD = await xsdAssembler.assemble(schemaPath);
-
+                fs.writeFileSync('/usr/projetos/nfewizard/nfewizard-io/src/utils/teste.txt', completeXSD)
+                // console.log(completeXSD)
                 const xmlDoc = libxmljs.parseXml(xml);
                 const xsdDoc = libxmljs.parseXml(completeXSD);
 
                 const isValid = xmlDoc.validate(xsdDoc);
 
                 if (isValid) {
-                    reject({
-                        success: false,
-                        message: this.formatErrorMessage(xmlDoc.validationErrors[0].message),
-                    });
-                } else {
                     resolve({
                         success: true,
                         message: 'XML válido.',
+                    });
+                } else {
+                    reject({
+                        success: false,
+                        message: this.formatErrorMessage(xmlDoc.validationErrors[0].message),
                     });
                 }
             } catch (error: any) {
@@ -403,7 +403,6 @@ class Utility {
 
     validateSchemaJavaBased(xml: any, metodo: string) {
         return new Promise(async (resolve, reject) => {
-            console.log('b')
             try {
                 const { schemaPath } = getSchema(metodo);
 
