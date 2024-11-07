@@ -372,9 +372,9 @@ class Utility {
         return new Promise(async (resolve, reject) => {
             try {
                 const { schemaPath } = getSchema(metodo);
-
+                console.log(schemaPath)
                 const completeXSD = await xsdAssembler.assemble(schemaPath);
-                fs.writeFileSync('/usr/projetos/nfewizard/nfewizard-io/src/utils/teste.txt', completeXSD)
+                fs.writeFileSync('/home/marco/Documents/projetos/nodejs/nfewizard/nfewizard-io/src/utils/teste.txt', completeXSD)
                 // console.log(completeXSD)
                 const xmlDoc = libxmljs.parseXml(xml);
                 const xsdDoc = libxmljs.parseXml(completeXSD);

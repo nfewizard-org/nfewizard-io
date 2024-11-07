@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/nfe" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" targetNamespace="http://www.portalfiscal.inf.br/nfe" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:editix="http://www.portalfiscal.inf.br/nfe" xmlns:nfe="http://www.portalfiscal.inf.br/nfe">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/nfe" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" targetNamespace="http://www.portalfiscal.inf.br/nfe" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:editix="http://www.portalfiscal.inf.br/nfe" xmlns:nfe="http://www.portalfiscal.inf.br/nfe" version="0.1">
 	<!-- edited with XMLSpy v2008 (http://www.altova.com) by sas-softwares@procergs.rs.gov.br (PROCERGS) -->
 <!-- PL_009  alterações de esquema decorrentes da - NT2016.002 v1.20 - 31/05/2017 13:14hs-->
 <!-- PL_008g  alterações de esquema decorrentes da - NT2015.002  - 15/07/2015 -->
@@ -16,7 +16,104 @@
 <!-- PL_009-v5a  implementado alterações da NT  -->
 <!-- PL_009k_NT2023_001_v100 implementado alterações da NT 2023.001  -->
 
-	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema_v1.01.xsd"/>
+	﻿<!-- ***************************************************-->
+<!-- ***   Schema específico para assinaturas XML    ***-->
+<!-- *** a partir de certificados do padrão (X509)   ***-->
+<!-- *** ICP-Brasil - Projeto Nota Fiscal Eletrônica ***-->
+<!-- ***************************************************-->
+<!-- Schema for XML Signatures-->
+
+	<ds:element name="Signature" type="ds:SignatureType"/>
+	<ds:complexType name="SignatureType">
+		<ds:sequence>
+			<ds:element name="SignedInfo" type="ds:SignedInfoType"/>
+			<ds:element name="SignatureValue" type="ds:SignatureValueType"/>
+			<ds:element name="KeyInfo" type="ds:KeyInfoType"/>
+		</ds:sequence>
+		<ds:attribute name="Id" type="ID" use="optional"/>
+	</ds:complexType>
+	<ds:complexType name="SignatureValueType">
+		<ds:simpleContent>
+			<ds:extension base="base64Binary">
+				<ds:attribute name="Id" type="ID" use="optional"/>
+			</ds:extension>
+		</ds:simpleContent>
+	</ds:complexType>
+	<ds:complexType name="SignedInfoType">
+		<ds:sequence>
+			<ds:element name="CanonicalizationMethod">
+				<ds:complexType>
+					<ds:attribute name="Algorithm" type="anyURI" use="required" fixed="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+				</ds:complexType>
+			</ds:element>
+			<ds:element name="SignatureMethod">
+				<ds:complexType>
+					<ds:attribute name="Algorithm" type="anyURI" use="required" fixed="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+				</ds:complexType>
+			</ds:element>
+			<ds:element name="Reference" type="ds:ReferenceType"/>
+		</ds:sequence>
+		<ds:attribute name="Id" type="ID" use="optional"/>
+	</ds:complexType>
+	<ds:complexType name="ReferenceType">
+		<ds:sequence>
+			<ds:element name="Transforms" type="ds:TransformsType">
+				<!-- Garante a unicidade do atributo -->
+				<ds:unique name="unique_Transf_Alg">
+					<ds:selector xpath="./*"/>
+					<ds:field xpath="@Algorithm"/>
+				</ds:unique>
+			</ds:element>
+			<ds:element name="DigestMethod">
+				<ds:complexType>
+					<ds:attribute name="Algorithm" type="anyURI" use="required" fixed="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				</ds:complexType>
+			</ds:element>
+			<ds:element name="DigestValue" type="ds:DigestValueType"/>
+		</ds:sequence>
+		<ds:attribute name="Id" type="ID" use="optional"/>
+		<ds:attribute name="URI" use="required">
+			<ds:simpleType>
+				<ds:restriction base="anyURI">
+					<ds:minLength value="2"/>
+				</ds:restriction>
+			</ds:simpleType>
+		</ds:attribute>
+		<ds:attribute name="Type" type="anyURI" use="optional"/>
+	</ds:complexType>
+	<ds:complexType name="TransformsType">
+		<ds:sequence>
+			<ds:element name="Transform" type="ds:TransformType" minOccurs="2" maxOccurs="2"/>
+		</ds:sequence>
+	</ds:complexType>
+	<ds:complexType name="TransformType">
+		<ds:sequence minOccurs="0" maxOccurs="unbounded">
+			<ds:element name="XPath" type="string"/>
+		</ds:sequence>
+		<ds:attribute name="Algorithm" type="ds:TTransformURI" use="required"/>
+	</ds:complexType>
+	<ds:complexType name="KeyInfoType">
+		<ds:sequence>
+			<ds:element name="X509Data" type="ds:X509DataType"/>
+		</ds:sequence>
+		<ds:attribute name="Id" type="ID" use="optional"/>
+	</ds:complexType>
+	<ds:complexType name="X509DataType">
+		<ds:sequence>
+			<ds:element name="X509Certificate" type="base64Binary"/>
+		</ds:sequence>
+	</ds:complexType>
+	<ds:simpleType name="DigestValueType">
+		<ds:restriction base="base64Binary"/>
+	</ds:simpleType>
+	<ds:simpleType name="TTransformURI">
+		<ds:restriction base="anyURI">
+			<ds:enumeration value="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+			<ds:enumeration value="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+		</ds:restriction>
+	</ds:simpleType>
+
+
 	<!-- PL_008  - 30/07/2013- NT 2013/005 -->
 
 	<xs:simpleType name="TCodUfIBGE">
