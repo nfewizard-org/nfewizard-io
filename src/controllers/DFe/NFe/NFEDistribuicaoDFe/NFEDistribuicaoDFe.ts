@@ -52,8 +52,13 @@ class NFEDistribuicaoDFe extends BaseNFE {
 
     protected async gerarConsulta(xmlConsulta: string) {
         try {
+            const config = this.environment.getConfig();
             // Valida Schema
-            await this.utility.validateSchema(xmlConsulta, this.metodo)
+            if (config.lib?.useForSchemaValidation !== 'validateSchemaJsBased') {
+                await this.utility.validateSchemaJavaBased(xmlConsulta, this.metodo);
+            } else {
+                await this.utility.validateSchemaJsBased(xmlConsulta, this.metodo);
+            }
 
             // Capturando a url do método para o namespace xmlns
             const { method, action } = this.utility.getSoapInfo(this.metodo);

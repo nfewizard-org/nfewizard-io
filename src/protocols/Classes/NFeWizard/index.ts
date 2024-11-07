@@ -15,6 +15,9 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 export type NFeWizardProps = {
+    /**
+    * @param {obj} dfe - Configurações relacionadas aos processos de DFe
+    */
     dfe: {
         /**
          * @param {boolean} baixarXMLDistribuicao - Define se os XMLs retornados pelo método NFeDistribuicaoDFe serão salvos
@@ -86,6 +89,9 @@ export type NFeWizardProps = {
          */
         CPFCNPJ: string;
     };
+    /**
+    * @param {obj} nfe - Configurações relacionadas aos processos de NFe e NFCe
+    */
     nfe: {
         /**
          * @param {number} ambiente - Define o ambiente que receberá os XML da NF-e:
@@ -106,9 +112,9 @@ export type NFeWizardProps = {
          */
         idCSC?: number;
     };
-        /**
-         * @param email -Preencher para casos onde for necessário utilizar envio de e-mail;
-         */
+    /**
+    * @param email -Preencher para casos onde for necessário utilizar envio de e-mail;
+    */
     email?: {
         /**
          * @param {string} host - Host SMTP do seu provedor de e-mail
@@ -149,13 +155,34 @@ export type NFeWizardProps = {
             to: string; 
         };
     };
+    /**
+    * @param {obj} lib - Permite customização de alguns parametros de execução da lib
+    */
     lib?: {
+        /**
+        * @param {obj} connection -  Define opções de conexão aos webservices da SEFAZ
+        */
         connection?: {
+            /**
+            * @param {obj} timeout -  Define o tempo de espera por um retorno da SEFAZ
+            */
             timeout?: number;
         },
+        /**
+        * @param {obj} log -  Define opções de log
+        */
         log?: {
             exibirLogNoConsole?: boolean;
         },
+        /**
+        * @param {boolean} useOpenSSL -  Define se a lib deve utilizar métodos que fazem uso do OpenSSL ou não
+        */
         useOpenSSL?: boolean;
+        /**
+        * @param {validateSchemaJavaBased | validateSchemaJsBased} useForSchemaValidation - Define se a lib deve utilizar um método de validação de schema
+        * baseado em JAVA ou em JS puro.
+        * Útil para utilização em ambientes sem JAVA (Ex: Lambda)
+        */
+        useForSchemaValidation?: 'validateSchemaJavaBased' | 'validateSchemaJsBased';
     };
 };
