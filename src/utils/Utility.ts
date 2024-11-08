@@ -25,14 +25,12 @@ import Environment from '@Classes/Environment';
 import { NFeWizardProps, GenericObject, SoapMethod, NFeServicosUrlType, SaveXMLProps, SaveJSONProps, ProtNFe } from '@Protocols';
 import { Json } from './xml2json';
 import xml2js from 'xml2js';
-import path from 'path';
 import libxmljs from 'libxmljs';
 import xsdAssembler from 'xsd-assembler';
 
 class Utility {
     environment;
     json: Json;
-    private schemaAttributes: { [key: string]: string } = {}; // Armazena atributos únicos do primeiro xs:schema
 
     constructor(environment: Environment) {
         this.environment = environment;
