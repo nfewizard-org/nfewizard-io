@@ -270,9 +270,9 @@ class Utility {
         return new Promise(async (resolve, reject) => {
             try {
                 const { basePath, schemaPath } = getSchema(metodo);
-
+                // console.log({schemaPath})
                 const completeXSD = await xsdAssembler.assemble(schemaPath);
-
+                fs.writeFileSync(`/usr/projetos/konvix/erp-cloud-nfce-transmissao/tmp/XSD.xsd`, completeXSD);
                 const xmlDoc = libxmljs.parseXml(xml);
                 const xsdDoc = libxmljs.parseXml(completeXSD, { baseUrl: `${basePath}/` });
 
