@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.9] - 2024-11-07
+
+### Changed
+- **Carregamento do Ambiente:**
+  - Adicionada propriedade useForSchemaValidation (config - lib - useForSchemaValidation). Caso 'validateSchemaJsBased' chama um método que não utiliza JAVA para validar o xml. Caso 'validateSchemaJavaBased' chama um método baseado em JAAVA para validar o xml.
+
+- **Validação de XML:**
+  - Adicionado método de *validateSchemaJsBased* e *validateSchemaJavaBased* para validação do XML condicionado à propriedade *useForSchemaValidation* na configuração do ambiente.
+
 ## [0.1.3] - [0.1.8] - 2024-11-05
 
 ### Fixed
