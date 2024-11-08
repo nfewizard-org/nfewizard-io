@@ -97,6 +97,8 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 
 - Adicionada propriedade useForSchemaValidation (config - lib - useForSchemaValidation). Caso 'validateSchemaJsBased' chama um método que não utiliza JAVA para validar o xml. Caso 'validateSchemaJavaBased' chama um método baseado em JAAVA para validar o xml.
 - Adicionado método de *validateSchemaJsBased* e *validateSchemaJavaBased* para validação do XML condicionado à propriedade *useForSchemaValidation* na configuração do ambiente.
+- Externaliza libxmljs
+- Finaliza ajustes para funcionamento em ambiente lambda
 
 ## Observações
 

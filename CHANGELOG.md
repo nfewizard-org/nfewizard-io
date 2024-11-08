@@ -4,6 +4,7 @@
 
 ### Changed
 - Externaliza libxmljs
+- Finaliza ajustes para funcionamento em ambiente lambda
   
 
 ## [0.1.9] - 2024-11-07
