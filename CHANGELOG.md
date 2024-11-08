@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0] - 2024-11-07
+
+### Changed
+- Externaliza libxmljs
+  
+
 ## [0.1.9] - 2024-11-07
 
 ### Changed

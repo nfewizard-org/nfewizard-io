@@ -25,7 +25,7 @@ export default {
             compact: true,
         },
     ],
-    external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem'],
+    external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem', 'libxmljs'],
     plugins: [
         alias({
             entries: [
