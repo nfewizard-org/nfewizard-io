@@ -24,6 +24,13 @@ export interface SoapMethod {
     };
 }
 
+
+export interface ServicesUrl {
+    [key: string]: {
+        [key: string]: string
+    };
+}
+
 export interface NFeServicosUrlType {
     [estado: string]: {
         [servico: string]: string;

@@ -22,7 +22,7 @@ import soapMethod from '../config/soapMethod.json';
 import cStatError from '../config/cStatError.json';
 import { getSchema } from './getSchema';
 import Environment from '@Classes/Environment';
-import { NFeWizardProps, GenericObject, SoapMethod, NFeServicosUrlType, SaveXMLProps, SaveJSONProps, ProtNFe } from '@Protocols';
+import { NFeWizardProps, GenericObject, SoapMethod, NFeServicosUrlType, SaveXMLProps, SaveJSONProps, ProtNFe, ServicesUrl } from '@Protocols';
 import { Json } from './xml2json';
 import xml2js from 'xml2js';
 import libxmljs from 'libxmljs';
@@ -153,15 +153,58 @@ class Utility {
     /**
      * Recupera url para action e metoodo do SOAP
      */
-    getSoapInfo(metodo: string) {
+    getSoapInfo1(uf: string, metodo: string) {
         const methodConfig = soapMethod as SoapMethod;
         const methodInfo = methodConfig[metodo];
         if (!methodInfo) {
             throw new Error("Método não encontrado no arquivo de configuração SOAP.");
         }
+        
         return {
             method: methodInfo.method,
             action: methodInfo.action,
+        };
+    }
+
+    getSoapInfo(uf: string, method: string) {
+        const servicos = NFeServicosUrl as ServicesUrl;
+        let chaveMethod = '';
+        let chaveSoap = '';
+
+        switch (uf) {
+            case 'SP':
+                chaveSoap = 'SOAP_V4_SP';
+                break;
+            case 'BA':
+                chaveSoap = 'SOAP_V4_BA';
+                break;
+            default:
+                chaveSoap = 'SOAP_V4';
+                break;
+        }
+
+        switch (uf) {
+            case 'SP':
+                chaveMethod = 'WSDL_V4_SP';
+                break;
+            default:
+                chaveMethod = 'WSDL_V4';
+                break;
+        }
+
+        const methodServices = servicos[chaveMethod];
+        const methodUrl = this.getLatestURLConsulta(methodServices, method);
+
+        const soapServices = servicos[chaveSoap];
+        const soapUrl = this.getLatestURLConsulta(soapServices, method);
+
+        if (!methodUrl || !soapUrl) {
+            throw new Error("Método não encontrado no arquivo de configuração SOAP.");
+        }
+
+        return {
+            method: methodUrl,
+            action: soapUrl,
         };
     }
 
@@ -193,7 +236,6 @@ class Utility {
         // Caso não encontre nenhuma versão numerada, retorna a URL sem versão
         return data[metodo] || null;
     };
-
 
     /**
      * Define o ambiente (UF e Produção ou Homologação) para geração das chaves de recuperação da URL do webservice
