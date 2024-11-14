@@ -383,6 +383,7 @@ class NFEAutorizacao extends BaseNFE {
             xmlConsulta = this.gerarXmlNFeAutorizacao(data);
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta(xmlConsulta);
+            // console.log(xmlFormated)
             soapXML = xmlFormated
 
             // Salva XML de Consulta

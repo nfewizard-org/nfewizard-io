@@ -1273,7 +1273,7 @@
   },
   "WSDL_V4_SP": {
     "NFEAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4",
-    "NFERetornoAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao4",
+    "NFERetornoAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4",
     "NFEInutilizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeInutilizacao4",
     "NFEConsultaProtocolo_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4",
     "NFEStatusServico_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4",
@@ -1283,7 +1283,7 @@
   },
   "SOAP_V4_SP": {
     "NFEAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote",
-    "NFERetornoAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao4/nfeRetAutorizacaoLote",
+    "NFERetornoAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4/nfeRetAutorizacaoLote",
     "NFEInutilizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeInutilizacao4/nfeInutilizacaoNF",
     "NFEConsultaProtocolo_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4/nfeConsultaNF",
     "NFEStatusServico_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF",
