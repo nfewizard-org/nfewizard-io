@@ -107,6 +107,29 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 - `NodeJs`: Testado com versões 16 ou superiores.
 - `UF`: Testado apenas para São Paulo. Por favor, abra uma issue caso encontre problemas com outros estados.
 
+
+## Para uma boa experiência de Debug no VS Code permitindo fazer o "step in" nos métodos do NfeWizzard usar o launch.json com sourceMpas true e outFiles conforme segue:
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/src/index.ts",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "sourceMaps": true
+        }
+    ]
+}
+```
+
 ## Em Desenvolvimento
 
 ### Próximos passos

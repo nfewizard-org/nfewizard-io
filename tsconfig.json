@@ -1,6 +1,10 @@
 {
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"],
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
   "compilerOptions": {
     "outDir": "dist", // Diretório onde os arquivos compilados serão colocados
     "rootDir": "./src", // Diretório de origem dos arquivos TypeScript
@@ -16,6 +20,8 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "baseUrl": ".", // Define o diretório base para resolução de módulos
+    "inlineSources": true,
+    "inlineSourceMap": false,
     "paths": {
       "@Classes/*": [
         "src/classes/*"

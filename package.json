@@ -24,7 +24,9 @@
     "build:cjs-esm": "yarn build:cjs && yarn build:esm"
   },
   "files": [
-    "dist"
+    "dist",
+    "dist/cjs/*.map",
+    "src/**/*.ts"
   ],
   "keywords": [
     "nfe",
