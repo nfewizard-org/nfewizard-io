@@ -129,6 +129,26 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 }
 ```
 
+**tsconfig.json do projeto que importa o NFEWizard.IO:**:
+```json
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "nodenext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "inlineSourceMap": false,
+    "declaration": true,
+    "declarationMap": true,
+    "moduleResolution": "nodenext"
+  }
+}
+```
+
 ## Em Desenvolvimento
 
 ### Próximos passos
