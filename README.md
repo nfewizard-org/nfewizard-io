@@ -72,6 +72,7 @@ await nfeWizard.NFE_LoadEnvironment({
                 timeout: 30000,
             },
             useOpenSSL: false,
+            useForSchemaValidation: 'validateSchemaJsBased',
         }
     }
 });

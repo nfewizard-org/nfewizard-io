@@ -1,6 +1,12 @@
 # Changelog
 
-## [0.2.2] - 2024-11-07
+## [0.2.3] - 2024-11-14
+
+### Fixed
+- Corrige definição do método wsdl e action soap para consulta protocolo
+- Ajusta posicionamento, exibição e geração de DANFE NFCe
+
+## [0.2.2] - 2024-11-14
 
 ### Fixed
 - Corrige definição do método wsdl e action soap
