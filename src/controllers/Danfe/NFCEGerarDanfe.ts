@@ -126,8 +126,6 @@ class NFCEGerarDanfe {
     saveQRCode = async (text: string) => {
         // Caminho para salvar o QR code na pasta assets
         const filePath = path.resolve(baseDir, this.qrcodePath);
-        // const filePath = path.join(this.qrcodePath, 'qrcode.png');
-        // this.createDir(this.qrcodePath);
 
         try {
             await QRCode.toFile(`${filePath}/qrcode.png`, text, {
