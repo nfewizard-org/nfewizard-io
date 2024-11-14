@@ -28,7 +28,7 @@ import { fileURLToPath } from 'url';
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
 const fontDir = process.env.NODE_ENV === 'production' ? 'assets/fonts/ARIAL.TTF' : '../../assets/fonts/ARIAL.TTF';
 const fontDirBold = process.env.NODE_ENV === 'production' ? 'assets/fonts/ARIALBD.TTF' : '../../assets/fonts/ARIALBD.TTF';
-const qrcodePath = process.env.NODE_ENV === 'production' ? 'assets' : 'src/assets'
+const qrcodePath = process.env.NODE_ENV === 'production' ? 'assets' : '../../assets'
 
 class NFCEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
@@ -125,11 +125,12 @@ class NFCEGerarDanfe {
 
     saveQRCode = async (text: string) => {
         // Caminho para salvar o QR code na pasta assets
-        const filePath = path.join(this.qrcodePath, 'qrcode.png');
-        this.createDir(this.qrcodePath);
+        const filePath = path.resolve(baseDir, this.qrcodePath);
+        // const filePath = path.join(this.qrcodePath, 'qrcode.png');
+        // this.createDir(this.qrcodePath);
 
         try {
-            await QRCode.toFile(filePath, text, {
+            await QRCode.toFile(`${filePath}/qrcode.png`, text, {
                 color: {
                     dark: '#000000', // Cor do código
                     light: '#FFFFFF', // Cor de fundo
@@ -160,7 +161,7 @@ class NFCEGerarDanfe {
             const barcode = png.toString('base64');
             const barcodeDir = this.qrcodePath;
             const barcodeFilePath = path.join(barcodeDir, 'barcode.png');
-            this.createDir(barcodeDir);
+            // this.createDir(barcodeDir);
             fs.writeFileSync(barcodeFilePath, Buffer.from(barcode, 'base64'));
         } catch (err) {
             console.error('Erro ao gerar código de barras:', err);
@@ -419,8 +420,8 @@ class NFCEGerarDanfe {
         });
 
         tableTop += this.itemHeight;
-        const filePath = path.join(this.qrcodePath, 'qrcode.png');
-        this.doc.image(filePath, 2, tableTop, { width: 70.87, height: 70.87 });
+        const filePath = path.resolve(baseDir, this.qrcodePath);
+        this.doc.image(`${filePath}/qrcode.png`, 2, tableTop, { width: 70.87, height: 70.87 });
 
         tableTop += 4;
         let topBeforeQrCode = tableTop;

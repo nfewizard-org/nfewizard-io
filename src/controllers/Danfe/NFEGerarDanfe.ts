@@ -21,8 +21,11 @@ import { ICMS, IPI, DetProd, NFEGerarDanfeProps, Ide, Dest, Emit, Total, Transp,
 import { format } from 'date-fns';
 import ValidaCPFCNPJ from '@Utils/ValidaCPFCNPJ';
 import PDFDocument from 'pdfkit';
+import { fileURLToPath } from 'url';
 
-const barcodePath = process.env.NODE_ENV === 'production' ? 'assets' : 'src/assets'
+
+const baseDir = path.dirname(fileURLToPath(import.meta.url))
+const barcodePath = process.env.NODE_ENV === 'production' ? 'assets' : '../../assets'
 
 class NFEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
@@ -95,9 +98,9 @@ class NFEGerarDanfe {
             });
             const barcode = png.toString('base64');
             const barcodeDir = this.barcodePath;
-            const barcodeFilePath = path.join(barcodeDir, 'barcode.png');
+            const filePath = path.resolve(baseDir, this.barcodePath);
             this.createDir(barcodeDir);
-            fs.writeFileSync(barcodeFilePath, Buffer.from(barcode, 'base64'));
+            fs.writeFileSync(`${filePath}/barcode.png`, Buffer.from(barcode, 'base64'));
         } catch (err) {
             console.error('Erro ao gerar código de barras:', err);
             return null;
@@ -254,7 +257,8 @@ class NFEGerarDanfe {
         /** IDENTIFICACAO NFe */
         const _buildIdentificacaoNFe = () => {
             this.doc.rect(left + 310.2, topIdentificacao_1, 256.73, 35).stroke();
-            this.doc.image(`${this.barcodePath}/barcode.png`, left + 323.5, topIdentificacao_1 + 3, { width: 230, height: 30 });
+            const filePath = path.resolve(baseDir, this.barcodePath);
+            this.doc.image(`${filePath}/barcode.png`, left + 323.5, topIdentificacao_1 + 3, { width: 230, height: 30 });
             if (Number(this.ide.tpAmb) !== 2 && !this.enviada) {
                 this.doc.fontSize(14).font('Times-Bold').fillColor('red').text('NF-E NÃO ENVIADA PARA SEFAZ', left + 316, topIdentificacao_1 + 12, {
                     characterSpacing: 1,
