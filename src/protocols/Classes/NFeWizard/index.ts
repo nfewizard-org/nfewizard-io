@@ -152,7 +152,7 @@ export type NFeWizardProps = {
             /**
              * @param {string} to -  Destinatário padrão
              */
-            to: string; 
+            to: string;
         };
     };
     /**

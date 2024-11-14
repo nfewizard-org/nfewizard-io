@@ -28,7 +28,7 @@ import { fileURLToPath } from 'url';
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
 const fontDir = process.env.NODE_ENV === 'production' ? 'assets/fonts/ARIAL.TTF' : '../../assets/fonts/ARIAL.TTF';
 const fontDirBold = process.env.NODE_ENV === 'production' ? 'assets/fonts/ARIALBD.TTF' : '../../assets/fonts/ARIALBD.TTF';
-const qrcodePath = process.env.NODE_ENV === 'production' ? '../tmp' : '../../../tmp'
+// const qrcodePath = process.env.NODE_ENV === 'production' ? '../tmp' : '../../../tmp'
 
 class NFCEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
@@ -56,12 +56,12 @@ class NFCEGerarDanfe {
 
     constructor(props: NFEGerarDanfeProps) {
         const { data, chave, outputPath, pageWidth } = props;
-
+        
         this.data = data;
         this.chave = chave.trim();
         this.outputPath = outputPath;
         this.enviada = false; // Valor padrão
-        this.qrcodePath = qrcodePath; // Caminho padrão
+        this.qrcodePath = outputPath; // Caminho padrão
         this.documento = new ValidaCPFCNPJ(); // Inicialização correta
         this.protNFe = data.protNFe;
 
@@ -143,6 +143,23 @@ class NFCEGerarDanfe {
         }
     };
 
+    getQRCodeBuffer = async (text: string) => {
+        try {
+            const buffer = await QRCode.toBuffer(text, {
+                color: {
+                    dark: '#000000', // Cor do código
+                    light: '#FFFFFF', // Cor de fundo
+                },
+                width: 300, // Largura da imagem
+            });
+            return buffer;
+        } catch (error: any) {
+            console.error('Erro ao gerar o QR code:', error);
+            console.error(error.stack); 
+            throw new Error(`Erro ao gerar o QR code: ${error.message}`);
+        }
+    };
+
     createDir(path: string) {
         if (!fs.existsSync(path)) {
             fs.mkdirSync(path, { recursive: true });
@@ -192,8 +209,8 @@ class NFCEGerarDanfe {
         this._buildHeader();
     }
 
-    drawFooter() {
-        this._buildFooter();
+    drawFooter(qrCodeBuffer: Buffer) {
+        this._buildFooter(qrCodeBuffer);
     }
 
     _buildHeader() {
@@ -402,7 +419,7 @@ class NFCEGerarDanfe {
 
     }
 
-    _buildFooter() {
+    _buildFooter(qrCodeBuffer: Buffer) {
         let tableTop = this.doc.y + 5;
 
         this.doc.font('Arial-bold').text('Consulte pela Chave de Acesso em', 0, tableTop, {
@@ -420,8 +437,10 @@ class NFCEGerarDanfe {
         });
 
         tableTop += this.itemHeight;
-        const filePath = path.resolve(baseDir, this.qrcodePath);
-        this.doc.image(`${filePath}/qrcode.png`, 2, tableTop, { width: 70.87, height: 70.87 });
+        // const filePath = path.resolve(baseDir, this.qrcodePath);
+        // this.doc.image(`${filePath}/qrcode.png`, 2, tableTop, { width: 70.87, height: 70.87 });
+        this.doc.image(qrCodeBuffer, 2, tableTop, { width: 70.87, height: 70.87 });
+
 
         tableTop += 4;
         let topBeforeQrCode = tableTop;
@@ -485,7 +504,8 @@ class NFCEGerarDanfe {
         try {
             this.exibirMarcaDaguaDanfe = exibirMarcaDaguaDanfe || true;
 
-            await this.saveQRCode(this.infNFeSupl?.qrCode  || '')
+            // await this.saveQRCode(this.infNFeSupl?.qrCode  || '')
+            const qrCodeBuffer = await this.getQRCodeBuffer(this.infNFeSupl?.qrCode || '');
 
             this.doc.pipe(fs.createWriteStream(this.outputPath));
 
@@ -495,7 +515,7 @@ class NFCEGerarDanfe {
 
             this._buildTotais();
 
-            this.drawFooter();
+            this.drawFooter(qrCodeBuffer);
 
             this.doc.end();
 
