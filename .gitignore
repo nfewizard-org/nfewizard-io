@@ -12,6 +12,7 @@ src/assets/DANFE_NFCE.pdf
 src/assets/DANFE.pdf
 src/assets/logo.jpg
 src/assets/qrcode.png
+src/old_schemas
 tmp
 package-lock.json
 

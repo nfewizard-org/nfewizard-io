@@ -9,7 +9,9 @@
 		<xs:sequence>
 			<xs:element name="tpAmb" type="TAmb">
 				<xs:annotation>
-					<xs:documentation>Identificação do Ambiente: 1 - Produção 2 - Homologação</xs:documentation>
+					<xs:documentation>Identificação do Ambiente:
+1 - Produção
+2 - Homologação</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="cUF" type="TCodUfIBGE">
@@ -37,7 +39,9 @@
 		<xs:sequence>
 			<xs:element name="tpAmb" type="TAmb">
 				<xs:annotation>
-					<xs:documentation>Identificação do Ambiente: 1 - Produção 2 - Homologação</xs:documentation>
+					<xs:documentation>Identificação do Ambiente:
+1 - Produção
+2 - Homologação</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="verAplic" type="TVerAplic">
