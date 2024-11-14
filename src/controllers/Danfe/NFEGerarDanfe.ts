@@ -22,6 +22,8 @@ import { format } from 'date-fns';
 import ValidaCPFCNPJ from '@Utils/ValidaCPFCNPJ';
 import PDFDocument from 'pdfkit';
 
+const barcodePath = process.env.NODE_ENV === 'production' ? 'assets' : 'src/assets'
+
 class NFEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
     chave: string;
@@ -47,10 +49,7 @@ class NFEGerarDanfe {
         this.chave = chave.trim();
         this.outputPath = outputPath;
         this.enviada = false; // Valor padrão
-        this.barcodePath = './src/assets'; // Caminho padrão
-        if (process.env.NODE_ENV === 'production') {
-            this.barcodePath = 'assets'; // Caminho padrão
-        }
+        this.barcodePath = barcodePath;
         this.documento = new ValidaCPFCNPJ(); // Inicialização correta
         this.protNFe = data.protNFe;
 

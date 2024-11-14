@@ -28,7 +28,7 @@ import { fileURLToPath } from 'url';
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
 const fontDir = process.env.NODE_ENV === 'production' ? 'assets/fonts/ARIAL.TTF' : '../../assets/fonts/ARIAL.TTF';
 const fontDirBold = process.env.NODE_ENV === 'production' ? 'assets/fonts/ARIALBD.TTF' : '../../assets/fonts/ARIALBD.TTF';
-
+const qrcodePath = process.env.NODE_ENV === 'production' ? 'assets' : 'src/assets'
 
 class NFCEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
@@ -61,10 +61,7 @@ class NFCEGerarDanfe {
         this.chave = chave.trim();
         this.outputPath = outputPath;
         this.enviada = false; // Valor padrão
-        this.qrcodePath = './src/assets'; // Caminho padrão
-        if (process.env.NODE_ENV === 'production') {
-            this.qrcodePath = 'assets'; // Caminho padrão
-        }
+        this.qrcodePath = qrcodePath; // Caminho padrão
         this.documento = new ValidaCPFCNPJ(); // Inicialização correta
         this.protNFe = data.protNFe;
 
@@ -127,7 +124,7 @@ class NFCEGerarDanfe {
     }
 
     saveQRCode = async (text: string) => {
-        // Caminho para salvar o QR code na pasta src/assets
+        // Caminho para salvar o QR code na pasta assets
         const filePath = path.join(this.qrcodePath, 'qrcode.png');
         this.createDir(this.qrcodePath);
 
@@ -139,8 +136,9 @@ class NFCEGerarDanfe {
                 },
                 width: 300, // Largura da imagem
             });
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro ao gerar o QR code:', error);
+            console.error(error.stack); 
         }
     };
 
@@ -421,9 +419,11 @@ class NFCEGerarDanfe {
         });
 
         tableTop += this.itemHeight;
-        this.doc.image(`${this.qrcodePath}/qrcode.png`, 2, tableTop, { width: 70.87, height: 70.87 });
+        const filePath = path.join(this.qrcodePath, 'qrcode.png');
+        this.doc.image(filePath, 2, tableTop, { width: 70.87, height: 70.87 });
 
         tableTop += 4;
+        let topBeforeQrCode = tableTop;
 
         const docDest = this.documento.mascaraCnpjCpf(this.dest?.CNPJCPF || this.dest?.CNPJ || this.dest?.CPF || this.dest?.idEstrangeiro || '')
 
@@ -474,8 +474,8 @@ class NFCEGerarDanfe {
             .text(dtaAut);
 
         tableTop = this.doc.y + 20;
-
-        this.doc.text('Tributos Totais Incidentes (Lei Federal 12.741/2012): R$ 22,90', 0, tableTop, {
+        topBeforeQrCode += 70.87 
+        this.doc.text('Tributos Totais Incidentes (Lei Federal 12.741/2012): R$ 22,90', 0, topBeforeQrCode, {
             align: 'center'
         });
     }
@@ -484,7 +484,7 @@ class NFCEGerarDanfe {
         try {
             this.exibirMarcaDaguaDanfe = exibirMarcaDaguaDanfe || true;
 
-            this.saveQRCode(this.infNFeSupl?.qrCode  || '')
+            await this.saveQRCode(this.infNFeSupl?.qrCode  || '')
 
             this.doc.pipe(fs.createWriteStream(this.outputPath));
 

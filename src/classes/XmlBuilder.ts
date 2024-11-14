@@ -69,7 +69,7 @@ class XmlBuilder {
             renderOpts: {
                 pretty: false
             },
-            cdata: true
+            // cdata: true
         });
         return builder.buildObject(obj);
     }
