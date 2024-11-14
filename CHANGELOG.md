@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.3] - 2024-11-14
+## [0.2.3] - [0.2.4] - 2024-11-14
 
 ### Fixed
 - Corrige definição do método wsdl e action soap para consulta protocolo
