@@ -28,7 +28,7 @@ import { fileURLToPath } from 'url';
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
 const fontDir = process.env.NODE_ENV === 'production' ? 'assets/fonts/ARIAL.TTF' : '../../assets/fonts/ARIAL.TTF';
 const fontDirBold = process.env.NODE_ENV === 'production' ? 'assets/fonts/ARIALBD.TTF' : '../../assets/fonts/ARIALBD.TTF';
-const qrcodePath = process.env.NODE_ENV === 'production' ? 'assets' : '../../assets'
+const qrcodePath = process.env.NODE_ENV === 'production' ? '../tmp' : '../../../tmp'
 
 class NFCEGerarDanfe {
     data: NFEGerarDanfeProps['data'];

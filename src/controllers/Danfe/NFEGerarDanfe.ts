@@ -25,7 +25,7 @@ import { fileURLToPath } from 'url';
 
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
-const barcodePath = process.env.NODE_ENV === 'production' ? 'assets' : '../../assets'
+const barcodePath = process.env.NODE_ENV === 'production' ? '../tmp' : '../../../tmp'
 
 class NFEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
