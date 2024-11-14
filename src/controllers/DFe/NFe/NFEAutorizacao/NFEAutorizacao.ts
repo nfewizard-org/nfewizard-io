@@ -345,7 +345,7 @@ class NFEAutorizacao extends BaseNFE {
             }
 
             // Capturando a url do método para o namespace xmlns
-            const { method, action } = this.utility.getSoapInfo(this.metodo);
+            const { method, action } = this.utility.getSoapInfo(config.dfe.UF, this.metodo);
 
             // Criando envelop SOAP (estrutura para e envio do XML)
             const xmlFormated = this.xmlBuilder.buildSoapEnvelope(xmlConsulta, method);
@@ -383,6 +383,7 @@ class NFEAutorizacao extends BaseNFE {
             xmlConsulta = this.gerarXmlNFeAutorizacao(data);
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta(xmlConsulta);
+            // console.log(xmlFormated)
             soapXML = xmlFormated
 
             // Salva XML de Consulta

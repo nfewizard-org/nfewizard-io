@@ -34,7 +34,7 @@
     "NFEConsultaProtocolo_4.00": "https://nfe.sefaz.am.gov.br/services2/services/NfeConsulta4",
     "NFEStatusServico_4.00": "https://nfe.sefaz.am.gov.br/services2/services/NfeStatusServico4",
     "NFEInutilizacao_4.00": "https://nfe.sefaz.am.gov.br/services2/services/NfeInutilizacao4",
-    "NFEAutorizacao_4.00": "https://nfe.sefaz.am.gov.br/services2/services/NfeAutorizacao4",
+    "NFEAutorizacao_4.00": "https://nfe.sefaz.am.gov.br/services2/services/NFeAutorizacao4",
     "NFERetornoAutorizacao_4.00": "https://nfe.sefaz.am.gov.br/services2/services/NfeRetAutorizacao4",
     "RecepcaoEvento_4.00": "https://nfe.sefaz.am.gov.br/services2/services/RecepcaoEvento4"
   },
@@ -55,7 +55,7 @@
     "NFEConsultaProtocolo_4.00": "https://homnfe.sefaz.am.gov.br/services2/services/NfeConsulta4",
     "NFEStatusServico_4.00": "https://homnfe.sefaz.am.gov.br/services2/services/NfeStatusServico4",
     "NFEInutilizacao_4.00": "https://homnfe.sefaz.am.gov.br/services2/services/NfeInutilizacao4",
-    "NFEAutorizacao_4.00": "https://homnfe.sefaz.am.gov.br/services2/services/NfeAutorizacao4",
+    "NFEAutorizacao_4.00": "https://homnfe.sefaz.am.gov.br/services2/services/NFeAutorizacao4",
     "NFERetornoAutorizacao_4.00": "https://homnfe.sefaz.am.gov.br/services2/services/NfeRetAutorizacao4",
     "RecepcaoEvento_4.00": "https://homnfe.sefaz.am.gov.br/services2/services/RecepcaoEvento4"
   },
@@ -273,7 +273,7 @@
     "NFEStatusServico_4.00": "https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico4?wsdl",
     "NfeConsultaCadastro_4.00": "https://nfe.sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro4?wsdl",
     "RecepcaoEvento_4.00": "https://nfe.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento4?wsdl",
-    "NFEAutorizacao_4.00": "https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao4?wsdl",
+    "NFEAutorizacao_4.00": "https://nfe.sefaz.mt.gov.br/nfews/v2/services/NFeAutorizacao4?wsdl",
     "NFERetornoAutorizacao_4.00": "https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeRetAutorizacao4?wsdl"
   },
   "NFe_MT_H": {
@@ -289,7 +289,7 @@
     "NFERetornoAutorizacao_4.00": "https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeRetAutorizacao4",
     "RecepcaoEvento_4.00": "https://homologacao.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento4",
     "NFEConsultaProtocolo_4.00": "https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta4",
-    "NFEAutorizacao_4.00": "https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeAutorizacao4",
+    "NFEAutorizacao_4.00": "https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NFeAutorizacao4",
     "NFEInutilizacao_4.00": "https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeInutilizacao4",
     "NfeConsultaCadastro_4.00": "https://homologacao.sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro4",
     "NFEStatusServico_4.00": "https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico4"
@@ -704,7 +704,7 @@
     "NFEConsultaProtocolo_4.00": "https://nfce.sefaz.am.gov.br/nfce-services/services/NfeConsulta4",
     "NFEStatusServico_4.00": "https://nfce.sefaz.am.gov.br/nfce-services/services/NfeStatusServico4",
     "NFEInutilizacao_4.00": "https://nfce.sefaz.am.gov.br/nfce-services/services/NfeInutilizacao4",
-    "NFEAutorizacao_4.00": "https://nfce.sefaz.am.gov.br/nfce-services/services/NfeAutorizacao4",
+    "NFEAutorizacao_4.00": "https://nfce.sefaz.am.gov.br/nfce-services/services/NFeAutorizacao4",
     "NFERetornoAutorizacao_4.00": "https://nfce.sefaz.am.gov.br/nfce-services/services/NfeRetAutorizacao4",
     "RecepcaoEvento_4.00": "https://nfce.sefaz.am.gov.br/nfce-services/services/RecepcaoEvento4",
     "URL-QRCode": "http://sistemas.sefaz.am.gov.br/nfceweb/consultarNFCe.jsp",
@@ -724,7 +724,7 @@
     "NFEConsultaProtocolo_4.00": "https://homnfce.sefaz.am.gov.br/nfce-services-nac/services/NfeConsulta4",
     "NFEStatusServico_4.00": "https://homnfce.sefaz.am.gov.br/nfce-services-nac/services/NfeStatusServico4",
     "NFEInutilizacao_4.00": "https://homnfce.sefaz.am.gov.br/nfce-services-nac/services/NfeInutilizacao4",
-    "NFEAutorizacao_4.00": "https://homnfce.sefaz.am.gov.br/nfce-services-nac/services/NfeAutorizacao4",
+    "NFEAutorizacao_4.00": "https://homnfce.sefaz.am.gov.br/nfce-services-nac/services/NFeAutorizacao4",
     "NFERetornoAutorizacao_4.00": "https://homnfce.sefaz.am.gov.br/nfce-services-nac/services/NfeRetAutorizacao4",
     "RecepcaoEvento_4.00": "https://homnfce.sefaz.am.gov.br/nfce-services-nac/services/RecepcaoEvento4",
     "URL-QRCode": "http://homnfce.sefaz.am.gov.br/nfceweb/consultarNFCe.jsp",
@@ -942,7 +942,7 @@
     "RecepcaoEvento_1.00": "https://nfce.sefaz.mt.gov.br/nfcews/services/RecepcaoEvento?wsdl",
     "NFEStatusServico_3.10": "https://nfce.sefaz.mt.gov.br/nfcews/services/NfeStatusServico2?wsdl",
     "NFEConsultaProtocolo_3.10": "https://nfce.sefaz.mt.gov.br/nfcews/services/NfeConsulta2?wsdl",
-    "NFEAutorizacao_4.00": "https://nfce.sefaz.mt.gov.br/nfcews/services/NfeAutorizacao4",
+    "NFEAutorizacao_4.00": "https://nfce.sefaz.mt.gov.br/nfcews/services/NFeAutorizacao4",
     "NFERetornoAutorizacao_4.00": "https://nfce.sefaz.mt.gov.br/nfcews/services/NfeRetAutorizacao4",
     "NFEInutilizacao_4.00": "https://nfce.sefaz.mt.gov.br/nfcews/services/NfeInutilizacao4",
     "NFEConsultaProtocolo_4.00": "https://nfce.sefaz.mt.gov.br/nfcews/services/NfeConsulta4",
@@ -959,7 +959,7 @@
     "RecepcaoEvento_1.00": "https://homologacao.sefaz.mt.gov.br/nfcews/services/RecepcaoEvento?wsdl",
     "NFEStatusServico_3.10": "https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeStatusServico2?wsdl",
     "NFEConsultaProtocolo_3.10": "https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeConsulta2?wsdl",
-    "NFEAutorizacao_4.00": "https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeAutorizacao4",
+    "NFEAutorizacao_4.00": "https://homologacao.sefaz.mt.gov.br/nfcews/services/NFeAutorizacao4",
     "NFERetornoAutorizacao_4.00": "https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeRetAutorizacao4",
     "NFEInutilizacao_4.00": "https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeInutilizacao4",
     "NFEConsultaProtocolo_4.00": "https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeConsulta4",
@@ -1258,7 +1258,8 @@
     "NFEConsultaProtocolo_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/nfeconsultaprotocolo4",
     "NFEStatusServico_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4",
     "RecepcaoEvento_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4",
-    "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4"
+    "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4",
+    "NFeDistribuicaoDFe_1.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe"
   },
   "SOAP_V4": {
     "NFEAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote",
@@ -1267,25 +1268,28 @@
     "NFEConsultaProtocolo_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/nfeconsultaprotocolo4/nfeConsultaNF",
     "NFEStatusServico_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF",
     "RecepcaoEvento_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEvento",
-    "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4/consultaCadastro"
+    "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4/consultaCadastro",
+    "NFeDistribuicaoDFe_1.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe/nfeDistDFeInteresse"
   },
   "WSDL_V4_SP": {
-    "NFEAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao4",
-    "NFERetornoAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao4",
-    "NFEInutilizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeInutilizacao4",
-    "NFEConsultaProtocolo_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeConsulta4",
-    "NFEStatusServico_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico4",
-    "RecepcaoEvento_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento4",
-    "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4"
+    "NFEAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4",
+    "NFERetornoAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4",
+    "NFEInutilizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeInutilizacao4",
+    "NFEConsultaProtocolo_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4",
+    "NFEStatusServico_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4",
+    "RecepcaoEvento_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4",
+    "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4",
+    "NFeDistribuicaoDFe_1.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe"
   },
   "SOAP_V4_SP": {
-    "NFEAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao4/nfeAutorizacaoLote",
-    "NFERetornoAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao4/nfeRetAutorizacaoLote",
-    "NFEInutilizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeInutilizacao4/nfeInutilizacaoNF",
-    "NFEConsultaProtocolo_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeConsulta4/nfeConsultaNF",
-    "NFEStatusServico_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeStatusServico4/nfeStatusServicoNF",
-    "RecepcaoEvento_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento4/nfeRecepcaoEventoNF",
-    "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4/consultaCadastro"
+    "NFEAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote",
+    "NFERetornoAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4/nfeRetAutorizacaoLote",
+    "NFEInutilizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeInutilizacao4/nfeInutilizacaoNF",
+    "NFEConsultaProtocolo_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4/nfeConsultaNF",
+    "NFEStatusServico_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF",
+    "RecepcaoEvento_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEventoNF",
+    "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4/consultaCadastro",
+    "NFeDistribuicaoDFe_1.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe/nfeDistDFeInteresse"
   },
   "SOAP_V4_BA": {
     "NFEAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote",
@@ -1294,6 +1298,7 @@
     "NFEConsultaProtocolo_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsulta4/nfeConsultaNF",
     "NFEStatusServico_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeStatusServico4/nfeStatusServicoNF",
     "RecepcaoEvento_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEventoNF",
-    "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4/consultaCadastro"
+    "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4/consultaCadastro",
+    "NFeDistribuicaoDFe_1.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe/nfeDistDFeInteresse"
   }
 }
