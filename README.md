@@ -135,6 +135,7 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
   "compilerOptions": {
     "target": "es2020",
     "module": "nodenext",
+    "outDir": "dist", 
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
