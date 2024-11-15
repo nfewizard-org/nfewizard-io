@@ -63,7 +63,6 @@ export default {
                 // { src: 'src/certs/*', dest: 'dist/esm/certs' },
                 // { src: 'src/schemas/*', dest: 'dist/esm/schemas' },
                 // CJS
-                { src: 'src/**/*.ts', dest: 'dist/cjs/src' },
                 { src: 'src/assets/*', dest: 'dist/cjs/assets' },
                 { src: 'src/certs/*', dest: 'dist/cjs/certs' },
                 { src: 'src/schemas/*', dest: 'dist/cjs/schemas' },
