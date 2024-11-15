@@ -19,3 +19,4 @@ package-lock.json
 certificado.pfx
 
 *:Zone.Identifier
+yarn.lock

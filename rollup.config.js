@@ -1,3 +1,15 @@
+/**
+    * @description      : 
+    * @author           : Marco Lima 
+    * @group            : 
+    * @created          :  
+    * 
+    * MODIFICATION LOG
+    * - Version         : 0.2.6
+    * - Date            : 14/11/2024
+    * - Author          : Cassio Seffrin
+    * - Modification    : 
+**/
 import alias from '@rollup/plugin-alias';
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
@@ -6,9 +18,7 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import copy from 'rollup-plugin-copy';
-
 import path from 'path';
-
 export default {
     input: 'src/index.ts',
     output: [
@@ -18,12 +28,14 @@ export default {
         //     sourcemap: true,
         //     compact: true,
         // },
-        {
-            dir: 'dist/cjs',
-            format: 'cjs',
-            sourcemap: true,
-            compact: true,
-        },
+            {
+                dir: 'dist/cjs',
+                format: 'cjs',
+                sourcemap: true,
+                sourcemapFile: 'dist/cjs/index.js.map',
+                compact: true,
+                inlineSources: true,
+            },
     ],
     external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem', 'libxmljs'],
     plugins: [
