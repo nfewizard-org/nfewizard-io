@@ -1,3 +1,15 @@
+/**
+    * @description      : 
+    * @author           : Marco Aurélio Silva Lima
+    * @group            : 
+    * @created          : 
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 17/11/2024
+    * - Author          : Cassio Seffrin
+    * - Modification    : 
+**/
 /*
  * This file is part of NFeWizard-io.
  * 
@@ -239,60 +251,63 @@ class NFCEGerarDanfe {
     }
 
     _buildProdutos() {
-        const tableTop = this.doc.y + 5;
-        let y = tableTop;
-        let currentPage = 0;
-
-        const header = (top: number) => {
-            this.doc.font('Arial-bold').fontSize(this.fontSize).text('Código', 2, top);
-            this.doc.text('Descrição', this.ajustarPosicao(30, this.documentWidth), top);
-            this.doc.text('Qtde UN', this.ajustarPosicao(136.77, this.documentWidth), top);
-            this.doc.text('VL Unit', this.ajustarPosicao(166.77, this.documentWidth), top);
-            this.doc.text('VL Total', this.ajustarPosicao(196.77, this.documentWidth), top);
+        const { right, left, top } = this.doc.page.margins; 
+        const tableWidth = this.documentWidth - left - right;
+        const startX = left; 
+        const tableTop = this.doc.y + top;
+        const columnRatios = {
+            codigo: 0.15,
+            descricao: 0.40,
+            qtdeUn: 0.15,
+            unit: 0.15, 
+            total: 0.15 
         };
-
+        const columnSpacing = 0; 
+        const columnWidths = {
+            codigo: tableWidth * columnRatios.codigo,
+            descricao: tableWidth * columnRatios.descricao,
+            qtdeUn: tableWidth * columnRatios.qtdeUn,
+            unit: tableWidth * columnRatios.unit,
+            total: tableWidth * columnRatios.total
+        };
+        const header = (top: number) => {
+            let x = startX;
+            this.doc.font('Arial-bold').fontSize(this.fontSize).text('Código', x, top, { width: columnWidths.codigo });
+            x += columnWidths.codigo + columnSpacing;
+            this.doc.text('Descrição', x, top, { width: columnWidths.descricao });
+            x += columnWidths.descricao + columnSpacing;
+            this.doc.text('Qtde', x, top, { width: columnWidths.qtdeUn, align: 'right' });
+            x += columnWidths.qtdeUn + columnSpacing;
+            this.doc.text('Unit', x, top, { width: columnWidths.unit, align: 'right' }); 
+            x += columnWidths.unit + columnSpacing;
+            this.doc.text('Total', x, top, { width: columnWidths.total, align: 'right' }); 
+        };
         const row = (top: number, item: DetProd) => {
             const quant = parseFloat(String(item.prod.qCom || item.prod.qTrib)).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
             const valUnit = parseFloat(String(item.prod.vUnCom || item.prod.vUnTrib || '0')).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             const valLiq = parseFloat(String(item.prod.vProd || '0')).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-
-            this.doc.font('Arial').fontSize(this.fontSize).text(item.prod.cProd, 2, top);
-            this.doc.text(item.prod.xProd.slice(0, 30), this.ajustarPosicao(30, this.documentWidth), top);
-            this.doc.text(`${quant} ${item.prod.uCom}`, this.ajustarPosicao(135, this.documentWidth), top, {
-                width: this.ajustarPosicao(25, this.documentWidth),
-                align: 'right'
-            });
-            this.doc.text(valUnit, this.ajustarPosicao(166.77, this.documentWidth), top, {
-                width: this.ajustarPosicao(20, this.documentWidth),
-                align: 'right'
-            });
-            this.doc.text(valLiq, this.ajustarPosicao(196.77, this.documentWidth), top, {
-                width: this.ajustarPosicao(20, this.documentWidth),
-                align: 'right'
-            });
-
+            let x = startX;
+            this.doc.font('Arial').fontSize(this.fontSize).text(item.prod.cProd, x, top, { width: columnWidths.codigo });
+            x += columnWidths.codigo + columnSpacing;
+            this.doc.text(item.prod.xProd.slice(0, 24), x, top, { width: columnWidths.descricao }); 
+            x += columnWidths.descricao + columnSpacing;
+            this.doc.text(`${quant} ${item.prod.uCom}`, x, top, { width: columnWidths.qtdeUn, align: 'right' });
+            x += columnWidths.qtdeUn + columnSpacing;
+            this.doc.text(valUnit, x, top, { width: columnWidths.unit, align: 'right' });
+            x += columnWidths.unit + columnSpacing;
+            this.doc.text(valLiq, x, top, { width: columnWidths.total, align: 'right' });
         };
-
         header(tableTop);
-
-        const createTable = (prod: DetProd) => {
-            row(y + this.itemHeight, prod);
-            y += this.itemHeight;
-            currentPage++;
-        }
-
-        // // Adicionando itens da tabela
+        let y = tableTop + this.itemHeight;
         if (this.det instanceof Array) {
-            for (let i = 0; i < this.det.length; i++) {
-                const prod = this.det[i];
-                createTable(prod);
-            }
+            this.det.forEach((prod) => {
+                row(y, prod);
+                y += this.itemHeight;
+            });
         } else {
-            createTable(this.det);
+            row(y, this.det);
         }
     }
-
     _buildTotais() {
 
         let tableTop = this.doc.y + 5;
