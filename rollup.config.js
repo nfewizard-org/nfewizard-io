@@ -32,7 +32,6 @@ export default {
                 dir: 'dist/cjs',
                 format: 'cjs',
                 sourcemap: true,
-                sourcemapFile: 'dist/cjs/index.js.map',
                 compact: true,
                 inlineSources: true,
             },
