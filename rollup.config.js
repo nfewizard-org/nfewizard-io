@@ -6,7 +6,7 @@
     * 
     * MODIFICATION LOG
     * - Version         : 0.2.6
-    * - Date            : 20/11/2024
+    * - Date            : 14/11/2024
     * - Author          : Cassio Seffrin
     * - Modification    : 
 **/
@@ -28,13 +28,14 @@ export default {
         //     sourcemap: true,
         //     compact: true,
         // },
-        {
-            dir: 'dist/cjs',
-            format: 'cjs',
-            sourcemap: true,
-            compact: true,
-            inlineSources: true,
-        },
+            {
+                dir: 'dist/cjs',
+                format: 'cjs',
+                sourcemap: true,
+                sourcemapFile: 'dist/cjs/index.js.map',
+                compact: true,
+                inlineSources: true,
+            },
     ],
     external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem', 'libxmljs'],
     plugins: [
@@ -43,6 +44,7 @@ export default {
                 { find: '@Classes', replacement: path.resolve(__dirname, 'src/classes') },
                 { find: '@Controllers', replacement: path.resolve(__dirname, 'src/controllers') },
                 { find: '@Protocols', replacement: path.resolve(__dirname, 'src/protocols') },
+                { find: '@Protocols', replacement: path.resolve(__dirname, 'src/protocols/index') },
                 { find: '@Utils', replacement: path.resolve(__dirname, 'src/utils') },
             ],
         }),
@@ -51,7 +53,6 @@ export default {
         commonjs(),
         typescript({
             tsconfig: "tsconfig.json",
-            useTsconfigDeclarationDir: true,
             sourceMap: true,
         }),
         replace({
