@@ -32,7 +32,6 @@ export default {
                 dir: 'dist/cjs',
                 format: 'cjs',
                 sourcemap: true,
-                sourcemapFile: 'dist/cjs/index.js.map',
                 compact: true,
                 inlineSources: true,
             },
@@ -51,9 +50,12 @@ export default {
         json(),
         nodeResolve(),
         commonjs(),
-        typescript(),
+        typescript({
+            tsconfig: "tsconfig.json",
+            sourceMap: true,
+        }),
         replace({
-            'process.env.NODE_ENV': JSON.stringify('production'), // Substitui NODE_ENV por 'production'
+            'process.env.NODE_ENV': JSON.stringify('production'),
             preventAssignment: true,
         }),
         copy({
@@ -68,6 +70,9 @@ export default {
                 { src: 'src/schemas/*', dest: 'dist/cjs/schemas' },
             ],
         }),
-        terser(),
+        terser({
+            keep_fnames: true,
+            mangle: false,
+        }),
     ],
 };

@@ -20,8 +20,6 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "baseUrl": ".", // Define o diretório base para resolução de módulos
-    "inlineSources": true,
-    "inlineSourceMap": false,
     "paths": {
       "@Classes/*": [
         "src/classes/*"
