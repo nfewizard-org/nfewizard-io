@@ -68,7 +68,7 @@ class NFCEGerarDanfe {
 
     constructor(props: NFEGerarDanfeProps) {
         const { data, chave, outputPath, pageWidth } = props;
-        
+
         this.data = data;
         this.chave = chave.trim();
         this.outputPath = outputPath;
@@ -149,7 +149,7 @@ class NFCEGerarDanfe {
             });
         } catch (error: any) {
             console.error('Erro ao gerar o QR code:', error);
-            console.error(error.stack); 
+            console.error(error.stack);
         }
     };
 
@@ -165,7 +165,7 @@ class NFCEGerarDanfe {
             return buffer;
         } catch (error: any) {
             console.error('Erro ao gerar o QR code:', error);
-            console.error(error.stack); 
+            console.error(error.stack);
             throw new Error(`Erro ao gerar o QR code: ${error.message}`);
         }
     };
@@ -224,8 +224,8 @@ class NFCEGerarDanfe {
     }
 
     _buildHeader() {
-        const CNPJCPF = this.emit.CNPJCPF?.toString() 
-        const CNPJ = this.emit.CNPJ?.toString() 
+        const CNPJCPF = this.emit.CNPJCPF?.toString()
+        const CNPJ = this.emit.CNPJ?.toString()
         const CPF = this.emit.CPF?.toString()
         const documento = this.documento.mascaraCnpjCpf(CNPJCPF || CNPJ || CPF || '')
 
@@ -251,18 +251,18 @@ class NFCEGerarDanfe {
     }
 
     _buildProdutos() {
-        const { right, left, top } = this.doc.page.margins; 
+        const { right, left, top } = this.doc.page.margins;
         const tableWidth = this.documentWidth - left - right;
-        const startX = left; 
+        const startX = left;
         const tableTop = this.doc.y + top;
         const columnRatios = {
             codigo: 0.15,
             descricao: 0.40,
             qtdeUn: 0.15,
-            unit: 0.15, 
-            total: 0.15 
+            unit: 0.15,
+            total: 0.15
         };
-        const columnSpacing = 0; 
+        const columnSpacing = 0;
         const columnWidths = {
             codigo: tableWidth * columnRatios.codigo,
             descricao: tableWidth * columnRatios.descricao,
@@ -278,9 +278,9 @@ class NFCEGerarDanfe {
             x += columnWidths.descricao + columnSpacing;
             this.doc.text('Qtde', x, top, { width: columnWidths.qtdeUn, align: 'right' });
             x += columnWidths.qtdeUn + columnSpacing;
-            this.doc.text('Unit', x, top, { width: columnWidths.unit, align: 'right' }); 
+            this.doc.text('Unit', x, top, { width: columnWidths.unit, align: 'right' });
             x += columnWidths.unit + columnSpacing;
-            this.doc.text('Total', x, top, { width: columnWidths.total, align: 'right' }); 
+            this.doc.text('Total', x, top, { width: columnWidths.total, align: 'right' });
         };
         const row = (top: number, item: DetProd) => {
             const quant = parseFloat(String(item.prod.qCom || item.prod.qTrib)).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
@@ -289,7 +289,7 @@ class NFCEGerarDanfe {
             let x = startX;
             this.doc.font('Arial').fontSize(this.fontSize).text(item.prod.cProd, x, top, { width: columnWidths.codigo });
             x += columnWidths.codigo + columnSpacing;
-            this.doc.text(item.prod.xProd.slice(0, 24), x, top, { width: columnWidths.descricao }); 
+            this.doc.text(item.prod.xProd.slice(0, 24), x, top, { width: columnWidths.descricao });
             x += columnWidths.descricao + columnSpacing;
             this.doc.text(`${quant} ${item.prod.uCom}`, x, top, { width: columnWidths.qtdeUn, align: 'right' });
             x += columnWidths.qtdeUn + columnSpacing;
@@ -458,19 +458,34 @@ class NFCEGerarDanfe {
         tableTop += 4;
         let topBeforeQrCode = tableTop;
 
-        const docDest = this.documento.mascaraCnpjCpf(this.dest?.CNPJCPF || this.dest?.CNPJ || this.dest?.CPF || this.dest?.idEstrangeiro || '')
-
-        if (docDest && docDest !== '') {
-            this.doc.font('Arial-bold').text(`CONSUMIDOR - DOC ${docDest}`, 75, tableTop, {
+        const CNPJCPF = this.documento.mascaraCnpjCpf(
+            this.dest?.CNPJCPF || this.dest?.CNPJ || this.dest?.CPF || this.dest?.idEstrangeiro || ''
+        );
+        const xNome = this.dest?.xNome ?? 'Sem cliente identificado';
+        const xLgr = this.dest?.enderDest?.xLgr ?? '';
+        const nro = this.dest?.enderDest?.nro ?? '';
+        const xBairro = this.dest?.enderDest?.xBairro ?? null;
+        const xMun = this.dest?.enderDest?.xMun ?? '';
+        const UF = this.dest?.enderDest?.UF ?? '';
+        const enderecoPartes = [
+            xLgr && `${xLgr}`,
+            nro && `${nro}`,
+            xBairro && `bairro: ${xBairro}`,
+            xMun && `${xMun}`,
+            UF && `${UF}`
+        ].filter(Boolean);
+        const enderecoStr = enderecoPartes.join(', ');
+        if (CNPJCPF && CNPJCPF !== '') {
+            this.doc.font('Arial-bold').text(`CONSUMIDOR - DOC ${CNPJCPF}`, 75, tableTop, {
                 align: 'left',
                 lineGap: 1,
                 continued: true,
             }).font('Arial')
-                .text(' - Marco Aurélio Silva Lima -', {
+                .text(` - ${xNome} -`, {
                     lineGap: 1,
                     continued: true,
                 })
-                .text('Rua Teste teste teste, 262, Bairro Teste, Taubaté - SP');
+                .text(enderecoStr); 
             tableTop = this.doc.y + 4;
         } else {
             this.doc.text('CONSUMIDOR NÃO IDENTIFICADO', 75, tableTop, {
@@ -507,7 +522,7 @@ class NFCEGerarDanfe {
             .text(dtaAut);
 
         tableTop = this.doc.y + 20;
-        topBeforeQrCode += 70.87 
+        topBeforeQrCode += 70.87
         this.doc.text('Tributos Totais Incidentes (Lei Federal 12.741/2012): R$ 22,90', 0, topBeforeQrCode, {
             align: 'center'
         });
