@@ -35,6 +35,7 @@ import ValidaCPFCNPJ from '@Utils/ValidaCPFCNPJ';
 import PDFDocument from 'pdfkit';
 import QRCode from 'qrcode';
 import { fileURLToPath } from 'url';
+import { getDesTipoPag } from '@Utils/getDesTipoPag';
 
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
@@ -385,10 +386,12 @@ class NFCEGerarDanfe {
         let topTiposPag = tableTop;
         if (Array.isArray(this.pag.detPag)) {
             for (let pagto of this.pag.detPag) {
+                if (!pagto.xPag) pagto.xPag = getDesTipoPag(pagto.tPag);
                 this.doc.text(pagto.xPag || 'Não informado', 2, topTiposPag + this.itemHeight);
                 topTiposPag += this.itemHeight;
             }
         } else {
+            if (!this.pag.detPag.xPag) this.pag.detPag.xPag = getDesTipoPag(this.pag.detPag.tPag);
             this.doc.text(this.pag.detPag.xPag || 'Não informado', 2, topTiposPag + this.itemHeight);
         }
 
