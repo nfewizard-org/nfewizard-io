@@ -23,6 +23,10 @@ export interface EventoNFe {
      */
     idLote: number;
     /**
+     * @param {'55' | '65'} modelo - Modelo do documento a ser cancelado (informar apenas para cancelamento/epec)
+     */
+    modelo?: '55' | '65';
+    /**
      * @param {TipoEvento} evento - Máximo de 20 eventos por lote
      */
     evento: TipoEvento[]
@@ -88,6 +92,10 @@ export interface CienciaDaOperacao {
      * @param {number} idLote - dentificador de controle do Lote de envio do Evento. Número sequencial único para identificação do Lote, de uso exclusivo do autor do evento. O Web Service não faz qualquer uso deste identificador.
      */
     idLote: number;
+    /**
+     * @param {'55' | '65'} modelo - Modelo do documento a ser cancelado (informar apenas para cancelamento/epec)
+     */
+    modelo?: '55' | '65';
     /**
      * @param {EventoCienciaDaOperacao} evento - Máximo de 20 eventos por lote
      */
@@ -160,6 +168,10 @@ export interface CartaDeCorrecao {
      * @param {number} idLote - dentificador de controle do Lote de envio do Evento. Número sequencial único para identificação do Lote, de uso exclusivo do autor do evento. O Web Service não faz qualquer uso deste identificador.
      */
     idLote: number;
+    /**
+     * @param {'55' | '65'} modelo - Modelo do documento a ser cancelado (informar apenas para cancelamento/epec)
+     */
+    modelo?: '55' | '65';
     /**
      * @param {EventoCartaDeCorrecao} evento - Máximo de 20 eventos por lote
      */
@@ -251,6 +263,10 @@ export interface Cancelamento {
      */
     idLote: number;
     /**
+     * @param {'55' | '65'} modelo - Modelo do documento a ser cancelado (informar apenas para cancelamento/epec)
+     */
+    modelo?: '55' | '65';
+    /**
      * @param {EventoCancelamento} evento - Máximo de 20 eventos por lote
      */
     evento: EventoCancelamento[]
@@ -311,6 +327,10 @@ export interface ConfirmacaoDaOperacao {
      * @param {number} idLote - dentificador de controle do Lote de envio do Evento. Número sequencial único para identificação do Lote, de uso exclusivo do autor do evento. O Web Service não faz qualquer uso deste identificador.
      */
     idLote: number;
+    /**
+     * @param {'55' | '65'} modelo - Modelo do documento a ser cancelado (informar apenas para cancelamento/epec)
+     */
+    modelo?: '55' | '65';
     /**
      * @param {EventoConfirmacaoDaOperacao} evento - Máximo de 20 eventos por lote
      */
@@ -437,6 +457,10 @@ export interface EPEC {
      */
     idLote: number;
     /**
+     * @param {'55' | '65'} modelo - Modelo do documento a ser cancelado (informar apenas para cancelamento/epec)
+     */
+    modelo?: '55' | '65';
+    /**
      * @param {EventoEPEC} evento - Máximo de 20 eventos por lote
      */
     evento: EventoEPEC[]
@@ -502,6 +526,10 @@ export interface OperacaoNaoRealizada {
      */
     idLote: number;
     /**
+     * @param {'55' | '65'} modelo - Modelo do documento a ser cancelado (informar apenas para cancelamento/epec)
+     */
+    modelo?: '55' | '65';
+    /**
      * @param {EventoOperacaoNaoRealizada} evento - Máximo de 20 eventos por lote
      */
     evento: EventoOperacaoNaoRealizada[]
@@ -563,6 +591,10 @@ export interface DesconhecimentoDaOperacao {
      * @param {number} idLote - dentificador de controle do Lote de envio do Evento. Número sequencial único para identificação do Lote, de uso exclusivo do autor do evento. O Web Service não faz qualquer uso deste identificador.
      */
     idLote: number;
+    /**
+     * @param {'55' | '65'} modelo - Modelo do documento a ser cancelado (informar apenas para cancelamento/epec)
+     */
+    modelo?: '55' | '65';
     /**
      * @param {EventoDesconhecimentoDaOperacao} evento - Máximo de 20 eventos por lote
      */

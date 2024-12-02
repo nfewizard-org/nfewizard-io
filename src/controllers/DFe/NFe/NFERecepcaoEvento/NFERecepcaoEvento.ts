@@ -23,12 +23,14 @@ import BaseNFE from '../BaseNFe/BaseNFe.js';
 
 class NFERecepcaoEvento extends BaseNFE {
     tpEvento: string;
+    modelo?: string;
     xmlEventosNacionais: string[];
     xmlEventosRegionais: string[];
     xMotivoPorEvento: any[];
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance) {
         super(environment, utility, xmlBuilder, 'RecepcaoEvento', axios);
         this.tpEvento = '';
+        this.modelo = 'NFe';
         this.xmlEventosNacionais = [];
         this.xmlEventosRegionais = [];
         this.xMotivoPorEvento = [];
@@ -228,7 +230,7 @@ class NFERecepcaoEvento extends BaseNFE {
             const agent = this.environment.getHttpAgent();
 
             // Retorna a url do webservice NFEStatusServico
-            const webServiceUrl = this.utility.getWebServiceUrl(this.metodo, ambienteNacional || this.isAmbienteNacional(this.tpEvento));
+            const webServiceUrl = this.utility.getWebServiceUrl(this.metodo, ambienteNacional || this.isAmbienteNacional(this.tpEvento), '', this.modelo);
 
             return {
                 xmlFormated,
@@ -303,8 +305,10 @@ class NFERecepcaoEvento extends BaseNFE {
 
     async Exec(data: EventoNFe) {
         try {
-            const { evento, idLote } = data;
+            const { evento, idLote, modelo } = data;
             const { nacional, regional } = this.separaEventosPorAmbiente(evento);
+
+            if (modelo === '65') this.modelo =  'NFCe';
 
             // Enviar eventos ambiente nacional e regional separadamente
             let responseNacionalInJson, responseRegionalInJson = null
