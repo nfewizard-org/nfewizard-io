@@ -15,6 +15,7 @@ src/assets/qrcode.png
 src/old_schemas
 tmp
 package-lock.json
+src/old
 
 certificado.pfx
 
