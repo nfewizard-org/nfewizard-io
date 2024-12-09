@@ -14,8 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard from './adapters/NFeWizard';
+import { NFCEAutorizacaoServiceImpl } from '@Interfaces';
 
-export { NFeWizard as default };
-export * from './core/types';
-export * from './core/utils/NFEImposto'
+class NFCEAutorizacao {
+    nfceAutorizacaoService: NFCEAutorizacaoServiceImpl;
+    constructor(nfceAutorizacaoService: NFCEAutorizacaoServiceImpl) {
+        this.nfceAutorizacaoService = nfceAutorizacaoService;
+    }
+
+    async Exec(data?: any): Promise<any> {
+        return await this.nfceAutorizacaoService.Exec(data);
+    }
+
+}
+
+
+export default NFCEAutorizacao;

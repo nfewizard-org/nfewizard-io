@@ -14,8 +14,42 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard from './adapters/NFeWizard';
 
-export { NFeWizard as default };
-export * from './core/types';
-export * from './core/utils/NFEImposto'
+interface ObjProps {
+  [key: string]: number;
+}
+
+export const getCodIBGE = (UF: string) => {
+    const UFs: ObjProps = {
+        RO: 11,
+        AC: 12,
+        AM: 13,
+        RR: 14,
+        PA: 15,
+        AP: 16,
+        TO: 17,
+        MA: 21,
+        PI: 22,
+        CE: 23,
+        RN: 24,
+        PB: 25,
+        PE: 26,
+        AL: 27,
+        SE: 28,
+        BA: 29,
+        MG: 31,
+        ES: 32,
+        RJ: 33,
+        SP: 35,
+        PR: 41,
+        SC: 42,
+        RS: 43,
+        MS: 50,
+        MT: 51,
+        GO: 52,
+        DF: 53,
+        AN: 91,
+      }
+    
+    return UFs[UF];
+}

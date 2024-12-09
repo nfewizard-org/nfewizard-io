@@ -70,7 +70,7 @@
     "xml-crypto": "^6.0.0",
     "xml-js": "^1.6.11",
     "xml2js": "^0.6.2",
-    "xsd-assembler": "^0.0.2",
+    "xsd-assembler": "^0.0.3",
     "xsd-schema-validator": "^0.7.0"
   },
   "devDependencies": {

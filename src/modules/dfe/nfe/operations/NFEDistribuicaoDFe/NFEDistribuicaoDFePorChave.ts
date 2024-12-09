@@ -14,8 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard from './adapters/NFeWizard';
+import { NFEDistribuicaoDFeServiceImpl } from '@Interfaces';
 
-export { NFeWizard as default };
-export * from './core/types';
-export * from './core/utils/NFEImposto'
+class NFEDistribuicaoDFePorChave implements NFEDistribuicaoDFeServiceImpl {
+    nfeDistribuicaoDFePorChaveService: NFEDistribuicaoDFeServiceImpl;
+    constructor(nfeDistribuicaoDFePorChaveService: NFEDistribuicaoDFeServiceImpl) {
+        this.nfeDistribuicaoDFePorChaveService = nfeDistribuicaoDFePorChaveService;
+    }
+
+    async Exec(data?: any): Promise<any> {
+        return await this.nfeDistribuicaoDFePorChaveService.Exec(data);
+    }
+}
+export default NFEDistribuicaoDFePorChave;

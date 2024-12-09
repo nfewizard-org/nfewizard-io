@@ -14,8 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard from './adapters/NFeWizard';
+import { NFERecepcaoEventoServiceImpl } from '@Interfaces';
 
-export { NFeWizard as default };
-export * from './core/types';
-export * from './core/utils/NFEImposto'
+class NFECienciaDaOperacao implements NFERecepcaoEventoServiceImpl {
+    nfeCienciaDaOperacaoServiceService: NFERecepcaoEventoServiceImpl;
+    constructor(nfeCienciaDaOperacaoServiceService: NFERecepcaoEventoServiceImpl) {
+        this.nfeCienciaDaOperacaoServiceService = nfeCienciaDaOperacaoServiceService;
+    }
+
+    async Exec(data?: any): Promise<any> {
+        return await this.nfeCienciaDaOperacaoServiceService.Exec(data);
+    }
+}
+
+export default NFECienciaDaOperacao;

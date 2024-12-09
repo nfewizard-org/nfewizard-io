@@ -14,8 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard from './adapters/NFeWizard';
+import Environment from '@Classes/Environment.js';
+import Utility from 'src/old/utils/Utility.js';
+import XmlBuilder from '@Classes/XmlBuilder.js';
+import NFEDistribuicaoDFe from './NFEDistribuicaoDFe.js';
+import { AxiosInstance } from 'axios';
 
-export { NFeWizard as default };
-export * from './core/types';
-export * from './core/utils/NFEImposto'
+class NFEDistribuicaoDFePorNSU extends NFEDistribuicaoDFe{
+    constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance) {
+        super(environment, utility, xmlBuilder, axios);
+    }
+
+}
+
+export default NFEDistribuicaoDFePorNSU;

@@ -14,8 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard from './adapters/NFeWizard';
 
-export { NFeWizard as default };
-export * from './core/types';
-export * from './core/utils/NFEImposto'
+export type GenericObject = Record<string, any>;
+
+export interface SoapMethod {
+    [key: string]: {
+        method: string;
+        action: string;
+    };
+}
+
+
+export interface ServicesUrl {
+    [key: string]: {
+        [key: string]: string
+    };
+}
+
+export interface NFeServicosUrlType {
+    [estado: string]: {
+        [servico: string]: string;
+    };
+}
+
+export interface SaveXMLProps {
+    data: any;
+    fileName: string;
+    metodo: string;
+    path: string | undefined;
+}
+export interface SaveJSONProps {
+    data: any;
+    fileName: string;
+    metodo: string;
+    path: string | undefined;
+}

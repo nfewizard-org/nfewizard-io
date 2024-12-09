@@ -21,20 +21,29 @@
     "resolveJsonModule": true,
     "baseUrl": ".", // Define o diretório base para resolução de módulos
     "paths": {
-      "@Classes/*": [
-        "src/classes/*"
+      "@Adapters/*": [
+        "src/adapters/*"
       ],
-      "@Controllers/*": [
-        "src/controllers/*"
+      "@Modules/*": [
+        "src/modules/*"
       ],
-      "@Protocols/*": [
-        "src/protocols/*"
+      "@Interfaces/*": [
+        "src/core/interfaces/*"
       ],
-      "@Protocols": [
-        "src/protocols/index"
+      "@Interfaces": [
+        "src/core/interfaces/index"
+      ],
+      "@Types/*": [
+        "src/core/types/*"
+      ],
+      "@Types": [
+        "src/core/types/index"
+      ],
+      "@Core/*": [
+        "src/core/*"
       ],
       "@Utils/*": [
-        "src/utils/*"
+        "src/core/utils/*"
       ]
     },
   },

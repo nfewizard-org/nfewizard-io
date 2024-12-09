@@ -14,8 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard from './adapters/NFeWizard';
+import Environment from '@Modules/environment/Environment.js';
+import Utility from '@Utils/Utility.js';
+import XmlBuilder from '@Adapters/XmlBuilder.js';
+import { AxiosInstance } from 'axios';
+import NFERecepcaoEventoService from './NFERecepcaoEventoService.js';
+import { GerarConsultaImpl, SaveFilesImpl } from '@Interfaces';
 
-export { NFeWizard as default };
-export * from './core/types';
-export * from './core/utils/NFEImposto'
+class NFECartaDeCorrecaoService extends NFERecepcaoEventoService {
+    constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
+        super(environment, utility, xmlBuilder, axios, saveFiles, gerarConsulta);
+    }
+
+}
+
+export default NFECartaDeCorrecaoService;
