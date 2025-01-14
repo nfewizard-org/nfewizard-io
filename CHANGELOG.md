@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1] - 2025-01-14
+
+### Fixed
+- Diversos ajustes na emissão de NFC-e
+
+### Changed
+- Altera estrutura de pastas da lib (existem mais alterações estruturais por vir)
+
 ## [0.2.3] - [0.2.4] - 2024-11-14
 
 ### Fixed

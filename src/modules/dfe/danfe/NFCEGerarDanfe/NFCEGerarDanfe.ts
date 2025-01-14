@@ -31,10 +31,11 @@ import path from 'path';
 import fs from 'fs';
 import { DetProd, NFEGerarDanfeProps, Ide, Dest, Emit, Total, Transp, InfAdic, ProtNFe, Pag, InfNFeSupl } from 'src/core/types';
 import { format, parseISO } from 'date-fns';
-import ValidaCPFCNPJ from 'src/old/utils/ValidaCPFCNPJ';
 import PDFDocument from 'pdfkit';
 import QRCode from 'qrcode';
 import { fileURLToPath } from 'url';
+import ValidaCPFCNPJ from '@Core/utils/ValidaCPFCNPJ';
+import { getDesTipoPag } from '@Core/utils/getDesTipoPag';
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
 const fontDir = process.env.NODE_ENV === 'production' ? 'resources/fonts/ARIAL.TTF' : '../../../../resources/fonts/ARIAL.TTF';
@@ -382,10 +383,12 @@ class NFCEGerarDanfe {
         let topTiposPag = tableTop;
         if (Array.isArray(this.pag.detPag)) {
             for (let pagto of this.pag.detPag) {
+                if (!pagto.xPag) pagto.xPag = getDesTipoPag(pagto.tPag);
                 this.doc.text(pagto.xPag || 'Não informado', 2, topTiposPag + this.itemHeight);
                 topTiposPag += this.itemHeight;
             }
         } else {
+            if (!this.pag.detPag.xPag) this.pag.detPag.xPag = getDesTipoPag(this.pag.detPag.tPag);
             this.doc.text(this.pag.detPag.xPag || 'Não informado', 2, topTiposPag + this.itemHeight);
         }
 

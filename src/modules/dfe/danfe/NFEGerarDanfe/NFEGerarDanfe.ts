@@ -19,9 +19,9 @@ import path from 'path';
 import fs from 'fs';
 import { ICMS, IPI, DetProd, NFEGerarDanfeProps, Ide, Dest, Emit, Total, Transp, InfAdic, Vol, ProtNFe } from 'src/core/types';
 import { format } from 'date-fns';
-import ValidaCPFCNPJ from 'src/old/utils/ValidaCPFCNPJ';
 import PDFDocument from 'pdfkit';
 import { fileURLToPath } from 'url';
+import ValidaCPFCNPJ from '@Core/utils/ValidaCPFCNPJ';
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
 const barcodePath = process.env.NODE_ENV === 'production' ? '../tmp' : '../../../../../tmp'

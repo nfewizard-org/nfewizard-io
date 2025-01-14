@@ -16,6 +16,7 @@ Este documento lista os serviços atualmente homologados pela biblioteca `nfewiz
 | Geração de DANFE NFC-e                 |   ✅    | ✅     |
 | Recepção de Eventos                  |       |      |
 | &emsp;&emsp;• Cancelamento de NFe          |   ✅    | ✅     |
+| &emsp;&emsp;• Cancelamento de NFCe          |   ✅    | ✅     |
 | &emsp;&emsp;• Carta de Correção            |   ✅    | ✅     |
 | &emsp;&emsp;• Ciência da Operação          |   ✅    | ✅     |
 | &emsp;&emsp;• Confirmação da Operação      |   ✅    | ✅     |
