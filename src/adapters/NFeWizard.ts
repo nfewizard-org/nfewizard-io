@@ -35,12 +35,9 @@ import {
 } from 'src/core/types';
 import { NFeWizardImpl, NFeWizardServiceImpl } from '@Interfaces';
 import NFeWizardService from '@Modules/dfe/nfe/services/NFeWizard/NFeWizardService';
-import Environment from '@Modules/environment/Environment';
 
 class NFeWizard implements NFeWizardImpl {
     private nfeWizardService: NFeWizardServiceImpl;
-    private environment: Environment = {} as Environment;
-    private config: NFeWizardProps = {} as NFeWizardProps;
 
     constructor() {
         this.nfeWizardService = new NFeWizardService();

@@ -33,7 +33,6 @@ export default {
                 format: 'cjs',
                 sourcemap: true,
                 compact: true,
-                exports: 'named'
             },
     ],
     external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem', 'libxmljs'],
@@ -69,9 +68,9 @@ export default {
                 // { src: 'src/certs/*', dest: 'dist/esm/certs' },
                 // { src: 'src/schemas/*', dest: 'dist/esm/schemas' },
                 // CJS
-                { src: 'src/assets/*', dest: 'dist/cjs/assets' },
-                { src: 'src/certs/*', dest: 'dist/cjs/certs' },
-                { src: 'src/schemas/*', dest: 'dist/cjs/schemas' },
+                { src: 'src/resources/*', dest: 'dist/cjs/resources' },
+                // { src: 'src/certs/*', dest: 'dist/cjs/certs' },
+                // { src: 'src/schemas/*', dest: 'dist/cjs/schemas' },
             ],
         }),
         terser({
