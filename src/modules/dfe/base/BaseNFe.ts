@@ -17,7 +17,7 @@
 import Environment from '@Modules/environment/Environment.js';
 import XmlBuilder from '@Adapters/XmlBuilder.js';
 import Utility from '../../../core/utils/Utility.js';
-import { XmlParser } from '../../../core/utils/XmlParser.js';
+import XmlParser from '../../../core/utils/XmlParser.js';
 import { AxiosInstance } from 'axios';
 import { SaveFilesImpl, GerarConsultaImpl } from '@Interfaces';
 

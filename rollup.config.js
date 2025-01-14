@@ -33,18 +33,22 @@ export default {
                 format: 'cjs',
                 sourcemap: true,
                 compact: true,
-                inlineSources: true,
+                exports: 'named'
             },
     ],
     external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem', 'libxmljs'],
     plugins: [
         alias({
             entries: [
-                { find: '@Classes', replacement: path.resolve(__dirname, 'src/classes') },
-                { find: '@Controllers', replacement: path.resolve(__dirname, 'src/controllers') },
-                { find: '@Protocols', replacement: path.resolve(__dirname, 'src/protocols') },
-                { find: '@Protocols', replacement: path.resolve(__dirname, 'src/protocols/index') },
-                { find: '@Utils', replacement: path.resolve(__dirname, 'src/utils') },
+                { find: '@Adapters', replacement: path.resolve(__dirname, 'src/adapters') },
+                { find: '@Modules', replacement: path.resolve(__dirname, 'src/modules') },
+                { find: '@Interfaces', replacement: path.resolve(__dirname, 'src/core/interfaces') },
+                { find: '@Interfaces/*', replacement: path.resolve(__dirname, 'src/core/interfaces/*') },
+                { find: '@Types', replacement: path.resolve(__dirname, 'src/core/types') },
+                { find: '@Types/*', replacement: path.resolve(__dirname, 'src/core/types/*') },
+                { find: '@Core', replacement: path.resolve(__dirname, 'src/core') },
+                { find: '@Core/*', replacement: path.resolve(__dirname, 'src/core/*') },
+                { find: '@Utils/*', replacement: path.resolve(__dirname, 'src/core/utils/*') },
             ],
         }),
         json(),

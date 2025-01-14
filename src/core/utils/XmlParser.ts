@@ -18,7 +18,7 @@
 import { GenericObject } from 'src/core/types';
 import * as convert from "xml-js";
 
-export class XmlParser {
+export default class XmlParser {
     constructor() { }
 
     findInObj = (obj: GenericObject, chave: string): any => {

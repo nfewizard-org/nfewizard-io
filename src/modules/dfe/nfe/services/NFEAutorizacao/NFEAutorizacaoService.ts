@@ -16,7 +16,7 @@
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
 import NFERetornoAutorizacao from '../../operations/NFERetornoAutorizacao/NFERetornoAutorizacao.js';
-import { XmlParser } from '../../../../../core/utils/XmlParser.js';
+import XmlParser from '../../../../../core/utils/XmlParser.js';
 import Environment from '@Modules/environment/Environment.js';
 import Utility from '@Utils/Utility.js';
 import XmlBuilder from '@Adapters/XmlBuilder.js';

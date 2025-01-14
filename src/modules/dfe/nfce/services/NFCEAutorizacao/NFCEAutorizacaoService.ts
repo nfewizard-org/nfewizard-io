@@ -15,7 +15,7 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
-import { XmlParser } from '../../../../../core/utils/XmlParser.js';
+import XmlParser from '../../../../../core/utils/XmlParser.js';
 import Environment from '@Modules/environment/Environment.js';
 import Utility from '@Utils/Utility.js';
 import XmlBuilder from '@Adapters/XmlBuilder.js';
