@@ -58,7 +58,6 @@ abstract class BaseNFE {
         try {
             // Gerando XML específico
             const xmlConsulta = this.gerarXml(data);
-            console.log({ xmlConsulta })
 
             const { xmlFormated, agent, webServiceUrl } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
 

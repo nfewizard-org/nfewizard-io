@@ -313,8 +313,7 @@ class Utility {
             try {
                 const { basePath, schemaPath } = getSchema(metodo);
                 const completeXSD = await xsdAssembler.assemble(schemaPath);
-                console.log({ basePath, schemaPath })
-                // console.log(completeXSD)
+
                 fs.writeFileSync(`${basePath}/teste.xsd`, completeXSD)
 
                 const xmlDoc = libxmljs.parseXml(xml);

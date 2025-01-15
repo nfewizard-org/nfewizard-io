@@ -249,7 +249,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
 
             // Cria chave da nota e grava digito verificador
             const { chaveAcesso, dv } = this.calcularDigitoVerificador(NFe);
-            console.log({ chaveAcesso })
+
             NFe.infNFe.ide.cDV = dv;
             NFe.infNFe.ide.verProc = NFe.infNFe.ide.verProc || '1.0.0.0';
 
@@ -357,7 +357,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
             xmlConsulta = this.gerarXmlNFeAutorizacao(data);
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
-            // console.log(xmlFormated)
+
             soapXML = xmlFormated
 
             // Salva XML de Consulta
