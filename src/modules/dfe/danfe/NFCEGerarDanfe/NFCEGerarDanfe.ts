@@ -38,8 +38,8 @@ import ValidaCPFCNPJ from '@Core/utils/ValidaCPFCNPJ';
 import { getDesTipoPag } from '@Core/utils/getDesTipoPag';
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
-const fontDir = process.env.NODE_ENV === 'production' ? 'resources/fonts/ARIAL.TTF' : '../../../../resources/fonts/ARIAL.TTF';
-const fontDirBold = process.env.NODE_ENV === 'production' ? 'resources/fonts/ARIALBD.TTF' : '../../../../resources/fonts/ARIALBD.TTF';
+const fontDir = process.env.NODE_ENV === 'production' ? '../../../resources/fonts/ARIAL.TTF' : '../../../../resources/fonts/ARIAL.TTF';
+const fontDirBold = process.env.NODE_ENV === 'production' ? '../../../resources/fonts/ARIALBD.TTF' : '../../../../resources/fonts/ARIALBD.TTF';
 
 class NFCEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
@@ -184,10 +184,11 @@ class NFCEGerarDanfe {
                 includetext: false,    // Incluir texto
             });
             const barcode = png.toString('base64');
+            const buffer: any = Buffer.from(barcode, 'base64')
             const barcodeDir = this.qrcodePath;
             const barcodeFilePath = path.join(barcodeDir, 'barcode.png');
             // this.createDir(barcodeDir);
-            fs.writeFileSync(barcodeFilePath, Buffer.from(barcode, 'base64'));
+            fs.writeFileSync(barcodeFilePath, buffer);
         } catch (err) {
             console.error('Erro ao gerar código de barras:', err);
             return null;

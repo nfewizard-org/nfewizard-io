@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url));
-const dir = process.env.NODE_ENV === 'production' ? 'resources/certs' : '../../resources/certs';
+const dir = process.env.NODE_ENV === 'production' ? '../resources/certs' : '../../resources/certs';
 
 class LoadCertificate {
     private config: NFeWizardProps;

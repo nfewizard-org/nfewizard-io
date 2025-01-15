@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { LayoutNFe, ProtNFe } from '../..';
+
+import { LayoutNFe, ProtNFe } from './NFEAutorizacao';
 
 export type NFEGerarDanfeProps = {
     /**

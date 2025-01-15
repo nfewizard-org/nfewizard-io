@@ -36,7 +36,7 @@ import {
 import { NFeWizardImpl, NFeWizardServiceImpl } from '@Interfaces';
 import NFeWizardService from '@Modules/dfe/nfe/services/NFeWizard/NFeWizardService';
 
-class NFeWizard implements NFeWizardImpl {
+export default class NFeWizard implements NFeWizardImpl {
     private nfeWizardService: NFeWizardServiceImpl;
 
     constructor() {
@@ -141,5 +141,3 @@ class NFeWizard implements NFeWizardImpl {
         return this.nfeWizardService.NFE_EnviaEmail(mailParams);
     }
 }
-
-export default NFeWizard;

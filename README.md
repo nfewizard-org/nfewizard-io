@@ -22,6 +22,14 @@ para autorização.
     - Operação Não Realizada
 - **Geração de DANFE**: Criação do Documento Auxiliar da Nota Fiscal Eletrônica (DANFE), um resumo impresso da NFe.
 
+## 🚧 ATENÇÃO 🚧
+
+Para ambientes CJS (CommonJS) a importação utilizada deverá ser feita da seguinte maneira:
+```typescript
+const NFeWizard = require('nfewizard-io').default;
+```
+
+
 ## Exemplo de Utilização
 
 ```typescript

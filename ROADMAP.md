@@ -1,6 +1,6 @@
 # Roadmap
 
-## Versão esperada 1.0.0
+## Versão esperada 4.0.0
 
-- [] Change structures and apply solid principles
+- Emissão NFS-e
 

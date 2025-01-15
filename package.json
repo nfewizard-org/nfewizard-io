@@ -6,8 +6,14 @@
   },
   "version": "0.3.1",
   "description": "NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e).",
-  "main": "dist/cjs/index.js",
-  "types": "dist/cjs/index.d.ts",
+  "type": "module",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    "require": "./dist/cjs/index.cjs",
+    "import": "./dist/esm/index.js"
+  },
   "author": "maurelima",
   "license": "GPL-3.0",
   "funding": {
@@ -17,8 +23,9 @@
   "scripts": {
     "dev": "tsx src/testes.ts",
     "test": "jest",
+    "clean": "rm -rf dist",
     "build": "node build.mjs",
-    "build:rp": "rollup -c",
+    "build:rp": "npm run clean && rollup -c",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs-esm": "yarn build:cjs && yarn build:esm"

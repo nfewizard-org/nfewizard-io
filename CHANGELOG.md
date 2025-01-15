@@ -1,12 +1,14 @@
 # Changelog
 
-## [0.3.1] - 2025-01-14
+## [0.3.1] - 2025-01-15
 
 ### Fixed
 - Diversos ajustes na emissão de NFC-e
 
 ### Changed
 - Altera estrutura de pastas da lib (existem mais alterações estruturais por vir)
+- Build alterada para  gerar arquivos cjs e esm
+- Ajustes no package.json para tratar a importação correta de cjs e esm por ambiente
 
 ## [0.2.3] - [0.2.4] - 2024-11-14
 
