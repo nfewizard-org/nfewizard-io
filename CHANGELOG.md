@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.2] - 2025-01-21
+
+### Fixed
+- Remove criação do arquivo teste.xsd
+
 ## [0.3.1] - 2025-01-15
 
 ### Fixed
