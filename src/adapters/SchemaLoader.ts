@@ -19,7 +19,7 @@ import { fileURLToPath } from 'url';
 
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
-const dir = process.env.NODE_ENV === 'production' ? '../resources/schemas' : '../resources/schemas/';
+const dir = process.env.NODE_ENV === 'production' ? '../resources/schemas/nfe' : '../resources/schemas/nfe/';
 
 /**
  * Efetua a leitura do Schema
