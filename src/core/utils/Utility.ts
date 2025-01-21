@@ -314,8 +314,6 @@ class Utility {
                 const { basePath, schemaPath } = getSchema(metodo);
                 const completeXSD = await xsdAssembler.assemble(schemaPath);
 
-                fs.writeFileSync(`${basePath}/teste.xsd`, completeXSD)
-
                 const xmlDoc = libxmljs.parseXml(xml);
                 const xsdDoc = libxmljs.parseXml(completeXSD, { baseUrl: `${basePath}/` });
 
