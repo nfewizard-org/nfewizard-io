@@ -218,7 +218,9 @@ export const mountICMS = (icms: dadosICMS): ICMS => {
         ICMS60: ['orig', 'CST', 'vBCSTRet', 'pST', 'vICMSSubstituto', 'vICMSSTRet', 'vBCFCPSTRet', 'pFCPSTRet', 'vFCPSTRet', 'pRedBCEfet', 'vBCEfet', 'pICMSEfet', 'vICMSEfet'],
         ICMS61: ['orig', 'CST', 'qBCMonoRet', 'adRemICMSRet', 'vICMSMonoRet'],
         ICMS70: ['orig', 'CST', 'modBC', 'pRedBC', 'vBC', 'pICMS', 'vICMS', 'vBCST', 'pICMSST', 'vICMSST', 'vICMSDeson', 'motDesICMS', 'indDeduzDeson', 'modBCST', 'pMVAST', 'pRedBCST'],
-        ICMS90: ['orig', 'CST', 'modBC', 'vBC', 'pRedBC', 'pICMS', 'vICMS', 'vBCST', 'pICMSST', 'vICMSST', 'vICMSDeson', 'motDesICMS', 'indDeduzDeson', 'modBCST', 'pMVAST', 'pRedBCST'],
+    
+        ICMS90: ['orig', 'CST', 'modBC', 'vBC', 'pRedBC', 'pICMS', 'vICMS', 'vBCFCP', 'pFCP', 'vFCP', 'modBCST', 'pMVAST', 'pRedBCST', 'vBCST', 'pICMSST', 'vICMSST', 'vBCFCPST', 'pFCPST', 'vFCPST', 'vICMSDeson', 'motDesICMS', 'indDeduzDeson'],
+        
         ICMSPart: ['orig', 'CST', 'modBC', 'vBC', 'pRedBC', 'pICMS', 'vICMS', 'modBCST', 'pMVAST', 'pRedBCST', 'vBCST', 'pICMSST', 'vICMSST', 'pBCOp', 'UFST', 'vBCFCPST', 'pFCPST', 'vFCPST'],
         ICMSST: ['orig', 'CST', 'vBCSTRet', 'pST', 'vICMSSubstituto', 'vICMSSTRet', 'vBCFCPSTRet', 'pFCPSTRet', 'vFCPSTRet', 'vBCSTDest', 'vICMSSTDest'],
         ICMSSN101: ['orig', 'CSOSN', 'pCredSN', 'vCredICMSSN'],

@@ -38,8 +38,8 @@ import ValidaCPFCNPJ from '@Core/utils/ValidaCPFCNPJ';
 import { getDesTipoPag } from '@Core/utils/getDesTipoPag';
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
-const fontDir = process.env.NODE_ENV === 'production' ? '../../../resources/fonts/ARIAL.TTF' : '../../../../resources/fonts/ARIAL.TTF';
-const fontDirBold = process.env.NODE_ENV === 'production' ? '../../../resources/fonts/ARIALBD.TTF' : '../../../../resources/fonts/ARIALBD.TTF';
+const fontDir = process.env.NODE_ENV === 'production' ? '../resources/fonts/ARIAL.TTF' : '../../../../resources/fonts/ARIAL.TTF';
+const fontDirBold = process.env.NODE_ENV === 'production' ? '../resources/fonts/ARIALBD.TTF' : '../../../../resources/fonts/ARIALBD.TTF';
 
 class NFCEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
@@ -524,7 +524,7 @@ class NFCEGerarDanfe {
 
         tableTop = this.doc.y + 20;
         topBeforeQrCode += 70.87
-        this.doc.text('Tributos Totais Incidentes (Lei Federal 12.741/2012): R$ 22,90', 0, topBeforeQrCode, {
+        this.doc.text(`Tributos Totais Incidentes (Lei Federal 12.741/2012): R$ ${parseFloat(this.total.ICMSTot.vTotTrib || '0').toFixed(2)}`, 0, topBeforeQrCode, {
             align: 'center'
         });
     }
