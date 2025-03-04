@@ -47,6 +47,7 @@ export interface NFeWizardServiceImpl {
         NFe: LayoutNFe;
         protNFe: ProtNFe;
     }[]>;
+    NFSE_Autorizacao(): Promise<any>;
     NFE_Inutilizacao(data: InutilizacaoData): Promise<any>;
     NFE_GerarDanfe(data: NFEGerarDanfeProps): Promise<{
         message: string;

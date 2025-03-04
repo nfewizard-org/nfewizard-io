@@ -114,6 +114,9 @@ export default class NFeWizard implements NFeWizardImpl {
     async NFCE_Autorizacao(data: NFe) {
         return await this.nfeWizardService.NFCE_Autorizacao(data);
     }
+    async NFSE_Autorizacao() {
+        return await this.nfeWizardService.NFSE_Autorizacao();
+    }
 
     /**
      * Inutilização

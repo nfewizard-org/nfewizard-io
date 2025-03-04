@@ -60,6 +60,7 @@ import NFEDistribuicaoDFePorNSUService from '../NFEDistribuicaoDFe/NFEDistribuic
 import NFEDistribuicaoDFePorChaveService from '../NFEDistribuicaoDFe/NFEDistribuicaoDFePorChave';
 import NFEInutilizacaoService from '../NFEInutilizacao/NFEInutilizacaoService';
 import NFCEAutorizacaoService from '@Modules/dfe/nfce/services/NFCEAutorizacao/NFCEAutorizacaoService';
+import NFSEAutorizacaoService from '@Modules/dfe/nfse/services/NFSEAutorizacao/NFEAutorizacao/NFSEAutorizacaoService';
 
 class NFeWizardService implements NFeWizardServiceImpl {
     private config: NFeWizardProps = {} as NFeWizardProps;
@@ -375,6 +376,19 @@ class NFeWizardService implements NFeWizardServiceImpl {
             console.log('===================================');
 
             return response.xmls
+        } catch (error: any) {
+            throw new Error(`NFCE_Autorizacao: ${error.message}`)
+        }
+    }
+    async NFSE_Autorizacao() {
+        try {
+            const autorizacaoService = new NFSEAutorizacaoService();
+            const response = await autorizacaoService.Exec();
+
+            console.log('Retorno NFCE_Autorizacao');
+            console.log('===================================');
+
+            return response
         } catch (error: any) {
             throw new Error(`NFCE_Autorizacao: ${error.message}`)
         }

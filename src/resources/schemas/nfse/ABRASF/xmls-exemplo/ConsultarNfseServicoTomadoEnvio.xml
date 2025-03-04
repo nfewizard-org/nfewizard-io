@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConsultarNfseServicoTomadoEnvio xmlns="http://www.abrasf.org.br/nfse.xsd">
+    <Consulente>
+        <CpfCnpj>
+            <Cnpj>17148292000107</Cnpj>
+        </CpfCnpj>
+        <InscricaoMunicipal>190718</InscricaoMunicipal>
+    </Consulente>
+    <NumeroNfse>1</NumeroNfse>
+    <Prestador>
+        <CpfCnpj>
+            <Cnpj>17148292000107</Cnpj>
+        </CpfCnpj>
+        <InscricaoMunicipal>190718</InscricaoMunicipal>
+    </Prestador>
+    <Pagina>1</Pagina>
+</ConsultarNfseServicoTomadoEnvio>

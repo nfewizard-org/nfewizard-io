@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConsultarNfseServicoPrestadoEnvio xmlns="http://www.abrasf.org.br/nfse.xsd">
+    <Prestador>
+        <CpfCnpj>
+            <Cnpj>11006293000130</Cnpj>
+        </CpfCnpj>
+        <InscricaoMunicipal>99999</InscricaoMunicipal>
+    </Prestador>
+    <PeriodoCompetencia>
+        <DataInicial>2017-01-01</DataInicial>
+        <DataFinal>2023-01-01</DataFinal>
+    </PeriodoCompetencia>
+    <Pagina>1</Pagina>
+</ConsultarNfseServicoPrestadoEnvio>

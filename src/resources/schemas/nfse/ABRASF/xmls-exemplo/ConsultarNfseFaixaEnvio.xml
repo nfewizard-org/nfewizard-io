@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConsultarNfseFaixaEnvio xmlns="http://www.abrasf.org.br/nfse.xsd">
+    <Prestador>
+        <CpfCnpj>
+            <Cnpj>11006293000130</Cnpj>
+        </CpfCnpj>
+        <InscricaoMunicipal>99999</InscricaoMunicipal>
+    </Prestador>
+    <Faixa>
+        <NumeroNfseInicial>1</NumeroNfseInicial>
+        <NumeroNfseFinal>10</NumeroNfseFinal>
+    </Faixa>
+    <Pagina>1</Pagina>
+</ConsultarNfseFaixaEnvio>
