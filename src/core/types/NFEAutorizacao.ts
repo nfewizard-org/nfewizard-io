@@ -4117,6 +4117,11 @@ export type Pag = {
      * @param {DetPag[]} detPag - Grupo Detalhamento do Pagamento
      */
     detPag: DetPag[] | DetPag;
+    /**
+     * @param {string} vTroco - Valor do troco  
+     * Valor do troco (Incluído na NT 2016/002)
+     */
+    vTroco?: string;
 }
 export type DetPag = {
     /**
