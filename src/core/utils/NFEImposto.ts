@@ -194,8 +194,9 @@ export const mountPIS = (pis: dadosPIS): PIS => {
 }
 
 export const mountICMS = (icms: dadosICMS): ICMS => {
-    const { CST } = icms;
-    const cod_sit_trib = CST.length > 2 ? CST.substring(1, 3) : CST;
+    const { CST, CSOSN } = icms;
+
+    const cod_sit_trib = CST?.length > 2 ? CST.substring(1, 3) : CST || String(CSOSN);
 
     let icmsKey = ICMSMap[cod_sit_trib];
     if (!icmsKey) {
