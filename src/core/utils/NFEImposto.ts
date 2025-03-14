@@ -196,11 +196,18 @@ export const mountPIS = (pis: dadosPIS): PIS => {
 export const mountICMS = (icms: dadosICMS): ICMS => {
     const { CST, CSOSN } = icms;
 
-    const cod_sit_trib = CST?.length > 2 ? CST.substring(1, 3) : CST || String(CSOSN);
+    let cod_sit = CST;
 
-    let icmsKey = ICMSMap[cod_sit_trib];
+    if (CST) {
+        cod_sit = CST.length > 2 ? CST.substring(1, 3) : CST;
+    }
+    else if (CSOSN) {
+        cod_sit = String(CSOSN);
+    }
+
+    let icmsKey = ICMSMap[cod_sit];
     if (!icmsKey) {
-        console.warn(`Código de situação tributária ${cod_sit_trib} não é reconhecido. Alterado para padrão 'ICMS00'.`);
+        console.warn(`Código de situação tributária ${cod_sit} não é reconhecido. Alterado para padrão 'ICMS00'.`);
         icmsKey = 'ICMS00';
     }
 
@@ -219,9 +226,9 @@ export const mountICMS = (icms: dadosICMS): ICMS => {
         ICMS60: ['orig', 'CST', 'vBCSTRet', 'pST', 'vICMSSubstituto', 'vICMSSTRet', 'vBCFCPSTRet', 'pFCPSTRet', 'vFCPSTRet', 'pRedBCEfet', 'vBCEfet', 'pICMSEfet', 'vICMSEfet'],
         ICMS61: ['orig', 'CST', 'qBCMonoRet', 'adRemICMSRet', 'vICMSMonoRet'],
         ICMS70: ['orig', 'CST', 'modBC', 'pRedBC', 'vBC', 'pICMS', 'vICMS', 'vBCST', 'pICMSST', 'vICMSST', 'vICMSDeson', 'motDesICMS', 'indDeduzDeson', 'modBCST', 'pMVAST', 'pRedBCST'],
-    
+
         ICMS90: ['orig', 'CST', 'modBC', 'vBC', 'pRedBC', 'pICMS', 'vICMS', 'vBCFCP', 'pFCP', 'vFCP', 'modBCST', 'pMVAST', 'pRedBCST', 'vBCST', 'pICMSST', 'vICMSST', 'vBCFCPST', 'pFCPST', 'vFCPST', 'vICMSDeson', 'motDesICMS', 'indDeduzDeson'],
-        
+
         ICMSPart: ['orig', 'CST', 'modBC', 'vBC', 'pRedBC', 'pICMS', 'vICMS', 'modBCST', 'pMVAST', 'pRedBCST', 'vBCST', 'pICMSST', 'vICMSST', 'pBCOp', 'UFST', 'vBCFCPST', 'pFCPST', 'vFCPST'],
         ICMSST: ['orig', 'CST', 'vBCSTRet', 'pST', 'vICMSSubstituto', 'vICMSSTRet', 'vBCFCPSTRet', 'pFCPSTRet', 'vFCPSTRet', 'vBCSTDest', 'vICMSSTDest'],
         ICMSSN101: ['orig', 'CSOSN', 'pCredSN', 'vCredICMSSN'],
