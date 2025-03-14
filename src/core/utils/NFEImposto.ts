@@ -198,12 +198,12 @@ export const mountICMS = (icms: dadosICMS): ICMS => {
 
     let cod_sit = CST;
 
-    if (CST) {
+    if (CST?.trim()?.length > 0) {
         cod_sit = CST.length > 2 ? CST.substring(1, 3) : CST;
-    }
-    else if (CSOSN) {
+    } else if (CSOSN) {
         cod_sit = String(CSOSN);
     }
+    
 
     let icmsKey = ICMSMap[cod_sit];
     if (!icmsKey) {
