@@ -49,6 +49,15 @@ abstract class BaseNFE {
         throw new Error("O método 'gerarXml' não foi implementado na subclasse.");
     }
 
+    protected setContentType() {
+        const UF = this.environment.config.dfe.UF;
+
+        if (this.metodo === 'NFEConsultaProtocolo' && UF === 'MG') {
+            return 'application/soap+xml'
+        }
+        return 'text/xml; charset=utf-8'
+    }
+
     /**
      * Executa a requisição ao webservice SEFAZ
      * @param {any} [data] - Dados opcionais usados para gerar o XML em algumas subclasses.
@@ -67,7 +76,7 @@ abstract class BaseNFE {
             // Efetua requisição para o webservice NFEStatusServico
             const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
                 headers: {
-                    'Content-Type': 'text/xml; charset=utf-8',
+                    'Content-Type': this.setContentType(),
                 },
                 httpsAgent: agent
             });
@@ -88,6 +97,7 @@ abstract class BaseNFE {
 
             return responseInJson;
         } catch (error: any) {
+            console.log(error)
             throw new Error(error.message)
         }
     }

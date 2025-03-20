@@ -37,7 +37,7 @@ export default [
                 interop: 'auto',
             },
         ],
-        external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem', 'libxmljs'],
+        external: ['fs', 'path', 'https', 'url', 'crypto', 'bwip-js', 'xsd-schema-validator', 'pdfkit', 'pem', 'libxmljs', 'src/testes.ts'],
         plugins: [
             alias({
                 entries: [
