@@ -1426,11 +1426,11 @@ export type ICMS10 = {
     /**
      * @param {number} pFCPST - Percentual do Fundo de Combate à Pobreza (FCP) sobre o ICMS ST
      */
-    pFCPST?: number;
+    pFCpST?: number | string;
     /**
      * @param {number} vFCPST - Valor do Fundo de Combate à Pobreza (FCP) sobre o ICMS ST
      */
-    vFCPST?: number;
+    vFCpST?: number | string;
     /**
      * @param {number} vICMSDeson - Valor do ICMS desonerado
      * Informar apenas nos motivos de desoneração documentados abaixo
@@ -1646,17 +1646,17 @@ export type ICMS30 = {
      * @param {number} vBCFCPST - Valor da Base de Cálculo do FCP
      * Informar o valor da Base de Cálculo do FCP retido por Substituição Tributária
      */
-    vBCFCPST?: number;
+    vBCFCpST?: number | string;
     /**
      * @param {number} pFCPST - Percentual do FCP retido por Substituição Tributária
      * Percentual relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
      */
-    pFCPST?: number;
+    pFCpST?: number | string;
     /**
      * @param {number} vFCPST - Valor do FCP retido por Substituição Tributária
      * Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
      */
-    vFCPST?: number;
+    vFCpST?: number | string;
     /**
      * @param {number} vICMSDeson - Valor do ICMS desonerado
      * Informar apenas nos motivos de desoneração documentados abaixo.
@@ -1914,23 +1914,23 @@ export type ICMS60 = {
      * @param {number} vBCSTRet - Valor da BC do ICMS ST retido
      * Valor da BC do ICMS ST cobrado anteriormente por ST (v2.0). O valor pode ser omitido quando a legislação não exigir a sua informação.
      */
-    vBCSTRet?: number;
+    vBCSTRet?: number | string;
     /**
      * @param {number} pST - Alíquota suportada pelo Consumidor Final
      * Deve ser informada a alíquota do cálculo do ICMS-ST, já incluso o FCP caso incida sobre a mercadoria.
      * Exemplo: alíquota da mercadoria na venda ao consumidor final = 18% e 2% de FCP. A alíquota a ser informada no campo pST deve ser 20%. (Atualizado NT 2016/002)
      */
-    pST?: number;
+    pST?: number | string;
     /**
      * @param {number} vICMSSubstituto - Valor do ICMS próprio do Substituto
      * Valor do ICMS Próprio do Substituto cobrado em operação anterior (Criado na NT 2018.005)
      */
-    vICMSSubstituto?: number;
+    vICMSSubstituto?: number | string;
     /**
      * @param {number} vICMSSTRet - Valor do ICMS ST retido
      * Valor do ICMS ST cobrado anteriormente por ST (v2.0). O valor pode ser omitido quando a legislação não exigir a sua informação.
      */
-    vICMSSTRet?: number;
+    vICMSSTRet?: number | string;
     /**
      * @param {number} vBCFCPSTRet - Valor da Base de Cálculo do FCP retido anteriormente
      * Informar o valor da Base de Cálculo do FCP retido anteriormente por ST
@@ -2262,13 +2262,13 @@ export type ICMSST = {
     /**
      * @param {number} vBCSTRet - Valor do BC do ICMS ST retido na UF remetente
      */
-    vBCSTRet: number;
+    vBCSTRet: number | string;
     /**
      * @param {number} pST - Alíquota suportada pelo Consumidor Final
      * Deve ser informada a alíquota do cálculo do ICMS-ST, já incluso o FCP caso incida sobre a mercadoria.
      * Exemplo: alíquota da mercadoria na venda ao consumidor final = 18% e 2% de FCP. A alíquota a ser informada no campo pST deve ser 20%.
      */
-    pST: number;
+    pST: number | string
     /**
      * @param {number} vICMSSubstituto - Valor do ICMS próprio do Substituto
      * Valor do ICMS Próprio do Substituto cobrado em operação anterior
@@ -2485,22 +2485,22 @@ export type ICMSSN500 = {
      * @param {number} vBCSTRet - Valor da BC do ICMS ST retido
      * Valor da BC do ICMS ST cobrado anteriormente por ST (v2.0). O valor pode ser omitido quando a legislação não exigir a sua informação.
      */
-    vBCSTRet?: number;
+    vBCSTRet?: number | string;
     /**
      * @param {number} pST - Alíquota suportada pelo Consumidor Final
      * Deve ser informada a alíquota do cálculo do ICMS-ST, já incluso o FCP.
      */
-    pST?: number;
+    pST?: number | string;
     /**
      * @param {number} vICMSSubstituto - Valor do ICMS próprio do Substituto
      * Valor do ICMS próprio do Substituto cobrado em operação anterior
      */
-    vICMSSubstituto?: number;
+    vICMSSubstituto?: number | string;
     /**
      * @param {number} vICMSSTRet - Valor do ICMS ST retido
      * Valor do ICMS ST cobrado anteriormente por ST (v2.0). O valor pode ser omitido quando a legislação não exigir a sua informação.
      */
-    vICMSSTRet?: number;
+    vICMSSTRet?: number | string;
     /**
      * @param {number} vBCFCPSTRet - Valor da Base de Cálculo do FCP retido anteriormente
      * Informar o valor da Base de Cálculo do FCP retido anteriormente por ST
@@ -2624,17 +2624,17 @@ export type ICMSSN900 = {
      * @param {number} vBCFCPST - Valor da Base de Cálculo do FCP retido por Substituição Tributária
      * Informar o valor da Base de Cálculo do FCP retido por Substituição Tributária
      */
-    vBCFCPST?: number;
+    vBCFCpST?: number | string;
     /**
      * @param {number} pFCPST - Percentual do FCP retido por Substituição Tributária
      * Percentual relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
      */
-    pFCPST?: number;
+    pFCpST?: number | string;
     /**
      * @param {number} vFCPST - Valor do FCP retido por Substituição Tributária
      * Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
      */
-    vFCPST?: number;
+    vFCpST?: number | string;
     /**
      * @param {number} pCredSN - Alíquota aplicável de cálculo do crédito (Simples Nacional)
      * (v2.0)
@@ -2905,22 +2905,22 @@ export type dadosICMS = {
      * @param {number} vBCSTRet - Valor da BC do ICMS ST retido
      * Valor da BC do ICMS ST cobrado anteriormente por ST (v2.0). O valor pode ser omitido quando a legislação não exigir a sua informação.
      */
-    vBCSTRet?: number | '';
+    vBCSTRet?: number | string;
     /**
      * @param {number} pST - Alíquota suportada pelo Consumidor Final
      * Deve ser informada a alíquota do cálculo do ICMS-ST, já incluso o FCP.
      */
-    pST?: number | '';
+    pST?: number | string | '';
     /**
      * @param {number} vICMSSubstituto - Valor do ICMS próprio do Substituto
      * Valor do ICMS próprio do Substituto cobrado em operação anterior
      */
-    vICMSSubstituto?: number | '';
+    vICMSSubstituto?: number | string | '';
     /**
      * @param {number} vICMSSTRet - Valor do ICMS ST retido
      * Valor do ICMS ST cobrado anteriormente por ST (v2.0). O valor pode ser omitido quando a legislação não exigir a sua informação.
      */
-    vICMSSTRet?: number | '';
+    vICMSSTRet?: number | string | '';
     /**
      * @param {number} vBCFCPSTRet - Valor da Base de Cálculo do FCP retido anteriormente
      * Informar o valor da Base de Cálculo do FCP retido anteriormente por ST
@@ -2967,7 +2967,7 @@ export type dadosICMS = {
     /**
      * @param {number} CSOSN - Código de Situação da Operação
      */
-    CSOSN?: number | '';
+    CSOSN?: string;
     /**
      * @param {number} pCredSN - Alíquota aplicável de cálculo do crédito (Simples Nacional)
      * (v2.0)
