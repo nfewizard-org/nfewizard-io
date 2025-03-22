@@ -1,3 +1,15 @@
+/**
+    * @description      : 
+    * @author           : 
+    * @group            : 
+    * @created          : 21/03/2025 - 21:50:20
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 21/03/2025
+    * - Author          : 
+    * - Modification    : 
+**/
 /*
  * This file is part of NFeWizard-io.
  * 
@@ -208,6 +220,26 @@ class Utility {
         };
     }
 
+    /**
+     * Marco, adicionei este metodo para concatenar todas url incluido as na Usar, mas no fim nao precisei usar por enquanto
+     * @param chave 
+     * @returns 
+     */
+    getLatestURLConsultaFix(chave: string): Record<string, string> {
+        const urls = NFeServicosUrl as NFeServicosUrlType;
+        const temp_urls: Record<string, string> = { ...urls[chave] };
+        if ('Usar' in temp_urls) {
+            const referencedChave = temp_urls['Usar'];
+            const referencedUrls = urls[referencedChave] || {};
+            Object.keys(referencedUrls).forEach((key) => {
+                if (!(key in temp_urls)) {
+                    temp_urls[key] = referencedUrls[key];
+                }
+            });
+            delete temp_urls['Usar'];
+        }
+        return temp_urls;
+    }
 
     getLatestURLConsulta(data: Record<string, string>, metodo: string): string | null {
         // Obtem todas as chaves do objeto
@@ -279,19 +311,19 @@ class Utility {
     getUrlNFCe(metodo: string, ambienteNacional = false, versao = ""): string {
         let { chaveMae } = this.setAmbiente(metodo, ambienteNacional, versao, 'NFCe');
         const urls = NFeServicosUrl as NFeServicosUrlType;
-
-        if ('Usar' in urls[chaveMae])
-            chaveMae = urls[chaveMae].Usar
-
-        const chaveFilha = this.getLatestURLConsulta(urls[chaveMae], metodo);
+        // removendo este codigo funciona
+        // if ('Usar' in urls[chaveMae]){
+        //     chaveMae = urls[chaveMae].Usar
+        // }
+        // const tempUrls = this.getLatestURLConsultaFix(chaveMae);
+        // const urlnew =tempUrls[metodo];
+        // const chaveFilha = this.getLatestURLConsulta(urls[chaveMae], metodo);
         const url = urls[chaveMae] && this.getLatestURLConsulta(urls[chaveMae], metodo)
-
         if (!url) {
-            throw new Error(`Não foi possível recuperar a url para consulta de NFCe: ${chaveFilha}`);
+            throw new Error(`Não foi possível recuperar a url para consulta de NFCe: ${chaveMae}`);
         }
         return url;
     }
-
     /**
      * Função para validar XML com Schema
      */
