@@ -23,6 +23,36 @@ para autorização.
 - **Geração de DANFE**: Criação do Documento Auxiliar da Nota Fiscal Eletrônica (DANFE), um resumo impresso da NFe.
 
 ## 🚧 ATENÇÃO 🚧
+### Requisitos para instalação
+Para utilizar esta biblioteca, é necessário ter o JDK instalado no ambiente.
+
+Caso esteja rodando em um ambiente sem suporte ao JDK (como a Vercel) ou que não permita a adição de layers (diferente do AWS Lambda), é possível configurar a biblioteca como uma external lib e utilizar a seguinte opção ao inicializá-la:
+```typescript
+useForSchemaValidation: 'validateSchemaJsBased'
+```
+### Exemplo de configuração no Serverless Framework
+Se estiver usando o Serverless Framework, você pode marcar a biblioteca como external no arquivo de configuração (.yml), garantindo que ela não seja empacotada junto ao código da aplicação:
+```yml
+build:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: true
+    target: 'node20'
+    format: 'cjs'
+    external:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - oracledb
+      - tedious
+      - sqlite3
+      - pg-query-stream
+      - nfewizard-io
+```
+Dessa forma, a nfewizard-io será tratada como uma dependência externa, permitindo sua execução sem a necessidade do JDK no ambiente.
+
+### Exemplo de importação CJS
 
 Para ambientes CJS (CommonJS) a importação utilizada deverá ser feita da seguinte maneira:
 ```typescript
