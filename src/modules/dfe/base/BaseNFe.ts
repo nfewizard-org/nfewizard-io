@@ -52,7 +52,9 @@ abstract class BaseNFE {
     protected setContentType() {
         const UF = this.environment.config.dfe.UF;
 
-        if (this.metodo === 'NFEConsultaProtocolo' && UF === 'MG') {
+        const ufsAppSoad = ['MG', 'GO'];
+
+        if (this.metodo === 'NFEConsultaProtocolo' && ufsAppSoad.includes(UF)) {
             return 'application/soap+xml'
         }
         return 'text/xml; charset=utf-8'
@@ -97,7 +99,6 @@ abstract class BaseNFE {
 
             return responseInJson;
         } catch (error: any) {
-            console.log(error)
             throw new Error(error.message)
         }
     }

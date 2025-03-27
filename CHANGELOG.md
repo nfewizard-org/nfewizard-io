@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.14] - 2025-03-27
+
+### Fixed
+- Ajusta método de captura de URl's para NFCe
+- Ajusta URLs de Consulta de Protocolo
+
 ## [0.3.2] - 2025-01-21
 
 ### Fixed
