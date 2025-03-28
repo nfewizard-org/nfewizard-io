@@ -29,17 +29,19 @@ class SaveFiles implements SaveFilesImpl{
         this.utility = utility;
     }
 
-    public salvaArquivos(xmlConsulta: string, responseInJson: GenericObject, xmlRetorno: AxiosResponse<any, any>, metodo: string, options?: Record<string, any>): void {
+    public salvaArquivos(xmlConsulta: string, responseInJson: GenericObject | undefined, xmlRetorno: AxiosResponse<any, any>, metodo: string, xmlFormated?: string, options?: Record<string, any>): void {
         // Recupera configuração do ambiente para verificar se os arquivos gerados serão gravados em disco
         const config = this.environment.getConfig();
         let dateAndTimeInFileName = config.dfe.incluirTimestampNoNomeDosArquivos;
+        const { armazenarXMLConsultaComTagSoap } = this.environment.config.dfe
+        const xmlConsultaASalvar = armazenarXMLConsultaComTagSoap ? xmlFormated : xmlConsulta;
 
         const createFileName = (prefix: string | undefined) => {
             const dtaTime = dateAndTimeInFileName ? `-${format(new Date(), 'dd-MM-yyyy-HHmm')}` : '';
 
             const baseFileName = `${metodo}`;
             const prefixPart = prefix ? `-${prefix}` : '';
-            const nfePart = responseInJson.chNFe ? `-${responseInJson.chNFe}` : '';
+            const nfePart = responseInJson && responseInJson.chNFe ? `-${responseInJson.chNFe}` : '';
             const dateTimePart = dtaTime;
 
             return `${baseFileName}${prefixPart}${nfePart}${dateTimePart}`;
@@ -58,7 +60,7 @@ class SaveFiles implements SaveFilesImpl{
         };
 
         if (config.dfe.armazenarXMLConsulta) {
-            salvarArquivo(xmlConsulta, 'consulta', config.dfe.pathXMLConsulta, 'xml');
+            salvarArquivo(xmlConsultaASalvar, 'consulta', config.dfe.pathXMLConsulta, 'xml');
         }
         if (config.dfe.armazenarXMLRetorno) {
             salvarArquivo(xmlRetorno.data, 'retorno', config.dfe.pathXMLRetorno, 'xml');

@@ -29,6 +29,7 @@ import { mountCOFINS, mountICMS, mountPIS } from '@Utils/NFEImposto.js';
 import { GerarConsultaImpl, NFCEAutorizacaoServiceImpl, SaveFilesImpl } from '@Interfaces';
 import NFCERetornoAutorizacaoService from '../NFCERetornoAutorizacao/NFCERetornoAutorizacaoService.js';
 import NFCERetornoAutorizacao from '../../operations/NFCERetornoAutorizacao/NFCERetornoAutorizacao.js';
+import { logger } from '@Core/exceptions/logger.js';
 
 class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceImpl {
     xmlNFe: string[];
@@ -412,6 +413,17 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         return xml.replace('[XML]', this.xmlNFe.join(''));
     }
 
+    // protected setContentType() {
+    //     const UF = this.environment.config.dfe.UF;
+
+    //     const ufsAppSoad = ['MG', 'GO', 'MT', 'MS', 'AM'];
+
+    //     if (ufsAppSoad.includes(UF)) {
+    //         return 'application/soap+xml'
+    //     }
+    //     return 'text/xml; charset=utf-8'
+    // }
+
     async Exec(data: NFe): Promise<{
         success: boolean;
         xMotivo: GenericObject;
@@ -420,23 +432,25 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             protNFe: ProtNFe
         }[];
     }> {
-        let xmlConsulta = '';
-        let soapXML = '';
+        let xmlConsulta: string = '';
+        let xmlConsultaSoap: string = '';
+        let webServiceUrlTmp: string = '';
+        let responseInJson: GenericObject | undefined = undefined;
+        let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
+        const ContentType = this.setContentType();
         try {
             // Gerando XML para consulta de Status do Serviço
             xmlConsulta = this.gerarXmlNFCEAutorizacao(data);
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, false, '', 'NFCe');
 
-            soapXML = xmlFormated
-
-            // Salva XML de Consulta
-            this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);
+            xmlConsultaSoap = xmlFormated;
+            webServiceUrlTmp = webServiceUrl;
 
             // Efetua requisição para o webservice NFEStatusServico
             const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
                 headers: {
-                    'Content-Type': 'text/xml; charset=utf-8',
+                    'Content-Type': ContentType,
                     'SOAPAction': action,
                     'CSC': '9cf44de0-502d-4351-bf18-0843e6528e22',
                 },
@@ -447,9 +461,6 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
              */
             const responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
 
-            // Salva XML de Retorno
-            this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
-
             const retorno = await this.trataRetorno(xmlRetorno.data, data.indSinc, responseInJson);
 
             const xmlFinal = this.salvaArquivos(xmlConsulta, responseInJson, xmlRetorno.data,
@@ -457,7 +468,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                     xmlAutorizacao: retorno.data,
                     xMotivo: retorno.message
                 })
-            
+
             xmlFinal.xMotivo = xmlFinal.xMotivo.map((item: any) => ({
                 ...item,
                 xMotivo: item.xMotivo.replace('NF-e', 'NFC-e')
@@ -470,9 +481,27 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             }
 
         } catch (error: any) {
-            // Salva XML de Consulta
-            this.utility.salvaConsulta(xmlConsulta, soapXML, this.metodo);
+            // const logConfig = this.environment.config.lib?.log;
+
+            // if (logConfig) {
+            //     const { armazenarLogs } = logConfig;
+            //     if (armazenarLogs) {
+            //         logger.error({
+            //             message: error.message,
+            //             webServiceUrl: webServiceUrlTmp,
+            //             contentType: ContentType,
+            //             xmlSent: xmlConsultaSoap,
+            //             xmlResponse: error.response?.data || 'Sem resposta',
+            //         });
+            //     }
+            // }
             throw new Error(error.message)
+        } finally {
+            // Salva XML de Consulta
+            this.utility.salvaConsulta(xmlConsulta, xmlConsultaSoap, this.metodo);
+
+            // Salva XML de Retorno
+            this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
         }
     }
 

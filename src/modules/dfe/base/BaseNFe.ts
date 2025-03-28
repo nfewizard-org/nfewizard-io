@@ -18,8 +18,10 @@ import Environment from '@Modules/environment/Environment.js';
 import XmlBuilder from '@Adapters/XmlBuilder.js';
 import Utility from '../../../core/utils/Utility.js';
 import XmlParser from '../../../core/utils/XmlParser.js';
-import { AxiosInstance } from 'axios';
+import { AxiosInstance, AxiosResponse } from 'axios';
 import { SaveFilesImpl, GerarConsultaImpl } from '@Interfaces';
+import { GenericObject } from '@Types/Utils.js';
+import { logger } from '@Core/exceptions/logger.js';
 
 abstract class BaseNFE {
     environment: Environment;
@@ -52,9 +54,9 @@ abstract class BaseNFE {
     protected setContentType() {
         const UF = this.environment.config.dfe.UF;
 
-        const ufsAppSoad = ['MG', 'GO'];
+        const ufsAppSoad = ['MG', 'GO', 'MT', 'MS', 'AM'];
 
-        if (this.metodo === 'NFEConsultaProtocolo' && ufsAppSoad.includes(UF)) {
+        if (ufsAppSoad.includes(UF)) {
             return 'application/soap+xml'
         }
         return 'text/xml; charset=utf-8'
@@ -66,40 +68,59 @@ abstract class BaseNFE {
      * @returns {Promise<any>} A resposta do webservice em JSON.
      */
     async Exec(data?: any): Promise<any> {
+        let xmlConsulta: string = '';
+        let xmlConsultaSoap: string = '';
+        let webServiceUrlTmp: string = '';
+        let responseInJson: GenericObject | undefined = undefined;
+        let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
+        const ContentType = this.setContentType();
         try {
             // Gerando XML específico
-            const xmlConsulta = this.gerarXml(data);
+            xmlConsulta = this.gerarXml(data);
 
             const { xmlFormated, agent, webServiceUrl } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
 
-            // Salva XML de Consulta
-            this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);
+            xmlConsultaSoap = xmlFormated;
+            webServiceUrlTmp = webServiceUrl;
 
             // Efetua requisição para o webservice NFEStatusServico
-            const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
+            xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
                 headers: {
-                    'Content-Type': this.setContentType(),
+                    'Content-Type': ContentType,
                 },
                 httpsAgent: agent
             });
 
             // Instanciando classe de utilitários com lib xml-js e convertendo XML para XmlParser
             const json = new XmlParser();
-            const responseInJson = json.convertXmlToJson(xmlRetorno.data, this.metodo);
-
-            // Salva XML de Retorno
-            this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
+            responseInJson = json.convertXmlToJson(xmlRetorno.data, this.metodo);
 
             // Gera erro em caso de Rejeição
             if (responseInJson.xMotivo.includes('Rejeição')) {
                 throw new Error(responseInJson.xMotivo)
             }
 
-            this.saveFiles.salvaArquivos(xmlConsulta, responseInJson, xmlRetorno, this.metodo);
-
             return responseInJson;
         } catch (error: any) {
+            // const logConfig = this.environment.config.lib?.log;
+
+            // if (logConfig) {
+            //     const { armazenarLogs } = logConfig;
+
+            //     if (armazenarLogs) {
+            //         logger.error({
+            //             message: error.message,
+            //             webServiceUrl: webServiceUrlTmp,
+            //             contentType: ContentType,
+            //             xmlSent: xmlConsultaSoap,
+            //             xmlResponse: error.response?.data || 'Sem resposta',
+            //         });
+            //     }
+            // }
+
             throw new Error(error.message)
+        } finally {
+            this.saveFiles.salvaArquivos(xmlConsulta, responseInJson, xmlRetorno, this.metodo, xmlConsultaSoap);
         }
     }
 }

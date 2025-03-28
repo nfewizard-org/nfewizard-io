@@ -71,7 +71,7 @@ class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoAutoriza
             // Efetua requisição para o webservice NFEStatusServico
             const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
                 headers: {
-                    'Content-Type': 'text/xml; charset=utf-8',
+                    'Content-Type': this.setContentType(),
                     'SOAPAction': action,
                 },
                 httpsAgent: agent

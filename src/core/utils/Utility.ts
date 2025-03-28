@@ -495,12 +495,12 @@ class Utility {
         }
     }
 
-    salvaRetorno(xmlRetorno: string, responseInJson: GenericObject, metodo: string, name?: string) {
+    salvaRetorno(xmlRetorno: string, responseInJson: GenericObject | undefined, metodo: string, name?: string) {
         try {
             const fileName = name || this.getRequestLogFileName(metodo, 'retorno');
             const { armazenarXMLRetorno, pathXMLRetorno, armazenarRetornoEmJSON } = this.environment.config.dfe
 
-            if (armazenarXMLRetorno) {
+            if (armazenarXMLRetorno && xmlRetorno) {
                 this.salvaXML({
                     data: xmlRetorno,
                     fileName,
@@ -508,7 +508,7 @@ class Utility {
                     path: pathXMLRetorno,
                 });
 
-                if (armazenarRetornoEmJSON) {
+                if (armazenarRetornoEmJSON && responseInJson) {
                     this.salvaJSON({
                         data: responseInJson,
                         fileName,

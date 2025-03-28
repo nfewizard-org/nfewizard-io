@@ -32,7 +32,7 @@ Este documento lista os serviços atualmente homologados pela biblioteca `nfewiz
 | Distribuição DFe                     |   ❌    | ❌     |
 | Consulta de Protocolo                |   ✅    | ✅     |
 | Inutilização de NFe                  |   ❌    | ❌     |
-| Consulta de Status do Serviço        |   ❌    | ❌     |
+| Consulta de Status do Serviço        |   ✅    | ✅     |
 | Geração de DANFE NF-e                |   ❌    | ❌     |
 | Geração de DANFE NFC-e               |   ❌    | ❌     |
 | Recepção de Eventos                  |       |      |
@@ -53,7 +53,7 @@ Este documento lista os serviços atualmente homologados pela biblioteca `nfewiz
 | Distribuição DFe                     |   ❌    | ❌     |
 | Consulta de Protocolo                |   ❌    | ❌     |
 | Inutilização de NFe                  |   ❌    | ❌     |
-| Consulta de Status do Serviço        |   ❌    | ❌     |
+| Consulta de Status do Serviço        |   ✅    | ✅     |
 | Geração de DANFE NF-e                |   ❌    | ❌     |
 | Geração de DANFE NFC-e               |   ❌    | ❌     |
 | Recepção de Eventos                  |       |      |
@@ -74,7 +74,7 @@ Este documento lista os serviços atualmente homologados pela biblioteca `nfewiz
 | Distribuição DFe                     |   ❌    | ❌     |
 | Consulta de Protocolo                |   ✅    | ✅     |
 | Inutilização de NFe                  |   ❌    | ❌     |
-| Consulta de Status do Serviço        |   ❌    | ❌     |
+| Consulta de Status do Serviço        |   ✅    | ✅     |
 | Geração de DANFE NF-e                |   ❌    | ❌     |
 | Geração de DANFE NFC-e               |   ❌    | ❌     |
 | Recepção de Eventos                  |       |      |
@@ -95,7 +95,7 @@ Este documento lista os serviços atualmente homologados pela biblioteca `nfewiz
 | Distribuição DFe                     |   ❌    | ❌     |
 | Consulta de Protocolo                |   ❌    | ❌     |
 | Inutilização de NFe                  |   ❌    | ❌     |
-| Consulta de Status do Serviço        |   ❌    | ❌     |
+| Consulta de Status do Serviço        |   ✅    | ✅     |
 | Geração de DANFE NF-e                |   ❌    | ❌     |
 | Geração de DANFE NFC-e               |   ❌    | ❌     |
 | Recepção de Eventos                  |       |      |
@@ -116,7 +116,7 @@ Este documento lista os serviços atualmente homologados pela biblioteca `nfewiz
 | Distribuição DFe                     |   ❌    | ❌     |
 | Consulta de Protocolo                |   ✅    | ✅     |
 | Inutilização de NFe                  |   ❌    | ❌     |
-| Consulta de Status do Serviço        |   ❌    | ❌     |
+| Consulta de Status do Serviço        |   ✅    | ✅     |
 | Geração de DANFE NF-e                |   ❌    | ❌     |
 | Geração de DANFE NFC-e               |   ❌    | ❌     |
 | Recepção de Eventos                  |       |      |

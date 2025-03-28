@@ -173,6 +173,8 @@ export type NFeWizardProps = {
         */
         log?: {
             exibirLogNoConsole?: boolean;
+            armazenarLogs?: boolean;
+            // pathLogs?: string;
         },
         /**
         * @param {boolean} useOpenSSL -  Define se a lib deve utilizar métodos que fazem uso do OpenSSL ou não

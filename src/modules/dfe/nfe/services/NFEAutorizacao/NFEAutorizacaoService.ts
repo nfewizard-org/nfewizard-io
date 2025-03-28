@@ -27,6 +27,7 @@ import { format } from 'date-fns';
 import { mountCOFINS, mountICMS, mountPIS } from '@Utils/NFEImposto.js';
 import { GerarConsultaImpl, NFEAutorizacaoServiceImpl, SaveFilesImpl } from '@Interfaces';
 import NFERetornoAutorizacaoService from '../NFERetornoAutorizacao/NFERetornoAutorizacaoService.js';
+import { logger } from '@Core/exceptions/logger.js';
 
 class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl {
     xmlNFe: string[];
@@ -128,7 +129,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
 
             const nfeRetornoAutService = new NFERetornoAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
             const nfeRetornoAut = new NFERetornoAutorizacao(nfeRetornoAutService);
-    
+
             await new Promise(resolve => setTimeout(resolve, Number(responseInJson.infRec.tMed) * 1000));
 
             const retorno = await nfeRetornoAut.getXmlRetorno({
@@ -350,23 +351,25 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
             protNFe: ProtNFe
         }[];
     }> {
-        let xmlConsulta = '';
-        let soapXML = '';
+        let xmlConsulta: string = '';
+        let xmlConsultaSoap: string = '';
+        let webServiceUrlTmp: string = '';
+        let responseInJson: GenericObject | undefined = undefined;
+        let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
+        const ContentType = this.setContentType();
         try {
             // Gerando XML para consulta de Status do Serviço
             xmlConsulta = this.gerarXmlNFeAutorizacao(data);
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
 
-            soapXML = xmlFormated
-
-            // Salva XML de Consulta
-            this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);
+            xmlConsultaSoap = xmlFormated;
+            webServiceUrlTmp = webServiceUrl;
 
             // Efetua requisição para o webservice NFEStatusServico
-            const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
+            xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
                 headers: {
-                    'Content-Type': 'text/xml; charset=utf-8',
+                    'Content-Type': ContentType,
                     'SOAPAction': action,
                 },
                 httpsAgent: agent
@@ -374,10 +377,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
             /**
              * Verifica se houve rejeição no processamento do lote
              */
-            const responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
-
-            // Salva XML de Retorno
-            this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
+            responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
 
             const retorno = await this.trataRetorno(xmlRetorno.data, data.indSinc, responseInJson);
 
@@ -394,9 +394,27 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
             }
 
         } catch (error: any) {
-            // Salva XML de Consulta
-            this.utility.salvaConsulta(xmlConsulta, soapXML, this.metodo);
+            // const logConfig = this.environment.config.lib?.log;
+
+            // if (logConfig) {
+            //     const { armazenarLogs } = logConfig;
+            //     if (armazenarLogs) {
+            //         logger.error({
+            //             message: error.message,
+            //             webServiceUrl: webServiceUrlTmp,
+            //             contentType: ContentType,
+            //             xmlSent: xmlConsultaSoap,
+            //             xmlResponse: error.response?.data || 'Sem resposta',
+            //         });
+            //     }
+            // }
             throw new Error(error.message)
+        } finally {
+            // Salva XML de Consulta
+            this.utility.salvaConsulta(xmlConsulta, xmlConsultaSoap, this.metodo);
+
+            // Salva XML de Retorno
+            this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
         }
     }
 }

@@ -14,14 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { AxiosInstance } from 'axios';
+import { AxiosInstance, AxiosResponse } from 'axios';
 import DistribuicaoHandler from './util/DistribuicaoHandler.js';
 import Environment from '@Modules/environment/Environment.js';
 import Utility from '@Utils/Utility.js';
 import XmlBuilder from '@Adapters/XmlBuilder.js';
-import { ConsultaNFe } from '@Types';
+import { ConsultaNFe, GenericObject } from '@Types';
 import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
 import { GerarConsultaImpl, SaveFilesImpl } from '@Interfaces';
+import { logger } from '@Core/exceptions/logger.js';
 
 class NFEDistribuicaoDFeService extends BaseNFE {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
@@ -51,30 +52,33 @@ class NFEDistribuicaoDFeService extends BaseNFE {
 
 
     async Exec(data: ConsultaNFe) {
+        let xmlConsulta: string = '';
+        let xmlConsultaSoap: string = '';
+        let webServiceUrlTmp: string = '';
+        let responseInJson: GenericObject | undefined = undefined;
+        let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
+        const ContentType = this.setContentType();
         try {
             // Gerando XML para consulta de Status do Serviço
-            const xmlConsulta = this.gerarXmlNFeDistribuicaoDFe(data);
+            xmlConsulta = this.gerarXmlNFeDistribuicaoDFe(data);
 
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, true, '1.01', 'NFe', true, 'nfeDistDFeInteresse');
 
-            // Salva XML de Consulta
-            this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);
+            xmlConsultaSoap = xmlFormated;
+            webServiceUrlTmp = webServiceUrl;
 
             // Efetua requisição para o webservice NFEStatusServico
-            const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
+            xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
                 headers: {
-                    'Content-Type': 'text/xml; charset=utf-8',
+                    'Content-Type': ContentType,
                     'SOAPAction': action,
                 },
                 httpsAgent: agent
             });
 
             // Verifica se houve rejeição
-            const responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
-
-            // Salva XML de Retorno
-            this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
+            responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
 
             /**
              * Descompacta XML
@@ -92,7 +96,27 @@ class NFEDistribuicaoDFeService extends BaseNFE {
                 filesList,
             }
         } catch (error: any) {
+            // const logConfig = this.environment.config.lib?.log;
+
+            // if (logConfig) {
+            //     const { armazenarLogs } = logConfig;
+            //     if (armazenarLogs) {
+            //         logger.error({
+            //             message: error.message,
+            //             webServiceUrl: webServiceUrlTmp,
+            //             contentType: ContentType,
+            //             xmlSent: xmlConsultaSoap,
+            //             xmlResponse: error.response?.data || 'Sem resposta',
+            //         });
+            //     }
+            // }
             throw new Error(error.message)
+        } finally {
+            // Salva XML de Consulta
+            this.utility.salvaConsulta(xmlConsulta, xmlConsultaSoap, this.metodo);
+
+            // Salva XML de Retorno
+            this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
         }
     }
 

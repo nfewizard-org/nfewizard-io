@@ -21,6 +21,7 @@ import XmlBuilder from '@Adapters/XmlBuilder.js';
 import { EventoNFe, GenericObject, TipoEvento } from '@Types';
 import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
 import { GerarConsultaImpl, NFERecepcaoEventoServiceImpl, SaveFilesImpl } from '@Interfaces';
+import { logger } from '@Core/exceptions/logger';
 
 class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServiceImpl {
     tpEvento: string;
@@ -245,21 +246,23 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
     }
 
     protected async enviaEvento(evento: TipoEvento[], idLote: number, tipoAmbiente: number) {
+        let xmlConsulta: string = '';
+        let xmlConsultaSoap: string = '';
+        let webServiceUrlTmp: string = '';
+        const ContentType = this.setContentType();
+        const ambienteNacional = tipoAmbiente === 0 ? true : false;
         try {
-            const ambienteNacional = tipoAmbiente === 0 ? true : false;
             // Gerando XML para consulta de Status do Serviço
-            const xmlConsulta = this.gerarXmlRecepcaoEvento(evento, idLote, ambienteNacional);
+            xmlConsulta = this.gerarXmlRecepcaoEvento(evento, idLote, ambienteNacional);
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, ambienteNacional || this.isAmbienteNacional(this.tpEvento), '', this.modelo);
 
-            // Salva XML de Consulta
-            const fileName = ambienteNacional ? 'RecepcaoEvento[Nacional]-consulta' : 'RecepcaoEvento[Regional]-consulta'
-            this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo, fileName);
-
+            xmlConsultaSoap = xmlFormated;
+            webServiceUrlTmp = webServiceUrl;
             // Efetua requisição para o webservice NFEStatusServico
             const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
                 headers: {
-                    'Content-Type': 'text/xml; charset=utf-8',
+                    'Content-Type': ContentType,
                     'SOAPAction': action,
                 },
                 httpsAgent: agent
@@ -267,7 +270,25 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
 
             return xmlRetorno.data
         } catch (error: any) {
+            // const logConfig = this.environment.config.lib?.log;
+
+            // if (logConfig) {
+            //     const { armazenarLogs } = logConfig;
+            //     if (armazenarLogs) {
+            //         logger.error({
+            //             message: error.message,
+            //             webServiceUrl: webServiceUrlTmp,
+            //             contentType: ContentType,
+            //             xmlSent: xmlConsultaSoap,
+            //             xmlResponse: error.response?.data || 'Sem resposta',
+            //         });
+            //     }
+            // }
             throw new Error(error.message)
+        } finally {
+            // Salva XML de Consulta
+            const fileName = ambienteNacional ? 'RecepcaoEvento[Nacional]-consulta' : 'RecepcaoEvento[Regional]-consulta'
+            this.utility.salvaConsulta(xmlConsulta, xmlConsultaSoap, this.metodo, fileName);
         }
     }
 
@@ -303,24 +324,6 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
                 this.trataRetorno(responseRegionalInJson);
                 finalResponseInJson.push(responseRegionalInJson)
             }
-
-            // if (responseNacionalInJson && responseRegionalInJson) {
-            //     // Juntar as duas consultas 
-            //     const envEvento = {
-            //         $: {
-            //             versao: "1.00",
-            //             xmlns: 'http://www.portalfiscal.inf.br/nfe'
-            //         },
-            //         idLote,
-            //         _: '[XML]'
-            //     }
-            //     const xml = this.xmlBuilder.gerarXml(envEvento, 'envEvento')
-
-            //     const eventos = this.xmlEventosNacionais.concat(this.xmlEventosRegionais);
-
-            //     const xmlConsultaFinal = xml.replace('[XML]', eventos.join(''));
-            //     // console.log(xmlConsultaFinal);
-            // }
 
             return {
                 success: true,
