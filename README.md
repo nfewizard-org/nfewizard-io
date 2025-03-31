@@ -23,8 +23,8 @@ para autorização.
 - **Consulta de Protocolo**: Verificação da situação atual da NF-e na Base de Dados do Portal da Secretaria de Fazenda Estadual.
 - **Inutilização de NFe**: Processo de inutilização de números de NF-e que não serão utilizados, assegurando a conformidade fiscal.
 - **Consulta de Status do Serviço**: Monitoramento do status dos serviços da SEFAZ, garantindo a disponibilidade dos webservices.
-- **Recepção de Eventos**: Tratamento de diversos eventos relacionados à NFe, incluindo:
-    - Cancelamento de NFe
+- **Recepção de Eventos**: Tratamento de diversos eventos relacionados à NFe e NFCe, incluindo:
+    - Cancelamento de NFe e NFCe
     - Carta de Correção
     - Ciência da Operação
     - Confirmação da Operação
