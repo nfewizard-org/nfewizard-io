@@ -52,7 +52,7 @@ class SaveFiles implements SaveFilesImpl{
             const method = fileType === 'xml' ? 'salvaXML' : 'salvaJSON';
 
             this.utility[method]({
-                data: data,
+                data: data || '',
                 fileName,
                 metodo: metodo,
                 path,

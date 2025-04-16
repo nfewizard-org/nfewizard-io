@@ -12,7 +12,12 @@ src/assets/DANFE_NFCE.pdf
 src/assets/DANFE.pdf
 src/assets/logo.jpg
 src/assets/qrcode.png
-src/old_schemas
+
+src/core/config/verifica-urls.js
+src/core/config/atualizaUrls.js
+src/core/config/urls_atualizadas.ini
+src/core/config/NFeServicosUrl_backup.json
+
 tmp
 package-lock.json
 src/old

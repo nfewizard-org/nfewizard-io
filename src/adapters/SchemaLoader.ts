@@ -39,7 +39,7 @@ export const getSchema = (metodo: string) => {
     NFeDistribuicaoDFe: `${pathSchemas}/distDFeInt_v1.01.xsd`,
     NFEAutorizacao: `${pathSchemas}/enviNFe_v4.00.xsd`,
     NFEInutilizacao: `${pathSchemas}/inutNFe_v4.00.xsd`,
-    NFERetornoAutorizacao: `${pathSchemas}/consReciNFe_v4.00.xsd`,
+    NFERetAutorizacao: `${pathSchemas}/consReciNFe_v4.00.xsd`,
   }
 
   try {

@@ -117,7 +117,7 @@ abstract class BaseNFE {
             //         });
             //     }
             // }
-
+            // console.log(error)
             throw new Error(error.message)
         } finally {
             this.saveFiles.salvaArquivos(xmlConsulta, responseInJson, xmlRetorno, this.metodo, xmlConsultaSoap);

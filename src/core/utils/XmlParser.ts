@@ -135,7 +135,7 @@ export default class XmlParser {
                 case 'NFCEAutorizacaoFinal':
                     jsonBody = this.getAutorizacaoFinalEventBody(jsonData)
                     break;
-                case 'NFERetornoAutorizacao':
+                case 'NFERetAutorizacao':
                     jsonBody = this.getAutorizacaoRetornoEventBody(jsonData)
                     break;
                 case 'NFEInutilizacao':

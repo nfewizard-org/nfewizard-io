@@ -24,7 +24,7 @@ import { GerarConsultaImpl, NFCERetornoAutorizacaoServiceImpl, SaveFilesImpl } f
 
 class NFCERetornoAutorizacaoService extends BaseNFE implements NFCERetornoAutorizacaoServiceImpl {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
-        super(environment, utility, xmlBuilder, 'NFERetornoAutorizacao', axios, saveFiles, gerarConsulta);
+        super(environment, utility, xmlBuilder, 'NFERetAutorizacao', axios, saveFiles, gerarConsulta);
     }
 
     protected gerarXml(data: string): string {

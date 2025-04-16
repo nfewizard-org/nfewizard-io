@@ -468,8 +468,8 @@ class Utility {
                 return `NFEAutorizacao-${tipo}`
             case 'NFCEAutorizacao':
                 return `NFCEAutorizacao-${tipo}`
-            case 'NFERetornoAutorizacao':
-                return `NFERetornoAutorizacao-${tipo}`
+            case 'NFERetAutorizacao':
+                return `NFERetAutorizacao-${tipo}`
 
             default:
                 throw new Error('Erro: Requisição de nome para método não implementado.')
