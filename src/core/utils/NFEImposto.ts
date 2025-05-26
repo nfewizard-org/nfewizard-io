@@ -198,13 +198,16 @@ export const mountICMS = (icms: dadosICMS): ICMS => {
 
     let cod_sit = CST;
 
+    let tipo_sit_trib = 'CST'; 
     if (CST?.trim()?.length > 0) {
         cod_sit = CST.length > 2 ? CST.substring(1, 3) : CST;
     } else if (CSOSN) {
-        CSOSN?.trim()?.length > 3 ? cod_sit = CSOSN.substring(1, 4) : cod_sit = String(CSOSN);;
+        tipo_sit_trib = 'CSOSN';
+        CSOSN?.trim()?.length > 3 ? cod_sit = CSOSN.substring(1, 4) : cod_sit = String(CSOSN);
     }
 
-
+    // console.warn(`MountICMS utilizando [${tipo_sit_trib}]`);
+    
     let icmsKey = ICMSMap[cod_sit];
     if (!icmsKey) {
         console.warn(`Código de situação tributária ${cod_sit} não é reconhecido. Alterado para padrão 'ICMS00'.`);

@@ -1383,7 +1383,7 @@
     "RecepcaoEvento_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4",
     "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4",
     "NFeDistribuicaoDFe_1.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe",
-    "NFERetAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao4"
+    "NFERetAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4"
   },
   "SOAP_V4_SP": {
     "NFEAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote",
@@ -1394,7 +1394,7 @@
     "RecepcaoEvento_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEventoNF",
     "CadConsultaCadastro_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4/consultaCadastro",
     "NFeDistribuicaoDFe_1.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe/nfeDistDFeInteresse",
-    "NFERetAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao4/nfeRetAutorizacaoLote"
+    "NFERetAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4/nfeRetAutorizacaoLote"
   },
   "SOAP_V4_BA": {
     "NFEAutorizacao_4.00": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote",

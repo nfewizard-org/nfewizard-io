@@ -11,6 +11,10 @@
         "method": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4",
         "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4/nfeAutorizacaoLote"
     },
+    "NFERetAutorizacao": {
+        "method": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4",
+        "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4/nfeRetAutorizacaoLote"
+    },
     "NFERetornoAutorizacao": {
         "method": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4",
         "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRetAutorizacao4/nfeRetAutorizacaoLote"
@@ -36,4 +40,3 @@
         "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEventoNF"
     }
 }
-
