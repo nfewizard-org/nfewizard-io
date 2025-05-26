@@ -18,9 +18,9 @@ import { NFERetornoAutorizacaoServiceImpl } from '@Interfaces';
 import { ProtNFe } from '@Types/NFEAutorizacao';
 
 class NFERetornoAutorizacao implements NFERetornoAutorizacaoServiceImpl {
-    nfeStatusServicoService: NFERetornoAutorizacaoServiceImpl;
-    constructor(nfeStatusServicoService: NFERetornoAutorizacaoServiceImpl) {
-        this.nfeStatusServicoService = nfeStatusServicoService;
+    nfeRetornoAutorizacaoService: NFERetornoAutorizacaoServiceImpl;
+    constructor(nfeRetornoAutorizacaoService: NFERetornoAutorizacaoServiceImpl) {
+        this.nfeRetornoAutorizacaoService = nfeRetornoAutorizacaoService;
     }
 
     async getXmlRetorno(data: {
@@ -33,7 +33,7 @@ class NFERetornoAutorizacao implements NFERetornoAutorizacaoServiceImpl {
         message: any;
         data: string[];
     }> {
-        return await this.nfeStatusServicoService.getXmlRetorno(data);
+        return await this.nfeRetornoAutorizacaoService.getXmlRetorno(data);
     }
 
 }

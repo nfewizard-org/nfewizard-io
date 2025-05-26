@@ -130,7 +130,11 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
             const nfeRetornoAutService = new NFERetornoAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
             const nfeRetornoAut = new NFERetornoAutorizacao(nfeRetornoAutService);
 
-            await new Promise(resolve => setTimeout(resolve, Number(responseInJson.infRec.tMed) * 1000));
+            /**
+             * Aguarda o Tempo médio de resposta do serviço (em segundos) dos últimos 5 minutos
+             * A informação do tMed só é recebida caso o processamento for assíncrono (indSinc = 0)
+             */
+            if (tipoEmissao !== 1) await new Promise(resolve => setTimeout(resolve, Number(responseInJson.infRec.tMed) * 1000));
 
             const retorno = await nfeRetornoAut.getXmlRetorno({
                 tipoEmissao,
