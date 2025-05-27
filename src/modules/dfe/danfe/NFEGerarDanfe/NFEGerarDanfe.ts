@@ -394,10 +394,46 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('BAIRRO / DISTRITO', left + 324, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(String(this.dest?.enderDest?.xBairro  || ''), left + 326, topDestinatario + 158, {
-                characterSpacing: 1,
+
+            const bairroText = String(this.dest?.enderDest?.xBairro || '');
+            const bairroCharLimit = 22;
+            const bairroMaxWidthForText = 110; // Largura útil para o texto dentro da célula
+            const defaultBairroFontSize = 8;
+            const reducedBairroFontSize = 5.5;
+            const defaultBairroCharSpacing = 1;
+            const reducedBairroCharSpacing = 0.25;
+
+            let fontSizeToUse = defaultBairroFontSize;
+            let charSpacingToUse = defaultBairroCharSpacing;
+
+            if (bairroText.length > bairroCharLimit) {
+                fontSizeToUse = reducedBairroFontSize;
+                charSpacingToUse = reducedBairroCharSpacing;
+            }
+
+            // Cálculo de Y para tentar alinhar (pode precisar de ajuste fino)
+            const textLineHeight = this.doc.currentLineHeight(); // Altura da linha com fontSizeToUse
+            const cellContentYBase = topDestinatario + 158; // Linha de base original
+            const cellHeightForText = 23 - 5 - 5; // Altura da célula - padding label - padding inferior
+            let yPosForBairro = cellContentYBase; 
+            // Ajuste simples para tentar centralizar um pouco se a linha for mais baixa que o espaço
+            if (textLineHeight < cellHeightForText) {
+                 yPosForBairro = cellContentYBase - ((cellHeightForText - textLineHeight) / 2) + (textLineHeight*0.3) ; // ajuste
+            }
+             // Ajuste fino para alinhar com os outros campos na mesma linha Y
+            yPosForBairro = topDestinatario + 158; // Reset para a mesma linha Y dos outros campos
+
+            this.doc.font('Times-Roman').fontSize(fontSizeToUse);
+
+            this.doc.text(bairroText, left + 320 + 3, yPosForBairro, { // Padding X de 3pt
+                characterSpacing: charSpacingToUse,
+                width: bairroMaxWidthForText,
+                lineBreak: false,
+                ellipsis: true,
             });
 
+            this.doc.font('Times-Roman').fontSize(8);
+            
             this.doc.rect(left + 438.5, topDestinatario + 143, 53.5, 23).stroke();
             this.doc.fontSize(5).text('CEP', left + 442.5, topDestinatario + 148, {
                 characterSpacing: 0.5,
