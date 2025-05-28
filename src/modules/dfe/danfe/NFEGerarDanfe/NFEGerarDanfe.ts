@@ -1,16 +1,16 @@
 /*
  * This file is part of NFeWizard-io.
- * 
+ *
  * NFeWizard-io is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * NFeWizard-io is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
@@ -23,15 +23,12 @@ import PDFDocument from 'pdfkit';
 import { fileURLToPath } from 'url';
 import ValidaCPFCNPJ from '@Core/utils/ValidaCPFCNPJ';
 
-const baseDir = path.dirname(fileURLToPath(import.meta.url))
-const barcodePath = process.env.NODE_ENV === 'production' ? '../tmp' : '../../../../../tmp'
 
 class NFEGerarDanfe {
     data: NFEGerarDanfeProps['data'];
     chave: string;
     enviada: boolean;
-    outputPath: string
-    barcodePath: string;
+    outputPath: string;
     documento: ValidaCPFCNPJ;
     protNFe: ProtNFe | undefined;
     det: DetProd | DetProd[];
@@ -43,6 +40,7 @@ class NFEGerarDanfe {
     infAdic: InfAdic | undefined;
     exibirMarcaDaguaDanfe?: boolean;
     doc: InstanceType<typeof PDFDocument>;
+    barcodeBuffer: Buffer | null = null;
 
     constructor(props: NFEGerarDanfeProps) {
         const { data, chave, outputPath } = props;
@@ -50,9 +48,8 @@ class NFEGerarDanfe {
         this.data = data;
         this.chave = chave.trim();
         this.outputPath = outputPath;
-        this.enviada = false; // Valor padrão
-        this.barcodePath = barcodePath;
-        this.documento = new ValidaCPFCNPJ(); // Inicialização correta
+        this.enviada = false;
+        this.documento = new ValidaCPFCNPJ();
         this.protNFe = data.protNFe;
 
         const nfeData = Array.isArray(data.NFe) ? data.NFe[0] : data.NFe;
@@ -80,30 +77,20 @@ class NFEGerarDanfe {
         });
     }
 
-    createDir(path: string) {
-        if (!fs.existsSync(path)) {
-            fs.mkdirSync(path, { recursive: true });
-        }
-    }
-
-    async generateBarcode(data: string) {
+    async generateBarcode(data: string): Promise<Buffer | null> {
         try {
-            const png = await bwipjs.toBuffer({
-                bcid: 'code128',       // Tipo de código de barras
-                text: data,            // Dado a ser codificado
-                scaleX: 4,             // Fator de escala
-                height: 14,            // Altura da barra
-                includetext: false,    // Incluir texto
+            const pngBuffer = await bwipjs.toBuffer({
+                bcid: 'code128',
+                text: data,
+                scaleX: 4,
+                height: 14,
+                includetext: false,
             });
-
-            const barcode = png.toString('base64');
-            const barcodeDir = this.barcodePath;
-            const filePath = path.resolve(baseDir, this.barcodePath);
-            const buffer: any = Buffer.from(barcode, 'base64');
-            this.createDir(barcodeDir);
-            fs.writeFileSync(`${filePath}/barcode.png`, buffer);
+            this.barcodeBuffer = pngBuffer; // Armazena o buffer na instância
+            return pngBuffer; // Retorna o buffer
         } catch (err) {
             console.error('Erro ao gerar código de barras:', err);
+            this.barcodeBuffer = null;
             return null;
         }
     }
@@ -145,7 +132,7 @@ class NFEGerarDanfe {
             characterSpacing: 1.5,
             align: 'center'
         });
-        this.doc.fontSize(8.8).font('Times-Bold').text(`Nº ${String(this.ide.nNF).padStart(2, '0')}`, 480, 40.5, {
+        this.doc.fontSize(8.8).font('Times-Bold').text(`Nº ${String(this.ide.nNF).padStart(2, '0')}`, 480, 40.5, { 
             characterSpacing: 1.5,
             align: 'center',
         });
@@ -186,8 +173,8 @@ class NFEGerarDanfe {
     _buildHeader(pos: number) {
         const { top, left } = this.doc.page.margins;
         const page = this.doc.bufferedPageRange();
-        const CNPJCPF = this.emit.CNPJCPF?.toString() 
-        const CNPJ = this.emit.CNPJ?.toString() 
+        const CNPJCPF = this.emit.CNPJCPF?.toString()
+        const CNPJ = this.emit.CNPJ?.toString()
         const CPF = this.emit.CPF?.toString()
         const documento = this.documento.mascaraCnpjCpf(CNPJCPF || CNPJ || CPF || '')
         this.setLineStyle(0.75, '#1c1c1c');
@@ -255,11 +242,17 @@ class NFEGerarDanfe {
             });
         }
 
-        /** IDENTIFICACAO NFe */
+        /** IDENTIFICACAO NFe (Barcode e Chave) */
         const _buildIdentificacaoNFe = () => {
             this.doc.rect(left + 310.2, topIdentificacao_1, 256.73, 35).stroke();
-            const filePath = path.resolve(baseDir, this.barcodePath);
-            this.doc.image(`${filePath}/barcode.png`, left + 323.5, topIdentificacao_1 + 3, { width: 230, height: 30 });
+            if (this.barcodeBuffer) { // Verifica se o buffer do barcode existe
+                this.doc.image(this.barcodeBuffer, left + 323.5, topIdentificacao_1 + 3, { width: 230, height: 30 });
+            } else {
+                this.doc.fontSize(8).fillColor('red').text('Erro ao carregar barcode', left + 316, topIdentificacao_1 + 12, {
+                    width: 256.73, align: 'center'
+                });
+            }
+
             if (Number(this.ide.tpAmb) !== 2 && !this.enviada) {
                 this.doc.fontSize(14).font('Times-Bold').fillColor('red').text('NF-E NÃO ENVIADA PARA SEFAZ', left + 316, topIdentificacao_1 + 12, {
                     characterSpacing: 1,
@@ -401,10 +394,46 @@ class NFEGerarDanfe {
             this.doc.fontSize(5).text('BAIRRO / DISTRITO', left + 324, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(String(this.dest?.enderDest?.xBairro  || ''), left + 326, topDestinatario + 158, {
-                characterSpacing: 1,
+
+            const bairroText = String(this.dest?.enderDest?.xBairro || '');
+            const bairroCharLimit = 22;
+            const bairroMaxWidthForText = 110; // Largura útil para o texto dentro da célula
+            const defaultBairroFontSize = 8;
+            const reducedBairroFontSize = 5.5;
+            const defaultBairroCharSpacing = 1;
+            const reducedBairroCharSpacing = 0.25;
+
+            let fontSizeToUse = defaultBairroFontSize;
+            let charSpacingToUse = defaultBairroCharSpacing;
+
+            if (bairroText.length > bairroCharLimit) {
+                fontSizeToUse = reducedBairroFontSize;
+                charSpacingToUse = reducedBairroCharSpacing;
+            }
+
+            // Cálculo de Y para tentar alinhar (pode precisar de ajuste fino)
+            const textLineHeight = this.doc.currentLineHeight(); // Altura da linha com fontSizeToUse
+            const cellContentYBase = topDestinatario + 158; // Linha de base original
+            const cellHeightForText = 23 - 5 - 5; // Altura da célula - padding label - padding inferior
+            let yPosForBairro = cellContentYBase; 
+            // Ajuste simples para tentar centralizar um pouco se a linha for mais baixa que o espaço
+            if (textLineHeight < cellHeightForText) {
+                 yPosForBairro = cellContentYBase - ((cellHeightForText - textLineHeight) / 2) + (textLineHeight*0.3) ; // ajuste
+            }
+             // Ajuste fino para alinhar com os outros campos na mesma linha Y
+            yPosForBairro = topDestinatario + 158; // Reset para a mesma linha Y dos outros campos
+
+            this.doc.font('Times-Roman').fontSize(fontSizeToUse);
+
+            this.doc.text(bairroText, left + 320 + 3, yPosForBairro, { // Padding X de 3pt
+                characterSpacing: charSpacingToUse,
+                width: bairroMaxWidthForText,
+                lineBreak: false,
+                ellipsis: true,
             });
 
+            this.doc.font('Times-Roman').fontSize(8);
+            
             this.doc.rect(left + 438.5, topDestinatario + 143, 53.5, 23).stroke();
             this.doc.fontSize(5).text('CEP', left + 442.5, topDestinatario + 148, {
                 characterSpacing: 0.5,
@@ -626,7 +655,7 @@ class NFEGerarDanfe {
                 case 4:
                     return `${modFrete} - DESTINATÁRIO`;
                 case 9:
-                    return '';
+                    return `${modFrete} - SEM FRETE`;
                 default:
                     return '';
             }
@@ -918,7 +947,7 @@ class NFEGerarDanfe {
 
                 let CST = '';
                 if (chavesICMS.length > 0) {
-                    const tipoICMS = chavesICMS[0];
+                const tipoICMS = chavesICMS[0];
                     if (!icmsSemCST) {
                         CST = (ICMS[tipoICMS] as any).CST;
                     }
@@ -930,7 +959,7 @@ class NFEGerarDanfe {
                 vICMS: string,
                 pICMS: string
             } {
-                const chavesICMS: (keyof ICMS)[] = Object.keys(ICMS) as (keyof ICMS)[];
+                 const chavesICMS: (keyof ICMS)[] = Object.keys(ICMS) as (keyof ICMS)[];
 
                 const listaIcmsSemvBC = [
                     'ICMS02',
@@ -953,16 +982,16 @@ class NFEGerarDanfe {
                 let vICMS = '0,00';
                 let pICMS = '0,00';
                 if (chavesICMS.length > 0) {
-                    const tipoICMS = chavesICMS[0];
+                 const tipoICMS = chavesICMS[0];
                     if (!icmsSemvBC) {
                         vBC = (ICMS[tipoICMS] as any).vBC;
                         vICMS = (ICMS[tipoICMS] as any).vICMS
                         pICMS = (ICMS[tipoICMS] as any).pICMS
-                        return {
+                 return {
                             vBC: parseFloat(vBC).toFixed(2),
                             vICMS: parseFloat(vBC).toFixed(2),
                             pICMS: parseFloat(pICMS).toFixed(2)
-                        };
+                 };
                     }
                 }
                 return { vBC, vICMS, pICMS };
@@ -1090,7 +1119,7 @@ class NFEGerarDanfe {
 
         const createTable = (prod: DetProd) => {
             if (y + defaultItemHeight > this.doc.page.height - 160) {
-                this.doc.addPage();
+                    this.doc.addPage();
                 currentPage++;
                 if (currentPage > 0) {
                     y = 185;
