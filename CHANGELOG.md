@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.25] - 2025-06-11
+
+### Fixed
+- Corrige geração de código de barras para Danfe NFe
+- Corrige exception ao utilizar o método de distribuição DFe quando não há novos documentos a serem retornados.
+
 ## [0.3.14] - 2025-03-27
 
 ### Fixed
