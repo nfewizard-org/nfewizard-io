@@ -80,6 +80,13 @@ class NFEDistribuicaoDFeService extends BaseNFE {
             // Verifica se houve rejeição
             responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
 
+            if (responseInJson.retDistDFeInt.cStat === '137') {
+                return {
+                    data: {} as GenericObject,
+                    xMotivo: responseInJson.retDistDFeInt.xMotivo,
+                    filesList: [],
+                }
+            }
             /**
              * Descompacta XML
              * Converte XML para Json
