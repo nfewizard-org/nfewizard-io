@@ -78,7 +78,7 @@ class NFCERetornoAutorizacaoService extends BaseNFE implements NFCERetornoAutori
             });
 
             const responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
-            
+
             // Salva XML de Retorno
             this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
 

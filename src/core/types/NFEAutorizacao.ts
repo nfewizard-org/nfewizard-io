@@ -1086,6 +1086,155 @@ export type Prod = {
      * 1=Valor do item (vProd) compõe o valor total da NF-e (vProd)
      */
     indTot: number;
+    /**
+     * @param {Comb} comb - Informações específicas para combustíveis líquidos e lubrificantes
+     */
+    comb?: Comb;
+}
+
+export type Comb = {
+    /**
+     * @param {number | string} cProdANP - Código de produto da ANP
+     * Utilizar a Tabela de Código de Produtos da ANP, publicada no Portal Nacional da NF-e, no grupo "Documentos", opção "Diversos"
+     */
+    cProdANP: number | string;
+    /**
+     * @param {string} descANP - Descrição do produto conforme ANP
+     * Utilizar a Tabela de Código de Produtos da ANP, publicada no Portal Nacional da NF-e, no grupo "Documentos", opção "Diversos"
+     */
+    descANP: string;
+    /**
+     * @param {number} pGLP - Percentual do GLP derivado do petróleo no produto GLP (cProdANP=210203001)
+     * Informar em número decimal o percentual do GLP derivado de petróleo no produto GLP. Valores de 0 a 100.
+     */
+    pGLP?: number;
+    /**
+     * @param {number} pGNn - Percentual de Gás Natural Nacional – GLGNn para o produto GLP (cProdANP=210203001)
+     * Informar em número decimal o percentual do Gás Natural Nacional – GLGNn para o produto GLP. Valores de 0 a 100.
+     */
+    pGNn?: number;
+    /**
+     * @param {number} pGNi - Percentual de Gás Natural Importado – GLGNi para o produto GLP (cProdANP=210203001)
+     * Informar em número decimal o percentual do Gás Natural Importado – GLGNi para o produto GLP. Valores de 0 a 100.
+     */
+    pGNi?: number;
+    /**
+     * @param {number} vPart - Valor de partida (cProdANP=210203001)
+     * Deve ser informado neste campo o valor por quilograma sem ICMS.
+     */
+    vPart?: number;
+    /**
+     * @param {string} CODIF - Código de autorização / registro do CODIF
+     * Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC - Álcool Etílico Anidro Combustível).
+     */
+    CODIF?: string;
+    /**
+     * @param {number} qTemp - Quantidade de combustível faturada à temperatura ambiente
+     * Informar quando a quantidade faturada informada no campo "prod/qCom" tiver sido ajustada para uma temperatura diferente da ambiente.
+     */
+    qTemp?: number;
+    /**
+     * @param {string} UFCons - Sigla da UF de consumo
+     * Informar a UF de consumo. Informar "EX" para Exterior.
+     */
+    UFCons: string;
+    /**
+     * @param {CIDE} CIDE - Informações da CIDE
+     * Grupo de informações da CIDE
+     */
+    CIDE?: CIDE;
+    /**
+     * @param {Encerrante} encerrante - Informações do grupo de "encerrante"
+     * Informações do grupo de "encerrante" disponibilizado por hardware específico acoplado à bomba de Combustível, definido no controle da venda do Posto Revendedor de Combustível.
+     */
+    encerrante?: Encerrante;
+    /**
+     * @param {number} pBio - Percentual do índice de mistura do Biodiesel (B100) no Óleo Diesel B ou do Etanol Anidro na Gasolina C
+     * Informar em número decimal o percentual do índice de mistura do Biodiesel para o produto Óleo Diesel B ou o percentual do índice de mistura do Etanol Anidro para o produto Gasolina C. Valores maiores que 0 e menores ou iguais a 100.
+     */
+    pBio?: number;
+    /**
+     * @param {OrigComb[]} origComb - Grupo indicador da origem do combustível
+     * Obrigatoriedade de preenchimento do grupo conforme Tabela de Combustíveis Sujeitos à Tributação Monofásica
+     */
+    origComb?: OrigComb[] | OrigComb;
+}
+
+/**
+ * [CIDE]
+ * Informações da CIDE
+ */
+export type CIDE = {
+    /**
+     * @param {number | string} qBCProd - BC da CIDE
+     * Informar a BC da CIDE em quantidade
+     */
+    qBCProd: number | string;
+    /**
+     * @param {number | string} vAliqProd - Valor da alíquota da CIDE
+     * Informar o valor da alíquota em reais da CIDE
+     */
+    vAliqProd: number | string;
+    /**
+     * @param {number | string} vCIDE - Valor da CIDE
+     * Informar o valor da CIDE
+     */
+    vCIDE: number | string;
+}
+
+/**
+ * [encerrante]
+ * Informações do grupo de "encerrante"
+ */
+export type Encerrante = {
+    /**
+     * @param {number} nBico - Número de identificação do bico utilizado no abastecimento
+     * Informar o número do bico utilizado no abastecimento.
+     */
+    nBico: number;
+    /**
+     * @param {number} nBomba - Número de identificação da bomba ao qual o bico está interligado
+     * Caso exista, informar o número da bomba utilizada.
+     */
+    nBomba?: number;
+    /**
+     * @param {number} nTanque - Número de identificação do tanque ao qual o bico está interligado
+     * Informar o número do tanque utilizado.
+     */
+    nTanque: number;
+    /**
+     * @param {number} vEncIni - Valor do Encerrante no início do abastecimento
+     * Informar o valor da leitura do contador (Encerrante) no início do abastecimento
+     */
+    vEncIni: number;
+    /**
+     * @param {number} vEncFin - Valor do Encerrante no final do abastecimento
+     * Informar o valor da leitura do contador (Encerrante) no término do abastecimento
+     */
+    vEncFin: number;
+}
+
+/**
+ * [origComb]
+ * Grupo indicador da origem do combustível
+ */
+export type OrigComb = {
+    /**
+     * @param {0 | 1} indImport - Indicador de importação
+     * 0=Nacional;
+     * 1=Importado;
+     */
+    indImport: 0 | 1;
+    /**
+     * @param {number} cUFOrig - Código da UF
+     * UF de origem do produtor ou do importador. Utilizar a tabela do IBGE.
+     */
+    cUFOrig: number;
+    /**
+     * @param {number} pOrig - Percentual originário para a UF
+     * Informar em número decimal o percentual originário da UF. Esse valor será obtido através dos Anexos de Combustíveis previstos em Ato Cotepe. Valores maiores que 0 e menores ou iguais a 100.
+     */
+    pOrig: number;
 }
 
 /**
@@ -1993,15 +2142,15 @@ export type ICMS61 = {
      */
     qBCMonoRet?: number;
     /**
-     * @param {number} adRemICMSRet - Alíquota ad rem do imposto retido anteriormente
+     * @param {number| string} adRemICMSRet - Alíquota ad rem do imposto retido anteriormente
      * Alíquota ad rem do ICMS, estabelecida na legislação para o produto.
      */
-    adRemICMSRet: number;
+    adRemICMSRet: number | string;
     /**
-     * @param {number} vICMSMonoRet - Valor do ICMS retido anteriormente
+     * @param {number| string} vICMSMonoRet - Valor do ICMS retido anteriormente
      * O valor do ICMS é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida na legislação.
      */
-    vICMSMonoRet: number;
+    vICMSMonoRet: number | string;
 }
 /** [ICMS70] - Grupo Tributação do ICMS = 70 */
 export type ICMS70 = {
