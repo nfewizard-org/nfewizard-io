@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.27] - 2025-06-26
+
+### Changed
+- Adiciona tratativas para emissão de NFCe com combustíveis e lubrificantes.
+
 ## [0.3.25] - 2025-06-11
 
 ### Fixed
