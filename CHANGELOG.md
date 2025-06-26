@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.28] - 2025-06-26
+
+### Changed
+- Adiciona ICMS61 ao método mountCOFINS.
+
 ## [0.3.27] - 2025-06-26
 
 ### Changed
