@@ -28,6 +28,7 @@ import { mountCOFINS, mountICMS, mountPIS } from '@Utils/NFEImposto.js';
 import { GerarConsultaImpl, NFEAutorizacaoServiceImpl, SaveFilesImpl } from '@Interfaces';
 import NFERetornoAutorizacaoService from '../NFERetornoAutorizacao/NFERetornoAutorizacaoService.js';
 import { logger } from '@Core/exceptions/logger.js';
+import { Agent } from 'http';
 
 class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl {
     xmlNFe: string[];
@@ -112,41 +113,37 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
     }
 
     private async trataRetorno(xmlRetorno: string, indSinc: number, responseInJson: GenericObject) {
-        try {
-            /**
-             * Captura o valor nRec e protNFe
-             */
-            const { nRec, protNFe } = this.utility.getProtNFe(xmlRetorno);
+        /**
+         * Captura o valor nRec e protNFe
+         */
+        const { nRec, protNFe } = this.utility.getProtNFe(xmlRetorno);
 
-            /**
-             * 0 - assíncrona
-             * 1 - síncrona
-             */
-            let tipoEmissao = 0;
-            if (indSinc === 1 && protNFe) {
-                tipoEmissao = 1;
-            }
-
-            const nfeRetornoAutService = new NFERetornoAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
-            const nfeRetornoAut = new NFERetornoAutorizacao(nfeRetornoAutService);
-
-            /**
-             * Aguarda o Tempo médio de resposta do serviço (em segundos) dos últimos 5 minutos
-             * A informação do tMed só é recebida caso o processamento for assíncrono (indSinc = 0)
-             */
-            if (tipoEmissao !== 1) await new Promise(resolve => setTimeout(resolve, Number(responseInJson.infRec.tMed) * 1000));
-
-            const retorno = await nfeRetornoAut.getXmlRetorno({
-                tipoEmissao,
-                nRec,
-                protNFe,
-                xmlNFe: this.xmlNFe
-            });
-
-            return retorno;
-        } catch (error: any) {
-            throw new Error(error.message)
+        /**
+         * 0 - assíncrona
+         * 1 - síncrona
+         */
+        let tipoEmissao = 0;
+        if (indSinc === 1 && protNFe) {
+            tipoEmissao = 1;
         }
+
+        const nfeRetornoAutService = new NFERetornoAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+        const nfeRetornoAut = new NFERetornoAutorizacao(nfeRetornoAutService);
+
+        /**
+         * Aguarda o Tempo médio de resposta do serviço (em segundos) dos últimos 5 minutos
+         * A informação do tMed só é recebida caso o processamento for assíncrono (indSinc = 0)
+         */
+        if (tipoEmissao !== 1) await new Promise(resolve => setTimeout(resolve, Number(responseInJson.infRec.tMed) * 1000));
+
+        const retorno = await nfeRetornoAut.getXmlRetorno({
+            tipoEmissao,
+            nRec,
+            protNFe,
+            xmlNFe: this.xmlNFe
+        });
+
+        return retorno;
     }
 
     /**
@@ -225,6 +222,9 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
     }
 
     private gerarXmlNFeAutorizacao(data: NFe) {
+        logger.info('Montando estrutuda do XML em JSON', {
+            context: 'NFEAutorizacaoService',
+        });
         const createXML = (NFe: LayoutNFe) => {
             // Verificando se existe mais de um produto
             if (NFe?.infNFe?.det instanceof Array) {
@@ -347,6 +347,38 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
         return xml.replace('[XML]', this.xmlNFe.join(''));
     }
 
+    protected async callWebService(xmlConsulta: string, webServiceUrl: string, ContentType: string, action: string, agent: Agent): Promise<AxiosResponse<any, any>> {
+        const startTime = Date.now();
+
+        const headers = {
+            'Content-Type': ContentType,
+        };
+
+        logger.http('Iniciando comunicação com o webservice', {
+            context: `NFEAutorizacaoService`,
+            method: this.metodo,
+            url: webServiceUrl,
+            action,
+            headers,
+        });
+
+        const response = await this.axios.post(webServiceUrl, xmlConsulta, {
+            headers,
+            httpsAgent: agent
+        });
+
+        const duration = Date.now() - startTime;
+
+        logger.http('Comunicação concluída com sucesso', {
+            context: `NFEAutorizacaoService`,
+            method: this.metodo,
+            duration: `${duration}ms`,
+            responseSize: response.data ? JSON.stringify(response.data).length : 0
+        });
+
+        return response;
+    }
+
     public async Exec(data: NFe): Promise<{
         success: boolean;
         xMotivo: GenericObject;
@@ -371,13 +403,8 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
             webServiceUrlTmp = webServiceUrl;
 
             // Efetua requisição para o webservice NFEStatusServico
-            xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
-                headers: {
-                    'Content-Type': ContentType,
-                    'SOAPAction': action,
-                },
-                httpsAgent: agent
-            });
+            const xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);
+
             /**
              * Verifica se houve rejeição no processamento do lote
              */
@@ -391,28 +418,16 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
                     xMotivo: retorno.message
                 })
 
+            logger.info('NFe transmitida com sucesso', {
+                context: 'NFEAutorizacaoService',
+            });
+
             return {
                 success: true,
                 xMotivo: xmlFinal.xMotivo,
                 xmls: xmlFinal.response,
             }
 
-        } catch (error: any) {
-            // const logConfig = this.environment.config.lib?.log;
-
-            // if (logConfig) {
-            //     const { armazenarLogs } = logConfig;
-            //     if (armazenarLogs) {
-            //         logger.error({
-            //             message: error.message,
-            //             webServiceUrl: webServiceUrlTmp,
-            //             contentType: ContentType,
-            //             xmlSent: xmlConsultaSoap,
-            //             xmlResponse: error.response?.data || 'Sem resposta',
-            //         });
-            //     }
-            // }
-            throw new Error(error.message)
         } finally {
             // Salva XML de Consulta
             this.utility.salvaConsulta(xmlConsulta, xmlConsultaSoap, this.metodo);

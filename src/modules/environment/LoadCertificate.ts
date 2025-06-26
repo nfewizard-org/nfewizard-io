@@ -6,6 +6,7 @@ import forge from 'node-forge';
 
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { logger } from '@Core/exceptions/logger';
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url));
 const dir = process.env.NODE_ENV === 'production' ? '../resources/certs' : '../../resources/certs';
@@ -68,6 +69,10 @@ class LoadCertificate {
                     });
                 });
             } catch (error: any) {
+                logger.error('Erro ao validar certificado', error, {
+                    context: 'LoadCertificate',
+                    method: 'loadCertificateWithPEM',
+                });
                 reject(new Error(error.message));
             }
         });
@@ -102,7 +107,7 @@ class LoadCertificate {
                 // Verificar se o 'certBags' contém o certificado esperado
                 const cert = certBags[forge.pki.oids.certBag]?.[0]?.cert;
                 if (!cert) {
-                    return reject(new Error("Erro ao carregar certificado."));
+                    return reject(new Error("Erro ao validar certificado."));
                 }
                 const certPem = forge.pki.certificateToPem(cert);
                 this.certificate = certPem;
@@ -136,22 +141,32 @@ class LoadCertificate {
                     message: 'Certificado Carregado com Sucesso.'
                 });
             } catch (error: any) {
+                logger.error('Erro ao validar certificado', error, {
+                    context: 'LoadCertificate',
+                    method: 'loadCertificateWithNodeForge',
+                });
+
                 reject(new Error(error.message));
             }
         });
     }
 
     async loadCertificate(): Promise<CertificateLoadReturn> {
+        logger.info('Validando certificado', {
+            context: 'LoadCertificate',
+        });
         if (this.config.lib?.useOpenSSL || this.config.lib?.useOpenSSL === undefined) {
             const { agent } = await this.loadCertificateWithPEM();
-            return { 
+
+            return {
                 certificate: this.certificate,
                 cert_key: this.cert_key,
                 agent
             };
         }
         const { agent } = await this.loadCertificateWithNodeForge();
-        return { 
+
+        return {
             certificate: this.certificate,
             cert_key: this.cert_key,
             agent

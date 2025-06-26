@@ -1,7 +1,17 @@
+import { logger } from '@Core/exceptions/logger';
 import { NFeWizardProps } from '@Types';
 
 class ValidateEnvironment {
     checkRequiredSettings(config: NFeWizardProps) {
+        logger.info('Verificando parâmetros de inicialização', {
+            context: 'ValidateEnvironment',
+            config: {
+                pathCertificado: config.dfe.pathCertificado,
+                senhaCertificado: config.dfe.senhaCertificado,
+                ambiente: config.nfe.ambiente
+            }
+        });
+
         try {
             const requiredConfigFields: { [K in keyof NFeWizardProps]: string[] } = {
                 dfe: ['pathCertificado', 'senhaCertificado'],
@@ -64,7 +74,11 @@ class ValidateEnvironment {
                 success: true,
             };
         } catch (error: any) {
-            throw new Error(`Erro ao validar configurações: ${error.message}`);
+            logger.error('Erro ao inicializar ambiente', error, {
+                context: 'ValidateEnvironment',
+                method: 'checkRequiredSettings',
+            });
+            throw new Error(`Erro ao inicializar ambiente: ${error.message}`);
         }
     }
 }

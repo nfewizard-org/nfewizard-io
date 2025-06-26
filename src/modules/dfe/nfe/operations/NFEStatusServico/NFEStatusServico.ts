@@ -16,7 +16,7 @@
  */
 import { NFEStatusServicoServiceImpl } from '@Interfaces';
 
-class NFEStatusServico implements NFEStatusServicoServiceImpl{
+class NFEStatusServico implements NFEStatusServicoServiceImpl {
     nfeStatusServicoService: NFEStatusServicoServiceImpl;
     constructor(nfeStatusServicoService: NFEStatusServicoServiceImpl) {
         this.nfeStatusServicoService = nfeStatusServicoService;

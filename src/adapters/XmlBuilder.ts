@@ -17,6 +17,7 @@
 import xml2js from 'xml2js';
 import { SignedXml } from 'xml-crypto';
 import Environment from '@Modules/environment/Environment.js';
+import { logger } from '@Core/exceptions/logger';
 
 export interface NamespacesProps {
     [key: string]: string;
@@ -63,6 +64,9 @@ class XmlBuilder {
      * Método que converte Objeto em XML
      */
     serializeXml<T>(obj: T, rootTag: string) {
+        logger.info('Gerando XML', {
+            context: 'XmlBuilder',
+        });
         let builder = new xml2js.Builder({
             rootName: rootTag,
             headless: true,

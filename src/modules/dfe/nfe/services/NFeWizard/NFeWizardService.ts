@@ -60,6 +60,7 @@ import NFEDistribuicaoDFePorNSUService from '../NFEDistribuicaoDFe/NFEDistribuic
 import NFEDistribuicaoDFePorChaveService from '../NFEDistribuicaoDFe/NFEDistribuicaoDFePorChave';
 import NFEInutilizacaoService from '../NFEInutilizacao/NFEInutilizacaoService';
 import NFCEAutorizacaoService from '@Modules/dfe/nfce/services/NFCEAutorizacao/NFCEAutorizacaoService';
+import { logger } from '@Core/exceptions/logger';
 
 class NFeWizardService implements NFeWizardServiceImpl {
     private config: NFeWizardProps = {} as NFeWizardProps;
@@ -108,13 +109,12 @@ class NFeWizardService implements NFeWizardServiceImpl {
             this.xmlBuilder = new XmlBuilder(this.environment)
             this.gerarConsulta = new GerarConsulta(this.environment, this.utility, this.xmlBuilder);
 
-            console.log('===================================');
-            console.log('Biblioteca Inicializada com Sucesso');
-            console.log('===================================');
+            // console.log('===================================');
+            // console.log('Biblioteca Inicializada com Sucesso');
+            // console.log('===================================');
 
         } catch (error) {
-            console.log(error)
-            throw new Error(`Erro ao inicializar a lib: ${error}`)
+            logger.error(``, error, { context: 'NFE_LoadEnvironment', });
         }
     }
 
@@ -134,7 +134,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response
         } catch (error: any) {
-            throw new Error(`NFE_ConsultaStatusServico: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_ConsultaStatusServico', });
         }
     }
 
@@ -154,7 +154,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response
         } catch (error: any) {
-            throw new Error(`NFE_ConsultaProtocolo: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_ConsultaProtocolo', });
         }
     }
 
@@ -173,7 +173,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.response
         } catch (error: any) {
-            throw new Error(`NFE_RecepcaoEvento: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_RecepcaoEvento', });
         }
     }
     async NFE_EventoPrevioDeEmissaoEmContingencia(evento: EPEC) {
@@ -188,7 +188,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.response
         } catch (error: any) {
-            throw new Error(`NFEEpec: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_EventoPrevioDeEmissaoEmContingencia', });
         }
     }
     async NFE_Cancelamento(evento: Cancelamento) {
@@ -203,7 +203,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.response
         } catch (error: any) {
-            throw new Error(`NFE_Cancelamento: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_Cancelamento', });
         }
     }
     async NFE_CienciaDaOperacao(evento: CienciaDaOperacao) {
@@ -218,7 +218,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.response
         } catch (error: any) {
-            throw new Error(`NFE_CienciaDaOperacao: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_CienciaDaOperacao', });
         }
     }
     async NFE_ConfirmacaoDaOperacao(evento: ConfirmacaoDaOperacao) {
@@ -233,7 +233,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.response
         } catch (error: any) {
-            throw new Error(`NFE_ConfirmacaoDaOperacao: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_ConfirmacaoDaOperacao', });
         }
     }
     async NFE_OperacaoNaoRealizada(evento: OperacaoNaoRealizada) {
@@ -248,7 +248,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.response
         } catch (error: any) {
-            throw new Error(`NFE_OperacaoNaoRealizada: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_OperacaoNaoRealizada', });
         }
     }
     async NFE_CartaDeCorrecao(evento: CartaDeCorrecao) {
@@ -263,7 +263,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.response
         } catch (error: any) {
-            throw new Error(`NFE_CartaDeCorrecao: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_CartaDeCorrecao', });
         }
     }
     async NFE_DesconhecimentoDaOperacao(evento: DesconhecimentoDaOperacao) {
@@ -278,7 +278,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.response
         } catch (error: any) {
-            throw new Error(`NFE_DesconhecimentoDaOperacao: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_DesconhecimentoDaOperacao', });
         }
     }
 
@@ -297,7 +297,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.data
         } catch (error: any) {
-            throw new Error(`NFE_DistribuicaoDFe: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_DistribuicaoDFe', });
         }
     }
     async NFE_DistribuicaoDFePorUltNSU(data: DFePorUltimoNSU) {
@@ -312,7 +312,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.data
         } catch (error: any) {
-            throw new Error(`NFE_DistribuicaoDFePorUltNSU: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_DistribuicaoDFePorUltNSU', });
         }
     }
     async NFE_DistribuicaoDFePorNSU(data: DFePorNSU) {
@@ -327,7 +327,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.data
         } catch (error: any) {
-            throw new Error(`NFE_DistribuicaoDFePorNSU: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_DistribuicaoDFePorNSU', });
         }
     }
     async NFE_DistribuicaoDFePorChave(data: DFePorChaveNFe) {
@@ -342,7 +342,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.data
         } catch (error: any) {
-            throw new Error(`NFE_DistribuicaoDFePorChave: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_DistribuicaoDFePorChave', });
         }
     }
 
@@ -361,7 +361,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.xmls
         } catch (error: any) {
-            throw new Error(`NFE_Autorizacao: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_Autorizacao', });
         }
     }
     async NFCE_Autorizacao(data: NFe) {
@@ -376,7 +376,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response.xmls
         } catch (error: any) {
-            throw new Error(`NFCE_Autorizacao: ${error.message}`)
+            logger.error(``, error, { context: 'NFCE_Autorizacao', });
         }
     }
 
@@ -395,7 +395,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response
         } catch (error: any) {
-            throw new Error(`NFE_Inutilizacao: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_Inutilizacao', });
         }
     }
 
@@ -449,7 +449,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
 
             return response
         } catch (error: any) {
-            throw new Error(`NFE_EnviaEmail: ${error.message}`)
+            logger.error(``, error, { context: 'NFE_EnviaEmail', });
         }
     }
 

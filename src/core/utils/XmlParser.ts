@@ -15,6 +15,7 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { logger } from '@Core/exceptions/logger';
 import { GenericObject } from 'src/core/types';
 import * as convert from "xml-js";
 
@@ -52,7 +53,6 @@ export default class XmlParser {
     }
 
     getStatusServicoBody(jsonData: any): any {
-        ;
         return this.findInObj(jsonData, 'retConsStatServ');
     }
     getConsultaProtocoloBody(jsonData: any): any {
@@ -87,74 +87,73 @@ export default class XmlParser {
     }
 
     convertXmlToJson(xml: string, metodo: string, nsu?: string): GenericObject {
-        try {
-            const jsonAsString = convert.xml2json(xml, {
-                compact: true,
-                spaces: 2,
-                ignoreAttributes: true,
-                ignoreDeclaration: true,
-                trim: true,
-                ignoreInstruction: true,
-                ignoreComment: true,
-                ignoreCdata: true,
-                ignoreDoctype: true,
-                textFn: this.removeJsonTextAttribute,
-            });
+        logger.info('Convertendo XML para JSON', {
+            context: 'XmlParser',
+        });
+        const jsonAsString = convert.xml2json(xml, {
+            compact: true,
+            spaces: 2,
+            ignoreAttributes: true,
+            ignoreDeclaration: true,
+            trim: true,
+            ignoreInstruction: true,
+            ignoreComment: true,
+            ignoreCdata: true,
+            ignoreDoctype: true,
+            textFn: this.removeJsonTextAttribute,
+        });
 
-            const jsonData = JSON.parse(jsonAsString);
-            let jsonBody: any;
+        const jsonData = JSON.parse(jsonAsString);
+        let jsonBody: any;
 
-            switch (metodo) {
-                case 'NFEStatusServico':
-                    jsonBody = this.getStatusServicoBody(jsonData)
-                    break;
-                case 'NFEConsultaProtocolo':
-                    jsonBody = this.getConsultaProtocoloBody(jsonData)
-                    break;
-                case 'RecepcaoEvento':
-                    jsonBody = this.getRecepcaoEventoBody(jsonData)
-                    break;
-                case 'NFeDistribuicaoDFe':
-                    jsonBody = this.getDistribuicaoDFe(jsonData)
-                    break;
-                case 'NFeDistribuicaoDFe_proc':
-                    jsonBody = jsonData
-                    break;
-                case 'NFeDistribuicaoDFe_res':
-                    jsonBody = this.getDistribuicaoDFeResBody(jsonData)
-                    break;
-                case 'NFeDistribuicaoDFe_event':
-                    jsonBody = this.getDistribuicaoDFeEventBody(jsonData)
-                    break;
-                case 'NFEAutorizacao':
-                    jsonBody = this.getAutorizacaoEventBody(jsonData)
-                    break;
-                case 'NFEAutorizacaoFinal':
-                    jsonBody = this.getAutorizacaoFinalEventBody(jsonData)
-                    break;
-                case 'NFCEAutorizacaoFinal':
-                    jsonBody = this.getAutorizacaoFinalEventBody(jsonData)
-                    break;
-                case 'NFERetAutorizacao':
-                    jsonBody = this.getAutorizacaoRetornoEventBody(jsonData)
-                    break;
-                case 'NFEInutilizacao':
-                    jsonBody = this.getInutilizacaoRetornoEventBody(jsonData)
-                    break;
-                default:
-                    throw new Error('Formato de XML desconhecido');
-            }
-
-            if (jsonBody) {
-                if (nsu) {
-                    jsonBody.nsu = nsu;
-                }
-                jsonBody.xml = xml;
-            }
-
-            return jsonBody;
-        } catch (error) {
-            throw new Error(`Erro ao converter XML para Json: ${error}`);
+        switch (metodo) {
+            case 'NFEStatusServico':
+                jsonBody = this.getStatusServicoBody(jsonData)
+                break;
+            case 'NFEConsultaProtocolo':
+                jsonBody = this.getConsultaProtocoloBody(jsonData)
+                break;
+            case 'RecepcaoEvento':
+                jsonBody = this.getRecepcaoEventoBody(jsonData)
+                break;
+            case 'NFeDistribuicaoDFe':
+                jsonBody = this.getDistribuicaoDFe(jsonData)
+                break;
+            case 'NFeDistribuicaoDFe_proc':
+                jsonBody = jsonData
+                break;
+            case 'NFeDistribuicaoDFe_res':
+                jsonBody = this.getDistribuicaoDFeResBody(jsonData)
+                break;
+            case 'NFeDistribuicaoDFe_event':
+                jsonBody = this.getDistribuicaoDFeEventBody(jsonData)
+                break;
+            case 'NFEAutorizacao':
+                jsonBody = this.getAutorizacaoEventBody(jsonData)
+                break;
+            case 'NFEAutorizacaoFinal':
+                jsonBody = this.getAutorizacaoFinalEventBody(jsonData)
+                break;
+            case 'NFCEAutorizacaoFinal':
+                jsonBody = this.getAutorizacaoFinalEventBody(jsonData)
+                break;
+            case 'NFERetAutorizacao':
+                jsonBody = this.getAutorizacaoRetornoEventBody(jsonData)
+                break;
+            case 'NFEInutilizacao':
+                jsonBody = this.getInutilizacaoRetornoEventBody(jsonData)
+                break;
+            default:
+                throw new Error('Formato de XML desconhecido');
         }
+
+        if (jsonBody) {
+            if (nsu) {
+                jsonBody.nsu = nsu;
+            }
+            jsonBody.xml = xml;
+        }
+
+        return jsonBody;
     }
 }

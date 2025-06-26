@@ -30,6 +30,7 @@ import { GerarConsultaImpl, NFCEAutorizacaoServiceImpl, SaveFilesImpl } from '@I
 import NFCERetornoAutorizacaoService from '../NFCERetornoAutorizacao/NFCERetornoAutorizacaoService.js';
 import NFCERetornoAutorizacao from '../../operations/NFCERetornoAutorizacao/NFCERetornoAutorizacao.js';
 import { logger } from '@Core/exceptions/logger.js';
+import { Agent } from 'http';
 
 class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceImpl {
     xmlNFe: string[];
@@ -233,7 +234,9 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
     }
 
     private gerarXmlNFCEAutorizacao(data: NFe) {
-
+        logger.info('Montando estrutuda do XML em JSON', {
+            context: 'NFCEAutorizacaoService',
+        });
         const createXML = (NFe: LayoutNFe) => {
 
             // Verificando se existe mais de um produto
@@ -413,16 +416,37 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         return xml.replace('[XML]', this.xmlNFe.join(''));
     }
 
-    // protected setContentType() {
-    //     const UF = this.environment.config.dfe.UF;
+    protected async callWebService(xmlConsulta: string, webServiceUrl: string, ContentType: string, action: string, agent: Agent): Promise<AxiosResponse<any, any>> {
+        const startTime = Date.now();
 
-    //     const ufsAppSoad = ['MG', 'GO', 'MT', 'MS', 'AM'];
+        const headers = {
+            'Content-Type': ContentType,
+        };
 
-    //     if (ufsAppSoad.includes(UF)) {
-    //         return 'application/soap+xml'
-    //     }
-    //     return 'text/xml; charset=utf-8'
-    // }
+        logger.http('Iniciando comunicação com o webservice', {
+            context: `NFCEAutorizacaoService`,
+            method: this.metodo,
+            url: webServiceUrl,
+            action,
+            headers,
+        });
+
+        const response = await this.axios.post(webServiceUrl, xmlConsulta, {
+            headers,
+            httpsAgent: agent
+        });
+
+        const duration = Date.now() - startTime;
+
+        logger.http('Comunicação concluída com sucesso', {
+            context: `NFCEAutorizacaoService`,
+            method: this.metodo,
+            duration: `${duration}ms`,
+            responseSize: response.data ? JSON.stringify(response.data).length : 0
+        });
+
+        return response;
+    }
 
     async Exec(data: NFe): Promise<{
         success: boolean;
@@ -474,28 +498,16 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                 xMotivo: item.xMotivo.replace('NF-e', 'NFC-e')
             }));
 
+            logger.info('NFCe transmitida com sucesso', {
+                context: 'NFCEAutorizacaoService',
+            });
+            
             return {
                 success: true,
                 xMotivo: xmlFinal.xMotivo,
                 xmls: xmlFinal.response,
             }
 
-        } catch (error: any) {
-            // const logConfig = this.environment.config.lib?.log;
-
-            // if (logConfig) {
-            //     const { armazenarLogs } = logConfig;
-            //     if (armazenarLogs) {
-            //         logger.error({
-            //             message: error.message,
-            //             webServiceUrl: webServiceUrlTmp,
-            //             contentType: ContentType,
-            //             xmlSent: xmlConsultaSoap,
-            //             xmlResponse: error.response?.data || 'Sem resposta',
-            //         });
-            //     }
-            // }
-            throw new Error(error.message)
         } finally {
             // Salva XML de Consulta
             this.utility.salvaConsulta(xmlConsulta, xmlConsultaSoap, this.metodo);

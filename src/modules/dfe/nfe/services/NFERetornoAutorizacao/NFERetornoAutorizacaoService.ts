@@ -28,21 +28,17 @@ class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoAutoriza
     }
 
     protected gerarXml(data: string): string {
-        try {
-            const { nfe: { ambiente } } = this.environment.getConfig();
+        const { nfe: { ambiente } } = this.environment.getConfig();
 
-            const xmlObject = {
-                $: {
-                    xmlns: 'http://www.portalfiscal.inf.br/nfe',
-                    versao: "4.00",
-                },
-                tpAmb: ambiente,
-                nRec: data
-            }
-            return this.xmlBuilder.gerarXml(xmlObject, 'consReciNFe')
-        } catch (error: any) {
-            throw new Error(error.message)
+        const xmlObject = {
+            $: {
+                xmlns: 'http://www.portalfiscal.inf.br/nfe',
+                versao: "4.00",
+            },
+            tpAmb: ambiente,
+            nRec: data
         }
+        return this.xmlBuilder.gerarXml(xmlObject, 'consReciNFe');
     }
 
     /**
@@ -57,40 +53,40 @@ class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoAutoriza
         message: any;
         data: string[];
     }> {
-        try {
-            /**
-             * Gera o XML para consulta de acordo com o número do recibo da emissão (nRec)
-             */
-            const xmlConsulta = this.gerarXml(nRec);
+        // try {
+        /**
+         * Gera o XML para consulta de acordo com o número do recibo da emissão (nRec)
+         */
+        const xmlConsulta = this.gerarXml(nRec);
 
-            const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
+        const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
 
-            // Salva XML de Consulta
-            this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);
+        // Salva XML de Consulta
+        this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);
 
-            // Efetua requisição para o webservice NFEStatusServico
-            const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
-                headers: {
-                    'Content-Type': this.setContentType(),
-                    'SOAPAction': action,
-                },
-                httpsAgent: agent
-            });
+        // Efetua requisição para o webservice NFEStatusServico
+        const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
+            headers: {
+                'Content-Type': this.setContentType(),
+                'SOAPAction': action,
+            },
+            httpsAgent: agent
+        });
 
-            const responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
-            
-            // Salva XML de Retorno
-            this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
+        const responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
 
-            const { protNFe } = this.utility.getProtNFe(xmlRetorno.data);
+        // Salva XML de Retorno
+        this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
 
-            if (!protNFe) {
-                throw new Error(`Não foi possível encontrar a tag 'protNFe'. Talvez a NFe ainda não tenha sido processada.`)
-            }
-            return this.getXmlRetornoAutorizacao(protNFe, xmlNFe);
-        } catch (error: any) {
-            throw new Error(error.message)
+        const { protNFe } = this.utility.getProtNFe(xmlRetorno.data);
+
+        if (!protNFe) {
+            throw new Error(`Não foi possível encontrar a tag 'protNFe'. Talvez a NFe ainda não tenha sido processada.`)
         }
+        return this.getXmlRetornoAutorizacao(protNFe, xmlNFe);
+        // } catch (error: any) {
+        //     throw new Error(error.message)
+        // }
     }
 
     /**
@@ -105,50 +101,50 @@ class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoAutoriza
         message: any;
         data: string[];
     } {
-        try {
+        // try {
+        /**
+         * Cria o Obj base da NFe já processada (nfeProc)
+         */
+        const XMLs = []
+        for (let i = 0; i < protNFe.length; i++) {
+            const baseXML = {
+                $: {
+                    versao: "4.00",
+                    xmlns: 'http://www.portalfiscal.inf.br/nfe'
+                },
+                _: '[XML]'
+            }
+            let xml = this.xmlBuilder.gerarXml(baseXML, 'nfeProc')
             /**
-             * Cria o Obj base da NFe já processada (nfeProc)
+             * Converte a tag protNFe do formato JSON para XML e armazena na string protTag.
+             * Adiciona a tag protNFe (armazenada na string protTag) ao array contendo os dados das NFe.
              */
-            const XMLs = []
-            for (let i = 0; i < protNFe.length; i++) {
-                const baseXML = {
-                    $: {
-                        versao: "4.00",
-                        xmlns: 'http://www.portalfiscal.inf.br/nfe'
-                    },
-                    _: '[XML]'
-                }
-                let xml = this.xmlBuilder.gerarXml(baseXML, 'nfeProc')
+            // Expressão regular para capturar o valor do atributo Id
+            const formatedProtNFe: any = protNFe;
+            const xmlCompleto = xmlNFe.find((item) => item.indexOf(formatedProtNFe[i].infProt[0].chNFe[0]) !== -1);
+
+            if (xmlCompleto) {
+                const protTag = this.xmlBuilder.gerarXml(protNFe[i], 'protNFe')
+                const xmlFinal = [xmlCompleto]
+                xmlFinal.push(protTag)
+
                 /**
-                 * Converte a tag protNFe do formato JSON para XML e armazena na string protTag.
-                 * Adiciona a tag protNFe (armazenada na string protTag) ao array contendo os dados das NFe.
+                 * Substitui o "[XML]" com as tags NFe e a tag protNFe
                  */
-                // Expressão regular para capturar o valor do atributo Id
-                const formatedProtNFe: any = protNFe;
-                const xmlCompleto = xmlNFe.find((item) => item.indexOf(formatedProtNFe[i].infProt[0].chNFe[0]) !== -1);
- 
-                if (xmlCompleto) {
-                    const protTag = this.xmlBuilder.gerarXml(protNFe[i], 'protNFe')
-                    const xmlFinal = [xmlCompleto]
-                    xmlFinal.push(protTag)
+                xml = xml.replace('[XML]', xmlFinal.join(''));
+                xml = `<?xml version="1.0" encoding="UTF-8"?>${xml}`;
 
-                    /**
-                     * Substitui o "[XML]" com as tags NFe e a tag protNFe
-                     */
-                    xml = xml.replace('[XML]', xmlFinal.join(''));
-                    xml = `<?xml version="1.0" encoding="UTF-8"?>${xml}`;
-
-                    XMLs.push(xml)
-                }
+                XMLs.push(xml)
             }
-            return {
-                success: true,
-                message: 'xMotivo',
-                data: XMLs
-            }
-        } catch (error: any) {
-            throw new Error(error.message)
         }
+        return {
+            success: true,
+            message: 'xMotivo',
+            data: XMLs
+        }
+        // } catch (error: any) {
+        //     throw new Error(error.message)
+        // }
 
     }
 
@@ -176,27 +172,27 @@ class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoAutoriza
         message: any;
         data: string[];
     }> {
-        try {
+        // try {
 
-            /**
-             * Trata retorno Síncrono
-             */
-            if (tipoEmissao === 1 && protNFe) {
-                return this.getXmlRetornoAutorizacao(protNFe, xmlNFe);
-            }
-
-            /**
-             * Trata retorno Assíncrono
-             */
-            if (tipoEmissao === 0 && nRec) {
-                return this.getRetornoRecibo(nRec, xmlNFe);
-            }
-
-            throw new Error('Não foi possível buscar o retorno da autorização.');
-
-        } catch (error: any) {
-            throw new Error(error.message)
+        /**
+         * Trata retorno Síncrono
+         */
+        if (tipoEmissao === 1 && protNFe) {
+            return this.getXmlRetornoAutorizacao(protNFe, xmlNFe);
         }
+
+        /**
+         * Trata retorno Assíncrono
+         */
+        if (tipoEmissao === 0 && nRec) {
+            return this.getRetornoRecibo(nRec, xmlNFe);
+        }
+
+        throw new Error('Não foi possível buscar o retorno da autorização.');
+
+        // } catch (error: any) {
+        //     throw new Error(error.message)
+        // }
     }
 }
 

@@ -23,6 +23,7 @@ import AxiosHttpClient from './AxiosHttpClient';
 import HttpClientBuilder from './HttpClientBuilder';
 import ValidateEnvironment from './ValidateEnvironment';
 import LoadCertificate from './LoadCertificate';
+import { logger } from '@Core/exceptions/logger';
 
 class Environment {
     config: NFeWizardProps;
@@ -58,14 +59,38 @@ class Environment {
         return this.agent;
     }
 
+    private LoggerInit(config: NFeWizardProps) {
+        try {
+            if (config.lib?.log) {
+                logger.initialize({
+                    exibirLogNoConsole: config.lib.log.exibirLogNoConsole ?? false,
+                    armazenarLogs: config.lib.log.armazenarLogs ?? false,
+                    pathLogs: config.lib.log.pathLogs
+                });
+            }
+
+            logger.info('Inicializando ambiente NFeWizard', {
+                context: 'Environment',
+                // config,
+            });
+
+        } catch (error) {
+            logger.error('Erro ao inicializar ambiente NFeWizard', error, { context: 'Environment' });
+            throw error;
+        }
+    }
 
     async loadEnvironment() {
+        /** 
+         * Inicializa Logger 
+         * */
+        this.LoggerInit(this.config);
+
         /** 
          * Verifica configurações obrigatórias 
          * */
         const validateEnvironment = new ValidateEnvironment();
         validateEnvironment.checkRequiredSettings(this.config);
-
 
         /** 
          * Carrega Certificados 
@@ -89,6 +114,9 @@ class Environment {
          * Armazena informação de ambiente carregado 
          * */
         this.isLoaded = true;
+
+        logger.info('Ambiente NFe Wizard inicializado com sucesso', { context: 'Environment' });
+
         return { axios }
     }
 

@@ -39,6 +39,7 @@ import XmlParser from './XmlParser';
 import xml2js from 'xml2js';
 import libxmljs from 'libxmljs';
 import xsdAssembler from 'xsd-assembler';
+import { logger } from '@Core/exceptions/logger';
 
 class Utility {
     environment;
@@ -91,75 +92,61 @@ class Utility {
      * Método responsável por gravar o XML como json
      */
     salvaJSON(props: SaveJSONProps) {
+        logger.info('Gravando JSON', {
+            context: 'XmlBuilder',
+        });
         const { fileName, metodo, path, data } = props;
-        try {
-            let pathJson = path;
+        let pathJson = path;
 
-            if (!pathJson || pathJson.trim() === '') {
-                pathJson = `../tmp/${metodo}/`
-            }
-
-            // Utiliza a função recursiva para encontrar a chave chNFe
-            // const chNFe = this.findInObj(json, 'chNFe');
-
-            this.createDir(pathJson);
-
-            this.createFile(pathJson, fileName, data, 'json');
-        } catch (error: any) {
-            throw new Error(error.message)
+        if (!pathJson || pathJson.trim() === '') {
+            pathJson = `../tmp/${metodo}/`
         }
+
+        // Utiliza a função recursiva para encontrar a chave chNFe
+        // const chNFe = this.findInObj(json, 'chNFe');
+
+        this.createDir(pathJson);
+
+        this.createFile(pathJson, fileName, data, 'json');
     }
 
     /**
      * Método responsável por gravar os XML recebidos em disco
      */
     salvaXMLFromJson(config: NFeWizardProps, xmlInJson: any, fileName = "", metodo = "") {
-        try {
-            let pathXml = config.dfe.pathXMLRetorno;
+        logger.info('Gravando XML do JSON', {
+            context: 'XmlBuilder',
+        });
+        let pathXml = config.dfe.pathXMLRetorno;
 
-            if (!pathXml || pathXml.trim() === '') {
-                pathXml = `../tmp/${metodo}/`
-            }
-
-            const { xml } = xmlInJson;
-
-            // Utiliza a função recursiva para encontrar a chave chNFe
-            const chNFe = this.findInObj(xmlInJson, 'chNFe');
-
-            this.createDir(pathXml);
-
-            this.createFile(pathXml, fileName || chNFe, xml, 'xml');
-
-        } catch (error: any) {
-            throw new Error(error.message)
+        if (!pathXml || pathXml.trim() === '') {
+            pathXml = `../tmp/${metodo}/`
         }
+
+        const { xml } = xmlInJson;
+
+        // Utiliza a função recursiva para encontrar a chave chNFe
+        const chNFe = this.findInObj(xmlInJson, 'chNFe');
+
+        this.createDir(pathXml);
+
+        this.createFile(pathXml, fileName || chNFe, xml, 'xml');
     }
 
     salvaXML(props: SaveXMLProps) {
+        logger.info('Gravando XML', {
+            context: 'XmlBuilder',
+        });
         const { fileName, metodo, path, data } = props;
-        try {
-            let pathXml = path;
 
-            if (!pathXml || pathXml.trim() === '') {
-                pathXml = `../tmp/${metodo}/`
-            }
+        let pathXml = path;
 
-            // busca a chave chNFe
-            // xml2js.parseString(xml, (err, result) => {
-            //     if (err) {
-            //         console.error('Erro ao parsear o XML para captura do chNFe:', err);
-            //     } else {
-            //         console.log(result);
-            //     }
-            // });
-
-            this.createDir(pathXml);
-
-            this.createFile(pathXml, fileName, data, 'xml');
-
-        } catch (error: any) {
-            throw new Error(error.message)
+        if (!pathXml || pathXml.trim() === '') {
+            pathXml = `../tmp/${metodo}/`
         }
+        this.createDir(pathXml);
+
+        this.createFile(pathXml, fileName, data, 'xml');
     }
 
     /**
@@ -404,6 +391,9 @@ class Utility {
     }
 
     verificaRejeicao(data: string, metodo: string, name?: string) {
+        logger.info('Verificando retorno', {
+            context: 'Utility',
+        });
         const responseInJson = this.xmlParser.convertXmlToJson(data, metodo);
 
         // Gera erro em caso de Rejeição
@@ -477,48 +467,40 @@ class Utility {
     }
 
     salvaConsulta(xmlConsulta: string, xmlFormated: string, metodo: string, name?: string) {
-        try {
-            const fileName = name || this.getRequestLogFileName(metodo, 'consulta');
-            const { armazenarXMLConsulta, pathXMLConsulta, armazenarXMLConsultaComTagSoap } = this.environment.config.dfe
-            const xmlConsultaASalvar = armazenarXMLConsultaComTagSoap ? xmlFormated : xmlConsulta;
+        const fileName = name || this.getRequestLogFileName(metodo, 'consulta');
+        const { armazenarXMLConsulta, pathXMLConsulta, armazenarXMLConsultaComTagSoap } = this.environment.config.dfe
+        const xmlConsultaASalvar = armazenarXMLConsultaComTagSoap ? xmlFormated : xmlConsulta;
 
-            if (armazenarXMLConsulta) {
-                this.salvaXML({
-                    data: xmlConsultaASalvar,
-                    fileName,
-                    metodo,
-                    path: pathXMLConsulta,
-                });
-            }
-        } catch (error: any) {
-            throw new Error(error.message)
+        if (armazenarXMLConsulta) {
+            this.salvaXML({
+                data: xmlConsultaASalvar,
+                fileName,
+                metodo,
+                path: pathXMLConsulta,
+            });
         }
     }
 
     salvaRetorno(xmlRetorno: string, responseInJson: GenericObject | undefined, metodo: string, name?: string) {
-        try {
-            const fileName = name || this.getRequestLogFileName(metodo, 'retorno');
-            const { armazenarXMLRetorno, pathXMLRetorno, armazenarRetornoEmJSON } = this.environment.config.dfe
+        const fileName = name || this.getRequestLogFileName(metodo, 'retorno');
+        const { armazenarXMLRetorno, pathXMLRetorno, armazenarRetornoEmJSON } = this.environment.config.dfe
 
-            if (armazenarXMLRetorno && xmlRetorno) {
-                this.salvaXML({
-                    data: xmlRetorno,
+        if (armazenarXMLRetorno && xmlRetorno) {
+            this.salvaXML({
+                data: xmlRetorno,
+                fileName,
+                metodo,
+                path: pathXMLRetorno,
+            });
+
+            if (armazenarRetornoEmJSON && responseInJson) {
+                this.salvaJSON({
+                    data: responseInJson,
                     fileName,
                     metodo,
                     path: pathXMLRetorno,
                 });
-
-                if (armazenarRetornoEmJSON && responseInJson) {
-                    this.salvaJSON({
-                        data: responseInJson,
-                        fileName,
-                        metodo,
-                        path: pathXMLRetorno,
-                    });
-                }
             }
-        } catch (error: any) {
-            throw new Error(error.message)
         }
     }
 }
