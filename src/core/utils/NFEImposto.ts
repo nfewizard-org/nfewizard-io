@@ -110,6 +110,7 @@ const ICMSMap: { [key: string]: keyof ICMS } = {
     '50': 'ICMS40',
     '51': 'ICMS51',
     '60': 'ICMS60',
+    '61': 'ICMS61',
     '70': 'ICMS70',
     '90': 'ICMS90',
     '101': 'ICMSSN101',
