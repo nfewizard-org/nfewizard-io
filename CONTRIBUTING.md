@@ -90,7 +90,7 @@ git remote -v
 npm install
 
 # Verificar se está tudo funcionando
-npm run build
+npm run build:rp
 ```
 
 ### 3. **Configuração do Certificado**
