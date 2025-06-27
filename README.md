@@ -80,62 +80,69 @@ const nfeWizard = new NFeWizard();
 
 // Inicializar
 await nfeWizard.NFE_LoadEnvironment({
-    config: {
-        dfe: {
-            baixarXMLDistribuicao: true,
-            pathXMLDistribuicao: "tmp/DistribuicaoDFe",
-            armazenarXMLAutorizacao: true,
-            pathXMLAutorizacao: "tmp/Autorizacao",
-            armazenarXMLRetorno: true,
-            pathXMLRetorno: "tmp/RequestLogs",
-            armazenarXMLConsulta: true,
-            pathXMLConsulta: "tmp/RequestLogs",
-            armazenarXMLConsultaComTagSoap: false,
-            armazenarRetornoEmJSON: true,
-            pathRetornoEmJSON: "tmp/DistribuicaoDFe",
+        config: {
+            dfe: {
+                baixarXMLDistribuicao: true,
+                pathXMLDistribuicao: "tmp/DistribuicaoDFe",
+                armazenarXMLAutorizacao: true,
+                pathXMLAutorizacao: "tmp/Autorizacao",
+                armazenarXMLRetorno: true,
+                pathXMLRetorno: "tmp/RequestLogs",
+                armazenarXMLConsulta: true,
+                pathXMLConsulta: "tmp/RequestLogs",
+                armazenarXMLConsultaComTagSoap: false,
+                armazenarRetornoEmJSON: false,
+                pathRetornoEmJSON: "tmp/DistribuicaoDFe",
 
-            pathCertificado: "certificado.pfx",
-            senhaCertificado: "123456",
-            UF: "SP",
-            CPFCNPJ: "99999999999999",
-        },
-        nfe: {
-            ambiente: 2,
-            versaoDF: "4.00",
-        },
-        email: {
-            host: 'smtp.example.com',
-            port: 587,
-            secure: false,
-            auth: {
-                user: 'seu-email@example.com',
-                pass: 'sua-senha'
+                pathCertificado: "certificado.pfx",
+                senhaCertificado: "1234",
+                UF: "SP",
+                CPFCNPJ: "99999999999999",
             },
-            emailParams: {
-                from: '"Seu Nome" <seu-email@example.com>',
-                to: 'destinatario@example.com',
+            nfe: {
+                ambiente: 2,
+                versaoDF: "4.00",
+                idCSC: 1,
+                tokenCSC: '99999999-9999-9999-9999-999999999999'
+            },
+            email: {
+                host: 'mail.provider.com.br',
+                port: 465,
+                secure: true, 
+                auth: {
+                    user: 'nfe.example@email.com.br',
+                    pass: '123456' 
+                },
+                emailParams: {
+                    from: 'Company <noreply.company@email.com>',
+                    to: 'customer.name@email.com.br',
+                }
+            },
+            lib: {
+                connection: {
+                    timeout: 30000,
+                },
+                log: {
+                    exibirLogNoConsole: true,
+                    armazenarLogs: true,
+                    pathLogs: 'tmp/Logs'
+                },
+                useOpenSSL: false,
+                useForSchemaValidation: 'validateSchemaJsBased',
             }
-        },
-        lib: {
-            connection: {
-                timeout: 30000,
-            },
-            useOpenSSL: false,
-            useForSchemaValidation: 'validateSchemaJsBased',
         }
+    });
+
+    // Exemplo de Utilização
+    const chaveNFe: DFePorChaveNFe = {
+        cUFAutor: 35,
+        CNPJ: '99999999999999',
+        consChNFe: {
+            chNFe: '00000000000000000000000000000000000000000000'
+        },
     }
-});
 
-// Exemplo de Utilização
-const chaveNFe: DFePorChaveNFe = {
-    cUFAutor: 35,
-    CNPJ: '99999999999999',
-    consChNFe: {
-        chNFe: '00000000000000000000000000000000000000000000'
-    },
-}
-
-await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
+    await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 ```
 
 ## Documentação
