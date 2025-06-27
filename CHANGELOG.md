@@ -1,6 +1,12 @@
 # Changelog
 
-## [0.3.29] - 2025-06-27
+## [0.4.0] - 2025-06-27
+
+### Fixed
+- **NFeWizardService**
+  - Retorna propagação de erro aos métodos do NFeWizardService
+
+## [0.3.29] - 2025-06-26
 
 ### Added
 - **Sistema de Logs Estruturado:**
