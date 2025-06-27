@@ -1,6 +1,7 @@
 import { NFeWizardProps } from '@Types';
 import https from 'https';
 import { HttpClient } from '@Interfaces';
+import { logger } from '@Core/exceptions/logger';
 
 class HttpClientBuilder<T> {
     private config: NFeWizardProps;
@@ -13,6 +14,9 @@ class HttpClientBuilder<T> {
         this.httpClient = httpClient;
     }
     createHttpClient(): T {
+        logger.info('Criando client HTTP', {
+            context: 'createHttpClient',
+        });
         try {
             const axiosConfig = {
                 headers: {
@@ -24,6 +28,7 @@ class HttpClientBuilder<T> {
 
             return this.httpClient.create(axiosConfig);
         } catch (error: any) {
+            logger.error('Erro ao criar client HTTP', error, { context: 'createHttpClient' });
             throw new Error(error.message);
         }
     }

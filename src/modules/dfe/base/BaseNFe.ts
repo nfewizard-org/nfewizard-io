@@ -22,6 +22,7 @@ import { AxiosInstance, AxiosResponse } from 'axios';
 import { SaveFilesImpl, GerarConsultaImpl } from '@Interfaces';
 import { GenericObject } from '@Types/Utils.js';
 import { logger } from '@Core/exceptions/logger.js';
+import { Agent } from 'http';
 
 abstract class BaseNFE {
     environment: Environment;
@@ -62,6 +63,38 @@ abstract class BaseNFE {
         return 'text/xml; charset=utf-8'
     }
 
+    protected async callWebService(xmlConsulta: string, webServiceUrl: string, ContentType: string, action: string, agent: Agent): Promise<AxiosResponse<any, any>> {
+        const startTime = Date.now();
+
+        const headers = {
+            'Content-Type': ContentType,
+        };
+
+        logger.http('Iniciando comunicação com o webservice', {
+            context: `BaseNFE`,
+            method: this.metodo,
+            url: webServiceUrl,
+            action,
+            headers,
+        });
+
+        const response = await this.axios.post(webServiceUrl, xmlConsulta, {
+            headers,
+            httpsAgent: agent
+        });
+
+        const duration = Date.now() - startTime;
+
+        logger.http('Comunicação concluída com sucesso', {
+            context: `BaseNFE`,
+            method: this.metodo,
+            duration: `${duration}ms`,
+            responseSize: response.data ? JSON.stringify(response.data).length : 0
+        });
+
+        return response;
+    }
+
     /**
      * Executa a requisição ao webservice SEFAZ
      * @param {any} [data] - Dados opcionais usados para gerar o XML em algumas subclasses.
@@ -74,22 +107,17 @@ abstract class BaseNFE {
         let responseInJson: GenericObject | undefined = undefined;
         let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
         const ContentType = this.setContentType();
+
         try {
             // Gerando XML específico
             xmlConsulta = this.gerarXml(data);
 
-            const { xmlFormated, agent, webServiceUrl } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
+            const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
 
             xmlConsultaSoap = xmlFormated;
             webServiceUrlTmp = webServiceUrl;
 
-            // Efetua requisição para o webservice NFEStatusServico
-            xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
-                headers: {
-                    'Content-Type': ContentType,
-                },
-                httpsAgent: agent
-            });
+            const xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);
 
             // Instanciando classe de utilitários com lib xml-js e convertendo XML para XmlParser
             const json = new XmlParser();
@@ -101,24 +129,6 @@ abstract class BaseNFE {
             }
 
             return responseInJson;
-        } catch (error: any) {
-            // const logConfig = this.environment.config.lib?.log;
-
-            // if (logConfig) {
-            //     const { armazenarLogs } = logConfig;
-
-            //     if (armazenarLogs) {
-            //         logger.error({
-            //             message: error.message,
-            //             webServiceUrl: webServiceUrlTmp,
-            //             contentType: ContentType,
-            //             xmlSent: xmlConsultaSoap,
-            //             xmlResponse: error.response?.data || 'Sem resposta',
-            //         });
-            //     }
-            // }
-            // console.log(error)
-            throw new Error(error.message)
         } finally {
             this.saveFiles.salvaArquivos(xmlConsulta, responseInJson, xmlRetorno, this.metodo, xmlConsultaSoap);
         }

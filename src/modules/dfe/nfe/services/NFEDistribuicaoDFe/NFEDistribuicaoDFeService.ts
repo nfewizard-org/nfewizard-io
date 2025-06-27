@@ -23,6 +23,7 @@ import { ConsultaNFe, GenericObject } from '@Types';
 import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
 import { GerarConsultaImpl, SaveFilesImpl } from '@Interfaces';
 import { logger } from '@Core/exceptions/logger.js';
+import { Agent } from 'http';
 
 class NFEDistribuicaoDFeService extends BaseNFE {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
@@ -35,6 +36,9 @@ class NFEDistribuicaoDFeService extends BaseNFE {
 
 
     gerarXmlNFeDistribuicaoDFe(data: ConsultaNFe) {
+        logger.info('Montando estrutuda do XML em JSON', {
+            context: 'NFEDistribuicaoDFeService',
+        });
         const { nfe: { ambiente } } = this.environment.getConfig();
 
         //  XML
@@ -47,9 +51,40 @@ class NFEDistribuicaoDFeService extends BaseNFE {
             ...data,
         }
 
-        return this.xmlBuilder.gerarXml(xmlObject, 'distDFeInt')
+        return this.xmlBuilder.gerarXml(xmlObject, 'distDFeInt', this.metodo)
     }
 
+    protected async callWebService(xmlConsulta: string, webServiceUrl: string, ContentType: string, action: string, agent: Agent): Promise<AxiosResponse<any, any>> {
+        const startTime = Date.now();
+
+        const headers = {
+            'Content-Type': ContentType,
+        };
+
+        logger.http('Iniciando comunicação com o webservice', {
+            context: `NFEDistribuicaoDFeService`,
+            method: this.metodo,
+            url: webServiceUrl,
+            action,
+            headers,
+        });
+
+        const response = await this.axios.post(webServiceUrl, xmlConsulta, {
+            headers,
+            httpsAgent: agent
+        });
+
+        const duration = Date.now() - startTime;
+
+        logger.http('Comunicação concluída com sucesso', {
+            context: `NFEDistribuicaoDFeService`,
+            method: this.metodo,
+            duration: `${duration}ms`,
+            responseSize: response.data ? JSON.stringify(response.data).length : 0
+        });
+
+        return response;
+    }
 
     async Exec(data: ConsultaNFe) {
         let xmlConsulta: string = '';
@@ -68,14 +103,7 @@ class NFEDistribuicaoDFeService extends BaseNFE {
             xmlConsultaSoap = xmlFormated;
             webServiceUrlTmp = webServiceUrl;
 
-            // Efetua requisição para o webservice NFEStatusServico
-            xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
-                headers: {
-                    'Content-Type': ContentType,
-                    'SOAPAction': action,
-                },
-                httpsAgent: agent
-            });
+            const xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);
 
             // Verifica se houve rejeição
             responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
@@ -102,22 +130,6 @@ class NFEDistribuicaoDFeService extends BaseNFE {
                 xMotivo,
                 filesList,
             }
-        } catch (error: any) {
-            // const logConfig = this.environment.config.lib?.log;
-
-            // if (logConfig) {
-            //     const { armazenarLogs } = logConfig;
-            //     if (armazenarLogs) {
-            //         logger.error({
-            //             message: error.message,
-            //             webServiceUrl: webServiceUrlTmp,
-            //             contentType: ContentType,
-            //             xmlSent: xmlConsultaSoap,
-            //             xmlResponse: error.response?.data || 'Sem resposta',
-            //         });
-            //     }
-            // }
-            throw new Error(error.message)
         } finally {
             // Salva XML de Consulta
             this.utility.salvaConsulta(xmlConsulta, xmlConsultaSoap, this.metodo);

@@ -21,30 +21,33 @@ import Utility from '@Utils/Utility.js';
 import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
 import { AxiosInstance } from 'axios';
 import { SaveFilesImpl, GerarConsultaImpl, NFEStatusServicoServiceImpl } from '@Interfaces';
+import { logger } from '@Core/exceptions/logger';
+
+const METHOD_NAME = 'NFEStatusServico';
 
 class NFEStatusServicoService extends BaseNFE implements NFEStatusServicoServiceImpl {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
-        super(environment, utility, xmlBuilder, 'NFEStatusServico', axios, saveFiles, gerarConsulta);
+        super(environment, utility, xmlBuilder, METHOD_NAME, axios, saveFiles, gerarConsulta);
     }
 
     protected gerarXml(): string {
-        try {
-            const { nfe: { ambiente, versaoDF }, dfe: { UF } } = this.environment.getConfig();
+        logger.info('Montando estrutuda do XML em JSON', {
+            context: 'NFEStatusServicoService',
+        });
+        const { nfe: { ambiente, versaoDF }, dfe: { UF } } = this.environment.getConfig();
 
-            const xmlObject = {
-                $: {
-                    versao: versaoDF,
-                    xmlns: 'http://www.portalfiscal.inf.br/nfe'
-                },
-                tpAmb: ambiente,
-                cUF: getCodIBGE(UF),
-                xServ: 'STATUS',
-            }
-
-            return this.xmlBuilder.gerarXml(xmlObject, 'consStatServ')
-        } catch (error: any) {
-            throw new Error(error.message)
+        const xmlObject = {
+            $: {
+                versao: versaoDF,
+                xmlns: 'http://www.portalfiscal.inf.br/nfe'
+            },
+            tpAmb: ambiente,
+            cUF: getCodIBGE(UF),
+            xServ: 'STATUS',
         }
+
+        return this.xmlBuilder.gerarXml(xmlObject, 'consStatServ', this.metodo)
+
     }
 }
 

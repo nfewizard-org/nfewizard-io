@@ -20,30 +20,30 @@ import XmlBuilder from '@Adapters/XmlBuilder';
 import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
 import { AxiosInstance } from 'axios';
 import { GerarConsultaImpl, SaveFilesImpl, NFEconsultaProtocoloServiceImpl } from '@Interfaces';
+import { logger } from '@Core/exceptions/logger';
 
-class NFEconsultaProtocoloService extends BaseNFE implements NFEconsultaProtocoloServiceImpl{
+class NFEconsultaProtocoloService extends BaseNFE implements NFEconsultaProtocoloServiceImpl {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         super(environment, utility, xmlBuilder, 'NFEConsultaProtocolo', axios, saveFiles, gerarConsulta);
     }
 
     protected gerarXml(chave: string): string {
-        try {
-            const { nfe: { ambiente, versaoDF } } = this.environment.getConfig();
+        logger.info('Montando estrutuda do XML em JSON', {
+            context: 'NFEconsultaProtocoloService',
+        });
+        const { nfe: { ambiente, versaoDF } } = this.environment.getConfig();
 
-            const xmlObject = {
-                $: {
-                    versao: versaoDF,
-                    xmlns: 'http://www.portalfiscal.inf.br/nfe'
-                },
-                tpAmb: ambiente,
-                xServ: 'CONSULTAR',
-                chNFe: chave,
-            }
-
-            return this.xmlBuilder.gerarXml(xmlObject, 'consSitNFe')
-        } catch (error: any) {
-            throw new Error(error.message)
+        const xmlObject = {
+            $: {
+                versao: versaoDF,
+                xmlns: 'http://www.portalfiscal.inf.br/nfe'
+            },
+            tpAmb: ambiente,
+            xServ: 'CONSULTAR',
+            chNFe: chave,
         }
+
+        return this.xmlBuilder.gerarXml(xmlObject, 'consSitNFe', this.metodo);
     }
 }
 

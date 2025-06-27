@@ -21,6 +21,7 @@ import { InutilizacaoData } from '@Types';
 import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
 import { AxiosInstance } from 'axios';
 import { GerarConsultaImpl, NFEInutilizacaoServiceImpl, SaveFilesImpl } from '@Interfaces';
+import { logger } from '@Core/exceptions/logger';
 
 class NFEInutilizacaoService extends BaseNFE implements NFEInutilizacaoServiceImpl {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
@@ -44,6 +45,9 @@ class NFEInutilizacaoService extends BaseNFE implements NFEInutilizacaoServiceIm
      * Método utilitário para criação do XML a partir de um Objeto
      */
     gerarXmlNFeInutilizacao(data: InutilizacaoData) {
+        logger.info('Montando estrutuda do XML em JSON', {
+            context: 'NFEInutilizacaoService',
+        });
         const { nfe: { ambiente } } = this.environment.getConfig();
 
         const {
@@ -92,7 +96,7 @@ class NFEInutilizacaoService extends BaseNFE implements NFEInutilizacaoServiceIm
         }
 
         // Gerar XML
-        const xml = this.xmlBuilder.gerarXml(xmlObject, 'inutNFe')
+        const xml = this.xmlBuilder.gerarXml(xmlObject, 'inutNFe', this.metodo)
 
         // Assinar XML
         return this.xmlBuilder.assinarXML(xml, 'infInut');

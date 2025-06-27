@@ -1,5 +1,50 @@
 # Changelog
 
+## [0.3.29] - 2025-06-27
+
+### Added
+- **Sistema de Logs Estruturado:**
+  - Implementado sistema de logs estruturado com suporte a JSONL (JSON Lines)
+  - Logs separados por tipo: `app.jsonl`, `error.jsonl`, `http.jsonl`
+  - Rotação automática de arquivos de log com controle de tamanho
+  - Logs contextuais com informações detalhadas para debug
+  - Suporte a diferentes níveis de log (info, error, http)
+
+- **Sistema de Tratamento de Erros (EM DESENVOLVIMENTO):**
+  - Criada classe `NFeError` para erros contextuais estruturados
+  - Implementado sistema de captura e log automático de erros
+  - Tratamento específico para erros de Axios, XML e rejeições SEFAZ
+  - Context enrichment com informações técnicas detalhadas
+
+- **Ferramentas de Debug:**
+  - Configuração completa de debug para VS Code com suporte TypeScript
+  - Arquivo `src/debug.ts` para facilitar testes durante desenvolvimento
+  - Breakpoints funcionais com source maps
+
+- **Documentação de Contribuição:**
+  - Guia completo de contribuição (`CONTRIBUTING.md`)
+  - Instruções detalhadas para setup do ambiente de desenvolvimento
+  - Padrões de código e boas práticas documentados
+  - Templates para Pull Requests e Issues
+
+### Changed
+- **Logging de Requisições HTTP:**
+  - Logs HTTP agora incluem métricas de performance (duração, tamanho)
+  - Informações detalhadas sobre headers, URLs e status codes
+
+- **Tratamento de Erros nos Services NFe:**
+  - Melhorado tratamento de exceções com contexto detalhado
+  - Logs automáticos com stack trace e informações técnicas
+  - Preservação do erro original com context enrichment
+
+### Fixed
+- Logs estruturados agora mantêm formato consistente entre console e arquivo
+
+### Technical Improvements
+- Transport customizado para Winston com suporte a JSONL
+- Filtros de log por nível e contexto
+- Sistema de debug não-intrusivo que não afeta produção
+
 ## [0.3.28] - 2025-06-26
 
 ### Changed

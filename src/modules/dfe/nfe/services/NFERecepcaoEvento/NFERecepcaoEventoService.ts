@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { AxiosInstance } from 'axios';
+import { AxiosInstance, AxiosResponse } from 'axios';
 import Environment from '@Modules/environment/Environment.js';
 import Utility from '@Utils/Utility.js';
 import XmlBuilder from '@Adapters/XmlBuilder.js';
@@ -22,6 +22,7 @@ import { EventoNFe, GenericObject, TipoEvento } from '@Types';
 import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
 import { GerarConsultaImpl, NFERecepcaoEventoServiceImpl, SaveFilesImpl } from '@Interfaces';
 import { logger } from '@Core/exceptions/logger';
+import { Agent } from 'http';
 
 class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServiceImpl {
     tpEvento: string;
@@ -123,6 +124,9 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
     }
 
     private separaEventosPorAmbiente(evento: TipoEvento[]) {
+        logger.info('Dividindo eventos por ambiente', {
+            context: 'NFERecepcaoEventoService',
+        });
         const nacional = evento.filter(event => ['210210', '210200', '210220', '210240', '110140'].includes(event.tpEvento));
         const regional = evento.filter(event => !['210210', '210200', '210220', '210240', '110140'].includes(event.tpEvento));
 
@@ -186,7 +190,7 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
             }
 
             // Gera primeira parte do XML
-            const eventoXML = this.xmlBuilder.gerarXml(eventoObject, 'evento')
+            const eventoXML = this.xmlBuilder.gerarXml(eventoObject, 'evento', this.metodo)
             const xmlAssinado = this.xmlBuilder.assinarXML(eventoXML, 'infEvento');
             if (ambienteNacional) {
                 this.xmlEventosNacionais.push(xmlAssinado);
@@ -206,7 +210,7 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
         }
 
         // Gera Segunda parte do XML
-        const xml = this.xmlBuilder.gerarXml(envEvento, 'envEvento')
+        const xml = this.xmlBuilder.gerarXml(envEvento, 'envEvento', this.metodo)
         if (ambienteNacional) {
             return xml.replace('[XML]', this.xmlEventosNacionais.join(''));
         }
@@ -214,6 +218,9 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
     }
 
     private trataRetorno(responseInJson: GenericObject) {
+        logger.info('Tratando retorno dos eventos', {
+            context: 'NFERecepcaoEventoService',
+        });
         const retornoEventos = this.utility.findInObj(responseInJson, 'retEvento')
 
         if (retornoEventos instanceof Array) {
@@ -245,6 +252,39 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
         return this.xMotivoPorEvento;
     }
 
+    protected async callWebService(xmlConsulta: string, webServiceUrl: string, ContentType: string, action: string, agent: Agent): Promise<AxiosResponse<any, any>> {
+        const startTime = Date.now();
+
+        const headers = {
+            'Content-Type': ContentType,
+            'SOAPAction': action,
+        };
+
+        logger.http('Iniciando comunicação com o webservice', {
+            context: `BaseNFE`,
+            method: this.metodo,
+            url: webServiceUrl,
+            action,
+            headers,
+        });
+
+        const response = await this.axios.post(webServiceUrl, xmlConsulta, {
+            headers,
+            httpsAgent: agent
+        });
+
+        const duration = Date.now() - startTime;
+
+        logger.http('Comunicação concluída com sucesso', {
+            context: `BaseNFE`,
+            method: this.metodo,
+            duration: `${duration}ms`,
+            responseSize: response.data ? JSON.stringify(response.data).length : 0
+        });
+
+        return response;
+    }
+
     protected async enviaEvento(evento: TipoEvento[], idLote: number, tipoAmbiente: number) {
         let xmlConsulta: string = '';
         let xmlConsultaSoap: string = '';
@@ -259,32 +299,10 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
 
             xmlConsultaSoap = xmlFormated;
             webServiceUrlTmp = webServiceUrl;
-            // Efetua requisição para o webservice NFEStatusServico
-            const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
-                headers: {
-                    'Content-Type': ContentType,
-                    'SOAPAction': action,
-                },
-                httpsAgent: agent
-            });
+
+            const xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);
 
             return xmlRetorno.data
-        } catch (error: any) {
-            // const logConfig = this.environment.config.lib?.log;
-
-            // if (logConfig) {
-            //     const { armazenarLogs } = logConfig;
-            //     if (armazenarLogs) {
-            //         logger.error({
-            //             message: error.message,
-            //             webServiceUrl: webServiceUrlTmp,
-            //             contentType: ContentType,
-            //             xmlSent: xmlConsultaSoap,
-            //             xmlResponse: error.response?.data || 'Sem resposta',
-            //         });
-            //     }
-            // }
-            throw new Error(error.message)
         } finally {
             // Salva XML de Consulta
             const fileName = ambienteNacional ? 'RecepcaoEvento[Nacional]-consulta' : 'RecepcaoEvento[Regional]-consulta'
@@ -304,6 +322,7 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
             let finalResponseInJson = []
 
             if (nacional.length > 0) {
+                
                 const retornoNacional = await this.enviaEvento(nacional, idLote, 0);
 
                 responseNacionalInJson = this.utility.verificaRejeicao(retornoNacional, this.metodo);

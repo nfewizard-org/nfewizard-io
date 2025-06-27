@@ -21,6 +21,7 @@ import Utility from '@Utils/Utility.js';
 import { GenericObject } from '@Types';
 import Environment from '@Modules/environment/Environment.js';
 import { AxiosResponse } from 'axios';
+import { logger } from '@Core/exceptions/logger';
 
 class DistribuicaoHandler {
     environment: Environment;
@@ -59,44 +60,46 @@ class DistribuicaoHandler {
     }
 
     deCompressDFeXML(loteDistDFeInt: AxiosResponse<any, any>, metodo: string, xmlConsulta: string) {
-        try {
-            const json = new XmlParser()
-            const files: string[] = [];
-            xml2js.parseString(loteDistDFeInt, (err, result) => {
-                if (err) {
-                    throw new Error(`Erro ao descomprimir o XML: ${err}`);
+        logger.info('Descomprimindo XML', {
+            context: 'DistribuicaoHandler',
+        });
+        const json = new XmlParser()
+        const files: string[] = [];
+        xml2js.parseString(loteDistDFeInt, (err, result) => {
+            if (err) {
+                throw new Error(`Erro ao descomprimir o XML: ${err}`);
+            }
+
+            const docZips = this.utility.findInObj(result, 'docZip');
+            docZips.forEach((docZip: any) => {
+                const xmlString = this.decodeDocZip(docZip);
+                const cleanedXml = this.removeSignatureTag(xmlString);
+
+                const parsedResult = this.parseXml(cleanedXml);
+                if (!parsedResult) return;
+
+                let chNFe = this.getChNFe(parsedResult);
+                let tipo = this.getTipo(parsedResult);
+                const nsu = docZip['$'].NSU;
+
+                if (parsedResult['procEventoNFe']) {
+                    const tpEvento = this.utility.findInObj(parsedResult, 'tpEvento');
+                    chNFe = `${chNFe}-event-${tpEvento}`;
+                    tipo = 'event';
                 }
 
-                const docZips = this.utility.findInObj(result, 'docZip');
-                docZips.forEach((docZip: any) => {
-                    const xmlString = this.decodeDocZip(docZip);
-                    const cleanedXml = this.removeSignatureTag(xmlString);
-
-                    const parsedResult = this.parseXml(cleanedXml);
-                    if (!parsedResult) return;
-
-                    let chNFe = this.getChNFe(parsedResult);
-                    let tipo = this.getTipo(parsedResult);
-                    const nsu = docZip['$'].NSU;
-
-                    if (parsedResult['procEventoNFe']) {
-                        const tpEvento = this.utility.findInObj(parsedResult, 'tpEvento');
-                        chNFe = `${chNFe}-event-${tpEvento}`;
-                        tipo = 'event';
-                    }
-
-                    const xmlDistribuicaoInJson = json.convertXmlToJson(cleanedXml, `${metodo}_${tipo}`, nsu);
-                    this.handleResponse(xmlDistribuicaoInJson, cleanedXml, chNFe);
-                    files.push(chNFe);
-                });
+                const xmlDistribuicaoInJson = json.convertXmlToJson(cleanedXml, `${metodo}_${tipo}`, nsu);
+                this.handleResponse(xmlDistribuicaoInJson, cleanedXml, chNFe);
+                files.push(chNFe);
             });
-            return files;
-        } catch (error: any) {
-            throw new Error(error.message);
-        }
+        });
+        return files;
     }
 
     decodeDocZip(docZip: any) {
+        logger.info('Decodificando DocZip', {
+            context: 'DistribuicaoHandler',
+        });
         const base64String = docZip['_'];
         let binaryString = atob(base64String);
         let bytes = new Uint8Array(binaryString.length);
@@ -138,9 +141,9 @@ class DistribuicaoHandler {
     }
 
     handleResponse(XMLDistribuicaoInJson: GenericObject, XMLDistribuicao: string, chNFe: string) {
-        
+
         this.salvaArquivos(XMLDistribuicaoInJson, XMLDistribuicao, chNFe)
-        
+
         // Gera erro em caso de Rejeição
         const xMotivo = this.utility.findInObj(XMLDistribuicaoInJson, 'xMotivo')
         if (xMotivo && (xMotivo.includes('Rejeição') || xMotivo.includes('Rejeicao'))) {
