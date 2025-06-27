@@ -3003,6 +3003,11 @@ export type dadosICMS = {
      */
     qBCMonoReten?: number | '';
     /**
+     * @param {number} qBCMonoRet - Quantidade tributada retida anteriormente
+     * Informar a BC do ICMS em quantidade conforme unidade de medida estabelecida na legislação.
+     */
+    qBCMonoRet?: number | '';
+    /**
      * @param {number} adRemICMSReten - Alíquota ad rem do imposto com retenção
      * Alíquota ad rem do ICMS sobre o biocombustível a ser adicionado para a composição da mistura vendida a consumidor final estabelecida na legislação para o produto.
      */
