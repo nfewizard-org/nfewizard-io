@@ -45,6 +45,11 @@
 - Filtros de log por nível e contexto
 - Sistema de debug não-intrusivo que não afeta produção
 
+## [0.3.28] - 2025-06-26
+
+### Changed
+- Adiciona ICMS61 ao método mountICMS.
+
 ## [0.3.27] - 2025-06-26
 
 ### Changed
