@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug NFe Wizard",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/src/testes.ts",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
+            "runtimeArgs": [],
+            "console": "integratedTerminal",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "sourceMaps": true,
+            "restart": true,
+            "protocol": "inspector",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug com ts-node",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/src/testes.ts",
+            "runtimeArgs": [
+                "--loader", "ts-node/esm"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "NODE_ENV": "development",
+                "NODE_OPTIONS": "--loader ts-node/esm"
+            },
+            "sourceMaps": true
+        }
+    ]
+}

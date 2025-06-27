@@ -92,15 +92,19 @@ class Utility {
      * Método responsável por gravar o XML como json
      */
     salvaJSON(props: SaveJSONProps) {
-        logger.info('Gravando JSON', {
-            context: 'XmlBuilder',
-        });
         const { fileName, metodo, path, data } = props;
+
         let pathJson = path;
 
         if (!pathJson || pathJson.trim() === '') {
             pathJson = `../tmp/${metodo}/`
         }
+
+        logger.info('Gravando JSON', {
+            context: 'XmlBuilder',
+            file: `${pathJson}/${fileName}.json`,
+        });
+
 
         // Utiliza a função recursiva para encontrar a chave chNFe
         // const chNFe = this.findInObj(json, 'chNFe');
@@ -114,14 +118,16 @@ class Utility {
      * Método responsável por gravar os XML recebidos em disco
      */
     salvaXMLFromJson(config: NFeWizardProps, xmlInJson: any, fileName = "", metodo = "") {
-        logger.info('Gravando XML do JSON', {
-            context: 'XmlBuilder',
-        });
         let pathXml = config.dfe.pathXMLRetorno;
 
         if (!pathXml || pathXml.trim() === '') {
             pathXml = `../tmp/${metodo}/`
         }
+
+        logger.info('Gravando XML do JSON', {
+            context: 'XmlBuilder',
+            file: `${pathXml}/${fileName}.json`,
+        });
 
         const { xml } = xmlInJson;
 
@@ -134,9 +140,16 @@ class Utility {
     }
 
     salvaXML(props: SaveXMLProps) {
-        logger.info('Gravando XML', {
-            context: 'XmlBuilder',
-        });
+        // const stack = new Error().stack?.split('\n');
+
+        // const callerLine = stack?.[2] || ''; // linha que chamou `salvaXML`
+        // const callerMatch = callerLine.match(/at (\S+)/);
+        // const callerName = callerMatch ? callerMatch[1] : 'desconhecido';
+
+        // logger.info('Gravando XML', {
+        //     context: 'XmlBuilder',
+        //     chamadoPor: callerName
+        // });
         const { fileName, metodo, path, data } = props;
 
         let pathXml = path;
@@ -144,6 +157,12 @@ class Utility {
         if (!pathXml || pathXml.trim() === '') {
             pathXml = `../tmp/${metodo}/`
         }
+
+        logger.info('Gravando XML', {
+            context: 'XmlBuilder',
+            file: `${pathXml}/${fileName}.json`,
+        });
+
         this.createDir(pathXml);
 
         this.createFile(pathXml, fileName, data, 'xml');
@@ -196,6 +215,18 @@ class Utility {
 
         const soapServices = servicos[chaveSoap];
         const soapUrl = this.getLatestURLConsulta(soapServices, method);
+
+        const soapInfo = {
+            method: methodUrl,
+            action: soapUrl,
+        };
+
+        logger.info(`Buscando URL's do webservice`, {
+            context: 'GerarConsulta',
+            chaveSoap,
+            chaveMethod,
+            NFeServicosUrl: 'src/core/config/NFeServicosUrl.json'
+        });
 
         if (!methodUrl || !soapUrl) {
             throw new Error("Método não encontrado no arquivo de configuração SOAP.");
@@ -391,7 +422,7 @@ class Utility {
     }
 
     verificaRejeicao(data: string, metodo: string, name?: string) {
-        logger.info('Verificando retorno', {
+        logger.info(`Verificando retorno [${metodo}]`, {
             context: 'Utility',
         });
         const responseInJson = this.xmlParser.convertXmlToJson(data, metodo);

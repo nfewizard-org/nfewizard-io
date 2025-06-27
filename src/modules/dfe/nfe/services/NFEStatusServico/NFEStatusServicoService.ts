@@ -46,7 +46,7 @@ class NFEStatusServicoService extends BaseNFE implements NFEStatusServicoService
             xServ: 'STATUS',
         }
 
-        return this.xmlBuilder.gerarXml(xmlObject, 'consStatServ')
+        return this.xmlBuilder.gerarXml(xmlObject, 'consStatServ', this.metodo)
 
     }
 }

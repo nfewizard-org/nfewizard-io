@@ -31,15 +31,20 @@ class GerarConsulta implements GerarConsultaImpl {
     }
 
     async gerarConsulta(xmlConsulta: string, metodo: string, ambienteNacional = false, versao = "", mod = "NFe", rootTag: boolean = false, tag = "") {
-        logger.info(`Buscando URL's do webservice`, {
-            context: 'GerarConsulta',
-        });
         try {
             const config = this.environment.getConfig();
             // Valida Schema
             if (config.lib?.useForSchemaValidation !== 'validateSchemaJsBased') {
+                logger.info(`Validando XML com xsd-schema-validator`, {
+                    context: 'GerarConsulta',
+                    obs: 'Validação necessita do JAVA instaldo no ambiente',
+                });
                 await this.utility.validateSchemaJavaBased(xmlConsulta, metodo);
             } else {
+                logger.info(`Validando XML com xsd-assembler`, {
+                    context: 'GerarConsulta',
+                    obs: 'Validação com nodejs',
+                });
                 await this.utility.validateSchemaJsBased(xmlConsulta, metodo);
             }
 

@@ -162,14 +162,40 @@ await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Debug NFe Wizard",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/src/index.ts",
+            "program": "${workspaceFolder}/src/testes.ts",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
+            "runtimeArgs": [],
+            "console": "integratedTerminal",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "sourceMaps": true,
+            "restart": true,
+            "protocol": "inspector",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug com ts-node",
+            "skipFiles": [
+                "<node_internals>/**"
             ],
+            "program": "${workspaceFolder}/src/testes.ts",
+            "runtimeArgs": [
+                "--loader", "ts-node/esm"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "NODE_ENV": "development",
+                "NODE_OPTIONS": "--loader ts-node/esm"
+            },
             "sourceMaps": true
         }
     ]
@@ -256,6 +282,7 @@ Agradecemos aos seguintes desenvolvedores por suas contribuições ao projeto:
     <td align="center"><a href="https://github.com/dliocode"><img src="https://github.com/dliocode.png" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>dliocode</b></sub></a></td>
     <td align="center"><a href="https://github.com/ThalesAugusto0"><img src="https://github.com/ThalesAugusto0.png" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>ThalesAugusto0</b></sub></a></td>
     <td align="center"><a href="https://github.com/cassioseffrin"><img src="https://github.com/cassioseffrin.png" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>cassioseffrin</b></sub></a></td>
+    <td align="center"><a href="https://www.linkedin.com/company/infinitedev/?originalSubdomain=br"><img src="https://media.licdn.com/dms/image/v2/C4D0BAQHwL-vRW4A0zw/company-logo_200_200/company-logo_200_200/0/1677157135085/infinitedev_logo?e=1756339200&v=beta&t=QH9t_R-s9-g-RDh-BM1eiu3eaO_d-F60Hk0xy6dy0M4" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>InfiniteDev</b></sub></a></td>
   </tr>
 </table>
 
@@ -268,7 +295,7 @@ Agradecemos imensamente aos nossos patrocinadores pela sua generosidade.
 <table>
   <tr>
     <td align="center"><a href="https://github.com/italosll"><img src="https://github.com/italosll.png" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>italosll</b></sub></a></td>
-    <!-- Adicione mais contribuidores conforme necessário -->
+    <td align="center"><a href="https://www.linkedin.com/company/infinitedev/?originalSubdomain=br"><img src="https://media.licdn.com/dms/image/v2/C4D0BAQHwL-vRW4A0zw/company-logo_200_200/company-logo_200_200/0/1677157135085/infinitedev_logo?e=1756339200&v=beta&t=QH9t_R-s9-g-RDh-BM1eiu3eaO_d-F60Hk0xy6dy0M4" width="50px;" style="border-radius:50%" alt=""/><br /><sub><b>InfiniteDev</b></sub></a></td>
   </tr>
 </table>
 

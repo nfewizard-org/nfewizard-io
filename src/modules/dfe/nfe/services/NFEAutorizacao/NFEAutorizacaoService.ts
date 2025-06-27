@@ -316,7 +316,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
                 }
             }
 
-            const eventoXML = this.xmlBuilder.gerarXml(xmlObject, 'NFe')
+            const eventoXML = this.xmlBuilder.gerarXml(xmlObject, 'NFe', this.metodo)
             const xmlAssinado = this.xmlBuilder.assinarXML(eventoXML, 'infNFe')
             this.xmlNFe.push(xmlAssinado);
         }
@@ -342,7 +342,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
         }
 
         // Gera base do XML
-        const xml = this.xmlBuilder.gerarXml(baseXML, 'enviNFe')
+        const xml = this.xmlBuilder.gerarXml(baseXML, 'enviNFe', this.metodo)
 
         return xml.replace('[XML]', this.xmlNFe.join(''));
     }

@@ -51,7 +51,7 @@ class NFEDistribuicaoDFeService extends BaseNFE {
             ...data,
         }
 
-        return this.xmlBuilder.gerarXml(xmlObject, 'distDFeInt')
+        return this.xmlBuilder.gerarXml(xmlObject, 'distDFeInt', this.metodo)
     }
 
     protected async callWebService(xmlConsulta: string, webServiceUrl: string, ContentType: string, action: string, agent: Agent): Promise<AxiosResponse<any, any>> {

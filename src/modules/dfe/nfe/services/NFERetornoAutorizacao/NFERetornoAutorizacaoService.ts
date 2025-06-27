@@ -38,7 +38,7 @@ class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoAutoriza
             tpAmb: ambiente,
             nRec: data
         }
-        return this.xmlBuilder.gerarXml(xmlObject, 'consReciNFe');
+        return this.xmlBuilder.gerarXml(xmlObject, 'consReciNFe', this.metodo);
     }
 
     /**
@@ -114,7 +114,7 @@ class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoAutoriza
                 },
                 _: '[XML]'
             }
-            let xml = this.xmlBuilder.gerarXml(baseXML, 'nfeProc')
+            let xml = this.xmlBuilder.gerarXml(baseXML, 'nfeProc', this.metodo)
             /**
              * Converte a tag protNFe do formato JSON para XML e armazena na string protTag.
              * Adiciona a tag protNFe (armazenada na string protTag) ao array contendo os dados das NFe.
@@ -124,7 +124,7 @@ class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoAutoriza
             const xmlCompleto = xmlNFe.find((item) => item.indexOf(formatedProtNFe[i].infProt[0].chNFe[0]) !== -1);
 
             if (xmlCompleto) {
-                const protTag = this.xmlBuilder.gerarXml(protNFe[i], 'protNFe')
+                const protTag = this.xmlBuilder.gerarXml(protNFe[i], 'protNFe', this.metodo)
                 const xmlFinal = [xmlCompleto]
                 xmlFinal.push(protTag)
 

@@ -43,7 +43,7 @@ class NFEconsultaProtocoloService extends BaseNFE implements NFEconsultaProtocol
             chNFe: chave,
         }
 
-        return this.xmlBuilder.gerarXml(xmlObject, 'consSitNFe');
+        return this.xmlBuilder.gerarXml(xmlObject, 'consSitNFe', this.metodo);
     }
 }
 

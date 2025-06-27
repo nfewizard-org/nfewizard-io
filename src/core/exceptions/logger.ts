@@ -1,6 +1,7 @@
 import winston from 'winston';
 import path from 'path';
 import fs from 'fs';
+import { JsonArrayTransport } from './JsonArrayTransporter.js';
 
 export interface LoggerConfig {
     exibirLogNoConsole: boolean;
@@ -33,6 +34,20 @@ class AppLogger {
         return AppLogger.instance;
     }
 
+    // Função para filtrar logs por nível específico
+    private filterOnly(level: string) {
+        return winston.format((info) => {
+            return info.level === level ? info : false;
+        })();
+    }
+
+    // Função para filtrar logs excluindo um nível específico
+    private filterExcluding(excludeLevel: string) {
+        return winston.format((info) => {
+            return info.level !== excludeLevel ? info : false;
+        })();
+    }
+
     public initialize(config: LoggerConfig): void {
         if (this.isInitialized) {
             return; // Já foi inicializado
@@ -40,7 +55,7 @@ class AppLogger {
 
         const transports: winston.transport[] = [];
 
-        // Configurar console se habilitado
+        // Configurar console se habilitado - formato em uma linha
         if (config.exibirLogNoConsole) {
             transports.push(
                 new winston.transports.Console({
@@ -48,41 +63,72 @@ class AppLogger {
                         winston.format.colorize(),
                         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
                         winston.format.printf(({ timestamp, level, message, context, method, ...meta }) => {
-                            const contextStr = context ? method ? `[${context}] [${method}] ` : `[${context}] ` : '';
+                            const contextStr = context ? `[${context}]` : '';
+                            const methodStr = method ? `[${method}]` : '';
+                            
+                            // JSON em uma linha para console
                             const metaStr = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : '';
-                            return `${timestamp} ${level}: ${contextStr}${message}${metaStr}`;
+                            return `${timestamp} ${level}: ${contextStr}${methodStr} ${message}${metaStr}`;
                         })
                     )
                 })
             );
         }
 
-        // Configurar arquivo se habilitado
+        // Configurar arquivo se habilitado - formato JSONL (uma linha por log)
         if (config.armazenarLogs && config.pathLogs) {
             // Criar diretório se não existir
             if (!fs.existsSync(config.pathLogs)) {
                 fs.mkdirSync(config.pathLogs, { recursive: true });
             }
 
-            // Log de aplicação (info, warn, error)
+            // Formato comum para arquivos - JSON em linha única
+            const fileFormat = winston.format.combine(
+                winston.format.timestamp(),
+                winston.format.errors({ stack: true }),
+                winston.format.json()
+            );
+
+            // Log de aplicação (info, warn, error, debug) - EXCLUINDO http
             transports.push(
-                new winston.transports.File({
-                    filename: path.join(config.pathLogs, 'app.log'),
+                new JsonArrayTransport({
+                    filename: 'app.jsonl',
+                    dirname: config.pathLogs,
+                    maxsize: 10 * 1024 * 1024, // 10MB
+                    maxFiles: 5,
                     format: winston.format.combine(
-                        winston.format.timestamp(),
-                        winston.format.json()
+                        this.filterExcluding('http'), // Excluir logs http
+                        fileFormat
                     )
                 })
             );
 
             // Log apenas de erros
             transports.push(
-                new winston.transports.File({
-                    filename: path.join(config.pathLogs, 'error.log'),
+                new JsonArrayTransport({
+                    filename: 'error.jsonl',
+                    dirname: config.pathLogs,
                     level: 'error',
+                    maxsize: 5 * 1024 * 1024, // 5MB
+                    maxFiles: 3,
                     format: winston.format.combine(
-                        winston.format.timestamp(),
-                        winston.format.json()
+                        this.filterOnly('error'), // Apenas logs de erro
+                        fileFormat
+                    )
+                })
+            );
+
+            // Log APENAS de requisições HTTP
+            transports.push(
+                new JsonArrayTransport({
+                    filename: 'http.jsonl',
+                    dirname: config.pathLogs,
+                    level: 'http',
+                    maxsize: 20 * 1024 * 1024, // 20MB
+                    maxFiles: 3,
+                    format: winston.format.combine(
+                        this.filterOnly('http'), // Apenas logs http
+                        fileFormat
                     )
                 })
             );
@@ -93,14 +139,13 @@ class AppLogger {
             level: 'debug',
             format: winston.format.combine(
                 winston.format.timestamp(),
-                winston.format.errors({ stack: true }),
-                winston.format.json()
+                winston.format.errors({ stack: true })
             ),
             transports
         });
 
         this.isInitialized = true;
-        this.info('Logger inicializado com sucesso', { 
+        this.info('Logger inicializado com sucesso', {
             context: 'Logger',
             config: {
                 console: config.exibirLogNoConsole,

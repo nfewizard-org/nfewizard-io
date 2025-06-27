@@ -96,7 +96,7 @@ class NFEInutilizacaoService extends BaseNFE implements NFEInutilizacaoServiceIm
         }
 
         // Gerar XML
-        const xml = this.xmlBuilder.gerarXml(xmlObject, 'inutNFe')
+        const xml = this.xmlBuilder.gerarXml(xmlObject, 'inutNFe', this.metodo)
 
         // Assinar XML
         return this.xmlBuilder.assinarXML(xml, 'infInut');

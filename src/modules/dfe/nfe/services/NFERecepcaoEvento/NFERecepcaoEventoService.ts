@@ -190,7 +190,7 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
             }
 
             // Gera primeira parte do XML
-            const eventoXML = this.xmlBuilder.gerarXml(eventoObject, 'evento')
+            const eventoXML = this.xmlBuilder.gerarXml(eventoObject, 'evento', this.metodo)
             const xmlAssinado = this.xmlBuilder.assinarXML(eventoXML, 'infEvento');
             if (ambienteNacional) {
                 this.xmlEventosNacionais.push(xmlAssinado);
@@ -210,7 +210,7 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
         }
 
         // Gera Segunda parte do XML
-        const xml = this.xmlBuilder.gerarXml(envEvento, 'envEvento')
+        const xml = this.xmlBuilder.gerarXml(envEvento, 'envEvento', this.metodo)
         if (ambienteNacional) {
             return xml.replace('[XML]', this.xmlEventosNacionais.join(''));
         }

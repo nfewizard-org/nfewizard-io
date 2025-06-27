@@ -351,7 +351,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                 }
             }
 
-            const eventoXML = this.xmlBuilder.gerarXml(xmlObject, 'NFe')
+            const eventoXML = this.xmlBuilder.gerarXml(xmlObject, 'NFe', this.metodo)
             let xmlAssinado = this.xmlBuilder.assinarXML(eventoXML, 'infNFe')
 
             if ([4, 9].includes(NFe.infNFe.ide.tpEmis)) {
@@ -411,7 +411,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         }
 
         // Gera base do XML
-        const xml = this.xmlBuilder.gerarXml(baseXML, 'enviNFe')
+        const xml = this.xmlBuilder.gerarXml(baseXML, 'enviNFe', this.metodo)
 
         return xml.replace('[XML]', this.xmlNFe.join(''));
     }
@@ -419,9 +419,13 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
     protected async callWebService(xmlConsulta: string, webServiceUrl: string, ContentType: string, action: string, agent: Agent): Promise<AxiosResponse<any, any>> {
         const startTime = Date.now();
 
+        const { nfe: { tokenCSC } } = this.environment.getConfig();
+
         const headers = {
             'Content-Type': ContentType,
-        };
+            'SOAPAction': action,
+            'CSC': tokenCSC,
+        }
 
         logger.http('Iniciando comunicação com o webservice', {
             context: `NFCEAutorizacaoService`,
@@ -472,14 +476,8 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             webServiceUrlTmp = webServiceUrl;
 
             // Efetua requisição para o webservice NFEStatusServico
-            const xmlRetorno = await this.axios.post(webServiceUrl, xmlFormated, {
-                headers: {
-                    'Content-Type': ContentType,
-                    'SOAPAction': action,
-                    'CSC': '9cf44de0-502d-4351-bf18-0843e6528e22',
-                },
-                httpsAgent: agent
-            });
+            const xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);
+
             /**
              * Verifica se houve rejeição no processamento do lote
              */
@@ -501,7 +499,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             logger.info('NFCe transmitida com sucesso', {
                 context: 'NFCEAutorizacaoService',
             });
-            
+
             return {
                 success: true,
                 xMotivo: xmlFinal.xMotivo,

@@ -87,7 +87,7 @@ export default class XmlParser {
     }
 
     convertXmlToJson(xml: string, metodo: string, nsu?: string): GenericObject {
-        logger.info('Convertendo XML para JSON', {
+        logger.info(`Convertendo XML para JSON [${metodo}]`, {
             context: 'XmlParser',
         });
         const jsonAsString = convert.xml2json(xml, {
