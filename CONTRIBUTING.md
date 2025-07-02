@@ -422,7 +422,7 @@ await nfeWizard.NFE_Autorizacao(nfe);          // ✅ Autorização OK
 Adicione ao arquivo `STATUS_HOMOLOGACAO.md`:
 
 
-### 3. **Reportando Resultados**
+### 3. **Issues E PRs**
 
 Ao abrir issue ou PR, inclua:
 
@@ -432,10 +432,15 @@ Ao abrir issue ou PR, inclua:
 - Certificado: A1
 - Método: NFE_ConsultaStatusServico
 - Status: ✅ Funcionando / ❌ Com erro
+```
 
 ## Logs Relevantes
+
+Inclua também os logs gerados no diretório configurado em `pathLogs`.
+Lembre-se de adicionar os logs **app.jsonl**, **error.jsonl** e **http.jsonl**.
+
 ```jsonl
-{"level":"error","message":"..."}
+{"context":"NFE_ConsultaProtocolo","error":{"message":"Rejeição: Consumo Indevido",...}
 ```
 
 ## Evidências

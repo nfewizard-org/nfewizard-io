@@ -1,20 +1,41 @@
-# NFeWizard-io
+# NFeWizard-io 🪄
 
-## 🚨 ATENÇÃO: Esta biblioteca foi modularizada! 🚨
+## Atenção: Ao abrir uma issue certifique-se de adicionar as informações abaixo:
 
-A biblioteca nfewizard-io agora está dividida em módulos menores para facilitar a manutenção e otimizar o tamanho do pacote.
+Ao abrir issue ou PR, inclua:
 
-⚠️ A partir da versão 1.0.0 este repositório será responsável apenas pelos serviços de NF-e.  Para os serviços de NFC-e utilize o `@nfewizard-io/nfce`.
+```markdown
+## Parametrização
+- UF: SP
+- Certificado: A1
+- Método: NFE_ConsultaStatusServico
+- Status: ✅ Funcionando / ❌ Com erro
+```
 
-## 📦 Como instalar os novos pacotes?
+## Logs Relevantes
+
+Inclua também os logs gerados no diretório configurado em `pathLogs`.
+Lembre-se de adicionar os logs **app.jsonl**, **error.jsonl** e **http.jsonl**.
+
+```jsonl
+{"context":"NFE_ConsultaProtocolo","error":{"message":"Rejeição: Consumo Indevido",...}
+```
+
+<!-- ## 🚨 ATENÇÃO: Esta biblioteca será modularizada! 🚨 -->
+
+<!-- A biblioteca nfewizard-io agora está dividida em módulos menores para facilitar a manutenção e otimizar o tamanho do pacote.
+
+⚠️ A partir da versão 1.0.0 este repositório será responsável apenas pelos serviços de NF-e.  Para os serviços de NFC-e utilize o `@nfewizard-io/nfce`. -->
+
+<!-- ## 📦 Como instalar os novos pacotes?
 
 ### Para utilizar serviços relacionados à NFCe instale o modulo:
 ```typescript
 npm i @nfewizard-io/nfce
 ```
-🚀 Pronto, agora você pode decidir utilizar apenas os serviços que precisa!
+🚀 Pronto, agora você pode decidir utilizar apenas os serviços que precisa! -->
 
-## Sobre
+## Sobre a Biblioteca
 NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
 
 - **Autorização (Emissão de NFe e NFCe)**: Submissão de Notas Fiscais Eletrônicas e Notas Fiscais de Consumidor Eletrônica
