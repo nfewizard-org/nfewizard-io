@@ -6,7 +6,7 @@
     * 
     * MODIFICATION LOG
     * - Version         : 1.0.0
-    * - Date            : 17/11/2024
+    * - Date            : 3/7/2025
     * - Author          : Cassio Seffrin
     * - Modification    : 
 **/
@@ -281,20 +281,53 @@ class NFCEGerarDanfe {
             x += columnWidths.unit + columnSpacing;
             this.doc.text('Total', x, top, { width: columnWidths.total, align: 'right' });
         };
+
         const row = (top: number, item: DetProd) => {
             const quant = parseFloat(String(item.prod.qCom || item.prod.qTrib)).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
             const valUnit = parseFloat(String(item.prod.vUnCom || item.prod.vUnTrib || '0')).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             const valLiq = parseFloat(String(item.prod.vProd || '0')).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
             let x = startX;
-            this.doc.font('Arial').fontSize(this.fontSize).text(item.prod.cProd, x, top, { width: columnWidths.codigo });
+            this.doc.font('Arial').fontSize(this.fontSize).text(item.prod.cProd, x, top, {
+                width: columnWidths.codigo,
+                align: 'left' as const
+            });
+
             x += columnWidths.codigo + columnSpacing;
-            this.doc.text(item.prod.xProd.slice(0, 24), x, top, { width: columnWidths.descricao });
+
+
+            const descricao = item.prod.xProd.slice(0, 120); // Limite de 120 caracteres
+            const textWidth = this.doc.widthOfString(descricao);
+            const lineCount = Math.ceil(textWidth / columnWidths.descricao);
+
+            const descricaoOptions = {
+                width: columnWidths.descricao,
+                align: 'left' as const,
+                height: this.itemHeight * lineCount
+            };
+
+            this.doc.text(descricao, x, top, descricaoOptions);
             x += columnWidths.descricao + columnSpacing;
-            this.doc.text(`${quant} ${item.prod.uCom}`, x, top, { width: columnWidths.qtdeUn, align: 'right' });
+
+            this.doc.text(`${quant} ${item.prod.uCom}`, x, top, {
+                width: columnWidths.qtdeUn,
+                align: 'right'
+            });
             x += columnWidths.qtdeUn + columnSpacing;
-            this.doc.text(valUnit, x, top, { width: columnWidths.unit, align: 'right' });
+
+            this.doc.text(valUnit, x, top, {
+                width: columnWidths.unit,
+                align: 'right'
+            });
             x += columnWidths.unit + columnSpacing;
-            this.doc.text(valLiq, x, top, { width: columnWidths.total, align: 'right' });
+
+            this.doc.text(valLiq, x, top, {
+                width: columnWidths.total,
+                align: 'right'
+            });
+
+
+            return descricaoOptions.height;
         };
         header(tableTop);
         let y = tableTop + this.itemHeight;
@@ -477,23 +510,25 @@ class NFCEGerarDanfe {
         ].filter(Boolean);
         const enderecoStr = enderecoPartes.join(', ');
         if (CNPJCPF && CNPJCPF !== '') {
-            this.doc.font('Arial-bold').text(`CONSUMIDOR - DOC ${CNPJCPF}`, 75, tableTop, {
-                align: 'left',
-                lineGap: 1,
-                continued: true,
-            }).font('Arial')
-                .text(` - ${xNome} -`, {
-                    lineGap: 1,
-                    continued: true,
+            this.doc.font('Arial-bold')
+                .text(`CONSUMIDOR - DOC ${CNPJCPF}`, 75, tableTop, {
+                    align: 'left',
+                    lineGap: 1
                 })
-                .text(enderecoStr); 
+                .font('Arial')
+                .text(` - ${xNome}`, {
+                    lineGap: 1
+                });
             tableTop = this.doc.y + 4;
+            this.doc.text(enderecoStr, 75, tableTop);
+            tableTop = this.doc.y + 8;
         } else {
             this.doc.text('CONSUMIDOR NÃO IDENTIFICADO', 75, tableTop, {
                 align: 'left',
             });
-            tableTop = this.doc.y + 4;
+            tableTop = this.doc.y + 8;
         }
+
 
         const data = parseISO(this.ide.dhEmi);
         const dtaEmi = format(data, 'dd/MM/yyyy HH:mm:ss');
@@ -504,10 +539,11 @@ class NFCEGerarDanfe {
             dtaAut = format(dataAut, 'dd/MM/yyyy HH:mm:ss');
         }
 
-        this.doc.font('Arial-bold').text(`NCF-e nº ${this.ide.nNF} Série ${this.ide.serie} ${dtaEmi}`, 75, tableTop, {
-            align: 'left',
-            lineGap: 1,
-        })
+        this.doc.font('Arial-bold')
+            .text(`NFC-e nº ${this.ide.nNF} Série ${this.ide.serie} ${dtaEmi}`, 75, tableTop, {
+                align: 'left',
+                lineGap: 1
+            })
             .text('Protocolo de autorização: ', {
                 continued: true,
                 lineGap: 1,
