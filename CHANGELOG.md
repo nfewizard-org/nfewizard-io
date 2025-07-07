@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.4] - 2025-07-06
+
+### Fixed
+- **package**
+  - Corrige versão para build
+
 ## [0.4.3] - 2025-07-06
 
 ### Fixed
