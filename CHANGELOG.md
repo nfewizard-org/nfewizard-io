@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.3] - 2025-07-06
+
+### Fixed
+- **NFCEGerarDanfe**
+  - Correções no Layout do DANFE NFC-e
+
 ## [0.4.0] - 2025-06-27
 
 ### Fixed
