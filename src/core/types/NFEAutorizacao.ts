@@ -403,6 +403,8 @@ export type Ide = {
     /**
      * @param {number} tpImp - Formato de Impressão do DANFE
      * 0=Sem geração de DANFE; 1=DANFE normal, Retrato; 2=DANFE normal, Paisagem; 3=DANFE Simplificado; 4=DANFE NFC-e; 5=DANFE NFC-e em mensagem eletrônica (o envio de mensagem eletrônica pode ser feita de forma simultânea com a impressão do DANFE; usar o tpImp=5 quando esta for a única forma de disponibilização do DANFE).
+     * 
+     * NT_2024.002
      */
     tpImp: number;
     /**
@@ -1471,7 +1473,7 @@ export type Imposto = {
     /**
      * @param {ICMS} ICMS - Informações do ICMS da Operação própria e ST
      * 
-     * NT-RT_2024.0002 - ICMS passa a ser opcional
+     * NT-RT_2024.0002/NT_2024.002 - ICMS passa a ser opcional
      * NT-RT_2024.0002 - Adiciona GRUPO UB - Informações dos tributos IBS / CBS e Imposto Seletivo
      */
     ICMS?: ICMS;
@@ -1540,13 +1542,26 @@ export type Imposto = {
  */
 export type IBSCBSSel = {
     /**
+     * @param {seletivo} seletivo - Informações do Imposto Seletivo
+     */
+    seletivo?: seletivo;
+    /**
      * @param {string} CST - Código de Situação Tributária do IBS e CBS
+     * NT_2024.002 - Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IMPOSTO SELETIVO
      */
     CST?: string;
     /**
      * @param {string} cClassTrib - Código de Classificação Tributária do IBS e CBS
+     * NT_2024.002 - Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IMPOSTO SELETIVO
      */
     cClassTrib?: string;
+    /**
+     * @param {string} indPerecimento - Indicador de Perecimento, furto, roubo ou extravio
+     * “1”= Perecimento, roubo, furto ou extravio do item
+     * 
+     * NT_2024.002
+     */
+    indPerecimento?: string;
     /**
      * @param {gIBSCBS} gIBSCBS - Grupo de Informações do IBS, CBS e Imposto Seletivo
      */
@@ -1555,10 +1570,6 @@ export type IBSCBSSel = {
      * @param {gIBSCBSMono} gIBSCBSMono - Grupo de Informações do IBS e CBS em operações com imposto monofásico
      */
     gIBSCBSMono?: gIBSCBSMono;
-    /**
-     * @param {seletivo} seletivo - Informações do Imposto Seletivo
-     */
-    seletivo?: seletivo;
 }
 
 /**
@@ -1569,10 +1580,12 @@ export type IBSCBSSel = {
 export type seletivo = {
     /**
      * @param {string} CST - Código de Situação Tributária do Imposto Seletivo
+     * NT_2024.002 - Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IMPOSTO SELETIVO
      */
     CST: string;
     /**
      * @param {string} cClassTrib - Código de Classificação Tributária do Imposto Seletivo
+     * NT_2024.002 - Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IMPOSTO SELETIVO
      */
     cClassTrib: string;
     /**
@@ -1637,8 +1650,50 @@ export type gIBSCBS = {
      * @param {gCBS} gCBS - Grupo de Informações da CBS
      */
     gCBS: gCBS;
+    /**
+     * @param {gIBSCredPres} gIBSCredPres - Grupo de Informações da CBS
+     */
+    gIBSCredPres: gIBSCredPres;
 }
 
+/**
+ * [gIBSCredPres] 
+ * Grupo de Informações do Crédito Presumidoreferente ao IBS [UB55]
+ * 
+ * Grupo de Informações do Crédito Presumido do IBS, quando aproveitado pelo emitente do documento. 
+ * Exemplos: 
+ * 1 - Aquisição de PR não contribuinte. 
+ * 2 - Tomador de serviço de transporte de TAC PF não contrib. 
+ * 3 - Aquisição de pessoa física com destino a reciclagem. 
+ * 4 - Aquisição de bens móveis de PF não contrib. para revenda (veículos / brecho). 
+ * 5 - Regime opcional para cooperativa.
+ * 
+ * NT_2024.002
+ */
+export type gIBSCredPres = {
+    /**
+     * @param {number} cCredPres - Código de Classificação do Crédito Presumido [UB56]
+     * 
+     * Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO DO CRÉDITO PRESUMIDO
+     */
+    cCredPres: number;
+    /**
+     * @param {number} pCredPres - Percentual do Crédito Presumido [UB57]
+     */
+    pCredPres: number;
+    /**
+     * @param {number} vCredPres - Valor do Crédito Presumido [UB58]
+     */
+    vCredPres: number;
+    /**
+     * @param {number} vCredPres - Valor do Crédito Presumido em condição suspensiva [UB59]
+     * 
+     * Valor do Crédito Presumido Condição Suspensiva. 
+     * Preencher apenas para cClassCredPres com indicação de Condição Suspensiva. 
+     * Incluir regra de validação para permitir apenas com o código 4 - Aquisição de bens móveis de PF não contrib. para revenda (veículos / brecho).
+     */
+    vCredPresCondSus: number;
+}
 /**
  * [gIBSUF] 
  * Grupo de Informações do IBS para a UF
@@ -1653,10 +1708,6 @@ export type gIBSUF = {
      * @param {number} vTribOP - Valor bruto do tributo na operação
      */
     vTribOP: number;
-    /**
-     * @param {number} vIBSUF - Valor do IBS de competência da UF
-     */
-    vIBSUF: number;
     /**
      * @param {gCredPres} gCredPres - Grupo de Informações do Crédito Presumido
      */
@@ -1677,6 +1728,10 @@ export type gIBSUF = {
      * @param {gDeson} gDeson - Grupo de informações da Desoneração
      */
     gDeson?: gDeson;
+    /**
+     * @param {number} vIBSUF - Valor do IBS de competência da UF
+     */
+    vIBSUF: number;
 }
 
 /**
@@ -1694,10 +1749,6 @@ export type gIBSMun = {
      */
     vTribOP: number;
     /**
-     * @param {number} vIBSMun - Valor do IBS de competência dos Municípios
-     */
-    vIBSMun: number;
-    /**
      * @param {gCredPres} gCredPres - Grupo de Informações do Crédito Presumido
      */
     gCredPres?: gCredPres;
@@ -1717,6 +1768,10 @@ export type gIBSMun = {
      * @param {gDeson} gDeson - Grupo de informações da Desoneração
      */
     gDeson?: gDeson;
+    /**
+     * @param {number} vIBSMun - Valor do IBS de competência dos Municípios
+     */
+    vIBSMun: number;
 }
 
 /**
@@ -1734,10 +1789,6 @@ export type gCBS = {
      */
     vTribOp: number;
     /**
-     * @param {number} vCBS - Valor da CBS
-     */
-    vCBS: number;
-    /**
      * @param {gCredPres} gCredPres - Grupo de Informações do Crédito Presumido
      */
     gCredPres?: gCredPres;
@@ -1757,6 +1808,10 @@ export type gCBS = {
      * @param {gDeson} gDeson - Grupo de informações da Desoneração
      */
     gDeson?: gDeson;
+    /**
+     * @param {number} vCBS - Valor da CBS
+     */
+    vCBS: number;
 }
 
 /**
@@ -1827,10 +1882,14 @@ export type gRed = {
 export type gDeson = {
     /**
      * @param {string} CST - Código de Situação Tributária do IBS e CBS
+     * 
+     * NT_2024.002 - Informado como se a operação fosse tributada integralmente. Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IBS E DA CBS
      */
     CST?: string;
     /**
      * @param {string} cClassTrib - Código de Classificação Tributária do IBS e CBS
+     * 
+     * NT_2024.002 - Informado como se a operação fosse tributada integralmente. Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IBS E DA CBS
      */
     cClassTrib?: string;
     /**
