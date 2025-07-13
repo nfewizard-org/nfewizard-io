@@ -237,7 +237,9 @@ export type Ide = {
     tpAmb: number;
     /**
      * @param {number} finNFe - Finalidade de emissão da NF-e
-     * 1=NF-e normal; 2=NF-e complementar; 3=NF-e de ajuste; 4=Devolução de mercadoria.
+     * 1=NF-e normal; 2=NF-e complementar; 3=NF-e de ajuste; 4=Devolução de mercadoria; 5=Nota de Crédito; 6=Nota de Débito;
+     * 
+     * NT-RT_2024.0002 - Adicione finNFe 5 e 6
      */
     finNFe: number;
     /**
@@ -1245,8 +1247,11 @@ export type OrigComb = {
 export type Imposto = {
     /**
      * @param {ICMS} ICMS - Informações do ICMS da Operação própria e ST
+     * 
+     * NT-RT_2024.0002 - ICMS passa a ser opcional
+     * NT-RT_2024.0002 - Adiciona GRUPO UB - Informações dos tributos IBS / CBS e Imposto Seletivo
      */
-    ICMS: ICMS;
+    ICMS?: ICMS;
     /**
      * @param {ICMSUFDest} ICMSUFDest - Informação do ICMS Interestadual
      * Grupo a ser informado nas vendas interestaduais para consumidor final, 
@@ -1297,6 +1302,46 @@ export type Imposto = {
      * @param {number} vTotTrib - Valor aproximado total de tributos federais, estaduais e municipais.
      */
     vTotTrib?: number;
+    /**
+     * @param {IBSCBSSel} IBSCBSSel - Informações do Imposto de Bens e Serviços - IBS, Contribuição de Bens e Serviços - CBS e Imposto Seletivo
+     */
+    IBSCBSSel?: IBSCBSSel;
+}
+
+/**
+ * [IBSCBSSel] 
+ * Informações do Imposto de Bens e Serviços - IBS, Contribuição de Bens e Serviços - CBS e Imposto Seletivo
+ * Grupo UB
+ * 
+ * NT-RT_2024.0002
+ */
+export type IBSCBSSel = {
+    /**
+     * @param {'00'} CST - Código de Situação Tributária do Imposto Seletivo
+     */
+    CST: string;
+    /**
+     * @param {string} cClassTrib - Código de Classificação Tributária do Imposto Seletivo
+     */
+    cClassTrib: string;
+    /**
+     * @param {string} gIBSCBS - Grupo de Informações do IBS, CBS e Imposto Seletiv
+     */
+    gIBSCBS: gIBSCBS;
+}
+
+/**
+ * [gIBSCBS] 
+ * Grupo de Informações do IBS, CBS e Imposto Seletiv
+ * Grupo gIBSCBS
+ * 
+ * NT-RT_2024.0002
+ */
+export type gIBSCBS = {
+    /**
+     * @param {'00'} CST - Código de Situação Tributária do Imposto Seletivo
+     */
+    CST: string;
 }
 
 /**
