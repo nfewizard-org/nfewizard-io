@@ -143,6 +143,183 @@ export type InfNFe = {
      * Grupo para informações da solicitação da NFF
      */
     infSolicNFF?: InfSolicNFF;
+    /**
+     * @param {IBSCBSSelTot} IBSCBSSelTot - Totais da NF-e com IBS, CBS e IS
+     * O grupo de valores totais da NF-e deve ser informado com o somatório do campo correspondente dos itens.
+     * O IBS, a CBS e o IS são por fora, por isso seus valores devem ser adicionados ao valor total da NF.
+     * 
+     * NT-RT_2024.002
+     */
+    IBSCBSSelTot?: IBSCBSSelTot;
+}
+
+/**
+ * [IBSCBSSelTot] 
+ * Totais da NF-e com IBS, CBS e IS
+ * W31
+ */
+export type IBSCBSSelTot = {
+    /**
+     * @param {gSel} gSel - Grupo total do imposto seletivo
+     */
+    gSel?: gSel;
+    /**
+     * @param {number} vBCIBSCBS - Valor total da BC do IBS e da CBS
+     */
+    vBCIBSCBS: number;
+    /**
+     * @param {gIBS} gIBS - Grupo total do IBS
+     */
+    gIBS: gIBS;
+}
+
+/**
+ * [gSel] 
+ * Grupo total do imposto seletivo
+ * W32
+ */
+export type gSel = {
+    /**
+     * @param {number} vBCSel - Total da base de cálculo do imposto seletivo
+     */
+    vBCSel: number;
+    /**
+     * @param {number} vImpSel - Total do imposto seletivo
+     */
+    vImpSel: number;
+}
+
+/**
+ * [gIBS] 
+ * Grupo total do IBS
+ * W36
+ */
+export type gIBS = {
+    /**
+     * @param {gIBSUFTot} gIBSUFTot - Grupo total do IBS da UF
+     */
+    gIBSUFTot: gIBSUFTot;
+    /**
+     * @param {gIBSMunTot} gIBSMunTot - Grupo total do IBS do Município
+     */
+    gIBSMunTot: gIBSMunTot;
+    /**
+     * @param {gCBSTot} gCBS - Grupo total da CBS
+     */
+    gCBS: gCBSTot;
+    /**
+     * @param {gMono} gMono - Grupo total da Monofasia
+     */
+    gMono?: gMono;
+}
+
+/**
+ * [gIBSUFTot] 
+ * Grupo total do IBS da UF
+ * W37
+ */
+export type gIBSUFTot = {
+    /**
+     * @param {number} vCresPres - Valor total do crédito presumido
+     */
+    vCresPres: number;
+    /**
+     * @param {number} vDif - Valor total do diferimento
+     */
+    vDif: number;
+    /**
+     * @param {number} vDevTrib - Valor total de devolução de tributos
+     */
+    vDevTrib: number;
+    /**
+     * @param {number} vDeson - Valor total de desoneração
+     */
+    vDeson: number;
+    /**
+     * @param {number} vIBSUF - Valor total do IBS da UF
+     */
+    vIBSUF: number;
+}
+
+/**
+ * [gIBSMunTot] 
+ * Grupo total do IBS do Município
+ * W43
+ */
+export type gIBSMunTot = {
+    /**
+     * @param {number} vCresPres - Valor total do crédito presumido
+     */
+    vCresPres: number;
+    /**
+     * @param {number} vDif - Valor total do diferimento
+     */
+    vDif: number;
+    /**
+     * @param {number} vDevTrib - Valor total de devolução de tributos
+     */
+    vDevTrib: number;
+    /**
+     * @param {number} vDeson - Valor total de desoneração
+     */
+    vDeson: number;
+    /**
+     * @param {number} vIBSMun - Valor total do IBS do Município
+     */
+    vIBSMun: number;
+    /**
+     * @param {number} vIBSTot - Valor total do IBS
+     */
+    vIBSTot: number;
+}
+
+/**
+ * [gCBSTot] 
+ * Grupo total da CBS
+ * W50
+ */
+export type gCBSTot = {
+    /**
+     * @param {number} vCresPres - Valor total do crédito presumido
+     */
+    vCresPres: number;
+    /**
+     * @param {number} vDif - Valor total do diferimento
+     */
+    vDif: number;
+    /**
+     * @param {number} vDevTrib - Valor total de devolução de tributos
+     */
+    vDevTrib: number;
+    /**
+     * @param {number} vDeson - Valor total de desoneração
+     */
+    vDeson: number;
+    /**
+     * @param {number} vCBS - Valor total da CBS
+     */
+    vCBS: number;
+}
+
+/**
+ * [gMono] 
+ * Grupo total da Monofasia
+ * W56
+ */
+export type gMono = {
+    /**
+     * @param {number} vTotIBSMono - Total do IBS monofásico
+     */
+    vTotIBSMono: number;
+    /**
+     * @param {number} vTotCBSMono - Total da CBS monofásica
+     */
+    vTotCBSMono: number;
+    /**
+     * @param {number} vTotNF - Valor total da NF-e com IBS / CBS / IS
+     * O IBS, a CBS e o IS são por fora, por isso seus valores devem ser adicionados ao valor total da NF.
+     */
+    vTotNF: number;
 }
 
 
