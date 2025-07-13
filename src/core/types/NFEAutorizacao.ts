@@ -388,10 +388,18 @@ export type Ide = {
      */
     idDest: number;
     /**
-     * @param {number} cMunFG - Código do Município de Ocorrência do Fato Gerador
+     * @param {number} cMunFG - Código do Município de Ocorrência do Fato Gerador do ICMS
      * Informar o município de ocorrência do fato gerador do ICMS. Utilizar a Utilizar a Tabela de código de Município do IBGE
      */
     cMunFG: number;
+    /**
+     * @param {number} cMunFGIBS - Código do Município de consumo, fato gerador do IBS / CBS
+     * Informar o município de ocorrência dofato gerador do fato gerador do IBS /CBS.
+     * Campo preenchido somente quando “indPres = 5 (Operação presencial, forado estabelecimento) ”, e não tiver endereço do destinatário (Grupo: E05) ou local de entrega (Grupo: G01).
+     * 
+     * NT_2024.002
+     */
+    cMunFGIBS?: number;
     /**
      * @param {number} tpImp - Formato de Impressão do DANFE
      * 0=Sem geração de DANFE; 1=DANFE normal, Retrato; 2=DANFE normal, Paisagem; 3=DANFE Simplificado; 4=DANFE NFC-e; 5=DANFE NFC-e em mensagem eletrônica (o envio de mensagem eletrônica pode ser feita de forma simultânea com a impressão do DANFE; usar o tpImp=5 quando esta for a única forma de disponibilização do DANFE).
@@ -416,7 +424,7 @@ export type Ide = {
      * @param {number} finNFe - Finalidade de emissão da NF-e
      * 1=NF-e normal; 2=NF-e complementar; 3=NF-e de ajuste; 4=Devolução de mercadoria; 5=Nota de Crédito; 6=Nota de Débito;
      * 
-     * NT-RT_2024.0002 - Adicione finNFe 5 e 6
+     * NT_2024.002 - Adiciona finNFe 5 e 6
      */
     finNFe: number;
     /**
@@ -455,6 +463,44 @@ export type Ide = {
      * (v2.0)
      */
     xJust?: string;
+    /**
+     * @param {number} indMultaJuros - Indicador de Multa e Juros
+     * 0=Indicador de Multa / 1=Indicador de Juros
+     * 
+     * NT_2024.002
+     */
+    indMultaJuros?: number;
+    /**
+     * @param {gCompraGov} gCompraGov - Grupo de compra Governamental
+     * 
+     * NT_2024.002
+     */
+    gCompraGov?: gCompraGov;
+    /**
+     * @param {number} tipoNotaCredito - Indicador do tipo de nota de crédito que está sendo utilizada
+     * Aguardando GT06. A definir
+     * 
+     * NT_2024.002
+     */
+    tipoNotaCredito?: number;
+}
+
+/**
+ * [gCompraGov] 
+ * Grupo de compra Governamental
+ * B31
+ */
+export type gCompraGov = {
+    /**
+     * @param {number} tpCompraGov - Tipo de compra Governamental
+     * 1=União; 2=Estados; 3=Distrito; Federal 4=Municípios
+     */
+    tpCompraGov: number;
+    /**
+     * @param {number} pRedutor - Percentual de redução de aliquota em compra governamental
+     * Conforme Seção XI, Art. 41 PLP 68/2024.
+     */
+    pRedutor?: number;
 }
 
 /**
