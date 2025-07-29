@@ -1,3 +1,15 @@
+/**
+    * @description      : 
+    * @author           : Marco Aurélio Silva Lima 
+    * @group            : 
+    * @created          : 28/07/2025 - 21:43:03
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 28/07/2025
+    * - Author          : Cassio Seffrin
+    * - Modification    : 
+**/
 /*
  * This file is part of NFeWizard-io.
  * 
@@ -1294,9 +1306,9 @@ export type Imposto = {
      */
     impostoDevol?: impostoDevol;
     /**
-     * @param {number} vTotTrib - Valor aproximado total de tributos federais, estaduais e municipais.
+     * @param {string} vTotTrib - Valor aproximado total de tributos federais, estaduais e municipais.
      */
-    vTotTrib?: number;
+    vTotTrib?: string;
 }
 
 /**
