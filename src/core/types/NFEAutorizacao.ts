@@ -208,6 +208,14 @@ export type gIBS = {
      */
     gCBS: gCBSTot;
     /**
+     * @param {number} vCresPres - Valor total do crédito presumido (W48)
+     */
+    vCresPres: number;
+    /**
+     * @param {number} vCredPresCondSus - Valor total do crédito presumido em condição suspensiva (W49)
+     */
+    vCredPresCondSus: number;
+    /**
      * @param {gMono} gMono - Grupo total da Monofasia
      */
     gMono?: gMono;
@@ -280,23 +288,27 @@ export type gIBSMunTot = {
  */
 export type gCBSTot = {
     /**
-     * @param {number} vCresPres - Valor total do crédito presumido
+     * @param {number} vCresPres - Valor total do crédito presumido (W51)
      */
     vCresPres: number;
     /**
-     * @param {number} vDif - Valor total do diferimento
+     * @param {number} vCredPresCondSus - Valor total do crédito presumido em condição suspensiva (W52)
+     */
+    vCredPresCondSus: number;
+    /**
+     * @param {number} vDif - Valor total do diferimento (W53)
      */
     vDif: number;
     /**
-     * @param {number} vDevTrib - Valor total de devolução de tributos
+     * @param {number} vDevTrib - Valor total de devolução de tributos (W54)
      */
     vDevTrib: number;
     /**
-     * @param {number} vDeson - Valor total de desoneração
+     * @param {number} vDeson - Valor total de desoneração (W55)
      */
     vDeson: number;
     /**
-     * @param {number} vCBS - Valor total da CBS
+     * @param {number} vCBS - Valor total da CBS (W56)
      */
     vCBS: number;
 }
@@ -320,6 +332,24 @@ export type gMono = {
      * O IBS, a CBS e o IS são por fora, por isso seus valores devem ser adicionados ao valor total da NF.
      */
     vTotNF: number;
+}
+
+/**
+ * [DFeReferenciado] 
+ * Documento Fiscal Eletrônico Referenciado
+ * VB01-VB03
+ */
+export type DFeReferenciado = {
+    /**
+     * @param {string} chaveAcesso - Chave de acesso do DF-e referenciado (VB02)
+     */
+    chaveAcesso: string;
+    /**
+     * @param {number} nItem - Número do item do documento referenciado (VB03)
+     * Corresponde ao atributo "nItem" do elemento "det" do documento original.
+     * Se o documento referenciado não tiver item, indicar "1"
+     */
+    nItem: number;
 }
 
 
@@ -1651,9 +1681,9 @@ export type gIBSCBS = {
      */
     gCBS: gCBS;
     /**
-     * @param {gIBSCredPres} gIBSCredPres - Grupo de Informações da CBS
+     * @param {gIBSCredPres} gIBSCredPres - Grupo de Informações do Crédito Presumido referente ao IBS
      */
-    gIBSCredPres: gIBSCredPres;
+    gIBSCredPres?: gIBSCredPres;
 }
 
 /**
@@ -1694,6 +1724,38 @@ export type gIBSCredPres = {
      */
     vCredPresCondSus: number;
 }
+
+/**
+ * [gCBSCredPres] 
+ * Grupo de Informações do Crédito Presumido referente a CBS
+ * UB64-UB68
+ * 
+ * NT_2024.002
+ */
+export type gCBSCredPres = {
+    /**
+     * @param {number} cCredPres - Código de Classificação do Crédito Presumido [UB65]
+     * 
+     * Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO DO CRÉDITO PRESUMIDO
+     */
+    cCredPres: number;
+    /**
+     * @param {number} pCredPres - Percentual do Crédito Presumido [UB66]
+     */
+    pCredPres: number;
+    /**
+     * @param {number} vCredPres - Valor do Crédito Presumido [UB67]
+     */
+    vCredPres: number;
+    /**
+     * @param {number} vCredPresCondSus - Valor do Crédito Presumido em condição suspensiva [UB68]
+     * 
+     * Valor do Crédito Presumido Condição Suspensiva. 
+     * Preencher apenas para cClassCredPres com indicação de Condição Suspensiva.
+     */
+    vCredPresCondSus: number;
+}
+
 /**
  * [gIBSUF] 
  * Grupo de Informações do IBS para a UF
@@ -1788,6 +1850,10 @@ export type gCBS = {
      * @param {number} vTribOp - Valor bruto do tributo na operação
      */
     vTribOp: number;
+    /**
+     * @param {gCBSCredPres} gCBSCredPres - Grupo de Informações do Crédito Presumido da CBS
+     */
+    gCBSCredPres?: gCBSCredPres;
     /**
      * @param {gCredPres} gCredPres - Grupo de Informações do Crédito Presumido
      */
