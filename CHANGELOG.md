@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.5] - 2025-08-03
+
+### Fixed
+- **Utility Module**
+  - Substitui libxmljs por libxmljs2, sanando problema de compatibilidade com node v24.
+
 ## [0.4.4] - 2025-07-06
 
 ### Fixed
