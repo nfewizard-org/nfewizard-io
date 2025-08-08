@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.6] - 2025-08-08
+
+### Feat
+- **Utility Module**
+  - Altera método `verificaRejeicao` para buscar Rejeição em todos os níveis do XML.
+
 ## [0.4.5] - 2025-08-03
 
 ### Fixed

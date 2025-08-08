@@ -89,6 +89,26 @@ class Utility {
     };
 
     /**
+     * Função recursiva para encontrar todas as ocorrências de uma chave em qualquer nivel do objeto
+     */
+    findAllInObj = (obj: GenericObject, chave: string): any[] => {
+        const results: any[] = [];
+        
+        if (obj.hasOwnProperty(chave)) {
+            results.push(obj[chave]);
+        }
+        
+        for (let prop in obj) {
+            if (typeof obj[prop] === 'object' && obj[prop] !== null) {
+                const nestedResults = this.findAllInObj(obj[prop], chave);
+                results.push(...nestedResults);
+            }
+        }
+        
+        return results;
+    };
+
+    /**
      * Método responsável por gravar o XML como json
      */
     salvaJSON(props: SaveJSONProps) {
@@ -426,24 +446,25 @@ class Utility {
             context: 'Utility',
         });
         const responseInJson = this.xmlParser.convertXmlToJson(data, metodo);
-
-        // Gera erro em caso de Rejeição
-        const xMotivo = this.findInObj(responseInJson, 'xMotivo');
-        const infProt = this.findInObj(responseInJson, 'infProt');
-
+        
         // Salva XML de retorno
         this.salvaRetorno(data, responseInJson, metodo, name);
 
-        // Gera erro em caso de Rejeição
-        if (xMotivo && (xMotivo.includes('Rejeição') || xMotivo.includes('Rejeicao'))) {
-            throw new Error(xMotivo);
+        // Busca todos os xMotivo no objeto
+        const allXMotivos = this.findAllInObj(responseInJson, 'xMotivo');
+        
+        // Verifica se algum xMotivo contém "Rejeição" ou "Rejeicao"
+        for (const xMotivo of allXMotivos) {
+            if (xMotivo && (xMotivo.includes('Rejeição') || xMotivo.includes('Rejeicao'))) {
+                throw new Error(xMotivo);
+            }
         }
-        if (infProt && (infProt?.xMotivo.includes('Rejeição') || infProt?.xMotivo.includes('Rejeicao'))) {
+
+        // Verifica infProt (mantendo verificação original como fallback)
+        const infProt = this.findInObj(responseInJson, 'infProt');
+        if (infProt && (infProt?.xMotivo?.includes('Rejeição') || infProt?.xMotivo?.includes('Rejeicao'))) {
             throw new Error(infProt?.xMotivo);
         }
-        // if (infEvento && (infEvento?.xMotivo.includes('Rejeição') || infEvento?.xMotivo.includes('Rejeicao'))) {
-        //     throw new Error(xMotivo);
-        // }
 
         return responseInJson;
     }
