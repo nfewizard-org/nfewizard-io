@@ -151,6 +151,11 @@ export type InfNFe = {
      * NT-RT_2024.002
      */
     IBSCBSSelTot?: IBSCBSSelTot;
+    /**
+     * @param {Agropecuario} agropecuario - Informações de produtos da agricultura, pecuária e produção florestal
+     * Grupo ZF - Informações específicas para produtos agropecuários
+     */
+    agropecuario?: Agropecuario;
 }
 
 /**
@@ -5362,6 +5367,82 @@ export type InfNFeSupl = {
     urlChave: string;
 }
 
+/**
+ * [agropecuario] 
+ * Informações de produtos da agricultura, pecuária e produção Florestal 
+ * GRUPO ZF
+ */
+export type Agropecuario = {
+    /**
+     * @param {Defensivo} defensivo - Defensivos Agrícolas (ZF02)
+     * Grupo de informações sobre defensivos agrícolas
+     */
+    defensivo?: Defensivo;
+    /**
+     * @param {GuiaTransito} guiaTransito - Guia de Trânsito (ZF04)
+     * Grupo de informações sobre guias de trânsito animal e vegetal
+     */
+    guiaTransito?: GuiaTransito;
+}
+
+/**
+ * [defensivo]
+ * Defensivos Agrícolas
+ * ZF02
+ */
+export type Defensivo = {
+    /**
+     * @param {string} nReceituario - Número da receita ou receituário do agrotóxico / defensivo agrícola (ZF03)
+     * Informar o número da receita ou receituário de aplicação do defensivo.
+     * Tamanho: 1-20 caracteres
+     */
+    nReceituario: string;
+    /**
+     * @param {string} CPFRespTec - CPF do Responsável Técnico pela emissão do receituário (ZF03a)
+     * Informar o CPF do Responsável Técnico legalmente habilitado para emissão do receituário agrícola,
+     * conforme exigências federais e estaduais, como engenheiro agrônomo, engenheiro florestal ou técnico agrícola.
+     * Tamanho: 11 dígitos
+     */
+    CPFRespTec: string;
+}
+
+/**
+ * [guiaTransito]
+ * Guia de Trânsito
+ * ZF04
+ */
+export type GuiaTransito = {
+    /**
+     * @param {number} tpGuia - Tipo de Guia (ZF05)
+     * 1 - GTA - Guia de Trânsito Animal
+     * 2 - TTA - Termo de Trânsito Animal
+     * 3 - DTA - Documento de Transferência Animal
+     * 4 - ATV - Autorização de Trânsito Vegetal
+     * 5 - PTV - Permissão de Trânsito Vegetal
+     * 6 - GTV - Guia de Trânsito Vegetal
+     * 7 - Guia Florestal (DOF, SisFlora - PA e MT ou SIAM - MG)
+     */
+    tpGuia: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+    /**
+     * @param {string} UFGuia - UF de emissão (ZF06)
+     * UF de emissão da guia
+     * Tamanho: 2 caracteres
+     */
+    UFGuia?: string;
+    /**
+     * @param {string} serieGuia - Série da Guia (ZF07)
+     * Informar sempre que houver a série da guia
+     * Tamanho: 1-9 caracteres
+     */
+    serieGuia?: string;
+    /**
+     * @param {number} nGuia - Número da Guia (ZF08)
+     * Número da Guia
+     * Tamanho: 1-9 dígitos
+     */
+    nGuia: number;
+}
+
 export type ProtNFe = {
     infProt: {
         tpAmb: number;
@@ -5402,7 +5483,6 @@ export type NFe = {
      */
     protNFe?: ProtNFe;
 }
-
 
 export type NFeDanfe = {
     NFe: LayoutNFe[] | LayoutNFe;
