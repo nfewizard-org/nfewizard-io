@@ -1370,7 +1370,7 @@ export type Prod = {
 }
 
 /**
- * [infProdNFF] [infProdEmb]
+ * [infProdNFF]
  * Informações Adicionais do Produto
  * Grupo I86
  */
@@ -1386,6 +1386,11 @@ export type InfProdNFF = {
     cOperNFF?: number;
 }
 
+/**
+ * [infProdEmb]
+ * Informações Adicionais do Produto
+ * Grupo I87
+ */
 export type InfProdEmb = {
     /**
      * @param {string} xEmb - Embalagem do produto
@@ -5399,7 +5404,7 @@ export type InfSolicNFF = {
 }
 
 /**
- * [infSolicNFF] 
+ * [infNFeSupl] 
  * Informações de solicitação da NFF (NT 2021.002)	
  * GRUPO ZX
  */
