@@ -38,7 +38,7 @@ export interface LayoutNFe {
 /**
  * [infNFe] 
  * Informações da NF-e 
- * GRUPO A
+ * GRUPO A - TAG A01 (Pai da estrutura NFe)
  */
 export type InfNFe = {
     /**
@@ -446,7 +446,7 @@ export type Ide = {
     tpImp: number;
     /**
      * @param {number} tpEmis - Tipo de Emissão da NF-e
-     * 1=Emissão normal (não em contingência); 2=Contingência FS-IA, com impressão do DANFE em Formulário de Segurança - Impressor Autônomo; 3= Regime Especial NFF (NT 2021.002)Contingência SCAN (Sistema de Contingência do Ambiente Nacional); *Desativado * NT 2015/002 4=Contingência EPEC (Evento Prévio da Emissão em Contingência); 5=Contingência FS-DA, com impressão do DANFE em Formulário de Segurança - Documento Auxiliar; 6=Contingência SVC-AN (SEFAZ Virtual de Contingência do AN); 7=Contingência SVC-RS (SEFAZ Virtual de Contingência do RS); <8>9=Contingência off-line da NFC-e; Para a NFC-e somente é válida a opção de contingência: 9-Contingência Off-Line e, a critério da UF, opção 4-Contingência EPEC. (NT 2015/002)
+     * 1=Emissão normal (não em contingência); 2=Contingência FS-IA, com impressão do DANFE em Formulário de Segurança - Impressor Autônomo; 3= Regime Especial NFF (NT 2021.002) 4=Contingência EPEC (Evento Prévio da Emissão em Contingência); 5=Contingência FS-DA, com impressão do DANFE em Formulário de Segurança - Documento Auxiliar; 6=Contingência SVC-AN (SEFAZ Virtual de Contingência do AN); 7=Contingência SVC-RS (SEFAZ Virtual de Contingência do RS); <8>9=Contingência off-line da NFC-e; Para a NFC-e somente é válida a opção de contingência: 9-Contingência Off-Line e, a critério da UF, opção 4-Contingência EPEC. (NT 2015/002)
      */
     tpEmis: number;
     /**
@@ -1359,6 +1359,53 @@ export type Prod = {
      * @param {Comb} comb - Informações específicas para combustíveis líquidos e lubrificantes
      */
     comb?: Comb;
+    /**
+     * @param {InfProdNFF} infProdNFF -Informações do Produto (NT 2021.002)
+     */
+    infProdNFF?: InfProdNFF;
+    /**
+     * @param {InfProdEmb} infProdEmb -Informações da Embalagem do Produto (NT 2021.002)
+     */
+    infProdEmb?: InfProdEmb;
+}
+
+/**
+ * [infProdNFF] [infProdEmb]
+ * Informações Adicionais do Produto
+ * Grupo I86
+ */
+export type InfProdNFF = {
+    /**
+     * @param {string} cProdFisco - Código Fiscal do Produto
+     */
+    cProdFisco?: string;
+    /**
+     * @param {number} cOperNFF - Código da Operação NFF
+     * 	Código da operação selecionada na NFF e relacionada ao item
+     */
+    cOperNFF?: number;
+}
+
+export type InfProdEmb = {
+    /**
+     * @param {string} xEmb - Embalagem do produto
+     * Exemplos de embalagens: "a granel"; "balde"; "bandeja"; "barril"; "caixa"; 
+     * "copo"; "estojo"; "fardo"; "garrafa"; "garrafão"; "lata"; "molho"; 
+     * "pacote"; "pote"; "saco"; "sacola"
+     */
+    xEmb?: string;
+    /**
+     * @param {number} qVolEmb - 	Volume do produto na embalagem
+     * Volume / quantidade do produto por unidade de medida na embalagem. Ex: Caixa com 3 KG 
+     * xEmb: caixa qVolEmb: 3 uEmb: kg
+     */
+    qVolEmb?: number;
+    /**
+     * @param {string} uEmb - Unidade de Medida da Embalagem
+     * Exemplos: "grama"; "kg"; "ton"; "litro"; "metro";
+     * "m3"; "m3 ester" (m3 estéreo); "m2"; "unid"; "dúzia";
+     */
+    uEmb?: string;
 }
 
 export type Comb = {
@@ -4568,10 +4615,6 @@ export type Total = {
      * @param {ISSQNtot} ISSQNtot - Grupo Totais referentes ao ISSQN	
      */
     ISSQNtot?: ISSQNtot;
-    /**
-     * @param {RetTrib} retTrib - Grupo Totais referentes ao ISSQN	
-     */
-    retTrib?: RetTrib;
 }
 export type ICMSTot = {
     /**
@@ -4704,6 +4747,10 @@ export type ICMSTot = {
      * Observação: (NT 2013/003)
      */
     vTotTrib?: string;
+    /**
+     * @param {RetTrib} retTrib - Grupo Totais referentes a Retenções de Tributos	
+     */
+    retTrib?: RetTrib;
 }
 export type ISSQNtot = {
     /**
