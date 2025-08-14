@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.7] - 2025-08-14
+
+### Fix
+- **Rollup Config**
+  - Externaliza libxmljs2.
+
 ## [0.4.6] - 2025-08-08
 
 ### Feat
