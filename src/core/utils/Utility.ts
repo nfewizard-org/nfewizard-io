@@ -37,7 +37,7 @@ import Environment from '@Modules/environment/Environment.js';
 import { NFeWizardProps, GenericObject, SoapMethod, NFeServicosUrlType, SaveXMLProps, SaveJSONProps, ProtNFe, ServicesUrl } from 'src/core/types';
 import XmlParser from './XmlParser';
 import xml2js from 'xml2js';
-import libxmljs from 'libxmljs';
+import libxmljs from 'libxmljs2';
 import xsdAssembler from 'xsd-assembler';
 import { logger } from '@Core/exceptions/logger';
 

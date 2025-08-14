@@ -337,7 +337,9 @@ export type gMono = {
 /**
  * [DFeReferenciado] 
  * Documento Fiscal Eletrônico Referenciado
+ * Grupo para referenciamento de itens de outro DF-e
  * VB01-VB03
+ * GRUPO VB
  */
 export type DFeReferenciado = {
     /**
@@ -1160,6 +1162,11 @@ export type DetProd = {
      * NT 2021.004
      */
     obsItem?: ObsItem;
+    /**
+     * @param {DFeReferenciado} DFeReferenciado -Documento Fiscal Eletrônico Referenciado	
+     * NT 2024.002.v1.10
+     */
+    DFeReferenciado?: DFeReferenciado;
 }
 
 /**
