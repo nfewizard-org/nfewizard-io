@@ -210,7 +210,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
         // Valida se CPF ou CNPJ
         const nfeAutorizacaoHandler = new ValidaCPFCNPJ();
         const { documentoValido, tipoDoDocumento } = nfeAutorizacaoHandler.validarCpfCnpj(doc);
-
+        console.log( { documentoValido, tipoDoDocumento })
         if (!documentoValido || tipoDoDocumento === 'Desconhecido') {
             const message = tipoDoDocumento === 'Desconhecido'
                 ? `Documento do ${campo} ausente ou inválido`
@@ -230,7 +230,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
             if (NFe?.infNFe?.det instanceof Array) {
                 // Adicionando indice ao item
                 const formatedItens = NFe.infNFe.det.map((det, index) => {
-                    if (det.imposto.ICMS.dadosICMS) {
+                    if (det.imposto?.ICMS?.dadosICMS) {
                         const icms = mountICMS(det.imposto.ICMS.dadosICMS);
                         det.imposto.ICMS = icms;
                     }
@@ -261,6 +261,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
             // Valida Documento do emitente
             NFe.infNFe.emit = Object.assign({ [this.validaDocumento(String(NFe.infNFe.emit.CNPJCPF), 'emitente')]: NFe.infNFe.emit.CNPJCPF }, NFe.infNFe.emit)
             delete NFe.infNFe.emit.CNPJCPF;
+
             // Valida Documento do destinatário
             if (NFe.infNFe.dest) {
                 NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF || ''), 'destinatário')]: NFe.infNFe.dest?.CNPJCPF || '' }, NFe.infNFe.dest)
