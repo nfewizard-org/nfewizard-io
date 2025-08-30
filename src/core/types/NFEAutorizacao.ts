@@ -1817,7 +1817,7 @@ export type gIBSCBS = {
      * @param {string} vIBS - Valor do IBS - [UB54a]
      * Valor do IBS (soma de vIBSUF e vIBSMun). Quando houver crédito presumido com indicador “IndDeduzCredPres=1”, o vCredPres deve ser abatido desse valor.
      */
-    vIBS: string;
+    // vIBS: string;
     /**
      * @param {gCBS} gCBS - Grupo de Informações da CBS - [UB55]
      */
@@ -2594,7 +2594,7 @@ export type ICMS10 = {
      * @param {number} vICMSST - Valor do ICMS ST
      * Valor do ICMS ST retido
      */
-    vICMSST: number;
+    vICMSST: number | string;
     /**
      * @param {string} vBCFCPST - Valor da Base de Cálculo do FCP retido por Substituição Tributária [N23a]
      * Informar o valor da Base de Cálculo do FCP retido por Substituição Tributária
@@ -2818,7 +2818,7 @@ export type ICMS30 = {
      * @param {number} vICMSST - Valor do ICMS ST
      * Valor do ICMS ST retido
      */
-    vICMSST: number;
+    vICMSST: number | string;
     /**
      * @param {number} vBCFCPST - Valor da Base de Cálculo do FCP
      * Informar o valor da Base de Cálculo do FCP retido por Substituição Tributária
@@ -3253,7 +3253,7 @@ export type ICMS70 = {
     /**
      * @param {number} vICMSST - Valor do ICMS ST
      */
-    vICMSST: number;
+    vICMSST: number | string;
 }
 /** [ICMS90] - Grupo Tributação do ICMS = 90 */
 export type ICMS90 = {
@@ -3328,7 +3328,7 @@ export type ICMS90 = {
     /**
      * @param {number} vICMSST - Valor do ICMS ST
      */
-    vICMSST: number;
+    vICMSST: number | string;
 }
 /** [ICMSPart] - Grupo de Partilha do ICMS entre a UF de origem e UF de destino ou a UF definida na legislação. */
 export type ICMSPart = {
@@ -3404,7 +3404,7 @@ export type ICMSPart = {
     /**
      * @param {number} vICMSST - Valor do ICMS ST
      */
-    vICMSST: number;
+    vICMSST: number | string;
     /**
      * @param {number} pBCOp - Percentual da BC operação própria
      */
@@ -3796,7 +3796,7 @@ export type ICMSSN900 = {
      * @param {number} vICMSST - Valor do ICMS ST
      * Valor do ICMS ST retido(v2.0)
      */
-    vICMSST: number;
+    vICMSST: number | string;
     /**
      * @param {number} vBCFCPST - Valor da Base de Cálculo do FCP retido por Substituição Tributária
      * Informar o valor da Base de Cálculo do FCP retido por Substituição Tributária
