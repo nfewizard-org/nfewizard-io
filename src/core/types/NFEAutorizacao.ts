@@ -543,6 +543,12 @@ export type Ide = {
      */
     gCompraGov?: gCompraGov;
     /**
+     * @param {gPagAntecipado} gPagAntecipado - Grupo de notas de antecipação de pagamento - [BB01]
+     * 
+     * Informado para abater as parcelas de antecipação de pagamento, conforme Art. 10. § 4º
+     */
+    gPagAntecipado?: gPagAntecipado;
+    /**
      * @param {number} tipoNotaCredito - Indicador do tipo de nota de crédito que está sendo utilizada
      * Aguardando GT06. A definir
      * 
@@ -576,6 +582,19 @@ export type gCompraGov = {
         2=Recebimento do pagamento, conforme fato gerador do IBS/CBS definido no Art. 10 § 2º
      */
     tpOperGov: number;
+}
+
+/**
+ * [gPagAntecipado] 
+ * Grupo de notas de antecipação de pagamento
+ * GRUPO BB
+ */
+export type gPagAntecipado = {
+    /**
+     * @param {string} refNFe - Chave de acesso da NF-e de antecipação de pagamento 
+     * Referência uma NF-e (modelo 55) emitida anteriormente, referente a pagamento antecipado
+     */
+    refNFe: string;
 }
 
 /**
