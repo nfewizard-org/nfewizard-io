@@ -139,19 +139,6 @@ export type InfNFe = {
      */
     infRespTec?: InfRespTec;
     /**
-     * @param {InfSolicNFF} infSolicNFF - Informações de solicitação da NFF (NT 2021.002)	
-     * Grupo para informações da solicitação da NFF
-     */
-    infSolicNFF?: InfSolicNFF;
-    /**
-     * @param {IBSCBSSelTot} IBSCBSSelTot - Totais da NF-e com IBS, CBS e IS
-     * O grupo de valores totais da NF-e deve ser informado com o somatório do campo correspondente dos itens.
-     * O IBS, a CBS e o IS são por fora, por isso seus valores devem ser adicionados ao valor total da NF.
-     * 
-     * NT-RT_2024.002
-     */
-    IBSCBSSelTot?: IBSCBSSelTot;
-    /**
      * @param {Agropecuario} agropecuario - Informações de produtos da agricultura, pecuária e produção florestal
      * Grupo ZF - Informações específicas para produtos agropecuários
      */
@@ -169,9 +156,9 @@ export type IBSCBSSelTot = {
      */
     gSel?: gSel;
     /**
-     * @param {number} vBCIBSCBS - Valor total da BC do IBS e da CBS
+     * @param {number | string} vBCIBSCBS - Valor total da BC do IBS e da CBS
      */
-    vBCIBSCBS: number;
+    vBCIBSCBS: number | string;
     /**
      * @param {gIBS} gIBS - Grupo total do IBS
      */
@@ -217,9 +204,9 @@ export type gIBS = {
      */
     vCresPres: number;
     /**
-     * @param {number} vCredPresCondSus - Valor total do crédito presumido em condição suspensiva (W49)
+     * @param {number | string} vCredPresCondSus - Valor total do crédito presumido em condição suspensiva (W49)
      */
-    vCredPresCondSus: number;
+    vCredPresCondSus: number | string;
     /**
      * @param {gMono} gMono - Grupo total da Monofasia
      */
@@ -237,21 +224,21 @@ export type gIBSUFTot = {
      */
     vCresPres: number;
     /**
-     * @param {number} vDif - Valor total do diferimento
+     * @param {number | string} vDif - Valor total do diferimento
      */
-    vDif: number;
+    vDif: number | string;
     /**
-     * @param {number} vDevTrib - Valor total de devolução de tributos
+     * @param {number | string} vDevTrib - Valor total de devolução de tributos
      */
-    vDevTrib: number;
+    vDevTrib: number | string;
     /**
      * @param {number} vDeson - Valor total de desoneração
      */
     vDeson: number;
     /**
-     * @param {number} vIBSUF - Valor total do IBS da UF
+     * @param {string} vIBSUF - Valor total do IBS da UF
      */
-    vIBSUF: number;
+    vIBSUF: string;
 }
 
 /**
@@ -265,23 +252,23 @@ export type gIBSMunTot = {
      */
     vCresPres: number;
     /**
-     * @param {number} vDif - Valor total do diferimento
+     * @param {number | string} vDif - Valor total do diferimento
      */
-    vDif: number;
+    vDif: number | string;
     /**
-     * @param {number} vDevTrib - Valor total de devolução de tributos
+     * @param {number | string} vDevTrib - Valor total de devolução de tributos
      */
-    vDevTrib: number;
+    vDevTrib: number | string;
     /**
      * @param {number} vDeson - Valor total de desoneração
      */
     vDeson: number;
     /**
-     * @param {number} vIBSMun - Valor total do IBS do Município
+     * @param {string} vIBSMun - Valor total do IBS do Município
      */
-    vIBSMun: number;
+    vIBSMun: string;
     /**
-     * @param {number} vIBSTot - Valor total do IBS
+     * @param {string} vIBSTot - Valor total do IBS
      */
     vIBSTot: number;
 }
@@ -297,25 +284,25 @@ export type gCBSTot = {
      */
     vCresPres: number;
     /**
-     * @param {number} vCredPresCondSus - Valor total do crédito presumido em condição suspensiva (W52)
+     * @param {number | string} vCredPresCondSus - Valor total do crédito presumido em condição suspensiva (W52)
      */
-    vCredPresCondSus: number;
+    vCredPresCondSus: number | string;
     /**
-     * @param {number} vDif - Valor total do diferimento (W53)
+     * @param {number | string} vDif - Valor total do diferimento (W53)
      */
-    vDif: number;
+    vDif: number | string;
     /**
-     * @param {number} vDevTrib - Valor total de devolução de tributos (W54)
+     * @param {number | string} vDevTrib - Valor total de devolução de tributos (W54)
      */
-    vDevTrib: number;
+    vDevTrib: number | string;
     /**
      * @param {number} vDeson - Valor total de desoneração (W55)
      */
     vDeson: number;
     /**
-     * @param {number} vCBS - Valor total da CBS (W56)
+     * @param {string | number} vCBS - Valor total da CBS (W56)
      */
-    vCBS: number;
+    vCBS: number | string;
 }
 
 /**
@@ -343,7 +330,7 @@ export type gMono = {
  * [DFeReferenciado] 
  * Documento Fiscal Eletrônico Referenciado
  * Grupo para referenciamento de itens de outro DF-e
- * VC01-VC03
+ * VC02-VC03
  * GRUPO VC
  */
 export type DFeReferenciado = {
@@ -356,7 +343,7 @@ export type DFeReferenciado = {
      * Corresponde ao atributo "nItem" do elemento "det" do documento original.
      * Se o documento referenciado não tiver item, indicar "1"
      */
-    nItem: number;
+    nItem?: number;
 }
 
 /**
@@ -548,6 +535,10 @@ export type Ide = {
      * (v2.0)
      */
     xJust?: string;
+    /**
+     * @param {NFref[] | NFref} NFref - Informação de Documentos Fiscais referenciados
+     */
+    NFref?: NFref[] | NFref;
     /**
      * @param {number} indMultaJuros - Indicador de Multa e Juros  - [B30]
      * 0=Indicador de Multa / 1=Indicador de Juros
@@ -1757,21 +1748,21 @@ export type IS = {
      */
     pIS: number;
     /**
-     * @param {number} pISEspec - Alíquota específica por unidade de medida apropriada - [UB07]
+     * @param {number | string} pISEspec - Alíquota específica por unidade de medida apropriada - [UB07]
      */
-    pISEspec?: number;
+    pISEspec?: number | string;
     /**
      * @param {string} uTrib - Unidade de Medida Tributável - [UB09]
      */
     uTrib?: string;
     /**
-     * @param {number} qTrib - Quantidade Tributável - [UB10]
+     * @param {number | string} qTrib - Quantidade Tributável - [UB10]
      */
-    qTrib?: number;
+    qTrib?: number | string;
     /**
-     * @param {number} vIS - Valor do Imposto Seletivo - [UB11]
+     * @param {number | string} vIS - Valor do Imposto Seletivo - [UB11]
      */
-    vIS?: number;
+    vIS?: number | string;
 };
 
 /**
@@ -1811,9 +1802,9 @@ export type IBSCBS = {
  */
 export type gIBSCBS = {
     /**
-     * @param {number} vBC - Base de cálculo do IBS e CBS - [UB16]
+     * @param {string} vBC - Base de cálculo do IBS e CBS - [UB16]
      */
-    vBC: number;
+    vBC: string;
     /**
      * @param {gIBSUF} gIBSUF - Grupo de Informações do IBS para a UF - [UB17]
      */
@@ -1823,10 +1814,10 @@ export type gIBSCBS = {
      */
     gIBSMun: gIBSMun;
     /**
-     * @param {number} vIBS - Valor do IBS - [UB54a]
+     * @param {string} vIBS - Valor do IBS - [UB54a]
      * Valor do IBS (soma de vIBSUF e vIBSMun). Quando houver crédito presumido com indicador “IndDeduzCredPres=1”, o vCredPres deve ser abatido desse valor.
      */
-    vIBS: number;
+    vIBS: string;
     /**
      * @param {gCBS} gCBS - Grupo de Informações da CBS - [UB55]
      */
@@ -1884,13 +1875,13 @@ export type gIBSCBSMono = {
  */
 export type gTransfCred = {
     /**
-     * @param {number} vIBS - Valor do IBS a ser transferido - [UB107]
+     * @param {string} vIBS - Valor do IBS a ser transferido - [UB107]
      */
-    vIBS: number;
+    vIBS: string;
     /**
-     * @param {number} vCBS - Valor da CBS a ser transferida - [UB108]
+     * @param {string | number} vCBS - Valor da CBS a ser transferida - [UB108]
      */
-    vCBS: number;
+    vCBS: number | string;
 };
 
 /**
@@ -1922,7 +1913,7 @@ export type gDif = {
     /**
      * @param {number} vDif - Valor do Diferimento - [UB23], [UB42], [UB61]
      */
-    vDif: number;
+    vDif: number | string;
 };
 
 /**
@@ -1934,7 +1925,7 @@ export type gDevTrib = {
      * @param {number} vDevTrib - Valor do tributo devolvido - [UB25], [UB44], [UB63]
      * Valor do tributo devolvido (“cashback” de desconto na própria Nota Fiscal / Fatura)
      */
-    vDevTrib: number;
+    vDevTrib: number | string;
 };
 
 /**
@@ -1946,10 +1937,10 @@ export type gRed = {
      */
     pRedAliq: number;
     /**
-     * @param {number} pAliqEfet - Alíquota Efetiva do IBS/CBS que será aplicada a Base de Cálculo - [UB28], [UB47], [UB66]
+     * @param {number | string} pAliqEfet - Alíquota Efetiva do IBS/CBS que será aplicada a Base de Cálculo - [UB28], [UB47], [UB66]
      * Alíquota efetiva, após aplicação da redução de alíquota, incluindo o gCompraGov/pRedutor, se houver.
      */
-    pAliqEfet: number;
+    pAliqEfet: number | string;
 };
 
 /**
@@ -1957,10 +1948,10 @@ export type gRed = {
  */
 export type gIBSUF = {
     /**
-     * @param {number} pIBSUF - Alíquota do IBS de competência das UF - [UB18]
+     * @param {string} pIBSUF - Alíquota do IBS de competência das UF - [UB18]
      * Alíquota vigente do IBS da UF
      */
-    pIBSUF: number;
+    pIBSUF: string;
     /**
      * @param {gDif} gDif - Grupo de Informações do Diferimento - [UB21]
      */
@@ -1975,11 +1966,11 @@ export type gIBSUF = {
      */
     gRed?: gRed;
     /**
-     * @param {number} vIBSUF - Valor do IBS de competência da UF - [UB35]
+     * @param {string} vIBSUF - Valor do IBS de competência da UF - [UB35]
      * Se grupo gRed preenchido: vIBSUF = gRed/pAliqEfet * vBC (UB16)
      * Senão: vIBSUF = pIBSUF * vBC
      */
-    vIBSUF: number;
+    vIBSUF: string;
 };
 
 /**
@@ -1987,10 +1978,10 @@ export type gIBSUF = {
  */
 export type gIBSMun = {
     /**
-     * @param {number} pIBSMun - Alíquota do IBS de competência do Município - [UB37]
+     * @param {string} pIBSMun - Alíquota do IBS de competência do Município - [UB37]
      * Alíquota vigente do IBS do Município
      */
-    pIBSMun: number;
+    pIBSMun: string;
     /**
      * @param {gDif} gDif - Grupo de Informações do Diferimento - [UB40]
      */
@@ -2005,11 +1996,11 @@ export type gIBSMun = {
      */
     gRed?: gRed;
     /**
-     * @param {number} vIBSMun - Valor do IBS de competência do Município - [UB54]
+     * @param {string} vIBSMun - Valor do IBS de competência do Município - [UB54]
      * Se grupo gRed preenchido: vIBSMun = gRed/pAliqEfet * vBC (UB16)
      * Senão: vIBSMun = pIBSMun * vBC
      */
-    vIBSMun: number;
+    vIBSMun: string;
 };
 
 /**
@@ -2017,10 +2008,10 @@ export type gIBSMun = {
  */
 export type gCBS = {
     /**
-     * @param {number} pCBS - Alíquota da CBS - [UB56]
+     * @param {string} pCBS - Alíquota da CBS - [UB56]
      * Alíquota vigente da CBS
      */
-    pCBS: number;
+    pCBS: string;
     /**
      * @param {gDif} gDif - Grupo de Informações do Diferimento - [UB59]
      */
@@ -2035,11 +2026,11 @@ export type gCBS = {
      */
     gRed?: gRed;
     /**
-     * @param {number} vCBS - Valor da CBS - [UB67]
+     * @param {string | number} vCBS - Valor da CBS - [UB67]
      * Se grupo gRed preenchido: vCBS = gRed/pAliqEfet * vBC (UB16)
      * Senão: vCBS = pCBS * vBC
      */
-    vCBS: number;
+    vCBS: number | string;
 };
 
 /**
@@ -2060,29 +2051,29 @@ export type gTribRegular = {
      */
     cClassTribReg: string;
     /**
-     * @param {number} pAliqEfetRegIBSUF - Valor da alíquota do IBS da UF - [UB71]
+     * @param {number | string} pAliqEfetRegIBSUF - Valor da alíquota do IBS da UF - [UB71]
      */
-    pAliqEfetRegIBSUF: number;
+    pAliqEfetRegIBSUF: number | string;
     /**
      * @param {number} vTribRegIBSUF - Valor do Tributo do IBS da UF - [UB72]
      */
-    vTribRegIBSUF: number;
+    vTribRegIBSUF: number | string;
     /**
-     * @param {number} pAliqEfetRegIBSMun - Valor da alíquota do IBS do Município - [UB72a]
+     * @param {number | string} pAliqEfetRegIBSMun - Valor da alíquota do IBS do Município - [UB72a]
      */
-    pAliqEfetRegIBSMun: number;
+    pAliqEfetRegIBSMun: number | string;
     /**
      * @param {number} vTribRegIBSMun - Valor do Tributo do IBS do Município - [UB72b]
      */
-    vTribRegIBSMun: number;
+    vTribRegIBSMun: number | string;
     /**
-     * @param {number} pAliqEfetRegCBS - Valor da alíquota da CBS - [UB72c]
+     * @param {number | string} pAliqEfetRegCBS - Valor da alíquota da CBS - [UB72c]
      */
-    pAliqEfetRegCBS: number;
+    pAliqEfetRegCBS: number | string;
     /**
      * @param {number} vTribRegCBS - Valor do Tributo da CBS - [UB72d]
      */
-    vTribRegCBS: number;
+    vTribRegCBS: number | string;
 };
 
 /**
@@ -2101,14 +2092,14 @@ export type gIBSCredPres = {
      */
     pCredPres: number;
     /**
-     * @param {number} vCredPres - Valor do Crédito Presumido - [UB76]
+     * @param {number | string} vCredPres - Valor do Crédito Presumido - [UB76]
      */
-    vCredPres: number;
+    vCredPres: number | string;
     /**
      * @param {number} vCredPresCondSus - Valor do Crédito Presumido em condição suspensiva. - [UB77]
      * Valor do Crédito Presumido Condição Suspensiva. Preencher apenas para cCredPres com indicação de Condição Suspensiva.
      */
-    vCredPresCondSus: number;
+    vCredPresCondSus: number | string;
 };
 
 /**
@@ -2127,14 +2118,14 @@ export type gCBSCredPres = {
      */
     pCredPres: number;
     /**
-     * @param {number} vCredPres - Valor do Crédito Presumido - [UB81]
+     * @param {number | string} vCredPres - Valor do Crédito Presumido - [UB81]
      */
-    vCredPres: number;
+    vCredPres: number | string;
     /**
      * @param {number} vCredPresCondSus - Valor do Crédito Presumido em condição suspensiva. - [UB82]
      * Valor do Crédito Presumido Condição Suspensiva. Preencher apenas para cCredPres com indicação de Condição Suspensiva
      */
-    vCredPresCondSus: number;
+    vCredPresCondSus: number | string;
 };
 
 /**
@@ -2192,15 +2183,15 @@ export type gMonoPadrao = {
      */
     adRemCBS: number;
     /**
-     * @param {number} vIBSMono - Valor do IBS monofásico - [UB88]
+     * @param {number | string} vIBSMono - Valor do IBS monofásico - [UB88]
      * O valor do imposto é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida na legislação.
      */
-    vIBSMono: number;
+    vIBSMono: number | string;
     /**
-     * @param {number} vCBSMono - Valor da CBS monofásica - [UB89]
+     * @param {number | string} vCBSMono - Valor da CBS monofásica - [UB89]
      * O valor do imposto é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida na legislação.
      */
-    vCBSMono: number;
+    vCBSMono: number | string;
 };
 
 /**
@@ -2219,19 +2210,19 @@ export type gMonoReten = {
      */
     adRemIBSReten: number;
     /**
-     * @param {number} vIBSMonoReten - Valor do IBS monofásico sujeito a retenção - [UB93]
+     * @param {number | string} vIBSMonoReten - Valor do IBS monofásico sujeito a retenção - [UB93]
      * Valor do IBS com retenção, a ser somado ao valor de IBS a ser recolhido.
      */
-    vIBSMonoReten: number;
+    vIBSMonoReten: number | string;
     /**
      * @param {number} adRemCBSReten - Alíquota ad rem da CBS sujeito a retenção - [UB93a]
      */
     adRemCBSReten: number;
     /**
-     * @param {number} vCBSMonoReten - Valor da CBS monofásica sujeita a retenção - [UB93b]
+     * @param {number | string} vCBSMonoReten - Valor da CBS monofásica sujeita a retenção - [UB93b]
      * Valor da CBS com retenção, a ser somado ao valor de CBS a ser recolhido
      */
-    vCBSMonoReten: number;
+    vCBSMonoReten: number | string;
 };
 
 /**
@@ -2251,20 +2242,20 @@ export type gMonoRet = {
      */
     adRemIBSRet: number;
     /**
-     * @param {number} vIBSMonoRet - Valor do IBS retido anteriormente - [UB97]
+     * @param {number | string} vIBSMonoRet - Valor do IBS retido anteriormente - [UB97]
      * O valor do IBS é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida na legislação
      */
-    vIBSMonoRet: number;
+    vIBSMonoRet: number | string;
     /**
      * @param {number} adRemCBSRet - Alíquota ad rem da CBS retida anteriormente - [UB98]
      * Alíquota ad rem da CBS, estabelecida na legislação para o produto.
      */
     adRemCBSRet: number;
     /**
-     * @param {number} vCBSMonoRet - Valor da CBS retida anteriormente - [UB98a]
+     * @param {number | string} vCBSMonoRet - Valor da CBS retida anteriormente - [UB98a]
      * O valor da CBS é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida na legislação
      */
-    vCBSMonoRet: number;
+    vCBSMonoRet: number | string;
 };
 
 /**
@@ -2279,7 +2270,7 @@ export type gMonoDif = {
      */
     pDifIBS: number;
     /**
-     * @param {number} vIBSMonoDif - Valor do IBS monofásico diferido - [UB101]
+     * @param {string} vIBSMonoDif - Valor do IBS monofásico diferido - [UB101]
      * A ser deduzido do valor do IBS.
      */
     vIBSMonoDif: number;
@@ -2289,7 +2280,7 @@ export type gMonoDif = {
      */
     pDifCBS: number;
     /**
-     * @param {number} vCBSMonoDif - Valor da CBS Monofásica diferida. - [UB103]
+     * @param {string | number} vCBSMonoDif - Valor da CBS Monofásica diferida. - [UB103]
      * A ser deduzido do valor da CBS.
      */
     vCBSMonoDif: number;
@@ -2521,11 +2512,6 @@ export type ICMS02 = {
 /** [ICMS10] - Grupo Tributação do ICMS = 10 */
 export type ICMS10 = {
     /**
-     * @param {'10'} CST - Tributação do ICMS
-     * 10=Tributada e com cobrança do ICMS por substituição tributária
-     */
-    CST: '10';
-    /**
      * @param {number} orig - Origem da mercadoria
      * 0 - Nacional, exceto as indicadas nos códigos 3, 4, 5 e 8
      * 1 - Estrangeira - Importação direta, exceto a indicada no código 6
@@ -2538,6 +2524,11 @@ export type ICMS10 = {
      * 8 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 70%
      */
     orig: number;
+    /**
+     * @param {'10'} CST - Tributação do ICMS
+     * 10=Tributada e com cobrança do ICMS por substituição tributária
+     */
+    CST: '10';
     /**
      * @param {number} modBC - Modalidade de determinação da BC do ICMS
      * 0=Margem Valor Agregado (%);
@@ -2560,23 +2551,9 @@ export type ICMS10 = {
      */
     vICMS: string;
     /**
-     * @param {number} pBCST - Percentual da BC efetiva de tributação do ICMS ST
+     * @param {string} vBCFCP - Valor da Base de Cálculo do FCP	
      */
-    pBCST: string
-    /**
-     * @param {number} vBCST - Valor da BC do ICMS ST
-     */
-    vBCST: string;
-    /**
-     * @param {number} pICMSST - Alíquota do imposto do ICMS ST
-     * Alíquota do ICMS ST sem o FCP. Quando for o caso, informar a alíquota do FCP no campo pFCPST.
-     */
-    pICMSST: number;
-    /**
-     * @param {number} vICMSST - Valor do ICMS ST
-     * Valor do ICMS ST retido
-     */
-    vICMSST: number;
+    vBCFCP?: string;
     /**
      * @param {number} pFCP - Percentual do Fundo de Combate à Pobreza (FCP) sobre o ICMS
      */
@@ -2585,6 +2562,44 @@ export type ICMS10 = {
      * @param {number} vFCP - Valor do Fundo de Combate à Pobreza (FCP) sobre o ICMS
      */
     vFCP?: number;
+    /**
+     * @param {number} modBCST - Modalidade de determinação da BC do ICMS ST
+        0=Preço tabelado ou máximo sugerido;
+        1=Lista Negativa (valor);
+        2=Lista Positiva (valor);
+        3=Lista Neutra (valor);
+        4=Margem Valor Agregado (%);
+        5=Pauta (valor);
+        6=Valor da Operação;
+     */
+    modBCST: number;
+    /**
+     * @param {number} pMVAST - Percentual da margem de valor Adicionado do ICMS ST [N19]
+     */
+    pMVAST?: number;
+    /**
+     * @param {number} pRedBCST - Percentual da Redução de BC do ICMS ST [N20]
+     */
+    pRedBCST?: number;
+    /**
+     * @param {number} vBCST - Valor da BC do ICMS ST
+     */
+    vBCST: string;
+    /**
+     * @param {number} pICMSST - Alíquota do imposto do ICMS ST
+     * Alíquota do ICMS ST sem o FCP. Quando for o caso, informar a alíquota do FCP no campo pFCP
+     */
+    pICMSST: number;
+    /**
+     * @param {number} vICMSST - Valor do ICMS ST
+     * Valor do ICMS ST retido
+     */
+    vICMSST: number;
+    /**
+     * @param {string} vBCFCPST - Valor da Base de Cálculo do FCP retido por Substituição Tributária [N23a]
+     * Informar o valor da Base de Cálculo do FCP retido por Substituição Tributária
+     */
+    vBCFCPST?: string;
     /**
      * @param {number} pFCPST - Percentual do Fundo de Combate à Pobreza (FCP) sobre o ICMS ST
      */
@@ -4816,7 +4831,28 @@ export type Total = {
      * @param {ISSQNtot} ISSQNtot - Grupo Totais referentes ao ISSQN	
      */
     ISSQNtot?: ISSQNtot;
+    /**
+     * @param {RetTrib} retTrib - Grupo Totais referentes a Retenções de Tributos	
+     */
+    retTrib?: RetTrib;
+    /**
+     * @param {ISTot} ISTot - Grupo total do imposto seletivo
+     * O grupo de valores totais da NF-e deve ser informado com o somatório do campo correspondente dos itens.
+     * O IS é “por fora”, por isso seu valor deve ser adicionado ao valor total da NF.
+     */
+    ISTot?: ISTot;
+    /**
+     * @param {IBSCBSTot} IBSCBSTot - Totais da NF-e com IBS e CBS	
+     * O grupo de valores totais da NF-e deve ser informado com o somatório do campo correspondente dos itens.
+     * O IBS e a CBS são “por fora”, por isso seus valores devem ser adicionados ao valor total da NF.
+     */
+    IBSCBSTot?: IBSCBSTot;
+    /**
+     * @param {number | string} vNFTot - Valor total da NF-e com IBS / CBS / IS.
+     */
+    vNFTot?: number | string;
 }
+
 export type ICMSTot = {
     /**
      * @param {string} vBC - Base de Cálculo do ICMS
@@ -4948,10 +4984,6 @@ export type ICMSTot = {
      * Observação: (NT 2013/003)
      */
     vTotTrib?: string;
-    /**
-     * @param {RetTrib} retTrib - Grupo Totais referentes a Retenções de Tributos	
-     */
-    retTrib?: RetTrib;
 }
 export type ISSQNtot = {
     /**
@@ -5047,6 +5079,161 @@ export type RetTrib = {
      */
     vRetPrev?: number;
 }
+
+/**
+ * Grupo total do imposto seletivo - [W31]
+ * O grupo de valores totais da NF-e deve ser informado com o somatório do campo correspondente dos itens.
+ * O IS é “por fora”, por isso seu valor deve ser adicionado ao valor total da NF.
+ */
+export type ISTot = {
+    /**
+     * @param {number | string} vIS - Total do imposto seletivo - [W33]
+     */
+    vIS: number | string;
+};
+
+/**
+ * Totais da NF-e com IBS e CBS - [W34]
+ * O grupo de valores totais da NF-e deve ser informado com o somatório do campo correspondente dos itens.
+ * O IBS e a CBS são “por fora”, por isso seus valores devem ser adicionados ao valor total da NF.
+ */
+export type IBSCBSTot = {
+    /**
+     * @param {number | string} vBCIBSCBS - Valor total da BC do IBS e da CBS - [W35]
+     */
+    vBCIBSCBS: number | string;
+    /**
+     * @param {gIBS_Totais} gIBS - Grupo total do IBS - [W36]
+     */
+    gIBS?: gIBS_Totais;
+    /**
+     * @param {gCBS_Totais} gCBS - Grupo total da CBS - [W50]
+     */
+    gCBS?: gCBS_Totais;
+    /**
+     * @param {gMono_Totais} gMono - Grupo total da Monofasia - [W57]
+     */
+    gMono?: gMono_Totais;
+};
+
+/**
+ * Grupo total do IBS da UF - [W37]
+ */
+export type gIBSUF_Totais = {
+    /**
+     * @param {number} vDif - Valor total do diferimento - [W38]
+     */
+    vDif: number | string;
+    /**
+     * @param {number} vDevTrib - Valor total de devolução de tributos - [W39]
+     */
+    vDevTrib: number | string;
+    /**
+     * @param {string} vIBSUF - Valor total do IBS da UF - [W41]
+     */
+    vIBSUF: string;
+};
+
+/**
+ * Grupo total do IBS do Município - [W42]
+ */
+export type gIBSMun_Totais = {
+    /**
+     * @param {number} vDif - Valor total do diferimento - [W43]
+     */
+    vDif: number | string;
+    /**
+     * @param {number} vDevTrib - Valor total de devolução de tributos - [W44]
+     */
+    vDevTrib: number | string;
+    /**
+     * @param {string} vIBSMun - Valor total do IBS do Município - [W46]
+     */
+    vIBSMun: string;
+};
+
+/**
+ * Grupo total do IBS - [W36]
+ */
+export type gIBS_Totais = {
+    /**
+     * @param {gIBSUF_Totais} gIBSUF - Grupo total do IBS da UF - [W37]
+     */
+    gIBSUF: gIBSUF_Totais;
+    /**
+     * @param {gIBSMun_Totais} gIBSMun - Grupo total do IBS do Município - [W42]
+     */
+    gIBSMun: gIBSMun_Totais;
+    /**
+     * @param {string} vIBS - Valor total do IBS - [W47]
+     */
+    vIBS: string;
+    /**
+     * @param {number} vCredPres - Valor total do crédito presumido - [W48]
+     */
+    vCredPres: number | string;
+    /**
+     * @param {number} vCredPresCondSus - Valor total do crédito presumido em condição suspensiva. - [W49]
+     */
+    vCredPresCondSus: number | string;
+};
+
+/**
+ * Grupo total da CBS - [W50]
+ */
+export type gCBS_Totais = {
+    /**
+     * @param {number} vDif - Valor total do diferimento - [W53]
+     */
+    vDif: number | string;
+    /**
+     * @param {number} vDevTrib - Valor total de devolução de tributos - [W54]
+     */
+    vDevTrib: number | string;
+    /**
+     * @param {string | number} vCBS - Valor total da CBS - [W56]
+     */
+    vCBS: number | string;
+    /**
+     * @param {number} vCredPres - Valor total do crédito presumido - [W56a]
+     */
+    vCredPres: number | string;
+    /**
+     * @param {number} vCredPresCondSus - Valor total do crédito presumido em condição suspensiva. - [W56b]
+     */
+    vCredPresCondSus: number | string;
+};
+
+/**
+ * Grupo total da Monofasia - [W57]
+ */
+export type gMono_Totais = {
+    /**
+     * @param {string} vIBSMono - Total do IBS monofásico - [W58]
+     */
+    vIBSMono: number | string;
+    /**
+     * @param {string | number} vCBSMono - Total da CBS monofásica - [W59]
+     */
+    vCBSMono: number | string;
+    /**
+     * @param {string} vIBSMonoReten - Total do IBS monofásico sujeito a retenção - [W59a]
+     */
+    vIBSMonoReten: number | string;
+    /**
+     * @param {string | number} vCBSMonoReten - Total da CBS monofásica sujeita a retenção - [W59b]
+     */
+    vCBSMonoReten: number | string;
+    /**
+     * @param {number | string} vIBSMonoRet - Total do IBS monofásico retido anteriormente - [W59c]
+     */
+    vIBSMonoRet: number | string;
+    /**
+     * @param {number | string} vCBSMonoRet - Total da CBS monofásica retida anteriormente - [W59d]
+     */
+    vCBSMonoRet: number | string;
+};
+
 
 /**
  * [transp] 
