@@ -1232,7 +1232,7 @@ export type DetProd = {
 /**
  * [prod] 
  * Detalhamento de Produtos e Serviços	
- * GRUPO I
+ * GRUPO 
  */
 export type Prod = {
     /**
@@ -1683,499 +1683,610 @@ export type Imposto = {
      */
     vTotTrib?: number;
     /**
-     * @param {IBSCBSSel} IBSCBSSel - Informações do Imposto de Bens e Serviços - IBS, Contribuição de Bens e Serviços - CBS e Imposto Seletivo
+     * @param {IS} IS - Informações do Imposto Seletivo
      */
-    IBSCBSSel?: IBSCBSSel;
-}
-
-/**
- * [IBSCBSSel] 
- * Informações do Imposto de Bens e Serviços - IBS, Contribuição de Bens e Serviços - CBS e Imposto Seletivo
- * Grupo UB
- * 
- * NT-RT_2024.0002
- */
-export type IBSCBSSel = {
+    IS?: IS;
     /**
-     * @param {seletivo} seletivo - Informações do Imposto Seletivo
+     * @param {IBSCBS} IBSCBS - Informações do IBS e CBS
      */
-    seletivo?: seletivo;
+    IBSCBS?: IBSCBS;
     /**
-     * @param {string} CST - Código de Situação Tributária do IBS e CBS
-     * NT_2024.002 - Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IMPOSTO SELETIVO
-     */
-    CST?: string;
-    /**
-     * @param {string} cClassTrib - Código de Classificação Tributária do IBS e CBS
-     * NT_2024.002 - Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IMPOSTO SELETIVO
-     */
-    cClassTrib?: string;
-    /**
-     * @param {string} indPerecimento - Indicador de Perecimento, furto, roubo ou extravio
-     * “1”= Perecimento, roubo, furto ou extravio do item
-     * 
-     * NT_2024.002
-     */
-    indPerecimento?: string;
-    /**
-     * @param {gIBSCBS} gIBSCBS - Grupo de Informações do IBS, CBS e Imposto Seletivo
-     */
-    gIBSCBS?: gIBSCBS;
-    /**
-     * @param {gIBSCBSMono} gIBSCBSMono - Grupo de Informações do IBS e CBS em operações com imposto monofásico
+     * @param {gIBSCBSMono} gIBSCBSMono - Grupo de Informações do IBS e CBS em operações monofásicas
      */
     gIBSCBSMono?: gIBSCBSMono;
+    /**
+     * @param {gTransfCred} gTransfCred - Grupo de Transferências de Crédito
+     */
+    gTransfCred?: gTransfCred;
+    /**
+     * @param {gCredPresIBSZFM} gCredPresIBSZFM - Crédito presumido de IBS na ZFM
+     */
+    gCredPresIBSZFM?: gCredPresIBSZFM;
 }
 
-/**
- * [seletivo] 
- * Informações do Imposto Seletivo
- * UB02
- */
-export type seletivo = {
-    /**
-     * @param {string} CST - Código de Situação Tributária do Imposto Seletivo
-     * NT_2024.002 - Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IMPOSTO SELETIVO
-     */
-    CST: string;
-    /**
-     * @param {string} cClassTrib - Código de Classificação Tributária do Imposto Seletivo
-     * NT_2024.002 - Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IMPOSTO SELETIVO
-     */
-    cClassTrib: string;
-    /**
-     * @param {gImpSel} gImpSel - Grupo de Informações do Imposto Seletivo
-     */
-    gImpSel?: gImpSel;
-}
 
 /**
- * [gImpSel] 
- * Grupo de Informações do Imposto Seletivo
- * UB05
+ * Grupo UB - Informações dos tributos IBS / CBS e Imposto Seletivo (NT 2025.002 v1.20)
+ * NT-RT_2025.0002 v1.20
  */
-export type gImpSel = {
+
+/**
+ * Informações do Imposto Seletivo - [UB01]
+ */
+export type IS = {
     /**
-     * @param {number} vBCImpSel - Valor da Base de Cálculo do Imposto Seletivo
+     * @param {string} CSTIS - Código de Situação Tributária do Imposto Seletivo - [UB02]
+     * Utilizar tabela CST do Imposto Seletivo
      */
-    vBCImpSel: number;
+    CSTIS: string;
     /**
-     * @param {number} pImpSel - Alíquota do Imposto Seletivo
+     * @param {string} cClassTribIS - Código de Classificação Tributária do Imposto Seletivo - [UB03]
+     * Utilizar tabela cClassTribIS
      */
-    pImpSel: number;
+    cClassTribIS: string;
     /**
-     * @param {number} pImpSelEspec - Alíquota específica por unidade de medida apropriada
+     * @param {number} vBCIS - Valor da Base de Cálculo do ImpostoSeletivo - [UB05]
      */
-    pImpSelEspec?: number;
+    vBCIS: number;
     /**
-     * @param {string} uTrib - Unidade de Medida Tributável
+     * @param {number} pIS - Alíquota do Imposto Seletivo - [UB06]
+     */
+    pIS: number;
+    /**
+     * @param {number} pISEspec - Alíquota específica por unidade de medida apropriada - [UB07]
+     */
+    pISEspec?: number;
+    /**
+     * @param {string} uTrib - Unidade de Medida Tributável - [UB09]
      */
     uTrib?: string;
     /**
-     * @param {number} qTrib - Quantidade Tributável
+     * @param {number} qTrib - Quantidade Tributável - [UB10]
      */
     qTrib?: number;
     /**
-     * @param {number} vImpSel - Valor do Imposto Seletivo
+     * @param {number} vIS - Valor do Imposto Seletivo - [UB11]
      */
-    vImpSel: number;
-}
+    vIS?: number;
+};
 
 /**
- * [gIBSCBS] 
- * Grupo de Informações do IBS, CBS e Imposto Seletivo
- * UB14
- * 
- * NT-RT_2024.0002
+ * Informações do Imposto de Bens e Serviços - IBS e da Contribuição de Bens e Serviços - CBS - [UB12]
+ */
+export type IBSCBS = {
+    /**
+     * @param {string} CST - Código de Situação Tributária do IBS e CBS - [UB13]
+     * Utilizar tabela CST do IBS/CBS
+     */
+    CST: string;
+    /**
+     * @param {string} cClassTrib - Código de Classificação Tributária do IBS e CBS - [UB14]
+     * Utilizar tabela cClassTrib
+     */
+    cClassTrib: string;
+    /**
+     * @param {gIBSCBS} gIBSCBS - Grupo de Informações do IBS e da CBS - [UB15]
+     */
+    gIBSCBS?: gIBSCBS;
+    /**
+     * @param {gIBSCBSMono} gIBSCBSMono - Grupo de Informações do IBS e CBS em operações com imposto monofásico - [UB84]
+     */
+    gIBSCBSMono?: gIBSCBSMono;
+    /**
+     * @param {gTransfCred} gTransfCred - Transferências de Crédito - [UB106]
+     */
+    gTransfCred?: gTransfCred;
+    /**
+     * @param {gCredPresIBSZFM} gCredPresIBSZFM - Informações do crédito presumido de IBS para fornecimentos a partir da ZFM - [UB109]
+     */
+    gCredPresIBSZFM?: gCredPresIBSZFM;
+};
+
+/**
+ * Grupo de Informações do IBS e da CBS - [UB15]
  */
 export type gIBSCBS = {
     /**
-     * @param {number} vBC - Base de cálculo do IBS e CBS
+     * @param {number} vBC - Base de cálculo do IBS e CBS - [UB16]
      */
     vBC: number;
     /**
-     * @param {gIBSUF} gIBSUF - Grupo de Informações do IBS para a UF
+     * @param {gIBSUF} gIBSUF - Grupo de Informações do IBS para a UF - [UB17]
      */
     gIBSUF: gIBSUF;
     /**
-     * @param {gIBSMun} gIBSMun - Grupo de Informações do IBS para o município
+     * @param {gIBSMun} gIBSMun - Grupo de Informações do IBS para o município - [UB36]
      */
     gIBSMun: gIBSMun;
     /**
-     * @param {gCBS} gCBS - Grupo de Informações da CBS
+     * @param {number} vIBS - Valor do IBS - [UB54a]
+     * Valor do IBS (soma de vIBSUF e vIBSMun). Quando houver crédito presumido com indicador “IndDeduzCredPres=1”, o vCredPres deve ser abatido desse valor.
+     */
+    vIBS: number;
+    /**
+     * @param {gCBS} gCBS - Grupo de Informações da CBS - [UB55]
      */
     gCBS: gCBS;
     /**
-     * @param {gIBSCredPres} gIBSCredPres - Grupo de Informações do Crédito Presumido referente ao IBS
+     * @param {gTribRegular} gTribRegular - Grupo de informações da Tributação Regular - [UB68]
+     */
+    gTribRegular?: gTribRegular;
+    /**
+     * @param {gIBSCredPres} gIBSCredPres - Grupo de Informações do Crédito Presumido referente ao IBS - [UB73]
      */
     gIBSCredPres?: gIBSCredPres;
-}
-
-/**
- * [gIBSCredPres] 
- * Grupo de Informações do Crédito Presumidoreferente ao IBS [UB55]
- * 
- * Grupo de Informações do Crédito Presumido do IBS, quando aproveitado pelo emitente do documento. 
- * Exemplos: 
- * 1 - Aquisição de PR não contribuinte. 
- * 2 - Tomador de serviço de transporte de TAC PF não contrib. 
- * 3 - Aquisição de pessoa física com destino a reciclagem. 
- * 4 - Aquisição de bens móveis de PF não contrib. para revenda (veículos / brecho). 
- * 5 - Regime opcional para cooperativa.
- * 
- * NT_2024.002
- */
-export type gIBSCredPres = {
     /**
-     * @param {number} cCredPres - Código de Classificação do Crédito Presumido [UB56]
-     * 
-     * Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO DO CRÉDITO PRESUMIDO
-     */
-    cCredPres: number;
-    /**
-     * @param {number} pCredPres - Percentual do Crédito Presumido [UB57]
-     */
-    pCredPres: number;
-    /**
-     * @param {number} vCredPres - Valor do Crédito Presumido [UB58]
-     */
-    vCredPres: number;
-    /**
-     * @param {number} vCredPres - Valor do Crédito Presumido em condição suspensiva [UB59]
-     * 
-     * Valor do Crédito Presumido Condição Suspensiva. 
-     * Preencher apenas para cClassCredPres com indicação de Condição Suspensiva. 
-     * Incluir regra de validação para permitir apenas com o código 4 - Aquisição de bens móveis de PF não contrib. para revenda (veículos / brecho).
-     */
-    vCredPresCondSus: number;
-}
-
-/**
- * [gCBSCredPres] 
- * Grupo de Informações do Crédito Presumido referente a CBS
- * UB64-UB68
- * 
- * NT_2024.002
- */
-export type gCBSCredPres = {
-    /**
-     * @param {number} cCredPres - Código de Classificação do Crédito Presumido [UB65]
-     * 
-     * Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO DO CRÉDITO PRESUMIDO
-     */
-    cCredPres: number;
-    /**
-     * @param {number} pCredPres - Percentual do Crédito Presumido [UB66]
-     */
-    pCredPres: number;
-    /**
-     * @param {number} vCredPres - Valor do Crédito Presumido [UB67]
-     */
-    vCredPres: number;
-    /**
-     * @param {number} vCredPresCondSus - Valor do Crédito Presumido em condição suspensiva [UB68]
-     * 
-     * Valor do Crédito Presumido Condição Suspensiva. 
-     * Preencher apenas para cClassCredPres com indicação de Condição Suspensiva.
-     */
-    vCredPresCondSus: number;
-}
-
-/**
- * [gIBSUF] 
- * Grupo de Informações do IBS para a UF
- * UB16
- */
-export type gIBSUF = {
-    /**
-     * @param {number} pIBSUF - Alíquota do IBS de competência das UF
-     */
-    pIBSUF: number;
-    /**
-     * @param {number} vTribOP - Valor bruto do tributo na operação
-     */
-    vTribOP: number;
-    /**
-     * @param {gCredPres} gCredPres - Grupo de Informações do Crédito Presumido
-     */
-    gCredPres?: gCredPres;
-    /**
-     * @param {gDif} gDif - Grupo de Informações do Diferimento
-     */
-    gDif?: gDif;
-    /**
-     * @param {gDevTrib} gDevTrib - Grupo de Informações da devolução de tributos
-     */
-    gDevTrib?: gDevTrib;
-    /**
-     * @param {gRed} gRed - Grupo de informações da redução da alíquota
-     */
-    gRed?: gRed;
-    /**
-     * @param {gDeson} gDeson - Grupo de informações da Desoneração
-     */
-    gDeson?: gDeson;
-    /**
-     * @param {number} vIBSUF - Valor do IBS de competência da UF
-     */
-    vIBSUF: number;
-}
-
-/**
- * [gIBSMun] 
- * Grupo de Informações do IBS para o município
- * UB38
- */
-export type gIBSMun = {
-    /**
-     * @param {number} pIBSMun - Alíquota do IBS de competência dos Municípios
-     */
-    pIBSMun: number;
-    /**
-     * @param {number} vTribOP - Valor bruto do tributo na operação
-     */
-    vTribOP: number;
-    /**
-     * @param {gCredPres} gCredPres - Grupo de Informações do Crédito Presumido
-     */
-    gCredPres?: gCredPres;
-    /**
-     * @param {gDif} gDif - Grupo de Informações do Diferimento
-     */
-    gDif?: gDif;
-    /**
-     * @param {gDevTrib} gDevTrib - Grupo de Informações da devolução de tributos
-     */
-    gDevTrib?: gDevTrib;
-    /**
-     * @param {gRed} gRed - Grupo de informações da redução da alíquota
-     */
-    gRed?: gRed;
-    /**
-     * @param {gDeson} gDeson - Grupo de informações da Desoneração
-     */
-    gDeson?: gDeson;
-    /**
-     * @param {number} vIBSMun - Valor do IBS de competência dos Municípios
-     */
-    vIBSMun: number;
-}
-
-/**
- * [gCBS] 
- * Grupo de Informações da CBS
- * UB60
- */
-export type gCBS = {
-    /**
-     * @param {number} pCBS - Alíquota da CBS
-     */
-    pCBS: number;
-    /**
-     * @param {number} vTribOp - Valor bruto do tributo na operação
-     */
-    vTribOp: number;
-    /**
-     * @param {gCBSCredPres} gCBSCredPres - Grupo de Informações do Crédito Presumido da CBS
+     * @param {gCBSCredPres} gCBSCredPres - Grupo de Informações do Crédito Presumido referente a CBS - [UB78]
      */
     gCBSCredPres?: gCBSCredPres;
     /**
-     * @param {gCredPres} gCredPres - Grupo de Informações do Crédito Presumido
+     * @param {gTribCompraGov} gTribCompraGov - Grupo de informações da composição do valor do IBS e da CBS em compras governamentais - [UB82a]
      */
-    gCredPres?: gCredPres;
-    /**
-     * @param {gDif} gDif - Grupo de Informações do Diferimento
-     */
-    gDif?: gDif;
-    /**
-     * @param {gDevTrib} gDevTrib - Grupo de Informações da devolução de tributos
-     */
-    gDevTrib?: gDevTrib;
-    /**
-     * @param {gRed} gRed - Grupo de informações da redução da alíquota
-     */
-    gRed?: gRed;
-    /**
-     * @param {gDeson} gDeson - Grupo de informações da Desoneração
-     */
-    gDeson?: gDeson;
-    /**
-     * @param {number} vCBS - Valor da CBS
-     */
-    vCBS: number;
-}
+    gTribCompraGov?: gTribCompraGov;
+};
 
 /**
- * [gCredPres] 
- * Grupo de Informações do Crédito Presumido
- * UB20, UB42, UB64
- */
-export type gCredPres = {
-    /**
-     * @param {number} pCredPres - Percentual do Crédito Presumido
-     */
-    pCredPres: number;
-    /**
-     * @param {number} vCredPres - Valor do Crédito Presumido
-     */
-    vCredPres: number;
-}
-
-/**
- * [gDif] 
- * Grupo de Informações do Diferimento
- * UB23, UB45, UB67
- */
-export type gDif = {
-    /**
-     * @param {number} pDif - Percentual do diferimento
-     */
-    pDif: number;
-    /**
-     * @param {number} vDif - Valor do Diferimento
-     */
-    vDif: number;
-}
-
-/**
- * [gDevTrib] 
- * Grupo de Informações da devolução de tributos
- * UB26, UB48, UB70
- */
-export type gDevTrib = {
-    /**
-     * @param {number} vDevTrib - Valor do tributo devolvido
-     */
-    vDevTrib: number;
-}
-
-/**
- * [gRed] 
- * Grupo de informações da redução da alíquota
- * UB28, UB50, UB72
- */
-export type gRed = {
-    /**
-     * @param {number} pRedAliq - Percentual da redução de alíquota
-     */
-    pRedAliq: number;
-    /**
-     * @param {number} pAliqEfet - Alíquota Efetiva que será aplicada a Base de Cálculo
-     */
-    pAliqEfet: number;
-}
-
-/**
- * [gDeson] 
- * Grupo de informações da Desoneração
- * UB31, UB53, UB75
- */
-export type gDeson = {
-    /**
-     * @param {string} CST - Código de Situação Tributária do IBS e CBS
-     * 
-     * NT_2024.002 - Informado como se a operação fosse tributada integralmente. Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IBS E DA CBS
-     */
-    CST?: string;
-    /**
-     * @param {string} cClassTrib - Código de Classificação Tributária do IBS e CBS
-     * 
-     * NT_2024.002 - Informado como se a operação fosse tributada integralmente. Utilizar tabela CÓDIGO DE CLASSIFICAÇÃO TRIBUTÁRIA DO IBS E DA CBS
-     */
-    cClassTrib?: string;
-    /**
-     * @param {number} vBC - Valor da BC
-     */
-    vBC?: number;
-    /**
-     * @param {number} pAliq - Valor da alíquota
-     */
-    pAliq: number;
-    /**
-     * @param {number} vDeson - Valor desonerado
-     */
-    vDeson: number;
-}
-
-/**
- * [gIBSCBSMono] 
- * Grupo de Informações do IBS e CBS em operações com imposto monofásico
- * UB82 - Monofasia dos Combustíveis
+ * Grupo de Informações do IBS e CBS em operações com imposto monofásico - [UB84]
  */
 export type gIBSCBSMono = {
     /**
-     * @param {number} qBCMono - Quantidade tributada na monofasia
+     * @param {gMonoPadrao} gMonoPadrao - Grupo de informações da Tributação Monofásica Padrão - [UB84a]
      */
-    qBCMono?: number;
+    gMonoPadrao?: gMonoPadrao;
     /**
-     * @param {number} adRemIBS - Alíquota ad rem do IBS
+     * @param {gMonoReten} gMonoReten - Grupo de informações da Tributação Monofásica Sujeita à Retenção - [UB90]
+     */
+    gMonoReten?: gMonoReten;
+    /**
+     * @param {gMonoRet} gMonoRet - Grupo de informações da Tributação Monofásica Retida Anteriormente - [UB94]
+     */
+    gMonoRet?: gMonoRet;
+    /**
+     * @param {gMonoDif} gMonoDif - Grupo de informações do Diferimento da Tributação Monofásica - [UB99]
+     */
+    gMonoDif?: gMonoDif;
+    /**
+     * @param {number} vTotIBSMonoItem - Total de IBS Monofásico. - [UB104]
+     */
+    vTotIBSMonoItem: number;
+    /**
+     * @param {number} vTotCBSMonoItem - Total da CBS Monofásica - [UB105]
+     */
+    vTotCBSMonoItem: number;
+};
+
+/**
+ * Transferências de Crédito - [UB106]
+ */
+export type gTransfCred = {
+    /**
+     * @param {number} vIBS - Valor do IBS a ser transferido - [UB107]
+     */
+    vIBS: number;
+    /**
+     * @param {number} vCBS - Valor da CBS a ser transferida - [UB108]
+     */
+    vCBS: number;
+};
+
+/**
+ * Informações do crédito presumido de IBS para fornecimentos a partir da ZFM - [UB109]
+ */
+export type gCredPresIBSZFM = {
+    /**
+     * @param {number} tpCredPresIBSZFM - Tipo de classificação de acordo com o art. 450, § 1º, da LC 214/25 para o cálculo do crédito presumido na ZFM - [UB110]
+     * Classificação conforme percentuais definidos no art. 450, § 1º, da LC 214/25 para o cálculo do crédito presumido: 0 - Sem Crédito Presumido, 1 - Bens de consumo final (55%), 2 - Bens de capital (75%), 3 - Bens intermediários (90,25%), 4 - Bens de informática e outros definidos em legislação (100%)
+     */
+    tpCredPresIBSZFM: number;
+    /**
+     * @param {number} vCredPresIBSZFM - Valor do crédito presumido calculado sobre o saldo devedor apurado - [UB111]
+     * É obrigatório para nota de crédito com tpNFCredito = 02 - Apropriação de crédito presumido de IBS sobre o saldo devedor na ZFM. (art. 450, § 1º, LC 214/25). Vedado para documentos que não sejam nota de crédito com tpNFCredito = 02.
+     */
+    vCredPresIBSZFM?: number;
+};
+
+
+/**
+ * Grupo de Informações do Diferimento - [UB21], [UB40], [UB59]
+ */
+export type gDif = {
+    /**
+     * @param {number} pDif - Percentual do diferimento - [UB22], [UB41], [UB60]
+     * No caso de diferimento total, informar o percentual de diferimento "100".
+     */
+    pDif: number;
+    /**
+     * @param {number} vDif - Valor do Diferimento - [UB23], [UB42], [UB61]
+     */
+    vDif: number;
+};
+
+/**
+ * Grupo de Informações da devolução de tributos - [UB24], [UB43], [UB62]
+ * Grupo usado para registrar a devolução de tributos no fornecimento de energia elétrica, água, esgoto, gás natural e em outras hipóteses definidas no regulamento.
+ */
+export type gDevTrib = {
+    /**
+     * @param {number} vDevTrib - Valor do tributo devolvido - [UB25], [UB44], [UB63]
+     * Valor do tributo devolvido (“cashback” de desconto na própria Nota Fiscal / Fatura)
+     */
+    vDevTrib: number;
+};
+
+/**
+ * Grupo de informações da redução da alíquota - [UB26], [UB45], [UB64]
+ */
+export type gRed = {
+    /**
+     * @param {number} pRedAliq - Percentual da redução de alíquota do cClassTrib - [UB27], [UB46], [UB65]
+     */
+    pRedAliq: number;
+    /**
+     * @param {number} pAliqEfet - Alíquota Efetiva do IBS/CBS que será aplicada a Base de Cálculo - [UB28], [UB47], [UB66]
+     * Alíquota efetiva, após aplicação da redução de alíquota, incluindo o gCompraGov/pRedutor, se houver.
+     */
+    pAliqEfet: number;
+};
+
+/**
+ * Grupo de Informações do IBS para a UF - [UB17]
+ */
+export type gIBSUF = {
+    /**
+     * @param {number} pIBSUF - Alíquota do IBS de competência das UF - [UB18]
+     * Alíquota vigente do IBS da UF
+     */
+    pIBSUF: number;
+    /**
+     * @param {gDif} gDif - Grupo de Informações do Diferimento - [UB21]
+     */
+    gDif?: gDif;
+    /**
+     * @param {gDevTrib} gDevTrib - Grupo de Informações da devolução de tributos - [UB24]
+     * Grupo usado para registrar a devolução de tributos no fornecimento de energia elétrica, água, esgoto, gás natural e em outras hipóteses definidas no regulamento.
+     */
+    gDevTrib?: gDevTrib;
+    /**
+     * @param {gRed} gRed - Grupo de informações da redução da alíquota - [UB26]
+     */
+    gRed?: gRed;
+    /**
+     * @param {number} vIBSUF - Valor do IBS de competência da UF - [UB35]
+     * Se grupo gRed preenchido: vIBSUF = gRed/pAliqEfet * vBC (UB16)
+     * Senão: vIBSUF = pIBSUF * vBC
+     */
+    vIBSUF: number;
+};
+
+/**
+ * Grupo de Informações do IBS para o município - [UB36]
+ */
+export type gIBSMun = {
+    /**
+     * @param {number} pIBSMun - Alíquota do IBS de competência do Município - [UB37]
+     * Alíquota vigente do IBS do Município
+     */
+    pIBSMun: number;
+    /**
+     * @param {gDif} gDif - Grupo de Informações do Diferimento - [UB40]
+     */
+    gDif?: gDif;
+    /**
+     * @param {gDevTrib} gDevTrib - Grupo de Informações da devolução de tributos - [UB43]
+     * Grupo usado para registrar a devolução de tributos no fornecimento de energia elétrica, água, esgoto, gás natural e em outras hipóteses definidas no regulamento
+     */
+    gDevTrib?: gDevTrib;
+    /**
+     * @param {gRed} gRed - Grupo de informações da redução da alíquota - [UB45]
+     */
+    gRed?: gRed;
+    /**
+     * @param {number} vIBSMun - Valor do IBS de competência do Município - [UB54]
+     * Se grupo gRed preenchido: vIBSMun = gRed/pAliqEfet * vBC (UB16)
+     * Senão: vIBSMun = pIBSMun * vBC
+     */
+    vIBSMun: number;
+};
+
+/**
+ * Grupo de Informações da CBS - [UB55]
+ */
+export type gCBS = {
+    /**
+     * @param {number} pCBS - Alíquota da CBS - [UB56]
+     * Alíquota vigente da CBS
+     */
+    pCBS: number;
+    /**
+     * @param {gDif} gDif - Grupo de Informações do Diferimento - [UB59]
+     */
+    gDif?: gDif;
+    /**
+     * @param {gDevTrib} gDevTrib - Grupo de Informações da devolução de tributos - [UB62]
+     * Grupo usado para registrar a devolução de tributos no fornecimento de energia elétrica, água, esgoto, gás natural e em outras hipóteses definidas no regulamento.
+     */
+    gDevTrib?: gDevTrib;
+    /**
+     * @param {gRed} gRed - Grupo de informações da redução da alíquota - [UB64]
+     */
+    gRed?: gRed;
+    /**
+     * @param {number} vCBS - Valor da CBS - [UB67]
+     * Se grupo gRed preenchido: vCBS = gRed/pAliqEfet * vBC (UB16)
+     * Senão: vCBS = pCBS * vBC
+     */
+    vCBS: number;
+};
+
+/**
+ * Grupo de informações da Tributação Regular - [UB68]
+ * Grupo de informações da Tributação Regular. Informar como seria a tributação caso não cumprida a condição resolutória/suspensiva.
+ * Exemplo 1: Art. 445, §4 da LC 214/2025. Operações com ZFM e ALC.
+ * Exemplo 2: Operações com suspensão do tributo.
+ */
+export type gTribRegular = {
+    /**
+     * @param {string} CSTReg - Código de Situação Tributária do IBS e CBS - [UB69]
+     * Utilizar tabela CST do IBS/CBS
+     */
+    CSTReg: string;
+    /**
+     * @param {string} cClassTribReg - Código de Classificação Tributária do IBS e CBS - [UB70]
+     * Utilizar tabela cClassTrib
+     */
+    cClassTribReg: string;
+    /**
+     * @param {number} pAliqEfetRegIBSUF - Valor da alíquota do IBS da UF - [UB71]
+     */
+    pAliqEfetRegIBSUF: number;
+    /**
+     * @param {number} vTribRegIBSUF - Valor do Tributo do IBS da UF - [UB72]
+     */
+    vTribRegIBSUF: number;
+    /**
+     * @param {number} pAliqEfetRegIBSMun - Valor da alíquota do IBS do Município - [UB72a]
+     */
+    pAliqEfetRegIBSMun: number;
+    /**
+     * @param {number} vTribRegIBSMun - Valor do Tributo do IBS do Município - [UB72b]
+     */
+    vTribRegIBSMun: number;
+    /**
+     * @param {number} pAliqEfetRegCBS - Valor da alíquota da CBS - [UB72c]
+     */
+    pAliqEfetRegCBS: number;
+    /**
+     * @param {number} vTribRegCBS - Valor do Tributo da CBS - [UB72d]
+     */
+    vTribRegCBS: number;
+};
+
+/**
+ * Grupo de Informações do Crédito Presumido referente ao IBS - [UB73]
+ * Grupo de Informações do Crédito Presumido do IBS, quando aproveitado pelo emitente do documento.
+ */
+export type gIBSCredPres = {
+    /**
+     * @param {string} cCredPres - Código de Classificação do Crédito Presumido - [UB74]
+     * Utilizar tabela cCredPres (Anexo IV).
+     * Exemplos: 1 - Aquisição de Produtor Rural não contribuinte. 2 - Tomador de serviço de transporte de TAC PF não contrib. 3 - Aquisição de pessoa física com destino a reciclagem. 4 - Aquisição de bens móveis de PF não contrib. para revenda (veículos / brechó). 5 - Regime opcional para cooperativa.
+     */
+    cCredPres: string;
+    /**
+     * @param {number} pCredPres - Percentual do Crédito Presumido - [UB75]
+     */
+    pCredPres: number;
+    /**
+     * @param {number} vCredPres - Valor do Crédito Presumido - [UB76]
+     */
+    vCredPres: number;
+    /**
+     * @param {number} vCredPresCondSus - Valor do Crédito Presumido em condição suspensiva. - [UB77]
+     * Valor do Crédito Presumido Condição Suspensiva. Preencher apenas para cCredPres com indicação de Condição Suspensiva.
+     */
+    vCredPresCondSus: number;
+};
+
+/**
+ * Grupo de Informações do Crédito Presumido referente a CBS - [UB78]
+ * Grupo de Informações do Crédito Presumido da CBS, quando aproveitado pelo emitente do documento.
+ */
+export type gCBSCredPres = {
+    /**
+     * @param {string} cCredPres - Código de Classificação do Crédito Presumido - [UB79]
+     * Utilizar tabela cCredPres (Anexo IV).
+     * Exemplos: 1 - Aquisição de Produtor Rural não contribuinte. 2 - Tomador de serviço de transporte de TAC PF não contrib. 3 - Aquisição de pessoa física com destino a reciclagem. 4 - Aquisição de bens móveis de PF não contrib. para revenda (veículos / brechó). 5 - Regime opcional para cooperativa.
+     */
+    cCredPres: string;
+    /**
+     * @param {number} pCredPres - Percentual do Crédito Presumido - [UB80]
+     */
+    pCredPres: number;
+    /**
+     * @param {number} vCredPres - Valor do Crédito Presumido - [UB81]
+     */
+    vCredPres: number;
+    /**
+     * @param {number} vCredPresCondSus - Valor do Crédito Presumido em condição suspensiva. - [UB82]
+     * Valor do Crédito Presumido Condição Suspensiva. Preencher apenas para cCredPres com indicação de Condição Suspensiva
+     */
+    vCredPresCondSus: number;
+};
+
+/**
+ * Grupo de informações da composição do valor do IBS e da CBS em compras governamentais - [UB82a]
+ * Informar somente para compras governamentais.
+ */
+export type gTribCompraGov = {
+    /**
+     * @param {number} pAliqIBSUF - Alíquota do IBS de competência do Estado - [UB82b]
+     */
+    pAliqIBSUF: number;
+    /**
+     * @param {number} vTribIBSUF - Valor do Tributo do IBS da UF calculado - [UB82c]
+     * Valor que seria devido a UF, sem aplicação do Art. 473. da LC 214/2025
+     */
+    vTribIBSUF: number;
+    /**
+     * @param {number} pAliqIBSMun - Alíquota do IBS de competência do Município - [UB82d]
+     */
+    pAliqIBSMun: number;
+    /**
+     * @param {number} vTribIBSMun - Valor do Tributo do IBS do Município calculado - [UB82e]
+     * Valor que seria devido ao município, sem aplicação do Art. 473. da LC 214/2025
+     */
+    vTribIBSMun: number;
+    /**
+     * @param {number} pAliqCBS - Alíquota da CBS - [UB82f]
+     */
+    pAliqCBS: number;
+    /**
+     * @param {number} vTribCBS - Valor do Tributo da CBS calculado - [UB82g]
+     * Valor que seria devido a CBS, sem aplicação do Art. 473. da LC 214/2025
+     */
+    vTribCBS: number;
+};
+
+
+
+/**
+ * Grupo de informações da Tributação Monofásica Padrão - [UB84a]
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “indMonoPadrao” da tabela cClassTrib
+ */
+export type gMonoPadrao = {
+    /**
+     * @param {number} qBCMono - Quantidade tributada na monofasia - [UB85]
+     * Informar a BC quantidade conforme unidade de medida estabelecida na legislação para o produto.
+     */
+    qBCMono: number;
+    /**
+     * @param {number} adRemIBS - Alíquota ad rem do IBS - [UB86]
      */
     adRemIBS: number;
     /**
-     * @param {number} adRemCBS - Alíquota ad rem da CBS
+     * @param {number} adRemCBS - Alíquota ad rem da CBS - [UB87]
      */
     adRemCBS: number;
     /**
-     * @param {number} vIBSMono - Valor do IBS monofásico
+     * @param {number} vIBSMono - Valor do IBS monofásico - [UB88]
+     * O valor do imposto é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida na legislação.
      */
     vIBSMono: number;
     /**
-     * @param {number} vCBSMono - Valor da CBS monofásica
+     * @param {number} vCBSMono - Valor da CBS monofásica - [UB89]
+     * O valor do imposto é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida na legislação.
      */
     vCBSMono: number;
+};
+
+/**
+ * Grupo de informações da Tributação Monofásica Sujeita à Retenção - [UB90]
+ * Uso em operações com combustíveis derivados de petróleo (Gasolina A) [ou *Óleo Diesel A*] para retenção do imposto sobre o biocombustível a ser misturado. Art. 178 da LC 214/2025.
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “indMonoReten” da tabela cClassTrib
+ */
+export type gMonoReten = {
     /**
-     * @param {number} qBCMonoReten - Quantidade tributada sujeita à retenção na monofasia
+     * @param {number} qBCMonoReten - Quantidade tributada sujeita à retenção na monofasia - [UB91]
+     * Informar a BC sujeita a retenção em quantidade conforme unidade de medida estabelecida na legislação para o produto.
      */
-    qBCMonoReten?: number;
+    qBCMonoReten: number;
     /**
-     * @param {number} adRemIBSREten - Alíquota ad rem do imposto sujeito a retenção
+     * @param {number} adRemIBSReten - Alíquota ad rem do IBS sujeito a retenção - [UB92]
      */
-    adRemIBSREten?: number;
+    adRemIBSReten: number;
     /**
-     * @param {number} vIBSMonoReten - Valor do IBS monofásico sujeito a retenção
+     * @param {number} vIBSMonoReten - Valor do IBS monofásico sujeito a retenção - [UB93]
+     * Valor do IBS com retenção, a ser somado ao valor de IBS a ser recolhido.
      */
-    vIBSMonoReten?: number;
+    vIBSMonoReten: number;
     /**
-     * @param {number} pCredPresIBS - Percentual de crédito presumido do IBS monofásico
+     * @param {number} adRemCBSReten - Alíquota ad rem da CBS sujeito a retenção - [UB93a]
      */
-    pCredPresIBS?: number;
+    adRemCBSReten: number;
     /**
-     * @param {number} vCRedPresIBS - Valor do crédito presumido do IBS monofásico
+     * @param {number} vCBSMonoReten - Valor da CBS monofásica sujeita a retenção - [UB93b]
+     * Valor da CBS com retenção, a ser somado ao valor de CBS a ser recolhido
      */
-    vCRedPresIBS?: number;
+    vCBSMonoReten: number;
+};
+
+/**
+ * Grupo de informações da Tributação Monofásica Retida Anteriormente - [UB94]
+ * Tributação monofásica própria sobre combustíveis cobrada anteriormente.
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “indMonoRet” da tabela cClassTrib.
+ */
+export type gMonoRet = {
     /**
-     * @param {number} pCredPresCBS - Percentual de crédito presumido da CBS monofásica
+     * @param {number} qBCMonoRet - Quantidade tributada retida anteriormente - [UB95]
+     * Informar a BC do IBS em quantidade conforme unidade de medida estabelecida na legislação.
      */
-    pCredPresCBS?: number;
+    qBCMonoRet: number;
     /**
-     * @param {number} vCredPresCBS - Valor do crédito presumido da CBS monofásica
+     * @param {number} adRemIBSRet - Alíquota ad rem do IBS retido anteriormente - [UB96]
+     * Alíquota ad rem do IBS, estabelecida na legislação para o produto
      */
-    vCredPresCBS?: number;
+    adRemIBSRet: number;
     /**
-     * @param {number} pDifIBS - Percentual do diferimento do imposto monofásico
+     * @param {number} vIBSMonoRet - Valor do IBS retido anteriormente - [UB97]
+     * O valor do IBS é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida na legislação
      */
-    pDifIBS?: number;
+    vIBSMonoRet: number;
     /**
-     * @param {number} vIBSMonoDif - Valor do IBS mono diferido
+     * @param {number} adRemCBSRet - Alíquota ad rem da CBS retida anteriormente - [UB98]
+     * Alíquota ad rem da CBS, estabelecida na legislação para o produto.
      */
-    vIBSMonoDif?: number;
+    adRemCBSRet: number;
     /**
-     * @param {number} pDifCBS - Percentual do diferimento do imposto monofásico
+     * @param {number} vCBSMonoRet - Valor da CBS retida anteriormente - [UB98a]
+     * O valor da CBS é obtido pela multiplicação da alíquota ad rem pela quantidade do produto conforme unidade de medida estabelecida na legislação
      */
-    pDifCBS?: number;
+    vCBSMonoRet: number;
+};
+
+/**
+ * Grupo de informações do Diferimento da Tributação Monofásica - [UB99]
+ * Operações com diferimento, aplicado aos biocombustíveis. Exemplo: operação do produtor de biocombustível (usina).
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “indMonoDif” da tabela cClassTrib.
+ */
+export type gMonoDif = {
     /**
-     * @param {number} vCBSMonoDif - Valor do CBS Mono diferido
+     * @param {number} pDifIBS - Percentual do diferimento do imposto monofásico - [UB100]
+     * A ser aplicado em vIBSMono.
      */
-    vCBSMonoDif?: number;
+    pDifIBS: number;
     /**
-     * @param {number} vTotIBSMono - Total de IBS Monofásico
+     * @param {number} vIBSMonoDif - Valor do IBS monofásico diferido - [UB101]
+     * A ser deduzido do valor do IBS.
      */
-    vTotIBSMono: number;
+    vIBSMonoDif: number;
     /**
-     * @param {number} vTotCBSMono - Total da CBS Monofásica
+     * @param {number} pDifCBS - Percentual do diferimento do imposto monofásico - [UB102]
+     * A ser aplicado em vCBSMono
      */
-    vTotCBSMono: number;
-}
+    pDifCBS: number;
+    /**
+     * @param {number} vCBSMonoDif - Valor da CBS Monofásica diferida. - [UB103]
+     * A ser deduzido do valor da CBS.
+     */
+    vCBSMonoDif: number;
+};
+
+
+
+/**
+ * Grupo UB. Informações dos tributos IBS / CBS e Imposto Seletivo
+ */
+export type GrupoUB = {
+    /**
+     * @param {IS} IS - Informações do Imposto Seletivo - [UB01]
+     */
+    IS?: IS;
+    /**
+     * @param {IBSCBS} IBSCBS - Informações do Imposto de Bens e Serviços - IBS e da Contribuição de Bens e Serviços - CBS - [UB12]
+     */
+    IBSCBS?: IBSCBS;
+};
+
 
 /**
  * [ICMS] 
