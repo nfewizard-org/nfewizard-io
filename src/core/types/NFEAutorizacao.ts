@@ -492,7 +492,13 @@ export type Ide = {
     indFinal: number;
     /**
      * @param {number} indPres - Indicador de presença do comprador no estabelecimento comercial no momento da operação
-     * 0=Não se aplica (por exemplo, Nota Fiscal complementar ou de ajuste); 1=Operação presencial; 2=Operação não presencial, pela Internet; 3=Operação não presencial, Teleatendimento; 4=NFC-e em operação com entrega a domicílio; 5=Operação presencial, fora do estabelecimento; (incluído NT 2016/002) 9=Operação não presencial, outros.
+     * 0=Não se aplica (por exemplo, Nota Fiscal complementar ou de ajuste);
+     * 1=Operação presencial;
+     * 2=Operação não presencial, pela Internet;
+     * 3=Operação não presencial, Teleatendimento;
+     * 4=NFC-e em operação com entrega a domicílio;
+     * 5=Operação presencial, fora do estabelecimento (incluído NT 2016/002);
+     * 9=Operação não presencial, outros.
      */
     indPres: number;
     /**
@@ -502,7 +508,9 @@ export type Ide = {
     indIntermed?: number;
     /**
      * @param {number} procEmi - Processo de emissão da NF-e
-     * 0=Emissão de NF-e com aplicativo do contribuinte; 1=Emissão de NF-e avulsa pelo Fisco; 2=Emissão de NF-e avulsa, pelo contribuinte com seu certificado digital, através do site do Fisco; 3=Emissão NF-e pelo contribuinte com aplicativo fornecido pelo Fisco.
+     * 0=Emissão de NF-e com aplicativo do contribuinte
+     * 1=Emissão de NF-e avulsa pelo Fisco
+     * 2=Emissão de NF-e avulsa, pelo contribuinte com seu certificado digital, através do site do Fisco; 3=Emissão NF-e pelo contribuinte com aplicativo fornecido pelo Fisco.
      */
     procEmi: number;
     /**
@@ -522,14 +530,14 @@ export type Ide = {
      */
     xJust?: string;
     /**
-     * @param {number} indMultaJuros - Indicador de Multa e Juros
+     * @param {number} indMultaJuros - Indicador de Multa e Juros  - [B30]
      * 0=Indicador de Multa / 1=Indicador de Juros
      * 
      * NT_2024.002
      */
     indMultaJuros?: number;
     /**
-     * @param {gCompraGov} gCompraGov - Grupo de compra Governamental
+     * @param {gCompraGov} gCompraGov - Grupo de compra Governamental - [B31]
      * 
      * NT_2024.002
      */
@@ -550,15 +558,24 @@ export type Ide = {
  */
 export type gCompraGov = {
     /**
-     * @param {number} tpCompraGov - Tipo de compra Governamental
-     * 1=União; 2=Estados; 3=Distrito; Federal 4=Municípios
+     * @param {number} tpEnteGov - Tipo de ente governamental - [B32]
+        1=União
+        2=Estados
+        3=Distrito Federal
+        4=Município
      */
-    tpCompraGov: number;
+    tpEnteGov: number;
     /**
-     * @param {number} pRedutor - Percentual de redução de aliquota em compra governamental
-     * Conforme Seção XI, Art. 41 PLP 68/2024.
+     * @param {number} pRedutor - Percentual de redução de aliquota em compra governamental - [B33]
+     * Conforme o art. 472/370 da LC 214/2025.
      */
-    pRedutor?: number;
+    pRedutor: number;
+    /**
+     * @param {number} tpOperGov - Tipo de operação com o ente governamental - [B34]
+        1=Fornecimento;
+        2=Recebimento do pagamento, conforme fato gerador do IBS/CBS definido no Art. 10 § 2º
+     */
+    tpOperGov: number;
 }
 
 /**
