@@ -343,8 +343,8 @@ export type gMono = {
  * [DFeReferenciado] 
  * Documento Fiscal Eletrônico Referenciado
  * Grupo para referenciamento de itens de outro DF-e
- * VB01-VB03
- * GRUPO VB
+ * VC01-VC03
+ * GRUPO VC
  */
 export type DFeReferenciado = {
     /**
@@ -358,6 +358,25 @@ export type DFeReferenciado = {
      */
     nItem: number;
 }
+
+/**
+ * [DFeReferenciado] 
+ * Documento Fiscal Eletrônico Referenciado
+ * Grupo para referenciamento de itens de outro DF-e
+ * GRUPO VB
+ */
+// export type DFeReferenciado = {
+//     /**
+//      * @param {string} chaveAcesso - Chave de acesso do DF-e referenciado (VB02)
+//      */
+//     chaveAcesso: string;
+//     /**
+//      * @param {number} nItem - Número do item do documento referenciado (VB03)
+//      * Corresponde ao atributo "nItem" do elemento "det" do documento original.
+//      * Se o documento referenciado não tiver item, indicar "1"
+//      */
+//     nItem: number;
+// }
 
 
 /**
@@ -1222,6 +1241,11 @@ export type DetProd = {
      * NT 2021.004
      */
     obsItem?: ObsItem;
+    /**
+     * @param {number} vItem -Valor Total do Item da NF-e
+     * Valor total do Item, correspondente à sua participação no total da nota. A soma dos itens deverá corresponder ao total da nota.
+     */
+    vItem?: number;
     /**
      * @param {DFeReferenciado} DFeReferenciado -Documento Fiscal Eletrônico Referenciado	
      * NT 2024.002.v1.10
