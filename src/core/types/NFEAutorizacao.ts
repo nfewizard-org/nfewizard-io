@@ -1411,6 +1411,12 @@ export type Prod = {
      */
     indTot: number;
     /**
+     * @param {number} indBemMovelUsado - Indicador de fornecimento de bem móvel usado	
+        Somente para fornecimentos de bem móvel usado adquirido de pessoa física que não seja contribuinte ou que seja inscrita como MEI.
+        1 - Bem Móvel Usado
+     */
+    indBemMovelUsado?: number;
+    /**
      * @param {Comb} comb - Informações específicas para combustíveis líquidos e lubrificantes
      */
     comb?: Comb;
