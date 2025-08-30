@@ -467,6 +467,25 @@ export type Ide = {
      */
     finNFe: number;
     /**
+     * @param {number} tpNFDebito - Tipo de Nota de Débito - [B25.1]
+        01=Transferência de créditos para Cooperativas;
+        02=Anulação de Crédito por Saídas Imunes/Isentas;
+        03=Débitos de notas fiscais não processadas na apuração;
+        04=Multa e juros;
+        05=Transferência de crédito de sucessão;
+        06 = Pagamento antecipado
+        07 = Perda em estoque
+     */
+    tpNFDebito?: number;
+    /**
+     * @param {number} tpNFCredito - Tipo de Nota de Crédito - [B25.2]
+        01 = Multa e juros
+        02 = Apropriação de crédito presumido de IBS sobre o saldo
+        devedor na ZFM (art. 450, § 1º, LC 214/25)
+        03 = Retorno
+     */
+    tpNFCredito?: number;
+    /**
      * @param {number} indFinal - Indica operação com Consumidor final
      * 0=Normal; 1=Consumidor final;
      */
