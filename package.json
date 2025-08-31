@@ -25,8 +25,8 @@
     "debug": "tsx src/debug.ts",
     "test": "jest",
     "clean": "rm -rf dist",
-    "build": "node build.mjs",
-    "build:rp": "npm run clean && rollup -c",
+    "build": "npm run clean && rollup -c",
+    "build:idle": "node build.mjs",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs-esm": "yarn build:cjs && yarn build:esm"
