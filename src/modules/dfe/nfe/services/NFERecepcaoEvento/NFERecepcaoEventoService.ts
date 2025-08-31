@@ -311,7 +311,7 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
     }
 
     async Exec(data: EventoNFe) {
-        try {
+
             const { evento, idLote, modelo } = data;
             const { nacional, regional } = this.separaEventosPorAmbiente(evento);
 
@@ -349,9 +349,7 @@ class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServi
                 xMotivos: this.xMotivoPorEvento,
                 response: finalResponseInJson,
             };
-        } catch (error: any) {
-            throw new Error(error.message)
-        }
+
     }
 }
 
