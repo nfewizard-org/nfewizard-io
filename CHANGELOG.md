@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.5.0] - 2025-08-31
+
+### Feat
+- **Leiaute da NF-e (Modelo 55 e 65) - Reforma Tributária - [NT 2025.002 v1.10]**
+  - Atualiza Grupo B - Identificação da Nota Fiscal eletrônica
+  - Atualiza Grupo N01 - ICMS Normal e ST
+  - Atualiza Grupo W03 - Total da NF-e - IBS / CBS / I
+  - Adiciona Grupo BB - Grupo de notas de antecipação de pagamento
+  - Adiciona Grupo I - Produtos e Serviços da NF-e
+  - Adiciona Grupo UB - Informações dos tributos IBS / CBS e Imposto Seletivo
+  - Adiciona Grupo VB - Identificação da Nota Fiscal eletrônica
+  - Adiciona Grupo VC - Referenciamento de item de outro Documento Fiscal Eletrônico - DF-e
+  - Atualiza Schemas XML NF-e/NFC-e - Schema dos eventos da NT 2025.002 v.1.20
+  - Atualiza Schemas XML NF-e/NFC-e - Pacote de Liberação nº 010b v. 1.21 (Novo leiaute da NF-e, NT 2025.002 v.1.20, NT 2024.003 e NT 2025.001)
+  - Adiciona validação para CNPJ alfanumérico - NTC 2025.001
+  - Atualiza URL-QRCode - Atualizada URL-QRCode para Goias
+
 ## [0.4.7] - 2025-08-14
 
 ### Fix
