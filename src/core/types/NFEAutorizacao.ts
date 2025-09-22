@@ -1296,10 +1296,10 @@ export type Prod = {
      */
     NVE?: string[] | string;
     /**
-     * @param {number} CEST - Código CEST
+     * @param {string} CEST - Código CEST
      * Campo CEST (Código Especificador da Substituição Tributária), que estabelece a sistemática de uniformização e identificação das mercadorias e bens passíveis de sujeição aos regimes de substituição tributária e de antecipação de recolhimento do ICMS.
      */
-    CEST?: number;
+    CEST?: string;
     /**
      * @param {'S' | 'N'} indEscala - Indicador de Escala Relevante
      * Indicador de Produção em escala relevante, conforme Cláusula 23 do Convenio ICMS 52/2017:
@@ -1649,7 +1649,7 @@ export type OrigComb = {
 /**
  * [imposto] 
  * Tributos incidentes no Produto ou Serviço	
- * GRUPO I
+ * GRUPO M01
  */
 export type Imposto = {
     /**
@@ -1829,7 +1829,7 @@ export type gIBSCBS = {
      * @param {string} vIBS - Valor do IBS - [UB54a]
      * Valor do IBS (soma de vIBSUF e vIBSMun). Quando houver crédito presumido com indicador “IndDeduzCredPres=1”, o vCredPres deve ser abatido desse valor.
      */
-    // vIBS: string;
+    vIBS: string;
     /**
      * @param {gCBS} gCBS - Grupo de Informações da CBS - [UB55]
      */
@@ -2298,21 +2298,6 @@ export type gMonoDif = {
     vCBSMonoDif: number;
 };
 
-
-
-/**
- * Grupo UB. Informações dos tributos IBS / CBS e Imposto Seletivo
- */
-export type GrupoUB = {
-    /**
-     * @param {IS} IS - Informações do Imposto Seletivo - [UB01]
-     */
-    IS?: IS;
-    /**
-     * @param {IBSCBS} IBSCBS - Informações do Imposto de Bens e Serviços - IBS e da Contribuição de Bens e Serviços - CBS - [UB12]
-     */
-    IBSCBS?: IBSCBS;
-};
 
 
 /**
