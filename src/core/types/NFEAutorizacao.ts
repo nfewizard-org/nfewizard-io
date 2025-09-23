@@ -570,13 +570,6 @@ export type Ide = {
      * Informado para abater as parcelas de antecipação de pagamento, conforme Art. 10. § 4º
      */
     gPagAntecipado?: gPagAntecipado;
-    /**
-     * @param {number} tipoNotaCredito - Indicador do tipo de nota de crédito que está sendo utilizada
-     * Aguardando GT06. A definir
-     * 
-     * NT_2024.002
-     */
-    tipoNotaCredito?: number;
 }
 
 /**
@@ -1717,18 +1710,18 @@ export type Imposto = {
      * @param {IBSCBS} IBSCBS - Informações do IBS e CBS
      */
     IBSCBS?: IBSCBS;
-    /**
-     * @param {gIBSCBSMono} gIBSCBSMono - Grupo de Informações do IBS e CBS em operações monofásicas
-     */
-    gIBSCBSMono?: gIBSCBSMono;
-    /**
-     * @param {gTransfCred} gTransfCred - Grupo de Transferências de Crédito
-     */
-    gTransfCred?: gTransfCred;
-    /**
-     * @param {gCredPresIBSZFM} gCredPresIBSZFM - Crédito presumido de IBS na ZFM
-     */
-    gCredPresIBSZFM?: gCredPresIBSZFM;
+    // /** VALIDAR
+    //  * @param {gIBSCBSMono} gIBSCBSMono - Grupo de Informações do IBS e CBS em operações monofásicas
+    //  */
+    // gIBSCBSMono?: gIBSCBSMono;
+    // /**
+    //  * @param {gTransfCred} gTransfCred - Grupo de Transferências de Crédito
+    //  */
+    // gTransfCred?: gTransfCred;
+    // /**
+    //  * @param {gCredPresIBSZFM} gCredPresIBSZFM - Crédito presumido de IBS na ZFM
+    //  */
+    // gCredPresIBSZFM?: gCredPresIBSZFM;
 }
 
 
@@ -1826,10 +1819,10 @@ export type gIBSCBS = {
      */
     gIBSMun: gIBSMun;
     /**
-     * @param {string} vIBS - Valor do IBS - [UB54a]
+     * @param {number | string} vIBS - Valor do IBS - [UB54a]
      * Valor do IBS (soma de vIBSUF e vIBSMun). Quando houver crédito presumido com indicador “IndDeduzCredPres=1”, o vCredPres deve ser abatido desse valor.
      */
-    vIBS: string;
+    vIBS: number | string;
     /**
      * @param {gCBS} gCBS - Grupo de Informações da CBS - [UB55]
      */
@@ -1887,9 +1880,9 @@ export type gIBSCBSMono = {
  */
 export type gTransfCred = {
     /**
-     * @param {string} vIBS - Valor do IBS a ser transferido - [UB107]
+     * @param {number | string} vIBS - Valor do IBS a ser transferido - [UB107]
      */
-    vIBS: string;
+    vIBS: number | string;
     /**
      * @param {string | number} vCBS - Valor da CBS a ser transferida - [UB108]
      */
@@ -5162,9 +5155,9 @@ export type gIBS_Totais = {
      */
     gIBSMun: gIBSMun_Totais;
     /**
-     * @param {string} vIBS - Valor total do IBS - [W47]
+     * @param {number | string} vIBS - Valor total do IBS - [W47]
      */
-    vIBS: string;
+    vIBS: number | string;
     /**
      * @param {number} vCredPres - Valor total do crédito presumido - [W48]
      */
