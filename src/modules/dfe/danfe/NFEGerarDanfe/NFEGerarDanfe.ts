@@ -253,7 +253,7 @@ class NFEGerarDanfe {
                 });
             }
 
-            if (Number(this.ide.tpAmb) !== 2 && !this.enviada) {
+            if (Number(this.ide.tpAmb) !== 2 && !this.enviada && !this.data.forceTransmitida) {
                 this.doc.fontSize(14).font('Times-Bold').fillColor('red').text('NF-E NÃO ENVIADA PARA SEFAZ', left + 316, topIdentificacao_1 + 12, {
                     characterSpacing: 1,
                     width: 256.73,

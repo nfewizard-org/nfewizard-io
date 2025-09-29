@@ -30,6 +30,10 @@ export type NFEGerarDanfeProps = {
          * @param {ProtNFe} protNFe - Dados da aturoziação de uso da NFe
          */
         protNFe?: ProtNFe;
+        /**
+         * @param {ProtNFe} protNFe - Força remoção da mensagem de "NFe não transmitida"
+         */
+        forceTransmitida?: boolean;
     };
     /**
      * @param {string} chave - Chave da NFe
