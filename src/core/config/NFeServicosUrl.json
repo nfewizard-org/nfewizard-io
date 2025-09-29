@@ -342,8 +342,8 @@
     "NFEStatusServico_3.10": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NfeStatusServico2",
     "NfeConsultaCadastro_2.00": "https://nfe.sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro2",
     "NfeConsultaCadastro_3.10": "https://nfe.sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro2",
-    "NFEAutorizacao_3.10": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NfeAutorizacao?wsdl",
-    "NFERetornoAutorizacao_3.10": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao?wsdl",
+    "NFEAutorizacao_3.10": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NfeAutorizacao",
+    "NFERetornoAutorizacao_3.10": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao",
     "NFEInutilizacao_4.00": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NFeInutilizacao4",
     "NFEConsultaProtocolo_4.00": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NFeConsultaProtocolo4",
     "NFEStatusServico_4.00": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NFeStatusServico4",
@@ -351,7 +351,7 @@
     "NFEAutorizacao_4.00": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NFeAutorizacao4",
     "NFERetornoAutorizacao_4.00": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NFeRetAutorizacao4",
     "NfeConsultaCadastro_4.00": "https://nfe.sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro4",
-    "NFERetAutorizacao_3.10": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao?wsdl",
+    "NFERetAutorizacao_3.10": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao",
     "NFERetAutorizacao_4.00": "https://nfe.sefaz.pe.gov.br/nfe-service/services/NFeRetAutorizacao4"
   },
   "NFe_PE_H": {
@@ -364,17 +364,17 @@
     "NFEConsultaProtocolo_3.10": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NfeConsulta2",
     "NFEStatusServico_2.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NfeStatusServico2",
     "NFEStatusServico_3.10": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NfeStatusServico2",
-    "NFEAutorizacao_3.10": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NfeAutorizacao?wsdl",
-    "NFERetornoAutorizacao_3.10": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao?wsdl",
-    "NFEInutilizacao_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeInutilizacao4?wsdl",
-    "NFEConsultaProtocolo_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeConsultaProtocolo4?wsdl",
-    "NFEStatusServico_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeStatusServico4?wsdl",
-    "NfeConsultaCadastro_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro4?wsdl",
-    "RecepcaoEvento_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeRecepcaoEvento4?wsdl",
-    "NFEAutorizacao_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeAutorizacao4?wsdl",
-    "NFERetornoAutorizacao_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeRetAutorizacao4?wsdl",
-    "NFERetAutorizacao_3.10": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao?wsdl",
-    "NFERetAutorizacao_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeRetAutorizacao4?wsdl"
+    "NFEAutorizacao_3.10": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NfeAutorizacao",
+    "NFERetornoAutorizacao_3.10": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao",
+    "NFEInutilizacao_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeInutilizacao4",
+    "NFEConsultaProtocolo_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeConsultaProtocolo4",
+    "NFEStatusServico_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeStatusServico4",
+    "NfeConsultaCadastro_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro4",
+    "RecepcaoEvento_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeRecepcaoEvento4",
+    "NFEAutorizacao_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeAutorizacao4",
+    "NFERetornoAutorizacao_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeRetAutorizacao4",
+    "NFERetAutorizacao_3.10": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao",
+    "NFERetAutorizacao_4.00": "https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeRetAutorizacao4"
   },
   "NFe_PI_P": {
     "Usar": "NFe_SVRS_P"
