@@ -243,7 +243,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             if (NFe?.infNFe?.det instanceof Array) {
                 // Adicionando indice ao item
                 const formatedItens = NFe.infNFe.det.map((det, index) => {
-                    if (det.imposto.ICMS.dadosICMS) {
+                    if (det.imposto.ICMS?.dadosICMS) {
                         const icms = mountICMS(det.imposto.ICMS.dadosICMS);
                         det.imposto.ICMS = icms;
                     }
