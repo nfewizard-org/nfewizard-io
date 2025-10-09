@@ -52,7 +52,7 @@ class GerarConsulta implements GerarConsultaImpl {
             const { method, action } = this.utility.getSoapInfo(config.dfe.UF, metodo);
 
             const xmlFormated = this.createSoapEnvelop(xmlConsulta, metodo, method, rootTag, tag);
-
+            console.log({ xmlFormated })
             // Retorna o Http.Agent contendo os certificados das Autoridades Certificadoras
             const agent = this.environment.getHttpAgent();
 
