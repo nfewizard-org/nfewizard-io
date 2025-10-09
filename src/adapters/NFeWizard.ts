@@ -18,6 +18,9 @@ import {
     NFeWizardProps,
     EventoNFe,
     ConsultaNFe,
+    ConsultaCTe,
+    DFePorUltimoNSUCTe,
+    DFePorNSUCTe,
     NFe,
     InutilizacaoData,
     NFEGerarDanfeProps,
@@ -103,6 +106,19 @@ export default class NFeWizard implements NFeWizardImpl {
     }
     async NFE_DistribuicaoDFePorChave(data: DFePorChaveNFe) {
         return await this.nfeWizardService.NFE_DistribuicaoDFePorChave(data);
+    }
+
+    /**
+     * Distribuição DFe CTe
+     */
+    async CTE_DistribuicaoDFe(data: ConsultaCTe) {
+        return await this.nfeWizardService.CTE_DistribuicaoDFe(data);
+    }
+    async CTE_DistribuicaoDFePorUltNSU(data: DFePorUltimoNSUCTe) {
+        return await this.nfeWizardService.CTE_DistribuicaoDFePorUltNSU(data);
+    }
+    async CTE_DistribuicaoDFePorNSU(data: DFePorNSUCTe) {
+        return await this.nfeWizardService.CTE_DistribuicaoDFePorNSU(data);
     }
 
     /**

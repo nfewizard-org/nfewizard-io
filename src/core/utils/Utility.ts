@@ -93,18 +93,18 @@ class Utility {
      */
     findAllInObj = (obj: GenericObject, chave: string): any[] => {
         const results: any[] = [];
-        
+
         if (obj.hasOwnProperty(chave)) {
             results.push(obj[chave]);
         }
-        
+
         for (let prop in obj) {
             if (typeof obj[prop] === 'object' && obj[prop] !== null) {
                 const nestedResults = this.findAllInObj(obj[prop], chave);
                 results.push(...nestedResults);
             }
         }
-        
+
         return results;
     };
 
@@ -446,13 +446,13 @@ class Utility {
             context: 'Utility',
         });
         const responseInJson = this.xmlParser.convertXmlToJson(data, metodo);
-        
+
         // Salva XML de retorno
         this.salvaRetorno(data, responseInJson, metodo, name);
 
         // Busca todos os xMotivo no objeto
         const allXMotivos = this.findAllInObj(responseInJson, 'xMotivo');
-        
+
         // Verifica se algum xMotivo contém "Rejeição" ou "Rejeicao"
         for (const xMotivo of allXMotivos) {
             if (xMotivo && (xMotivo.includes('Rejeição') || xMotivo.includes('Rejeicao'))) {
@@ -512,6 +512,8 @@ class Utility {
                 return `NFCEAutorizacao-${tipo}`
             case 'NFERetAutorizacao':
                 return `NFERetAutorizacao-${tipo}`
+            case 'CTeDistribuicaoDFe':
+                return `CTeDistribuicaoDFe-${tipo}`
 
             default:
                 throw new Error('Erro: Requisição de nome para método não implementado.')
