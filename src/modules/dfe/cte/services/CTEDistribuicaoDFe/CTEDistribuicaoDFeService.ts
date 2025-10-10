@@ -96,7 +96,7 @@ class CTEDistribuicaoDFeService extends BaseNFE {
             // Gerando XML para consulta de Distribuição DFe do CTe
             xmlConsulta = this.gerarXmlCTeDistribuicaoDFe(data);
             console.log({ xmlConsulta })
-            const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, true, '1.00', 'CTe', true, 'cteDistDFeInteresse');
+            const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, true, '1.00', 'CTe', true, 'cteDistDFeInteresse', 'cteDadosMsg');
 
             xmlConsultaSoap = xmlFormated;
             webServiceUrlTmp = webServiceUrl;
