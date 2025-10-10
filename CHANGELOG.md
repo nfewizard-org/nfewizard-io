@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.5.4] - 2025-10-10
+
+### Feat
+- **CT-e - Conhecimento de Transporte Eletrônico**
+  - Implementa módulo completo de Distribuição de CT-e
+  - Adiciona suporte para consulta de CT-e por NSU (`CTE_DistribuicaoDFePorNSU`)
+  - Adiciona suporte para consulta de CT-e por último NSU (`CTE_DistribuicaoDFePorUltNSU`)
+  - Implementa serviços de comunicação com webservices da SEFAZ para CT-e
+  - Adiciona configuração de URLs dos webservices de CT-e (produção e homologação)
+  - Implementa descompactação e processamento de documentos CT-e (proc, res, event)
+  - Adiciona suporte para salvamento automático de documentos CT-e na pasta de distribuição
+  - Atualiza XmlParser para reconhecer formatos de resposta CT-e
+  - Atualiza XmlBuilder para suportar tag `cteDadosMsg` no envelope SOAP
+  - Adiciona tipos e interfaces específicas para CT-e: `DFePorNSUCTe`, `DFePorUltimoNSUCTe`, `ConsultaCTe`
+  - Implementa DistribuicaoHandler específico para CT-e com suporte a `chCTe`, `resCTe` e `procEventoCTe`
+
 ## [0.5.0] - 2025-08-31
 
 ### Feat

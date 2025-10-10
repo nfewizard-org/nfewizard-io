@@ -38,11 +38,11 @@ npm i @nfewizard-io/nfce
 🚀 Pronto, agora você pode decidir utilizar apenas os serviços que precisa! -->
 
 ## Sobre a Biblioteca
-NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
+NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e) e Conhecimento de Transporte Eletrônico (CT-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
 
 - **Autorização (Emissão de NFe e NFCe)**: Submissão de Notas Fiscais Eletrônicas e Notas Fiscais de Consumidor Eletrônica
 para autorização.
-- **Distribuição DFe**: Consulta e Download de DF-e (Documentos fiscais eletrônicos), facilitando o acesso a documentos fiscais eletrônicos.
+- **Distribuição DFe (NF-e e CT-e)**: Consulta e Download de DF-e (Documentos fiscais eletrônicos), facilitando o acesso a documentos fiscais eletrônicos de NF-e e CT-e.
 - **Consulta de Protocolo**: Verificação da situação atual da NF-e na Base de Dados do Portal da Secretaria de Fazenda Estadual.
 - **Inutilização de NFe**: Processo de inutilização de números de NF-e que não serão utilizados, assegurando a conformidade fiscal.
 - **Consulta de Status do Serviço**: Monitoramento do status dos serviços da SEFAZ, garantindo a disponibilidade dos webservices.
@@ -175,8 +175,9 @@ await nfeWizard.NFE_LoadEnvironment({
 
 ## Última Release (0.3.1)
 
-- Efetuados diversos ajustes na emissão de NFC-e.
-- Alterada estrutura de pastas da lib (com mais alterações estruturais por vir)
+- Implementado suporte completo para Distribuição de CT-e (Conhecimento de Transporte Eletrônico)
+- Adicionados métodos `CTE_DistribuicaoDFePorNSU` e `CTE_DistribuicaoDFePorUltNSU`
+- Suporte para download automático de documentos CT-e (proc, res, event)
 
 ## Observações
 
