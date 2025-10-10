@@ -1,7 +1,7 @@
 import { Agent } from 'http';
 
 export interface GerarConsultaImpl {
-    gerarConsulta(xmlConsulta: string, metodo: string, ambienteNacional?: boolean, versao?: string, mod?: string, rootTag?: boolean, tag?: string): Promise<{
+    gerarConsulta(xmlConsulta: string, metodo: string, ambienteNacional?: boolean, versao?: string, mod?: string, rootTag?: boolean, tag?: string, dadosMsgTag?: string): Promise<{
         xmlFormated: string;
         agent: Agent;
         webServiceUrl: string;

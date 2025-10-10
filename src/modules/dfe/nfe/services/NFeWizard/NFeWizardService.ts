@@ -20,6 +20,13 @@ import NFEDistribuicaoDFe from '../../operations/NFEDistribuicaoDFe/NFEDistribui
 import NFEDistribuicaoDFePorChave from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorChave';
 import NFEDistribuicaoDFePorNSU from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorNSU';
 import NFEDistribuicaoDFePorUltNSU from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorUltNSU';
+// CTe imports
+import CTEDistribuicaoDFe from '@Modules/dfe/cte/operations/CTEDistribuicaoDFe/CTEDistribuicaoDFe';
+import CTEDistribuicaoDFePorNSU from '@Modules/dfe/cte/operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorNSU';
+import CTEDistribuicaoDFePorUltNSU from '@Modules/dfe/cte/operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorUltNSU';
+import CTEDistribuicaoDFeService from '@Modules/dfe/cte/services/CTEDistribuicaoDFe/CTEDistribuicaoDFeService';
+import CTEDistribuicaoDFePorNSUService from '@Modules/dfe/cte/services/CTEDistribuicaoDFe/CTEDistribuicaoDFePorNSU';
+import CTEDistribuicaoDFePorUltNSUService from '@Modules/dfe/cte/services/CTEDistribuicaoDFe/CTEDistribuicaoDFePorUltNSU';
 import NFEInutilizacao from '../../operations/NFEInutilizacao/NFEInutilizacao';
 import NFECartaDeCorrecao from '../../operations/NFERecepcaoEvento/NFECartaDeCorrecao';
 import NFEDesconhecimentoDaOperacao from '../../operations/NFERecepcaoEvento/NFEDesconhecimentoDaOperacao';
@@ -30,6 +37,9 @@ import {
     CienciaDaOperacao,
     ConfirmacaoDaOperacao,
     ConsultaNFe,
+    ConsultaCTe,
+    DFePorUltimoNSUCTe,
+    DFePorNSUCTe,
     DesconhecimentoDaOperacao,
     DFePorChaveNFe,
     DFePorNSU,
@@ -358,6 +368,58 @@ class NFeWizardService implements NFeWizardServiceImpl {
         } catch (error: any) {
             logger.error(``, error, { context: 'NFE_DistribuicaoDFePorChave', });
             throw new Error(`NFE_DistribuicaoDFePorChave: ${error.message}`)
+        }
+    }
+
+    /**
+     * Distribuição DFe CTe
+     */
+    async CTE_DistribuicaoDFe(data: ConsultaCTe) {
+        try {
+            const distribuicaoDFeService = new CTEDistribuicaoDFeService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const distribuicaoDFe = new CTEDistribuicaoDFe(distribuicaoDFeService);
+            const response = await distribuicaoDFe.Exec(data);
+
+            console.log('Retorno CTE_DistribuicaoDFe');
+            console.log(`   ${response.xMotivo}`);
+            console.log('===================================');
+
+            return response.data
+        } catch (error: any) {
+            logger.error(``, error, { context: 'CTE_DistribuicaoDFe', });
+            throw new Error(`CTE_DistribuicaoDFe: ${error.message}`)
+        }
+    }
+    async CTE_DistribuicaoDFePorUltNSU(data: DFePorUltimoNSUCTe) {
+        try {
+            const distribuicaoDFeService = new CTEDistribuicaoDFePorUltNSUService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const distribuicaoDFe = new CTEDistribuicaoDFePorUltNSU(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const response = await distribuicaoDFe.Exec(data);
+
+            console.log('Retorno CTE_DistribuicaoDFePorUltNSU');
+            console.log(`   ${response.xMotivo}`);
+            console.log('===================================');
+
+            return response.data
+        } catch (error: any) {
+            logger.error(``, error, { context: 'CTE_DistribuicaoDFePorUltNSU', });
+            throw new Error(`CTE_DistribuicaoDFePorUltNSU: ${error.message}`)
+        }
+    }
+    async CTE_DistribuicaoDFePorNSU(data: DFePorNSUCTe) {
+        try {
+            const distribuicaoDFeService = new CTEDistribuicaoDFePorNSUService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const distribuicaoDFe = new CTEDistribuicaoDFePorNSU(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const response = await distribuicaoDFe.Exec(data);
+
+            console.log('Retorno CTE_DistribuicaoDFePorNSU');
+            console.log(`   ${response.xMotivo}`);
+            console.log('===================================');
+
+            return response.data
+        } catch (error: any) {
+            logger.error(``, error, { context: 'CTE_DistribuicaoDFePorNSU', });
+            throw new Error(`CTE_DistribuicaoDFePorNSU: ${error.message}`)
         }
     }
 

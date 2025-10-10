@@ -38,5 +38,9 @@
     "RecepcaoEvento": {
         "method": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4",
         "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEventoNF"
+    },
+    "CTeDistribuicaoDFe": {
+        "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe",
+        "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe/cteDistDFeInteresse"
     }
 }

@@ -15,7 +15,7 @@ class GerarConsulta implements GerarConsultaImpl {
         this.xmlBuilder = xmlBuilder;
     }
 
-    createSoapEnvelop(xmlConsulta: string, metodo: string, method: string, rootTag: boolean = false, tag = "") {
+    createSoapEnvelop(xmlConsulta: string, metodo: string, method: string, rootTag: boolean = false, tag = "", dadosMsgTag: string = "nfeDadosMsg") {
         logger.info(`Adicionando SOAP ao XML`, {
             context: 'GerarConsulta',
         });
@@ -27,10 +27,10 @@ class GerarConsulta implements GerarConsultaImpl {
                 namespace: method,
             };
         }
-        return this.xmlBuilder.buildSoapEnvelope(xmlConsulta, method, 'soap12', rootTagObj);
+        return this.xmlBuilder.buildSoapEnvelope(xmlConsulta, method, 'soap12', rootTagObj, dadosMsgTag);
     }
 
-    async gerarConsulta(xmlConsulta: string, metodo: string, ambienteNacional = false, versao = "", mod = "NFe", rootTag: boolean = false, tag = "") {
+    async gerarConsulta(xmlConsulta: string, metodo: string, ambienteNacional = false, versao = "", mod = "NFe", rootTag: boolean = false, tag = "", dadosMsgTag: string = "nfeDadosMsg") {
         try {
             const config = this.environment.getConfig();
             // Valida Schema
@@ -51,7 +51,7 @@ class GerarConsulta implements GerarConsultaImpl {
             // Capturando a url do método para o namespace xmlns
             const { method, action } = this.utility.getSoapInfo(config.dfe.UF, metodo);
 
-            const xmlFormated = this.createSoapEnvelop(xmlConsulta, metodo, method, rootTag, tag);
+            const xmlFormated = this.createSoapEnvelop(xmlConsulta, metodo, method, rootTag, tag, dadosMsgTag);
 
             // Retorna o Http.Agent contendo os certificados das Autoridades Certificadoras
             const agent = this.environment.getHttpAgent();

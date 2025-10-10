@@ -62,13 +62,24 @@ export default class XmlParser {
         return this.findInObj(jsonData, 'retEnvEvento');
     }
     getDistribuicaoDFe(jsonData: any): any {
-        return this.findInObj(jsonData, 'nfeDistDFeInteresseResult');
+        // Tenta encontrar resposta NFe primeiro
+        let result = this.findInObj(jsonData, 'nfeDistDFeInteresseResult');
+        // Se não encontrar, tenta resposta CTe
+        if (!result) {
+            result = this.findInObj(jsonData, 'cteDistDFeInteresseResult');
+        }
+        return result;
     }
     getDistribuicaoDFeProcBody(jsonData: any): any {
         return this.findInObj(jsonData, 'NFe');
     }
     getDistribuicaoDFeResBody(jsonData: any): any {
-        return this.findInObj(jsonData, 'resNFe');
+        // Tenta encontrar resNFe primeiro, senão tenta resCTe
+        let result = this.findInObj(jsonData, 'resNFe');
+        if (!result) {
+            result = this.findInObj(jsonData, 'resCTe');
+        }
+        return result;
     }
     getDistribuicaoDFeEventBody(jsonData: any): any {
         return this.findInObj(jsonData, 'evento');
@@ -119,6 +130,9 @@ export default class XmlParser {
             case 'NFeDistribuicaoDFe':
                 jsonBody = this.getDistribuicaoDFe(jsonData)
                 break;
+            case 'CTeDistribuicaoDFe':
+                jsonBody = this.getDistribuicaoDFe(jsonData)
+                break;
             case 'NFeDistribuicaoDFe_proc':
                 jsonBody = jsonData
                 break;
@@ -126,6 +140,15 @@ export default class XmlParser {
                 jsonBody = this.getDistribuicaoDFeResBody(jsonData)
                 break;
             case 'NFeDistribuicaoDFe_event':
+                jsonBody = this.getDistribuicaoDFeEventBody(jsonData)
+                break;
+            case 'CTeDistribuicaoDFe_proc':
+                jsonBody = jsonData
+                break;
+            case 'CTeDistribuicaoDFe_res':
+                jsonBody = this.getDistribuicaoDFeResBody(jsonData)
+                break;
+            case 'CTeDistribuicaoDFe_event':
                 jsonBody = this.getDistribuicaoDFeEventBody(jsonData)
                 break;
             case 'NFEAutorizacao':
