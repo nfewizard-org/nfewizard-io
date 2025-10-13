@@ -33,6 +33,7 @@ abstract class BaseNFE {
     axios: AxiosInstance;
     saveFiles: SaveFilesImpl;
     gerarConsulta: GerarConsultaImpl;
+    modelo?: string;
 
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, metodo: string, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         this.environment = environment;
@@ -43,6 +44,7 @@ abstract class BaseNFE {
         this.saveFiles = saveFiles;
         this.gerarConsulta = gerarConsulta;
         this.chaveNfe = "";
+        this.modelo = 'NFe';
     }
 
     /**
@@ -96,6 +98,13 @@ abstract class BaseNFE {
     }
 
     /**
+     * Método para obter o modelo
+     */
+    protected getModelo(data?: any): string {
+        return this.modelo || 'NFe';
+    }
+
+    /**
      * Executa a requisição ao webservice SEFAZ
      * @param {any} [data] - Dados opcionais usados para gerar o XML em algumas subclasses.
      * @returns {Promise<any>} A resposta do webservice em JSON.
@@ -112,7 +121,9 @@ abstract class BaseNFE {
             // Gerando XML específico
             xmlConsulta = this.gerarXml(data);
 
-            const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
+            const modelo = this.getModelo(data);
+
+            const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, undefined, undefined, modelo);
 
             xmlConsultaSoap = xmlFormated;
             webServiceUrlTmp = webServiceUrl;
