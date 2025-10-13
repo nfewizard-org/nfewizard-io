@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.41] - 2025-10-13
+
+### Fix
+- **NF-e / NFC-e Inutilização**
+  - Adiciona suporte para modelo de NFCe na classe NFEInutilizacaoService
+
 ## [0.5.4] - 2025-10-10
 
 ### Feat
