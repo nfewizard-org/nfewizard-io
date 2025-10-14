@@ -42,6 +42,16 @@ class NFEInutilizacaoService extends BaseNFE implements NFEInutilizacaoServiceIm
     }
 
     /**
+     * Sobrescreve o método pai para determinar o modelo baseado nos dados de inutilização
+     */
+    protected getModelo(data?: InutilizacaoData): string {
+        if (data?.mod) {
+            return data.mod === '55' ? 'NFe' : 'NFCe';
+        }
+        return super.getModelo(data); // usa o comportamento padrão
+    }
+
+    /**
      * Método utilitário para criação do XML a partir de um Objeto
      */
     gerarXmlNFeInutilizacao(data: InutilizacaoData) {
