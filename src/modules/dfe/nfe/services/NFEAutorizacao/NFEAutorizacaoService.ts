@@ -234,11 +234,11 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
                         const icms = mountICMS(det.imposto.ICMS.dadosICMS);
                         det.imposto.ICMS = icms;
                     }
-                    if (det.imposto.PIS.dadosPIS) {
+                    if (det.imposto.PIS?.dadosPIS) {
                         const pis = mountPIS(det.imposto.PIS.dadosPIS);
                         det.imposto.PIS = pis;
                     }
-                    if (det.imposto.COFINS.dadosCOFINS) {
+                    if (det.imposto.COFINS?.dadosCOFINS) {
                         const cofins = mountCOFINS(det.imposto.COFINS.dadosCOFINS);
                         det.imposto.COFINS = cofins
                     }
