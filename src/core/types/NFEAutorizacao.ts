@@ -1674,7 +1674,7 @@ export type Imposto = {
      * @param {PIS} PIS - Grupo PIS	
      * Informar apenas um dos grupos Q02, Q03, Q04 ou Q05 com base valor atribuído ao campo Q06 – CST do PIS
      */
-    PIS: PIS;
+    PIS?: PIS;
     /**
      * @param {PISST} PISST - Grupo PIS Substituição Tributária	
      */
@@ -1683,7 +1683,7 @@ export type Imposto = {
      * @param {COFINS} COFINS - Grupo COFINS
      * Informar apenas um dos grupos S02, S03, S04 ou S04 com base valor atribuído ao campo de CST da COFINS
      */
-    COFINS: COFINS;
+    COFINS?: COFINS;
     /**
      * @param {COFINSST} COFINSST - Grupo COFINS Substituição Tributária
      */
