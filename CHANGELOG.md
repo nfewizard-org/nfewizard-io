@@ -1,5 +1,12 @@
 # Changelog
 
+
+## [0.5.43] - 2025-10-29
+
+### Fix
+- **EPEC**
+  - Torna o campo IE opcional no evento EPEC
+
 ## [0.5.41] - 2025-10-13
 
 ### Fix
