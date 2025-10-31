@@ -185,10 +185,19 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
     private calcularDigitoVerificador(data: LayoutNFe) {
         const {
             infNFe: {
+                Id,
                 ide: { cUF, mod, serie, nNF, tpEmis, cNF, dhEmi },
-                emit: { CNPJCPF }
+                emit: { CNPJCPF },
+            },
+        } = data
+
+        if (Id) {
+            this.chaveNfe = Id
+            return {
+                chaveAcesso: `NFe${Id}`,
+                dv: parseInt(Id.charAt(Id.length - 1), 10),
             }
-        } = data;
+            }
 
         const anoMes = this.anoMesEmissao(dhEmi);
 
@@ -259,6 +268,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
 
             NFe.infNFe.ide.cDV = dv;
             NFe.infNFe.ide.verProc = NFe.infNFe.ide.verProc || '1.0.0.0';
+            delete NFe.infNFe.Id
 
             // Valida Documento do emitente
             NFe.infNFe.emit = Object.assign({ [this.validaDocumento(String(NFe.infNFe.emit.CNPJCPF), 'emitente')]: NFe.infNFe.emit.CNPJCPF }, NFe.infNFe.emit)
