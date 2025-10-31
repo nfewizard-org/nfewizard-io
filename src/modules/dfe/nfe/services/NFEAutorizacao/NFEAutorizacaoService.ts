@@ -192,7 +192,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
         } = data
 
         if (Id) {
-            this.chaveNfe = `${Id}`
+            this.chaveNfe = Id
             return {
                 chaveAcesso: `NFe${Id}`,
                 dv: parseInt(Id.charAt(Id.length - 1)),
