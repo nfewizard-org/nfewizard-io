@@ -197,7 +197,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
                 chaveAcesso: `NFe${Id}`,
                 dv: parseInt(Id.charAt(Id.length - 1), 10),
             }
-            }
+        }
 
         const anoMes = this.anoMesEmissao(dhEmi);
 
@@ -221,7 +221,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
         // Valida se CPF ou CNPJ
         const nfeAutorizacaoHandler = new ValidaCPFCNPJ();
         const { documentoValido, tipoDoDocumento } = nfeAutorizacaoHandler.validarCpfCnpj(doc);
-        console.log( { documentoValido, tipoDoDocumento })
+        console.log({ documentoValido, tipoDoDocumento })
         if (!documentoValido || tipoDoDocumento === 'Desconhecido') {
             const message = tipoDoDocumento === 'Desconhecido'
                 ? `Documento do ${campo} ausente ou inválido`

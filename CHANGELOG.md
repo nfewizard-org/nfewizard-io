@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.45] - 2025-10-31
+
+### Feat
+- **NFe** **NFCe**
+  - Passa a considerar o campo Id informando em infNFe. Previamente era sempre gerado um novo Id e dv para a Nota.
 
 ## [0.5.43] - 2025-10-29
 

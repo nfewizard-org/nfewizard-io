@@ -187,10 +187,19 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
     private calcularDigitoVerificador(data: LayoutNFe) {
         const {
             infNFe: {
+                Id,
                 ide: { cUF, mod, serie, nNF, tpEmis, cNF, dhEmi },
-                emit: { CNPJCPF }
-            }
+                emit: { CNPJCPF },
+            },
         } = data;
+
+        if (Id) {
+            this.chaveNfe = Id
+            return {
+                chaveAcesso: `NFe${Id}`,
+                dv: parseInt(Id.charAt(Id.length - 1), 10),
+            }
+        }
 
         const anoMes = this.anoMesEmissao(dhEmi);
 
