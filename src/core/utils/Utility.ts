@@ -30,6 +30,7 @@
 import fs from 'fs';
 import xsdValidator from 'xsd-schema-validator';
 import NFeServicosUrl from '../config/NFeServicosUrl.json';
+import CTeServicosUrl from '../config/CTeServicosUrl.json';
 import soapMethod from '../config/soapMethod.json';
 import cStatError from '../config/cStatError.json';
 import { getSchema } from '../../adapters/SchemaLoader';
@@ -37,7 +38,7 @@ import Environment from '@Modules/environment/Environment.js';
 import { NFeWizardProps, GenericObject, SoapMethod, NFeServicosUrlType, SaveXMLProps, SaveJSONProps, ProtNFe, ServicesUrl } from 'src/core/types';
 import XmlParser from './XmlParser';
 import xml2js from 'xml2js';
-import libxmljs from 'libxmljs';
+import libxmljs from 'libxmljs2';
 import xsdAssembler from 'xsd-assembler';
 import { logger } from '@Core/exceptions/logger';
 
@@ -86,6 +87,26 @@ class Utility {
             }
         }
         return '';
+    };
+
+    /**
+     * Função recursiva para encontrar todas as ocorrências de uma chave em qualquer nivel do objeto
+     */
+    findAllInObj = (obj: GenericObject, chave: string): any[] => {
+        const results: any[] = [];
+
+        if (obj.hasOwnProperty(chave)) {
+            results.push(obj[chave]);
+        }
+
+        for (let prop in obj) {
+            if (typeof obj[prop] === 'object' && obj[prop] !== null) {
+                const nestedResults = this.findAllInObj(obj[prop], chave);
+                results.push(...nestedResults);
+            }
+        }
+
+        return results;
     };
 
     /**
@@ -185,10 +206,33 @@ class Utility {
     }
 
     getSoapInfo(uf: string, method: string) {
-        const servicos = NFeServicosUrl as ServicesUrl;
+        // Detecta se é CTe ou NFe pelo nome do método
+        const isCTe = method.startsWith('CTe');
+        const servicos = isCTe ? CTeServicosUrl as any : NFeServicosUrl as ServicesUrl;
         let chaveMethod = '';
         let chaveSoap = '';
 
+        if (isCTe) {
+            // Para CTe, as URLs são diretas (não há variação por UF como em NFe)
+            const soapMethodConfig = (soapMethod as any)[method];
+            if (!soapMethodConfig) {
+                throw new Error("Método CTe não encontrado no arquivo de configuração SOAP.");
+            }
+
+            logger.info(`Buscando URL's do webservice CTe`, {
+                context: 'GerarConsulta',
+                chaveSoap,
+                chaveMethod,
+                CTeServicosUrl: 'src/core/config/CTeServicosUrl.json'
+            });
+
+            return {
+                method: soapMethodConfig.method,
+                action: soapMethodConfig.action,
+            };
+        }
+
+        // Lógica existente para NFe
         switch (uf) {
             case 'SP':
                 chaveSoap = 'SOAP_V4_SP';
@@ -313,6 +357,23 @@ class Utility {
      * Retorna a url correta do webservice
      */
     getWebServiceUrl(metodo: string, ambienteNacional = false, versao = "", mod = "NFe"): string {
+        // Detecta se é CTe
+        const isCTe = metodo.startsWith('CTe');
+
+        if (isCTe) {
+            const cteUrls = CTeServicosUrl as any;
+            const ambiente = this.environment.config.nfe.ambiente === 1 ? 'P' : 'H';
+            const chave = `CTe_AN_${ambiente}`; // AN = Ambiente Nacional
+            const metodoComVersao = `${metodo}_${versao}`;
+
+            const url = cteUrls[chave] && cteUrls[chave][metodoComVersao];
+            if (!url) {
+                throw new Error(`Não foi possível recuperar a url para o webservice CTe: ${metodoComVersao} no ambiente ${ambiente}`);
+            }
+            return url;
+        }
+
+        // Lógica existente para NFe
         let { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao, mod);
         const urls = NFeServicosUrl as NFeServicosUrlType;
 
@@ -427,23 +488,24 @@ class Utility {
         });
         const responseInJson = this.xmlParser.convertXmlToJson(data, metodo);
 
-        // Gera erro em caso de Rejeição
-        const xMotivo = this.findInObj(responseInJson, 'xMotivo');
-        const infProt = this.findInObj(responseInJson, 'infProt');
-
         // Salva XML de retorno
         this.salvaRetorno(data, responseInJson, metodo, name);
 
-        // Gera erro em caso de Rejeição
-        if (xMotivo && (xMotivo.includes('Rejeição') || xMotivo.includes('Rejeicao'))) {
-            throw new Error(xMotivo);
+        // Busca todos os xMotivo no objeto
+        const allXMotivos = this.findAllInObj(responseInJson, 'xMotivo');
+
+        // Verifica se algum xMotivo contém "Rejeição" ou "Rejeicao"
+        for (const xMotivo of allXMotivos) {
+            if (xMotivo && (xMotivo.includes('Rejeição') || xMotivo.includes('Rejeicao'))) {
+                throw new Error(xMotivo);
+            }
         }
-        if (infProt && (infProt?.xMotivo.includes('Rejeição') || infProt?.xMotivo.includes('Rejeicao'))) {
+
+        // Verifica infProt (mantendo verificação original como fallback)
+        const infProt = this.findInObj(responseInJson, 'infProt');
+        if (infProt && (infProt?.xMotivo?.includes('Rejeição') || infProt?.xMotivo?.includes('Rejeicao'))) {
             throw new Error(infProt?.xMotivo);
         }
-        // if (infEvento && (infEvento?.xMotivo.includes('Rejeição') || infEvento?.xMotivo.includes('Rejeicao'))) {
-        //     throw new Error(xMotivo);
-        // }
 
         return responseInJson;
     }
@@ -491,6 +553,8 @@ class Utility {
                 return `NFCEAutorizacao-${tipo}`
             case 'NFERetAutorizacao':
                 return `NFERetAutorizacao-${tipo}`
+            case 'CTeDistribuicaoDFe':
+                return `CTeDistribuicaoDFe-${tipo}`
 
             default:
                 throw new Error('Erro: Requisição de nome para método não implementado.')

@@ -90,7 +90,7 @@ class XmlBuilder {
     /**
      *  Método utilizado para cirar um envelop SOAP - Formato de mensagem para serviço SOAP (como o da SEFAZ)
      */
-    buildSoapEnvelope(xml: string, soapMethod: string, soapVersion: string = "soap12", rootTagObj: any = null) {
+    buildSoapEnvelope(xml: string, soapMethod: string, soapVersion: string = "soap12", rootTagObj: any = null, dadosMsgTag: string = "nfeDadosMsg") {
         const soapNamespaces: NamespacesProps = {
             'soap12': 'http://www.w3.org/2003/05/soap-envelope', // SOAP 1.2
             'soap': 'http://schemas.xmlsoap.org/soap/envelope/' // SOAP 1.1
@@ -110,7 +110,7 @@ class XmlBuilder {
         // Condicionando a inclusão de 'rootTagObj'
         if (rootTagObj && rootTagObj.tag) {
             let bodyContent: BodyContentProps = {
-                'nfeDadosMsg': {
+                [dadosMsgTag]: {
                     '$': {
                         'xmlns': soapMethod
                     },
@@ -125,7 +125,7 @@ class XmlBuilder {
             soapEnvelopeObj[`${soapVersion}:Body`][rootTagObj.tag] = bodyContent;
         } else {
             soapEnvelopeObj[`${soapVersion}:Body`] = {
-                'nfeDadosMsg': {
+                [dadosMsgTag]: {
                     '$': {
                         'xmlns': soapMethod
                     },

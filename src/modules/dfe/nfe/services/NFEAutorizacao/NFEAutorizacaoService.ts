@@ -30,6 +30,8 @@ import NFERetornoAutorizacaoService from '../NFERetornoAutorizacao/NFERetornoAut
 import { logger } from '@Core/exceptions/logger.js';
 import { Agent } from 'http';
 
+const T_MED = 5; // Tempo médio de resposta padrão em segundos
+
 class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl {
     xmlNFe: string[];
 
@@ -134,7 +136,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
          * Aguarda o Tempo médio de resposta do serviço (em segundos) dos últimos 5 minutos
          * A informação do tMed só é recebida caso o processamento for assíncrono (indSinc = 0)
          */
-        if (tipoEmissao !== 1) await new Promise(resolve => setTimeout(resolve, Number(responseInJson.infRec.tMed) * 1000));
+        if (tipoEmissao !== 1) await new Promise(resolve => setTimeout(resolve, Number(responseInJson.infRec?.tMed || T_MED) * 1000));
 
         const retorno = await nfeRetornoAut.getXmlRetorno({
             tipoEmissao,
@@ -183,10 +185,19 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
     private calcularDigitoVerificador(data: LayoutNFe) {
         const {
             infNFe: {
+                Id,
                 ide: { cUF, mod, serie, nNF, tpEmis, cNF, dhEmi },
-                emit: { CNPJCPF }
+                emit: { CNPJCPF },
+            },
+        } = data
+
+        if (Id) {
+            this.chaveNfe = Id
+            return {
+                chaveAcesso: `NFe${Id}`,
+                dv: parseInt(Id.charAt(Id.length - 1), 10),
             }
-        } = data;
+        }
 
         const anoMes = this.anoMesEmissao(dhEmi);
 
@@ -210,7 +221,7 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
         // Valida se CPF ou CNPJ
         const nfeAutorizacaoHandler = new ValidaCPFCNPJ();
         const { documentoValido, tipoDoDocumento } = nfeAutorizacaoHandler.validarCpfCnpj(doc);
-
+        console.log({ documentoValido, tipoDoDocumento })
         if (!documentoValido || tipoDoDocumento === 'Desconhecido') {
             const message = tipoDoDocumento === 'Desconhecido'
                 ? `Documento do ${campo} ausente ou inválido`
@@ -230,15 +241,15 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
             if (NFe?.infNFe?.det instanceof Array) {
                 // Adicionando indice ao item
                 const formatedItens = NFe.infNFe.det.map((det, index) => {
-                    if (det.imposto.ICMS.dadosICMS) {
+                    if (det.imposto?.ICMS?.dadosICMS) {
                         const icms = mountICMS(det.imposto.ICMS.dadosICMS);
                         det.imposto.ICMS = icms;
                     }
-                    if (det.imposto.PIS.dadosPIS) {
+                    if (det.imposto.PIS?.dadosPIS) {
                         const pis = mountPIS(det.imposto.PIS.dadosPIS);
                         det.imposto.PIS = pis;
                     }
-                    if (det.imposto.COFINS.dadosCOFINS) {
+                    if (det.imposto.COFINS?.dadosCOFINS) {
                         const cofins = mountCOFINS(det.imposto.COFINS.dadosCOFINS);
                         det.imposto.COFINS = cofins
                     }
@@ -257,10 +268,12 @@ class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl
 
             NFe.infNFe.ide.cDV = dv;
             NFe.infNFe.ide.verProc = NFe.infNFe.ide.verProc || '1.0.0.0';
+            delete NFe.infNFe.Id
 
             // Valida Documento do emitente
             NFe.infNFe.emit = Object.assign({ [this.validaDocumento(String(NFe.infNFe.emit.CNPJCPF), 'emitente')]: NFe.infNFe.emit.CNPJCPF }, NFe.infNFe.emit)
             delete NFe.infNFe.emit.CNPJCPF;
+
             // Valida Documento do destinatário
             if (NFe.infNFe.dest) {
                 NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF || ''), 'destinatário')]: NFe.infNFe.dest?.CNPJCPF || '' }, NFe.infNFe.dest)

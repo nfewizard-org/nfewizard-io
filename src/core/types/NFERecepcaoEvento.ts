@@ -435,7 +435,7 @@ interface EventoEPEC {
             /**
              * @param {string} IE - Informar a IE do destinatário somente quando o contribuinte destinatário possuir uma inscrição estadual. Omitir a tag no caso de destinatário “ISENTO”, ou destinatário não possuir IE.
              */
-            IE: string;
+            IE?: string;
             /**
              * @param {string} vNF - Valor total da NF-e
              */

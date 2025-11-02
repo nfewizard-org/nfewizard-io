@@ -253,7 +253,7 @@ class NFEGerarDanfe {
                 });
             }
 
-            if (Number(this.ide.tpAmb) !== 2 && !this.enviada) {
+            if (Number(this.ide.tpAmb) !== 2 && !this.enviada && !this.data.forceTransmitida) {
                 this.doc.fontSize(14).font('Times-Bold').fillColor('red').text('NF-E NÃO ENVIADA PARA SEFAZ', left + 316, topIdentificacao_1 + 12, {
                     characterSpacing: 1,
                     width: 256.73,
@@ -1008,9 +1008,9 @@ class NFEGerarDanfe {
                 let pIPI = parseFloat(String(IPI.IPITrib.pIPI)).toFixed(2);
                 return { vIPI, pIPI }
             }
-            const CST = getCST(item.imposto.ICMS);
+            const CST = getCST(item.imposto.ICMS as ICMS);
             const { vIPI, pIPI } = getValoresIPI(item.imposto.IPI);
-            const { vBC, vICMS, pICMS } = getValoresItem(item.imposto.ICMS);
+            const { vBC, vICMS, pICMS } = getValoresItem(item.imposto.ICMS as ICMS);
 
             const text = item.infAdProd ? `${item.prod.xProd || ''}\n${item.infAdProd}` : item.prod.xProd || '';
             const textHeight = this.doc.heightOfString(text, {

@@ -1,5 +1,74 @@
 # Changelog
 
+## [0.5.45] - 2025-10-31
+
+### Feat
+- **NFe** **NFCe**
+  - Passa a considerar o campo Id informando em infNFe. Previamente era sempre gerado um novo Id e dv para a Nota.
+
+## [0.5.43] - 2025-10-29
+
+### Fix
+- **EPEC**
+  - Torna o campo IE opcional no evento EPEC
+
+## [0.5.41] - 2025-10-13
+
+### Fix
+- **NF-e / NFC-e Inutilização**
+  - Adiciona suporte para modelo de NFCe na classe NFEInutilizacaoService
+
+## [0.5.4] - 2025-10-10
+
+### Feat
+- **CT-e - Conhecimento de Transporte Eletrônico**
+  - Implementa módulo completo de Distribuição de CT-e
+  - Adiciona suporte para consulta de CT-e por NSU (`CTE_DistribuicaoDFePorNSU`)
+  - Adiciona suporte para consulta de CT-e por último NSU (`CTE_DistribuicaoDFePorUltNSU`)
+  - Implementa serviços de comunicação com webservices da SEFAZ para CT-e
+  - Adiciona configuração de URLs dos webservices de CT-e (produção e homologação)
+  - Implementa descompactação e processamento de documentos CT-e (proc, res, event)
+  - Adiciona suporte para salvamento automático de documentos CT-e na pasta de distribuição
+  - Atualiza XmlParser para reconhecer formatos de resposta CT-e
+  - Atualiza XmlBuilder para suportar tag `cteDadosMsg` no envelope SOAP
+  - Adiciona tipos e interfaces específicas para CT-e: `DFePorNSUCTe`, `DFePorUltimoNSUCTe`, `ConsultaCTe`
+  - Implementa DistribuicaoHandler específico para CT-e com suporte a `chCTe`, `resCTe` e `procEventoCTe`
+
+## [0.5.0] - 2025-08-31
+
+### Feat
+- **Leiaute da NF-e (Modelo 55 e 65) - Reforma Tributária - [NT 2025.002 v1.10]**
+  - Atualiza Grupo B - Identificação da Nota Fiscal eletrônica
+  - Atualiza Grupo N01 - ICMS Normal e ST
+  - Atualiza Grupo W03 - Total da NF-e - IBS / CBS / I
+  - Adiciona Grupo BB - Grupo de notas de antecipação de pagamento
+  - Adiciona Grupo I - Produtos e Serviços da NF-e
+  - Adiciona Grupo UB - Informações dos tributos IBS / CBS e Imposto Seletivo
+  - Adiciona Grupo VB - Identificação da Nota Fiscal eletrônica
+  - Adiciona Grupo VC - Referenciamento de item de outro Documento Fiscal Eletrônico - DF-e
+  - Atualiza Schemas XML NF-e/NFC-e - Schema dos eventos da NT 2025.002 v.1.20
+  - Atualiza Schemas XML NF-e/NFC-e - Pacote de Liberação nº 010b v. 1.21 (Novo leiaute da NF-e, NT 2025.002 v.1.20, NT 2024.003 e NT 2025.001)
+  - Adiciona validação para CNPJ alfanumérico - NTC 2025.001
+  - Atualiza URL-QRCode - Atualizada URL-QRCode para Goias
+
+## [0.4.7] - 2025-08-14
+
+### Fix
+- **Rollup Config**
+  - Externaliza libxmljs2.
+
+## [0.4.6] - 2025-08-08
+
+### Feat
+- **Utility Module**
+  - Altera método `verificaRejeicao` para buscar Rejeição em todos os níveis do XML.
+
+## [0.4.5] - 2025-08-03
+
+### Fixed
+- **Utility Module**
+  - Substitui libxmljs por libxmljs2, sanando problema de compatibilidade com node v24.
+
 ## [0.4.4] - 2025-07-06
 
 ### Fixed

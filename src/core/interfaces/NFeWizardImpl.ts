@@ -4,6 +4,9 @@ import {
     CienciaDaOperacao,
     ConfirmacaoDaOperacao,
     ConsultaNFe,
+    ConsultaCTe,
+    DFePorUltimoNSUCTe,
+    DFePorNSUCTe,
     DesconhecimentoDaOperacao,
     DFePorChaveNFe,
     DFePorNSU,
@@ -39,6 +42,9 @@ export interface NFeWizardImpl {
     NFE_DistribuicaoDFePorUltNSU(data: DFePorUltimoNSU): Promise<GenericObject>;
     NFE_DistribuicaoDFePorNSU(data: DFePorNSU): Promise<GenericObject>;
     NFE_DistribuicaoDFePorChave(data: DFePorChaveNFe): Promise<GenericObject>;
+    CTE_DistribuicaoDFe(data: ConsultaCTe): Promise<GenericObject>;
+    CTE_DistribuicaoDFePorUltNSU(data: DFePorUltimoNSUCTe): Promise<GenericObject>;
+    CTE_DistribuicaoDFePorNSU(data: DFePorNSUCTe): Promise<GenericObject>;
     NFE_Autorizacao(data: NFe): Promise<{
         NFe: LayoutNFe;
         protNFe: ProtNFe;

@@ -187,10 +187,19 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
     private calcularDigitoVerificador(data: LayoutNFe) {
         const {
             infNFe: {
+                Id,
                 ide: { cUF, mod, serie, nNF, tpEmis, cNF, dhEmi },
-                emit: { CNPJCPF }
-            }
+                emit: { CNPJCPF },
+            },
         } = data;
+
+        if (Id) {
+            this.chaveNfe = Id
+            return {
+                chaveAcesso: `NFe${Id}`,
+                dv: parseInt(Id.charAt(Id.length - 1), 10),
+            }
+        }
 
         const anoMes = this.anoMesEmissao(dhEmi);
 
@@ -243,15 +252,15 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             if (NFe?.infNFe?.det instanceof Array) {
                 // Adicionando indice ao item
                 const formatedItens = NFe.infNFe.det.map((det, index) => {
-                    if (det.imposto.ICMS.dadosICMS) {
+                    if (det.imposto.ICMS?.dadosICMS) {
                         const icms = mountICMS(det.imposto.ICMS.dadosICMS);
                         det.imposto.ICMS = icms;
                     }
-                    if (det.imposto.PIS.dadosPIS) {
+                    if (det.imposto.PIS?.dadosPIS) {
                         const pis = mountPIS(det.imposto.PIS.dadosPIS);
                         det.imposto.PIS = pis;
                     }
-                    if (det.imposto.COFINS.dadosCOFINS) {
+                    if (det.imposto.COFINS?.dadosCOFINS) {
                         const cofins = mountCOFINS(det.imposto.COFINS.dadosCOFINS);
                         det.imposto.COFINS = cofins
                     }
