@@ -1188,8 +1188,8 @@ class NFEGerarDanfe {
 
     async generatePDF(exibirMarcaDaguaDanfe?: boolean) {
         try {
-            this.exibirMarcaDaguaDanfe = exibirMarcaDaguaDanfe || true;
-            const chave = this.chave;
+            this.exibirMarcaDaguaDanfe = exibirMarcaDaguaDanfe ?? true
+            const chave = this.chave
 
             await this.generateBarcode(chave);
 
