@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.46] - 2025-11-06
+
+### Feat
+- **NFCe**
+  - Alteração das URLs Ceará/CE para servidor virtual do RS.
+
 ## [0.5.45] - 2025-10-31
 
 ### Feat
