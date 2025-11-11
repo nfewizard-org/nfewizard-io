@@ -285,6 +285,19 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             // Valida Documento do destinatário
 
             if (NFe.infNFe.dest) {
+                // Remove xNome if empty/undefined, or set homologation message before restructuring to preserve order
+                if (NFe.infNFe.ide.tpAmb === 2) {
+                    // In homologation, set xNome to the required message if it exists (even if undefined)
+                    if ('xNome' in NFe.infNFe.dest) {
+                        NFe.infNFe.dest.xNome = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL';
+                    }
+                } else {
+                    // In production, remove xNome if it's empty or whitespace only
+                    if ('xNome' in NFe.infNFe.dest && (!NFe.infNFe.dest.xNome || String(NFe.infNFe.dest.xNome).trim() === '')) {
+                        delete NFe.infNFe.dest.xNome;
+                    }
+                }
+                
                 NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF || ''), 'destinatário')]: NFe.infNFe.dest?.CNPJCPF || '' }, NFe.infNFe.dest)
                 delete NFe.infNFe.dest.CNPJCPF;
             }
@@ -316,13 +329,6 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                         { [this.validaDocumento(String(NFe.infNFe.NFref.refNFP.CNPJCPF), 'produtor rural')]: NFe.infNFe.NFref.refNFP.CNPJCPF },
                         NFe.infNFe.NFref.refNFP
                     )
-                }
-            }
-
-            // Caso Seja hambiente de homologação
-            if (NFe.infNFe.dest) {
-                if (NFe.infNFe.ide.tpAmb === 2) {
-                    NFe.infNFe.dest.xNome = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL';
                 }
             }
 
