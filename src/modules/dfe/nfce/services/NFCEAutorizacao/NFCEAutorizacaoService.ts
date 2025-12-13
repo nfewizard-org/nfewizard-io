@@ -285,8 +285,19 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             // Valida Documento do destinatário
 
             if (NFe.infNFe.dest) {
-                NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF || ''), 'destinatário')]: NFe.infNFe.dest?.CNPJCPF || '' }, NFe.infNFe.dest)
-                delete NFe.infNFe.dest.CNPJCPF;
+                const tipoDocDest = this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF || ''), 'destinatário');
+                const cnpjcpfValue = NFe.infNFe.dest?.CNPJCPF || '';
+                const xNomeValue = NFe.infNFe.ide.tpAmb === 2 
+                    ? 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+                    : NFe.infNFe.dest.xNome;
+                
+                // Reconstrói o objeto dest mantendo a ordem correta
+                const { CNPJCPF, xNome, ...restoDest } = NFe.infNFe.dest;
+                NFe.infNFe.dest = {
+                    [tipoDocDest]: cnpjcpfValue,
+                    ...(xNomeValue && { xNome: xNomeValue }),
+                    ...restoDest
+                };
             }
 
             // Valida Documento do transportador
@@ -316,13 +327,6 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                         { [this.validaDocumento(String(NFe.infNFe.NFref.refNFP.CNPJCPF), 'produtor rural')]: NFe.infNFe.NFref.refNFP.CNPJCPF },
                         NFe.infNFe.NFref.refNFP
                     )
-                }
-            }
-
-            // Caso Seja hambiente de homologação
-            if (NFe.infNFe.dest) {
-                if (NFe.infNFe.ide.tpAmb === 2) {
-                    NFe.infNFe.dest.xNome = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL';
                 }
             }
 
