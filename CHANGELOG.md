@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.47] - 2025-12-13
+
+### Fix
+- **NFCe**
+  - Altera validação de xNome do dest para evitar posicionamento indevido da tag
+
 ## [0.5.46] - 2025-11-06
 
 ### Feat
