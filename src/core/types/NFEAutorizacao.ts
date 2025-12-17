@@ -386,6 +386,12 @@ export type DFeReferenciado = {
 export type Ide = {
     /** [ide] - Informações de identificação da NF-e */
     /**
+     * @param {string} dPrevEntrega - Data da previsão de entrega ou disponibilização do bem - [B10a]
+     * Formato: AAAA-MM-DD
+     * Observação: Não informar este campo para a NFC-e.
+     */
+    dPrevEntrega?: string;
+    /**
      * @param {number} cUF - Código da UF do emitente do Documento Fiscal
      * Código da UF do emitente do Documento Fiscal. Utilizar a Utilizar a Tabela de código de UF do IBGE
      */
@@ -490,17 +496,19 @@ export type Ide = {
         02=Anulação de Crédito por Saídas Imunes/Isentas;
         03=Débitos de notas fiscais não processadas na apuração;
         04=Multa e juros;
-        05=Transferência de crédito de sucessão;
-        06 = Pagamento antecipado
-        07 = Perda em estoque
+        05=Transferência de crédito na sucessão;
+        06=Pagamento antecipado;
+        07=Perda em estoque;
+        08=Desenquadramento do SN
      */
     tpNFDebito?: number;
     /**
      * @param {number} tpNFCredito - Tipo de Nota de Crédito - [B25.2]
         01 = Multa e juros
-        02 = Apropriação de crédito presumido de IBS sobre o saldo
-        devedor na ZFM (art. 450, § 1º, LC 214/25)
-        03 = Retorno
+        02 = Apropriação de crédito presumido de IBS sobre o saldo devedor na ZFM (art. 450, § 1º, LC 214/25)
+        03 = Retorno por recusa na entrega ou por não localização do destinatário na tentativa de entrega
+        04 = Redução de valores
+        05 = Transferência de crédito na sucessão
      */
     tpNFCredito?: number;
     /**
@@ -569,7 +577,7 @@ export type Ide = {
      * 
      * Informado para abater as parcelas de antecipação de pagamento, conforme Art. 10. § 4º
      */
-    gPagAntecipado?: gPagAntecipado;
+    gPagAntecipado?: gPagAntecipado[] | gPagAntecipado;
 }
 
 /**
@@ -1431,11 +1439,21 @@ export type Prod = {
      */
     indTot: number;
     /**
-     * @param {number} indBemMovelUsado - Indicador de fornecimento de bem móvel usado	
+     * @param {number} indBemMovelUsado - Indicador de fornecimento de bem móvel usado - [I17c]
         Somente para fornecimentos de bem móvel usado adquirido de pessoa física que não seja contribuinte ou que seja inscrita como MEI.
         1 - Bem Móvel Usado
      */
     indBemMovelUsado?: number;
+    /**
+     * @param {number} tpCredPresIBSZFM - Classificação para subapuração do IBS na ZFM - [I05k]
+        Classificação conforme percentuais definidos no art. 450, § 1º, da LC 214/25 para o cálculo do crédito presumido:
+        0 - Sem Crédito Presumido
+        1 - Bens de consumo final (55%)
+        2 - Bens de capital (75%)
+        3 - Bens intermediários (90,25%)
+        4 - Bens de informática e outros definidos em legislação (100%)
+     */
+    tpCredPresIBSZFM?: number;
     /**
      * @param {Comb} comb - Informações específicas para combustíveis líquidos e lubrificantes
      */
@@ -1785,6 +1803,12 @@ export type IBSCBS = {
      */
     cClassTrib: string;
     /**
+     * @param {string} indDoacao - Indica a natureza da operação de doação - [UB14a]
+     * Orientando a apuração e a geração de débitos ou estornos conforme o cenário.
+     * Informar quando doação.
+     */
+    indDoacao?: string;
+    /**
      * @param {gIBSCBS} gIBSCBS - Grupo de Informações do IBS e da CBS - [UB15]
      */
     gIBSCBS?: gIBSCBS;
@@ -1800,6 +1824,18 @@ export type IBSCBS = {
      * @param {gCredPresIBSZFM} gCredPresIBSZFM - Informações do crédito presumido de IBS para fornecimentos a partir da ZFM - [UB109]
      */
     gCredPresIBSZFM?: gCredPresIBSZFM;
+    /**
+     * @param {gAjusteCompet} gAjusteCompet - Ajuste de Competência - [UB112]
+     */
+    gAjusteCompet?: gAjusteCompet;
+    /**
+     * @param {gEstornoCred} gEstornoCred - Estorno de Crédito - [UB116]
+     */
+    gEstornoCred?: gEstornoCred;
+    /**
+     * @param {gCredPresOper} gCredPresOper - Crédito Presumido da Operação - [UB120]
+     */
+    gCredPresOper?: gCredPresOper;
 };
 
 /**
@@ -1831,14 +1867,6 @@ export type gIBSCBS = {
      * @param {gTribRegular} gTribRegular - Grupo de informações da Tributação Regular - [UB68]
      */
     gTribRegular?: gTribRegular;
-    /**
-     * @param {gIBSCredPres} gIBSCredPres - Grupo de Informações do Crédito Presumido referente ao IBS - [UB73]
-     */
-    gIBSCredPres?: gIBSCredPres;
-    /**
-     * @param {gCBSCredPres} gCBSCredPres - Grupo de Informações do Crédito Presumido referente a CBS - [UB78]
-     */
-    gCBSCredPres?: gCBSCredPres;
     /**
      * @param {gTribCompraGov} gTribCompraGov - Grupo de informações da composição do valor do IBS e da CBS em compras governamentais - [UB82a]
      */
@@ -2082,58 +2110,6 @@ export type gTribRegular = {
 };
 
 /**
- * Grupo de Informações do Crédito Presumido referente ao IBS - [UB73]
- * Grupo de Informações do Crédito Presumido do IBS, quando aproveitado pelo emitente do documento.
- */
-export type gIBSCredPres = {
-    /**
-     * @param {string} cCredPres - Código de Classificação do Crédito Presumido - [UB74]
-     * Utilizar tabela cCredPres (Anexo IV).
-     * Exemplos: 1 - Aquisição de Produtor Rural não contribuinte. 2 - Tomador de serviço de transporte de TAC PF não contrib. 3 - Aquisição de pessoa física com destino a reciclagem. 4 - Aquisição de bens móveis de PF não contrib. para revenda (veículos / brechó). 5 - Regime opcional para cooperativa.
-     */
-    cCredPres: string;
-    /**
-     * @param {number} pCredPres - Percentual do Crédito Presumido - [UB75]
-     */
-    pCredPres: number;
-    /**
-     * @param {number | string} vCredPres - Valor do Crédito Presumido - [UB76]
-     */
-    vCredPres: number | string;
-    /**
-     * @param {number} vCredPresCondSus - Valor do Crédito Presumido em condição suspensiva. - [UB77]
-     * Valor do Crédito Presumido Condição Suspensiva. Preencher apenas para cCredPres com indicação de Condição Suspensiva.
-     */
-    vCredPresCondSus: number | string;
-};
-
-/**
- * Grupo de Informações do Crédito Presumido referente a CBS - [UB78]
- * Grupo de Informações do Crédito Presumido da CBS, quando aproveitado pelo emitente do documento.
- */
-export type gCBSCredPres = {
-    /**
-     * @param {string} cCredPres - Código de Classificação do Crédito Presumido - [UB79]
-     * Utilizar tabela cCredPres (Anexo IV).
-     * Exemplos: 1 - Aquisição de Produtor Rural não contribuinte. 2 - Tomador de serviço de transporte de TAC PF não contrib. 3 - Aquisição de pessoa física com destino a reciclagem. 4 - Aquisição de bens móveis de PF não contrib. para revenda (veículos / brechó). 5 - Regime opcional para cooperativa.
-     */
-    cCredPres: string;
-    /**
-     * @param {number} pCredPres - Percentual do Crédito Presumido - [UB80]
-     */
-    pCredPres: number;
-    /**
-     * @param {number | string} vCredPres - Valor do Crédito Presumido - [UB81]
-     */
-    vCredPres: number | string;
-    /**
-     * @param {number} vCredPresCondSus - Valor do Crédito Presumido em condição suspensiva. - [UB82]
-     * Valor do Crédito Presumido Condição Suspensiva. Preencher apenas para cCredPres com indicação de Condição Suspensiva
-     */
-    vCredPresCondSus: number | string;
-};
-
-/**
  * Grupo de informações da composição do valor do IBS e da CBS em compras governamentais - [UB82a]
  * Informar somente para compras governamentais.
  */
@@ -2289,6 +2265,112 @@ export type gMonoDif = {
      * A ser deduzido do valor da CBS.
      */
     vCBSMonoDif: number;
+};
+
+/**
+ * [gAjusteCompet] 
+ * Ajuste de Competência - [UB112]
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador "ind_gAjusteCompet" da tabela de CST do IBS e da CBS.
+ */
+export type gAjusteCompet = {
+    /**
+     * @param {string} competApur - Ano e mês referência do período de apuração - [UB113]
+     * Formato: AAAA-MM
+     * Informar período atual ou retroativo.
+     */
+    competApur: string;
+    /**
+     * @param {number | string} vIBS - Valor do IBS - [UB114]
+     */
+    vIBS: number | string;
+    /**
+     * @param {number | string} vCBS - Valor da CBS - [UB115]
+     */
+    vCBS: number | string;
+};
+
+/**
+ * [gEstornoCred] 
+ * Estorno de Crédito - [UB116]
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador "ind_gEstornoCred" da tabela de cClassTrib do IBS e da CBS.
+ */
+export type gEstornoCred = {
+    /**
+     * @param {number | string} vIBSEstCred - Valor do IBS a ser estornado - [UB117]
+     */
+    vIBSEstCred: number | string;
+    /**
+     * @param {number | string} vCBSEstCred - Valor da CBS a ser estornada - [UB118]
+     */
+    vCBSEstCred: number | string;
+};
+
+/**
+ * [gCredPresOper] 
+ * Crédito Presumido da Operação - [UB120]
+ * Observação 1: a permissão ou vedação do preenchimento deste grupo está condicionada ao indicador "ind_gCredPresOper" da tabela de cClassTrib do IBS e da CBS.
+ * Observação 2: O valor "1" do indicador "ind_gCredPresOper" significa que o contribuinte pode utilizar o crédito presumido, sem obrigatoriedade (permite, mas não exige).
+ */
+export type gCredPresOper = {
+    /**
+     * @param {number | string} vBCCredPres - Valor da Base de Cálculo do Crédito Presumido da Operação - [UB121]
+     */
+    vBCCredPres: number | string;
+    /**
+     * @param {number | string} cCredPres - Código de Classificação do Crédito Presumido - [UB122]
+     * Utilizar tabela cCredPres (Anexo IV).
+     */
+    cCredPres: number | string;
+    /**
+     * @param {gIBSCredPres} gIBSCredPres - Grupo de Informações do Crédito Presumido referente ao IBS - [UB123]
+     */
+    gIBSCredPres?: gIBSCredPres;
+    /**
+     * @param {gCBSCredPres} gCBSCredPres - Grupo de Informações do Crédito Presumido referente a CBS - [UB127]
+     */
+    gCBSCredPres?: gCBSCredPres;
+};
+
+/**
+ * [gIBSCredPres] 
+ * Grupo de Informações do Crédito Presumido referente ao IBS (Operação) - [UB123]
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador "ind_gIBSCredPres" da tabela de cCredPres do IBS e da CBS.
+ */
+export type gIBSCredPres = {
+    /**
+     * @param {number | string} pCredPres - Percentual do Crédito Presumido - [UB124]
+     */
+    pCredPres: number | string;
+    /**
+     * @param {number | string} vCredPres - Valor do Crédito Presumido - [UB125]
+     */
+    vCredPres: number | string;
+    /**
+     * @param {number | string} vCredPresCondSus - Valor do Crédito Presumido em condição suspensiva - [UB126]
+     * Preencher apenas para cCredPres com indicação de Condição Suspensiva.
+     */
+    vCredPresCondSus: number | string;
+};
+
+/**
+ * [gCBSCredPres] 
+ * Grupo de Informações do Crédito Presumido referente a CBS (Operação) - [UB127]
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador "ind_gCBSCredPres" da tabela de cCredPres do IBS e da CBS.
+ */
+export type gCBSCredPres = {
+    /**
+     * @param {number | string} pCredPres - Percentual do Crédito Presumido - [UB128]
+     */
+    pCredPres: number | string;
+    /**
+     * @param {number | string} vCredPres - Valor do Crédito Presumido - [UB129]
+     */
+    vCredPres: number | string;
+    /**
+     * @param {number | string} vCredPresCondSus - Valor do Crédito Presumido em condição suspensiva - [UB130]
+     * Preencher apenas para cCredPres com indicação de Condição Suspensiva.
+     */
+    vCredPresCondSus: number | string;
 };
 
 
@@ -4837,10 +4919,6 @@ export type Total = {
      * O IBS e a CBS são “por fora”, por isso seus valores devem ser adicionados ao valor total da NF.
      */
     IBSCBSTot?: IBSCBSTot;
-    /**
-     * @param {number | string} vNFTot - Valor total da NF-e com IBS / CBS / IS.
-     */
-    vNFTot?: number | string;
 }
 
 export type ICMSTot = {
@@ -5104,6 +5182,14 @@ export type IBSCBSTot = {
      * @param {gMono_Totais} gMono - Grupo total da Monofasia - [W57]
      */
     gMono?: gMono_Totais;
+    /**
+     * @param {gEstornoCred_Totais} gEstornoCred - Grupo total do Estorno de Crédito - [W59e]
+     */
+    gEstornoCred?: gEstornoCred_Totais;
+    /**
+     * @param {number | string} vNFTot - Valor total da NF-e com IBS/CBS/IS - [W60]
+     */
+    vNFTot?: number | string;
 };
 
 /**
@@ -5222,6 +5308,20 @@ export type gMono_Totais = {
      * @param {number | string} vCBSMonoRet - Total da CBS monofásica retida anteriormente - [W59d]
      */
     vCBSMonoRet: number | string;
+};
+
+/**
+ * Grupo total do Estorno de Crédito - [W59e]
+ */
+export type gEstornoCred_Totais = {
+    /**
+     * @param {number | string} vIBSEstCred - Valor total do IBS estornado - [W59f]
+     */
+    vIBSEstCred: number | string;
+    /**
+     * @param {number | string} vCBSEstCred - Valor total da CBS estornada - [W59g]
+     */
+    vCBSEstCred: number | string;
 };
 
 
