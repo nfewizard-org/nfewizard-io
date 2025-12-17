@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.5.5] - 2025-12-17
+
+### Feat
+- **Leiaute da NF-e (Modelo 55 e 65) - Reforma Tributária - [NT 2025.002 v1.30]**
+  - Atualiza Grupo B - Identificação da Nota Fiscal eletrônica
+    - Adiciona campo `indDoacao` (UB14a) - Indicador de natureza da operação de doação
+  - Atualiza Grupo UB - Informações dos tributos IBS / CBS e Imposto Seletivo
+    - Adiciona Grupo `gAjusteCompet` (UB112-UB115) - Ajuste de Competência do IBS/CBS
+    - Adiciona Grupo `gEstornoCred` (UB116-UB118) - Estorno de Crédito do IBS/CBS
+    - Adiciona Grupo `gCredPresOper` (UB119-UB130) - Crédito Presumido da Operação
+    - Reestrutura grupos `gIBSCredPres` e `gCBSCredPres` para nível de operação
+    - Remove grupos de crédito presumido do nível de item (UB73-82) conforme NT
+  - Atualiza Grupo W03 - Total da NF-e - IBS / CBS / IS
+    - Adiciona Grupo `gEstornoCred_Totais` (W59e-W59g) - Total do Estorno de Crédito
+    - Adiciona campo `vNFTot` (W60) - Valor total da NF-e incluindo IBS/CBS/IS
+  - Padroniza todos os campos numéricos para aceitar `number | string`
+  - Padroniza nomenclatura de tipos (tipo = nome do campo)
+
+### Changed
+- **Tipagem TypeScript:**
+  - Atualiza tipo `IBSCBS` com novos grupos de ajuste, estorno e crédito presumido
+  - Atualiza tipo `IBSCBSTot` com grupo de estorno e valor total da NF-e
+  - Melhora consistência de tipos com suporte a valores string em campos numéricos
+
 ## [0.5.47] - 2025-12-13
 
 ### Fix
