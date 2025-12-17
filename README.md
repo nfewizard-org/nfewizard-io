@@ -1,6 +1,6 @@
 # NFeWizard-io 🪄
 
-## 🛠️ Lib atualizada com NT 2025.002 v.120 - Reforma Tributária
+## 🛠️ Lib atualizada com NT 2025.002 v.130 - Reforma Tributária
 
 ## Atenção: Ao abrir uma issue certifique-se de adicionar as informações abaixo:
 
