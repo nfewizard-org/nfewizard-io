@@ -40,12 +40,18 @@
   },
   "dependencies": {
     "@nfewizard/types": "workspace:*",
+    "@nfewizard/shared": "workspace:*",
     "pdfkit": "^0.15.0",
     "qrcode": "^1.5.4",
     "bwip-js": "^4.3.2",
     "date-fns": "^2.30.0"
   },
   "devDependencies": {
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "rollup": "^4.0.0"
   }
 }
