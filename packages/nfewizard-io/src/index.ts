@@ -61,7 +61,7 @@ export { NFEGerarDanfe, NFCEGerarDanfe } from '@nfewizard/danfe';
 // Export NFE operations and services from local files
 export { NFEAutorizacao } from './nfe/operations/NFEAutorizacao/NFEAutorizacao.js';
 export { NFEStatusServico } from './nfe/operations/NFEStatusServico/NFEStatusServico.js';
-export { NFEconsultaProtocolo } from './nfe/operations/NFEConsultaProtocolo/NFEconsultaProtocolo.js';
+export { NFEConsultaProtocolo } from './nfe/operations/NFEConsultaProtocolo/NFEconsultaProtocolo.js';
 export { NFERetornoAutorizacao } from './nfe/operations/NFERetornoAutorizacao/NFERetornoAutorizacao.js';
 export { NFEInutilizacao } from './nfe/operations/NFEInutilizacao/NFEInutilizacao.js';
 export { NFEDistribuicaoDFe } from './nfe/operations/NFEDistribuicaoDFe/NFEDistribuicaoDFe.js';

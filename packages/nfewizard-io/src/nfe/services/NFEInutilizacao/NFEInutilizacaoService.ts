@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import Environment from '@Modules/environment/Environment.js';
+import { Environment } from '@nfewizard/shared';
 import Utility from '@Utils/Utility.js';
-import XmlBuilder from '@Adapters/XmlBuilder.js';
+import { XmlBuilder } from '@nfewizard/shared';
 import { InutilizacaoData } from '@Types';
-import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
+import { BaseNFE } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
-import { GerarConsultaImpl, NFEInutilizacaoServiceImpl, SaveFilesImpl } from '@Interfaces';
-import { logger } from '@Core/exceptions/logger';
+import { GerarConsultaImpl, NFEInutilizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
+import { logger } from '@nfewizard/shared';
 
-class NFEInutilizacaoService extends BaseNFE implements NFEInutilizacaoServiceImpl {
+export class NFEInutilizacaoService extends BaseNFE implements NFEInutilizacaoServiceImpl {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         super(environment, utility, xmlBuilder, 'NFEInutilizacao', axios, saveFiles, gerarConsulta);
     }

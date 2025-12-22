@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { NFEStatusServicoServiceImpl } from '@Interfaces';
+import { NFEStatusServicoServiceImpl } from '@nfewizard/types/shared';
 
-class NFEStatusServico implements NFEStatusServicoServiceImpl {
+export class NFEStatusServico implements NFEStatusServicoServiceImpl {
     nfeStatusServicoService: NFEStatusServicoServiceImpl;
     constructor(nfeStatusServicoService: NFEStatusServicoServiceImpl) {
         this.nfeStatusServicoService = nfeStatusServicoService;

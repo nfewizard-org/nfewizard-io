@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { NFEconsultaProtocoloServiceImpl } from '@Interfaces';
+import { NFEconsultaProtocoloServiceImpl } from '@nfewizard/types/shared';
 
-class NFEConsultaProtocolo implements NFEconsultaProtocoloServiceImpl{
+export class NFEConsultaProtocolo implements NFEconsultaProtocoloServiceImpl{
     nfeConsultaProtocoloService: NFEconsultaProtocoloServiceImpl;
     constructor(nfeConsultaProtocoloService: NFEconsultaProtocoloServiceImpl) {
         this.nfeConsultaProtocoloService = nfeConsultaProtocoloService;

@@ -15,24 +15,24 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
-import NFERetornoAutorizacao from '../../operations/NFERetornoAutorizacao/NFERetornoAutorizacao.js';
-import XmlParser from '../../../../../core/utils/XmlParser.js';
-import Environment from '@Modules/environment/Environment.js';
+import { NFERetornoAutorizacao } from '../../operations/NFERetornoAutorizacao/NFERetornoAutorizacao.js';
+import { XmlParser } from '@nfewizard/shared';
+import { Environment } from '@nfewizard/shared';
 import Utility from '@Utils/Utility.js';
-import XmlBuilder from '@Adapters/XmlBuilder.js';
-import ValidaCPFCNPJ from '../../../../../core/utils/ValidaCPFCNPJ.js';
+import { XmlBuilder } from '@nfewizard/shared';
+import { ValidaCPFCNPJ } from '@nfewizard/shared';
 import { GenericObject, LayoutNFe, NFe, ProtNFe } from '@Types';
-import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
+import { BaseNFE } from '@nfewizard/shared';
 import { format } from 'date-fns';
 import { mountCOFINS, mountICMS, mountPIS } from '@Utils/NFEImposto.js';
-import { GerarConsultaImpl, NFEAutorizacaoServiceImpl, SaveFilesImpl } from '@Interfaces';
-import NFERetornoAutorizacaoService from '../NFERetornoAutorizacao/NFERetornoAutorizacaoService.js';
-import { logger } from '@Core/exceptions/logger.js';
+import { GerarConsultaImpl, NFEAutorizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
+import { NFERetornoAutorizacaoService } from '../NFERetornoAutorizacao/NFERetornoAutorizacaoService.js';
+import { logger } from '@nfewizard/shared';
 import { Agent } from 'http';
 
 const T_MED = 5; // Tempo médio de resposta padrão em segundos
 
-class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl {
+export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServiceImpl {
     xmlNFe: string[];
 
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { COFINS, ICMS, PIS, dadosCOFINS, dadosICMS, dadosPIS } from 'src/core/types';
+import { COFINS, ICMS, PIS, dadosCOFINS, dadosICMS, dadosPIS } from '@nfewizard/types/nfe';
 
 function filterFieldsByType<T extends object>(source: any, requiredFields: (keyof T)[]): Partial<T> {
     const result: Partial<T> = {};

@@ -16,16 +16,16 @@
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
 import DistribuicaoHandler from './util/DistribuicaoHandler.js';
-import Environment from '@Modules/environment/Environment.js';
+import { Environment } from '@nfewizard/shared';
 import Utility from '@Utils/Utility.js';
-import XmlBuilder from '@Adapters/XmlBuilder.js';
+import { XmlBuilder } from '@nfewizard/shared';
 import { ConsultaNFe, GenericObject } from '@Types';
-import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
-import { GerarConsultaImpl, SaveFilesImpl } from '@Interfaces';
-import { logger } from '@Core/exceptions/logger.js';
+import { BaseNFE } from '@nfewizard/shared';
+import { GerarConsultaImpl, SaveFilesImpl } from '@nfewizard/types/shared';
+import { logger } from '@nfewizard/shared';
 import { Agent } from 'http';
 
-class NFEDistribuicaoDFeService extends BaseNFE {
+export class NFEDistribuicaoDFeService extends BaseNFE {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         super(environment, utility, xmlBuilder, 'NFeDistribuicaoDFe', axios, saveFiles, gerarConsulta);
     }

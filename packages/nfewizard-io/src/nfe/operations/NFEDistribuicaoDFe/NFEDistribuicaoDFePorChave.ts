@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { NFEDistribuicaoDFeServiceImpl } from '@Interfaces';
+import { NFEDistribuicaoDFeServiceImpl } from '@nfewizard/types/shared';
 
-class NFEDistribuicaoDFePorChave implements NFEDistribuicaoDFeServiceImpl {
+export class NFEDistribuicaoDFePorChave implements NFEDistribuicaoDFeServiceImpl {
     nfeDistribuicaoDFePorChaveService: NFEDistribuicaoDFeServiceImpl;
     constructor(nfeDistribuicaoDFePorChaveService: NFEDistribuicaoDFeServiceImpl) {
         this.nfeDistribuicaoDFePorChaveService = nfeDistribuicaoDFePorChaveService;

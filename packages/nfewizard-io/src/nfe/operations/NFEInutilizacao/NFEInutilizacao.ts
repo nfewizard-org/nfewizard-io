@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { NFEInutilizacaoServiceImpl } from '@Interfaces';
+import { NFEInutilizacaoServiceImpl } from '@nfewizard/types/shared';
 
-class NFEInutilizacao implements NFEInutilizacaoServiceImpl{
+export class NFEInutilizacao implements NFEInutilizacaoServiceImpl{
     nfeInutilizacaoService: NFEInutilizacaoServiceImpl;
     constructor(nfeInutilizacaoService: NFEInutilizacaoServiceImpl) {
         this.nfeInutilizacaoService = nfeInutilizacaoService;

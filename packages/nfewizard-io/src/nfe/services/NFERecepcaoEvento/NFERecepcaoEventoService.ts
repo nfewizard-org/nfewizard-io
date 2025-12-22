@@ -15,16 +15,16 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
-import Environment from '@Modules/environment/Environment.js';
+import { Environment } from '@nfewizard/shared';
 import Utility from '@Utils/Utility.js';
-import XmlBuilder from '@Adapters/XmlBuilder.js';
+import { XmlBuilder } from '@nfewizard/shared';
 import { EventoNFe, GenericObject, TipoEvento } from '@Types';
-import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
-import { GerarConsultaImpl, NFERecepcaoEventoServiceImpl, SaveFilesImpl } from '@Interfaces';
-import { logger } from '@Core/exceptions/logger';
+import { BaseNFE } from '@nfewizard/shared';
+import { GerarConsultaImpl, NFERecepcaoEventoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
+import { logger } from '@nfewizard/shared';
 import { Agent } from 'http';
 
-class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServiceImpl {
+export class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEventoServiceImpl {
     tpEvento: string;
     modelo?: string;
     xmlEventosNacionais: string[];

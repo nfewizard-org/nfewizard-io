@@ -19,11 +19,11 @@ import xml2js from 'xml2js';
 import XmlParser from '@Utils/XmlParser.js';
 import Utility from '@Utils/Utility.js';
 import { GenericObject } from '@Types';
-import Environment from '@Modules/environment/Environment.js';
+import { Environment } from '@nfewizard/shared';
 import { AxiosResponse } from 'axios';
-import { logger } from '@Core/exceptions/logger';
+import { logger } from '@nfewizard/shared';
 
-class DistribuicaoHandler {
+export class DistribuicaoHandler {
     environment: Environment;
     utility: Utility;
     metodo: string;

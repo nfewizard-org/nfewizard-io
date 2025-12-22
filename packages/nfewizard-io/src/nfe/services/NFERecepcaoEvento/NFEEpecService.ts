@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import Environment from '@Modules/environment/Environment.js';
+import { Environment } from '@nfewizard/shared';
 import Utility from '@Utils/Utility.js';
-import XmlBuilder from '@Adapters/XmlBuilder.js';
+import { XmlBuilder } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
-import { GerarConsultaImpl, SaveFilesImpl } from '@Interfaces';
-import NFERecepcaoEventoService from './NFERecepcaoEventoService';
+import { GerarConsultaImpl, SaveFilesImpl } from '@nfewizard/types/shared';
+import NFERecepcaoEventoService from './NFERecepcaoEventoService.js';
 
-class NFEEpecService extends NFERecepcaoEventoService {
+export class NFEEpecService extends NFERecepcaoEventoService {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         super(environment, utility, xmlBuilder, axios, saveFiles, gerarConsulta);
     }

@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { NFERecepcaoEventoServiceImpl } from '@Interfaces/NFERecepcaoEventoServiceImpl.js';
+import { NFERecepcaoEventoServiceImpl } from '@nfewizard/types/shared';
 
-class NFEConfirmacaoDaOperacao implements NFERecepcaoEventoServiceImpl {
+export class NFEConfirmacaoDaOperacao implements NFERecepcaoEventoServiceImpl {
     nfeConfirmacaoDaOperacaoServiceService: NFERecepcaoEventoServiceImpl;
     constructor(nfeConfirmacaoDaOperacaoServiceService: NFERecepcaoEventoServiceImpl) {
         this.nfeConfirmacaoDaOperacaoServiceService = nfeConfirmacaoDaOperacaoServiceService;

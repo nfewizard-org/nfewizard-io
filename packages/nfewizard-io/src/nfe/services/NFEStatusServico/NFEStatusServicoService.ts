@@ -15,17 +15,17 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { getCodIBGE } from '@Utils/getCodIBGE.js';
-import Environment from '@Modules/environment/Environment.js';
-import XmlBuilder from '@Adapters/XmlBuilder.js';
+import { Environment } from '@nfewizard/shared';
+import { XmlBuilder } from '@nfewizard/shared';
 import Utility from '@Utils/Utility.js';
-import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
+import { BaseNFE } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
-import { SaveFilesImpl, GerarConsultaImpl, NFEStatusServicoServiceImpl } from '@Interfaces';
-import { logger } from '@Core/exceptions/logger';
+import { SaveFilesImpl, GerarConsultaImpl, NFEStatusServicoServiceImpl } from '@nfewizard/types/shared';
+import { logger } from '@nfewizard/shared';
 
 const METHOD_NAME = 'NFEStatusServico';
 
-class NFEStatusServicoService extends BaseNFE implements NFEStatusServicoServiceImpl {
+export class NFEStatusServicoService extends BaseNFE implements NFEStatusServicoServiceImpl {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         super(environment, utility, xmlBuilder, METHOD_NAME, axios, saveFiles, gerarConsulta);
     }

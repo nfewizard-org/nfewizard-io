@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { NFERetornoAutorizacaoServiceImpl } from '@Interfaces';
+import { NFERetornoAutorizacaoServiceImpl } from '@nfewizard/types/shared';
 import { ProtNFe } from '@Types/NFEAutorizacao';
 
-class NFERetornoAutorizacao implements NFERetornoAutorizacaoServiceImpl {
+export class NFERetornoAutorizacao implements NFERetornoAutorizacaoServiceImpl {
     nfeRetornoAutorizacaoService: NFERetornoAutorizacaoServiceImpl;
     constructor(nfeRetornoAutorizacaoService: NFERetornoAutorizacaoServiceImpl) {
         this.nfeRetornoAutorizacaoService = nfeRetornoAutorizacaoService;

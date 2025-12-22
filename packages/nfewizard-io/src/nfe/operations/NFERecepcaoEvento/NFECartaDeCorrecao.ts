@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { NFERecepcaoEventoServiceImpl } from '@Interfaces/NFERecepcaoEventoServiceImpl.js';
+import { NFERecepcaoEventoServiceImpl } from '@nfewizard/types/shared';
 
 
-class NFECartaDeCorrecao implements NFERecepcaoEventoServiceImpl {
+export class NFECartaDeCorrecao implements NFERecepcaoEventoServiceImpl {
     nfeCartaDeCorrecaoServiceService: NFERecepcaoEventoServiceImpl;
     constructor(nfeCartaDeCorrecaoServiceService: NFERecepcaoEventoServiceImpl) {
         this.nfeCartaDeCorrecaoServiceService = nfeCartaDeCorrecaoServiceService;

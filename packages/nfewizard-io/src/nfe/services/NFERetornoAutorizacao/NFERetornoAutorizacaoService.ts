@@ -14,15 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import Environment from '@Modules/environment/Environment.js';
+import { Environment } from '@nfewizard/shared';
 import Utility from '@Utils/Utility.js';
-import XmlBuilder from '@Adapters/XmlBuilder.js';
-import BaseNFE from '@Modules/dfe/base/BaseNFe.js';
+import { XmlBuilder } from '@nfewizard/shared';
+import { BaseNFE } from '@nfewizard/shared';
 import { ProtNFe } from '@Types';
 import { AxiosInstance } from 'axios';
-import { GerarConsultaImpl, NFERetornoAutorizacaoServiceImpl, SaveFilesImpl } from '@Interfaces';
+import { GerarConsultaImpl, NFERetornoAutorizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 
-class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoAutorizacaoServiceImpl {
+export class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoAutorizacaoServiceImpl {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         super(environment, utility, xmlBuilder, 'NFERetAutorizacao', axios, saveFiles, gerarConsulta);
     }

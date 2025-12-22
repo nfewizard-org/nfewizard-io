@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { NFEAutorizacaoServiceImpl } from '@Interfaces/NFEAutorizacaoServiceImpl.js';
+import { NFEAutorizacaoServiceImpl } from '@nfewizard/types/shared';
 
-class NFEAutorizacao {
+export class NFEAutorizacao {
     nfeAutorizacaoService: NFEAutorizacaoServiceImpl;
     constructor(nfeAutorizacaoService: NFEAutorizacaoServiceImpl) {
         this.nfeAutorizacaoService = nfeAutorizacaoService;

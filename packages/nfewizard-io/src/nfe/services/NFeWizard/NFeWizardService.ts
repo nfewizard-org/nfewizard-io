@@ -1,45 +1,35 @@
-import XmlBuilder from '@Adapters/XmlBuilder';
-import Utility from '@Core/utils/Utility';
-import { NFeWizardServiceImpl } from '@Interfaces';
-import GerarConsulta from '@Modules/dfe/base/GerarConsulta';
-import SaveFiles from '@Modules/dfe/base/SaveFiles';
-import Environment from '@Modules/environment/Environment';
+import { XmlBuilder } from '@nfewizard/shared';
+import { Utility } from '@nfewizard/shared';
+import { NFeWizardServiceImpl } from '@nfewizard/types/shared';
+import { GerarConsulta } from '@nfewizard/shared';
+import { SaveFiles } from '@nfewizard/shared';
+import { Environment } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
-import NFEStatusServicoService from '@Modules/dfe/nfe/services/NFEStatusServico/NFEStatusServicoService';
-import NFEConsultaProtocolo from '../../operations/NFEConsultaProtocolo/NFEconsultaProtocolo';
-import NFEEpec from '../../operations/NFERecepcaoEvento/NFEEpec';
-import NFECancelamento from '../../operations/NFERecepcaoEvento/NFECancelamento';
-import NFECienciaDaOperacao from '../../operations/NFERecepcaoEvento/NFECienciaDaOperacao';
-import NFEConfirmacaoDaOperacao from '../../operations/NFERecepcaoEvento/NFEConfirmacaoDaOperacao';
-import NFEOperacaoNaoRealizada from '../../operations/NFERecepcaoEvento/NFEOperacaoNaoRealizada';
-import MailController from '@Adapters/MailAdapter';
-import NFCEGerarDanfe from '@Modules/dfe/danfe/NFCEGerarDanfe/NFCEGerarDanfe';
-import NFEGerarDanfe from '@Modules/dfe/danfe/NFEGerarDanfe/NFEGerarDanfe';
-import NFCEAutorizacao from '@Modules/dfe/nfce/operations/NFCEAutorizacao/NFCEAutorizacao';
-import NFEDistribuicaoDFe from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFe';
-import NFEDistribuicaoDFePorChave from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorChave';
-import NFEDistribuicaoDFePorNSU from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorNSU';
-import NFEDistribuicaoDFePorUltNSU from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorUltNSU';
+import { NFEStatusServicoService } from '../NFEStatusServico/NFEStatusServicoService.js';
+import { NFEConsultaProtocolo } from '../../operations/NFEConsultaProtocolo/NFEconsultaProtocolo.js';
+import { NFEEpec } from '../../operations/NFERecepcaoEvento/NFEEpec.js';
+import { NFECancelamento } from '../../operations/NFERecepcaoEvento/NFECancelamento.js';
+import { NFECienciaDaOperacao } from '../../operations/NFERecepcaoEvento/NFECienciaDaOperacao.js';
+import { NFEConfirmacaoDaOperacao } from '../../operations/NFERecepcaoEvento/NFEConfirmacaoDaOperacao.js';
+import { NFEOperacaoNaoRealizada } from '../../operations/NFERecepcaoEvento/NFEOperacaoNaoRealizada.js';
+import { MailController } from '../../../MailAdapter.js';
+import { NFCEGerarDanfe } from '@nfewizard/danfe';
+import { NFEGerarDanfe } from '@nfewizard/danfe';
+import { NFEDistribuicaoDFe } from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFe.js';
+import { NFEDistribuicaoDFePorChave } from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorChave.js';
+import { NFEDistribuicaoDFePorNSU } from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorNSU.js';
+import { NFEDistribuicaoDFePorUltNSU } from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorUltNSU.js';
 // CTe imports
-import CTEDistribuicaoDFe from '@Modules/dfe/cte/operations/CTEDistribuicaoDFe/CTEDistribuicaoDFe';
-import CTEDistribuicaoDFePorNSU from '@Modules/dfe/cte/operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorNSU';
-import CTEDistribuicaoDFePorUltNSU from '@Modules/dfe/cte/operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorUltNSU';
-import CTEDistribuicaoDFeService from '@Modules/dfe/cte/services/CTEDistribuicaoDFe/CTEDistribuicaoDFeService';
-import CTEDistribuicaoDFePorNSUService from '@Modules/dfe/cte/services/CTEDistribuicaoDFe/CTEDistribuicaoDFePorNSU';
-import CTEDistribuicaoDFePorUltNSUService from '@Modules/dfe/cte/services/CTEDistribuicaoDFe/CTEDistribuicaoDFePorUltNSU';
-import NFEInutilizacao from '../../operations/NFEInutilizacao/NFEInutilizacao';
-import NFECartaDeCorrecao from '../../operations/NFERecepcaoEvento/NFECartaDeCorrecao';
-import NFEDesconhecimentoDaOperacao from '../../operations/NFERecepcaoEvento/NFEDesconhecimentoDaOperacao';
-import NFEAutorizacaoService from '../NFEAutorizacao/NFEAutorizacaoService';
+import { NFEInutilizacao } from '../../operations/NFEInutilizacao/NFEInutilizacao.js';
+import { NFECartaDeCorrecao } from '../../operations/NFERecepcaoEvento/NFECartaDeCorrecao.js';
+import { NFEDesconhecimentoDaOperacao } from '../../operations/NFERecepcaoEvento/NFEDesconhecimentoDaOperacao.js';
+import { NFEAutorizacaoService } from '../NFEAutorizacao/NFEAutorizacaoService.js';
 import {
     Cancelamento,
     CartaDeCorrecao,
     CienciaDaOperacao,
     ConfirmacaoDaOperacao,
     ConsultaNFe,
-    ConsultaCTe,
-    DFePorUltimoNSUCTe,
-    DFePorNSUCTe,
     DesconhecimentoDaOperacao,
     DFePorChaveNFe,
     DFePorNSU,
@@ -52,27 +42,26 @@ import {
     NFEGerarDanfeProps,
     NFeWizardProps,
     OperacaoNaoRealizada
-} from '@Types';
-import NFEconsultaProtocoloService from '../NFEConsultaProtocolo/NFEconsultaProtocoloService';
-import NFEStatusServico from '../../operations/NFEStatusServico/NFEStatusServico';
-import NFERecepcaoEvento from '../../operations/NFERecepcaoEvento/NFERecepcaoEvento';
-import NFERecepcaoEventoService from '../NFERecepcaoEvento/NFERecepcaoEventoService';
-import NFECancelamentoService from '../NFERecepcaoEvento/NFECancelamentoService';
-import NFECartaDeCorrecaoService from '../NFERecepcaoEvento/NFECartaDeCorrecaoService';
-import NFECienciaDaOperacaoService from '../NFERecepcaoEvento/NFECienciaDaOperacaoService';
-import NFEDesconhecimentoDaOperacaoService from '../NFERecepcaoEvento/NFEDesconhecimentoDaOperacaoService';
-import NFEEpecService from '../NFERecepcaoEvento/NFEEpecService';
-import NFEOperacaoNaoRealizadaService from '../NFERecepcaoEvento/NFEOperacaoNaoRealizadaService';
-import NFEAutorizacao from '../../operations/NFEAutorizacao/NFEAutorizacao';
-import NFEDistribuicaoDFeService from '../NFEDistribuicaoDFe/NFEDistribuicaoDFeService';
-import NFEDistribuicaoDFePorUltNSUService from '../NFEDistribuicaoDFe/NFEDistribuicaoDFePorUltNSU';
-import NFEDistribuicaoDFePorNSUService from '../NFEDistribuicaoDFe/NFEDistribuicaoDFePorNSU';
-import NFEDistribuicaoDFePorChaveService from '../NFEDistribuicaoDFe/NFEDistribuicaoDFePorChave';
-import NFEInutilizacaoService from '../NFEInutilizacao/NFEInutilizacaoService';
-import NFCEAutorizacaoService from '@Modules/dfe/nfce/services/NFCEAutorizacao/NFCEAutorizacaoService';
-import { logger } from '@Core/exceptions/logger';
+} from '@nfewizard/types/nfe';
+import { NFEconsultaProtocoloService } from '../NFEConsultaProtocolo/NFEconsultaProtocoloService.js';
+import { NFEStatusServico } from '../../operations/NFEStatusServico/NFEStatusServico.js';
+import { NFERecepcaoEvento } from '../../operations/NFERecepcaoEvento/NFERecepcaoEvento.js';
+import { NFERecepcaoEventoService } from '../NFERecepcaoEvento/NFERecepcaoEventoService.js';
+import { NFECancelamentoService } from '../NFERecepcaoEvento/NFECancelamentoService.js';
+import { NFECartaDeCorrecaoService } from '../NFERecepcaoEvento/NFECartaDeCorrecaoService.js';
+import { NFECienciaDaOperacaoService } from '../NFERecepcaoEvento/NFECienciaDaOperacaoService.js';
+import { NFEDesconhecimentoDaOperacaoService } from '../NFERecepcaoEvento/NFEDesconhecimentoDaOperacaoService.js';
+import { NFEEpecService } from '../NFERecepcaoEvento/NFEEpecService.js';
+import { NFEOperacaoNaoRealizadaService } from '../NFERecepcaoEvento/NFEOperacaoNaoRealizadaService.js';
+import { NFEAutorizacao } from '../../operations/NFEAutorizacao/NFEAutorizacao.js';
+import { NFEDistribuicaoDFeService } from '../NFEDistribuicaoDFe/NFEDistribuicaoDFeService.js';
+import { NFEDistribuicaoDFePorUltNSUService } from '../NFEDistribuicaoDFe/NFEDistribuicaoDFePorUltNSU.js';
+import { NFEDistribuicaoDFePorNSUService } from '../NFEDistribuicaoDFe/NFEDistribuicaoDFePorNSU.js';
+import { NFEDistribuicaoDFePorChaveService } from '../NFEDistribuicaoDFe/NFEDistribuicaoDFePorChave.js';
+import { NFEInutilizacaoService } from '../NFEInutilizacao/NFEInutilizacaoService.js';
+import { logger } from '@nfewizard/shared';
 
-class NFeWizardService implements NFeWizardServiceImpl {
+export class NFeWizardService implements NFeWizardServiceImpl {
     private config: NFeWizardProps = {} as NFeWizardProps;
     private environment: Environment = {} as Environment;
     private utility: Utility = {} as Utility;
@@ -372,58 +361,6 @@ class NFeWizardService implements NFeWizardServiceImpl {
     }
 
     /**
-     * Distribuição DFe CTe
-     */
-    async CTE_DistribuicaoDFe(data: ConsultaCTe) {
-        try {
-            const distribuicaoDFeService = new CTEDistribuicaoDFeService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
-            const distribuicaoDFe = new CTEDistribuicaoDFe(distribuicaoDFeService);
-            const response = await distribuicaoDFe.Exec(data);
-
-            console.log('Retorno CTE_DistribuicaoDFe');
-            console.log(`   ${response.xMotivo}`);
-            console.log('===================================');
-
-            return response.data
-        } catch (error: any) {
-            logger.error(``, error, { context: 'CTE_DistribuicaoDFe', });
-            throw new Error(`CTE_DistribuicaoDFe: ${error.message}`)
-        }
-    }
-    async CTE_DistribuicaoDFePorUltNSU(data: DFePorUltimoNSUCTe) {
-        try {
-            const distribuicaoDFeService = new CTEDistribuicaoDFePorUltNSUService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
-            const distribuicaoDFe = new CTEDistribuicaoDFePorUltNSU(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
-            const response = await distribuicaoDFe.Exec(data);
-
-            console.log('Retorno CTE_DistribuicaoDFePorUltNSU');
-            console.log(`   ${response.xMotivo}`);
-            console.log('===================================');
-
-            return response.data
-        } catch (error: any) {
-            logger.error(``, error, { context: 'CTE_DistribuicaoDFePorUltNSU', });
-            throw new Error(`CTE_DistribuicaoDFePorUltNSU: ${error.message}`)
-        }
-    }
-    async CTE_DistribuicaoDFePorNSU(data: DFePorNSUCTe) {
-        try {
-            const distribuicaoDFeService = new CTEDistribuicaoDFePorNSUService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
-            const distribuicaoDFe = new CTEDistribuicaoDFePorNSU(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
-            const response = await distribuicaoDFe.Exec(data);
-
-            console.log('Retorno CTE_DistribuicaoDFePorNSU');
-            console.log(`   ${response.xMotivo}`);
-            console.log('===================================');
-
-            return response.data
-        } catch (error: any) {
-            logger.error(``, error, { context: 'CTE_DistribuicaoDFePorNSU', });
-            throw new Error(`CTE_DistribuicaoDFePorNSU: ${error.message}`)
-        }
-    }
-
-    /**
      * Autorização
      */
     async NFE_Autorizacao(data: NFe) {
@@ -440,22 +377,6 @@ class NFeWizardService implements NFeWizardServiceImpl {
         } catch (error: any) {
             logger.error(``, error, { context: 'NFE_Autorizacao', });
             throw new Error(`NFE_Autorizacao: ${error.message}`)
-        }
-    }
-    async NFCE_Autorizacao(data: NFe) {
-        try {
-            const autorizacaoService = new NFCEAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
-            const autorizacao = new NFCEAutorizacao(autorizacaoService);
-            const response = await autorizacao.Exec(data);
-
-            console.log('Retorno NFCE_Autorizacao');
-            console.table(response.xMotivo);
-            console.log('===================================');
-
-            return response.xmls
-        } catch (error: any) {
-            logger.error(``, error, { context: 'NFCE_Autorizacao', });
-            throw new Error(`NFCE_Autorizacao: ${error.message}`)
         }
     }
 
@@ -499,22 +420,6 @@ class NFeWizardService implements NFeWizardServiceImpl {
             throw new Error(`NFE_GerarDanfe: ${error.message}`)
         }
     }
-    async NFCE_GerarDanfe(data: NFEGerarDanfeProps) {
-        try {
-            const { dfe: { exibirMarcaDaguaDanfe } } = this.environment.getConfig();
-            const distribuicaoDFe = new NFCEGerarDanfe(data);
-            const response = await distribuicaoDFe.generatePDF(exibirMarcaDaguaDanfe);
-
-            console.log('Retorno NFCE_GerarDanfe');
-            console.log(response.message);
-            console.log('===================================');
-
-            return response
-        } catch (error: any) {
-            logger.error(``, error, { context: 'NFCE_GerarDanfe', });
-            throw new Error(`NFCE_GerarDanfe: ${error.message}`)
-        }
-    }
 
     /**
      * Método para envio de e-mail
@@ -546,4 +451,4 @@ class NFeWizardService implements NFeWizardServiceImpl {
     }
 }
 
-export default NFeWizardService;
+export { NFeWizardService };
