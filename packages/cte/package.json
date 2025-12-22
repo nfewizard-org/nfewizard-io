@@ -1,0 +1,47 @@
+{
+  "name": "@nfewizard/cte",
+  "version": "1.0.0",
+  "description": "Biblioteca Node.js para CTe - Conhecimento de Transporte Eletrônico",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/esm/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "cte",
+    "conhecimento transporte",
+    "sefaz",
+    "dfe"
+  ],
+  "author": "maurelima",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfewizard-org/nfewizard-io",
+    "directory": "packages/cte"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@nfewizard/types": "workspace:*",
+    "@nfewizard/shared": "workspace:*"
+  },
+  "optionalDependencies": {
+    "@nfewizard/danfe": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

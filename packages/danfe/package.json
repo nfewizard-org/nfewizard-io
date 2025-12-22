@@ -1,0 +1,51 @@
+{
+  "name": "@nfewizard/danfe",
+  "version": "1.0.0",
+  "description": "Geração de DANFE/DACTE em PDF para NFe, NFCe e CTe",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/esm/index.d.ts"
+    },
+    "./nfe": "./dist/esm/generators/nfe/index.js",
+    "./nfce": "./dist/esm/generators/nfce/index.js",
+    "./cte": "./dist/esm/generators/cte/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "danfe",
+    "dacte",
+    "pdf",
+    "nfe",
+    "nfce",
+    "cte"
+  ],
+  "author": "maurelima",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfewizard-org/nfewizard-io",
+    "directory": "packages/danfe"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nfewizard/types": "workspace:*",
+    "pdfkit": "^0.15.0",
+    "qrcode": "^1.5.4",
+    "bwip-js": "^4.3.2",
+    "date-fns": "^2.30.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

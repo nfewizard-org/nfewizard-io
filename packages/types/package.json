@@ -1,0 +1,42 @@
+{
+  "name": "@nfewizard/types",
+  "version": "1.0.0",
+  "description": "Tipos TypeScript para NFeWizard ecosystem (NFe, NFCe, CTe)",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./nfe": "./dist/nfe/index.js",
+    "./nfce": "./dist/nfce/index.js",
+    "./cte": "./dist/cte/index.js",
+    "./shared": "./dist/shared/index.js"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nfe",
+    "nfce",
+    "cte",
+    "types",
+    "typescript",
+    "sefaz"
+  ],
+  "author": "maurelima",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfewizard-org/nfewizard-io",
+    "directory": "packages/types"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

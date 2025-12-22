@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2020"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@nfewizard/types": ["packages/types/src"],
+      "@nfewizard/types/*": ["packages/types/src/*"],
+      "@nfewizard/shared": ["packages/shared/src"],
+      "@nfewizard/shared/*": ["packages/shared/src/*"],
+      "@nfewizard/danfe": ["packages/danfe/src"],
+      "@nfewizard/danfe/*": ["packages/danfe/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "build"]
+}
