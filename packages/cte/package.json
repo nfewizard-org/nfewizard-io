@@ -2,14 +2,14 @@
   "name": "@nfewizard/cte",
   "version": "1.0.0",
   "description": "Biblioteca Node.js para CTe - Conhecimento de Transporte Eletrônico",
-  "main": "./dist/cjs/index.cjs",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.cjs",
-      "import": "./dist/esm/index.js",
-      "types": "./dist/esm/index.d.ts"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/types/index.d.ts"
     }
   },
   "publishConfig": {
@@ -36,12 +36,20 @@
   },
   "dependencies": {
     "@nfewizard/types": "workspace:*",
-    "@nfewizard/shared": "workspace:*"
+    "@nfewizard/shared": "workspace:*",
+    "axios": "^1.6.7",
+    "date-fns": "^2.30.0",
+    "xml2js": "^0.6.2"
   },
   "optionalDependencies": {
     "@nfewizard/danfe": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "rollup": "^2.79.2"
   }
 }

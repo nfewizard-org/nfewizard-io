@@ -83,11 +83,35 @@ importers:
       '@nfewizard/types':
         specifier: workspace:*
         version: link:../types
+      axios:
+        specifier: ^1.6.7
+        version: 1.13.2(debug@4.4.3)
+      date-fns:
+        specifier: ^2.30.0
+        version: 2.30.0
+      xml2js:
+        specifier: ^0.6.2
+        version: 0.6.2
     optionalDependencies:
       '@nfewizard/danfe':
         specifier: workspace:*
         version: link:../danfe
     devDependencies:
+      '@rollup/plugin-commonjs':
+        specifier: ^25.0.7
+        version: 25.0.8(rollup@2.79.2)
+      '@rollup/plugin-json':
+        specifier: ^6.1.0
+        version: 6.1.0(rollup@2.79.2)
+      '@rollup/plugin-node-resolve':
+        specifier: ^15.2.3
+        version: 15.3.1(rollup@2.79.2)
+      '@rollup/plugin-typescript':
+        specifier: ^11.1.6
+        version: 11.1.6(rollup@2.79.2)(typescript@5.9.3)
+      rollup:
+        specifier: ^2.79.2
+        version: 2.79.2
       typescript:
         specifier: ^5.4.5
         version: 5.9.3
