@@ -16,7 +16,7 @@
  */
 
 import { logger } from '../exceptions/logger.js';
-import { GenericObject } from 'src/core/types';
+import { GenericObject } from '@nfewizard/types/shared';
 import * as convert from "xml-js";
 
 export class XmlParser {

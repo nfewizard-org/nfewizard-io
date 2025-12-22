@@ -1,0 +1,1 @@
+{"version":3,"file":"AxiosHttpClient.d.ts","sourceRoot":"","sources":["AxiosHttpClient.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,gBAAgB,EAAE,MAAM,yBAAyB,CAAC;AACvE,OAAc,EAAE,aAAa,EAAE,MAAM,OAAO,CAAC;AAE7C,cAAM,eAAgB,YAAW,UAAU,CAAC,aAAa,CAAC;IACtD,MAAM,CAAC,MAAM,EAAE,gBAAgB,GAAG,aAAa;CAOlD;AAED,OAAO,EAAE,eAAe,EAAE,CAAC"}

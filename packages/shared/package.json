@@ -2,19 +2,15 @@
   "name": "@nfewizard/shared",
   "version": "1.0.0",
   "description": "Core utilities compartilhadas (XML, HTTP, Certificate, Schema)",
-  "main": "./dist/cjs/index.cjs",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.cjs",
-      "import": "./dist/esm/index.js",
-      "types": "./dist/esm/index.d.ts"
-    },
-    "./xml": "./dist/esm/xml/index.js",
-    "./http": "./dist/esm/http/index.js",
-    "./certificate": "./dist/esm/certificate/index.js",
-    "./utils": "./dist/esm/utils/index.js"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/types/index.d.ts"
+    }
   },
   "publishConfig": {
     "access": "public"
@@ -35,7 +31,7 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "build:types": "tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist/types",
+    "build:types": "tsc --project tsconfig.types.json",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },

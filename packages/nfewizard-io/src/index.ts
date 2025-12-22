@@ -50,10 +50,11 @@ export {
   HttpClientBuilder,
   LoadCertificate,
   ValidateEnvironment,
-  ErrorContext,
-  JsonArrayTransport,
   logger
 } from '@nfewizard/shared';
+
+// Re-export types from shared
+export type { ErrorContext, JsonArrayTransport } from '@nfewizard/shared';
 
 // Re-export DANFE generators
 export { NFEGerarDanfe, NFCEGerarDanfe } from '@nfewizard/danfe';

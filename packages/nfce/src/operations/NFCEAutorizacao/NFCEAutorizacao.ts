@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * e
+ * 
  * NFeWizard-io is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -14,8 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import NFeWizard from './adapters/NFeWizard';
+import { NFCEAutorizacaoServiceImpl } from '@nfewizard/types/shared';
 
-export { NFeWizard as default };
-export * from './core/types';
-export * from './core/utils/NFEImposto'
+class NFCEAutorizacao {
+    nfceAutorizacaoService: NFCEAutorizacaoServiceImpl;
+    constructor(nfceAutorizacaoService: NFCEAutorizacaoServiceImpl) {
+        this.nfceAutorizacaoService = nfceAutorizacaoService;
+    }
+
+    async Exec(data?: any): Promise<any> {
+        return await this.nfceAutorizacaoService.Exec(data);
+    }
+
+}
+
+
+export { NFCEAutorizacao };

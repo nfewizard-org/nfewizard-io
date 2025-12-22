@@ -2,18 +2,15 @@
   "name": "@nfewizard/danfe",
   "version": "1.0.0",
   "description": "Geração de DANFE/DACTE em PDF para NFe, NFCe e CTe",
-  "main": "./dist/cjs/index.cjs",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.cjs",
-      "import": "./dist/esm/index.js",
-      "types": "./dist/esm/index.d.ts"
-    },
-    "./nfe": "./dist/esm/generators/nfe/index.js",
-    "./nfce": "./dist/esm/generators/nfce/index.js",
-    "./cte": "./dist/esm/generators/cte/index.js"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/types/index.d.ts"
+    }
   },
   "publishConfig": {
     "access": "public"
