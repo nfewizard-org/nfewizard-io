@@ -32,8 +32,9 @@ certificado_teste.pfx
 .local-packages
 .local-packages-single
 
-# Turbo cache
+# Turbo cache (raiz e packages)
 .turbo
+**/.turbo
 
 NTs
 modules.md
