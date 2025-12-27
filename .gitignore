@@ -36,5 +36,9 @@ certificado_teste.pfx
 .turbo
 **/.turbo
 
+# TypeScript build info
+*.tsbuildinfo
+**/.rollup.cache
+
 NTs
 modules.md
