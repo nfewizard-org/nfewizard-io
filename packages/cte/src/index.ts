@@ -1,3 +1,7 @@
+// Main CTe Wizard class (default export for easy usage)
+export { CTEWizard } from './CTEWizard.js';
+export { CTEWizard as default } from './CTEWizard.js';
+
 // CTe Operations
 export { CTEDistribuicaoDFe } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFe.js';
 export { CTEDistribuicaoDFePorNSU } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorNSU.js';

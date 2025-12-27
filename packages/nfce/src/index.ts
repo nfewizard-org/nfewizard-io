@@ -1,3 +1,7 @@
+// Main NFCe Wizard class (default export for easy usage)
+export { NFCEWizard } from './NFCEWizard.js';
+export { NFCEWizard as default } from './NFCEWizard.js';
+
 // NFCe Operations
 export { NFCEAutorizacao } from './operations/NFCEAutorizacao/NFCEAutorizacao.js';
 export { NFCERetornoAutorizacao } from './operations/NFCERetornoAutorizacao/NFCERetornoAutorizacao.js';
