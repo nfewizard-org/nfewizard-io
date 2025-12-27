@@ -15,9 +15,8 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { Environment } from '@nfewizard/shared';
-import Utility from '@Utils/Utility.js';
-import { XmlBuilder } from '@nfewizard/shared';
-import { InutilizacaoData } from '@Types';
+import { Utility, XmlBuilder } from '@nfewizard/shared';
+import { InutilizacaoData } from '@nfewizard/types/nfe';
 import { BaseNFE } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
 import { GerarConsultaImpl, NFEInutilizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';

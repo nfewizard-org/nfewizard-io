@@ -14,11 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { Environment } from '@nfewizard/shared';
-import Utility from '@Utils/Utility.js';
-import { XmlBuilder } from '@nfewizard/shared';
-import { BaseNFE } from '@nfewizard/shared';
-import { ProtNFe } from '@Types';
+import { Environment, Utility, XmlBuilder, BaseNFE } from '@nfewizard/shared';
+import { ProtNFe } from '@nfewizard/types/nfe';
 import { AxiosInstance } from 'axios';
 import { GerarConsultaImpl, NFERetornoAutorizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 

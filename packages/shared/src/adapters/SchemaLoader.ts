@@ -19,7 +19,8 @@ import { fileURLToPath } from 'url';
 
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url))
-const dir = process.env.NODE_ENV === 'production' ? '../resources/schemas' : '../resources/schemas/';
+// From dist/ to package root, then to resources/schemas
+const dir = path.join(baseDir, '../resources/schemas');
 
 /**
  * Efetua a leitura do Schema

@@ -16,15 +16,9 @@
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { NFERetornoAutorizacao } from '../../operations/NFERetornoAutorizacao/NFERetornoAutorizacao.js';
-import { XmlParser } from '@nfewizard/shared';
-import { Environment } from '@nfewizard/shared';
-import Utility from '@Utils/Utility.js';
-import { XmlBuilder } from '@nfewizard/shared';
-import { ValidaCPFCNPJ } from '@nfewizard/shared';
-import { GenericObject, LayoutNFe, NFe, ProtNFe } from '@Types';
-import { BaseNFE } from '@nfewizard/shared';
+import { XmlParser, Environment, Utility, XmlBuilder, ValidaCPFCNPJ, BaseNFE, mountCOFINS, mountICMS, mountPIS } from '@nfewizard/shared';
+import { GenericObject, LayoutNFe, NFe, ProtNFe } from '@nfewizard/types/nfe';
 import { format } from 'date-fns';
-import { mountCOFINS, mountICMS, mountPIS } from '@Utils/NFEImposto.js';
 import { GerarConsultaImpl, NFEAutorizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 import { NFERetornoAutorizacaoService } from '../NFERetornoAutorizacao/NFERetornoAutorizacaoService.js';
 import { logger } from '@nfewizard/shared';

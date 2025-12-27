@@ -27,4 +27,4 @@ export class NFEDistribuicaoDFe implements NFEDistribuicaoDFeServiceImpl {
     }
 }
 
-export default NFERecepcaoEvento;
+export default NFEDistribuicaoDFe;

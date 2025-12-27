@@ -339,6 +339,39 @@ Agradecemos imensamente aos nossos patrocinadores pela sua generosidade.
   </tr>
 </table>
 
+---
+
+## 🛠️ Desenvolvimento
+
+### Testar Localmente (antes de publicar no npm)
+
+Esta biblioteca é um monorepo. Para testar localmente:
+
+**Instalação completa (todos os módulos):**
+```bash
+./scripts/local-install.sh ~/seu-projeto-teste
+```
+
+**Instalação única (simula `npm install <pacote>`):**
+```bash
+# Testar apenas NFe
+./scripts/local-install-single.sh nfewizard-io ~/seu-projeto-teste
+
+# Testar apenas NFCe
+./scripts/local-install-single.sh @nfewizard/nfce ~/seu-projeto-teste
+
+# Testar apenas CTe
+./scripts/local-install-single.sh @nfewizard/cte ~/seu-projeto-teste
+```
+
+### 📖 Documentação
+
+- **[Scripts de Instalação Local](scripts/README.md)** - Como usar os scripts de teste
+- **[Guia de Instalação Local](examples/INSTALACAO_LOCAL.md)** - Detalhes sobre testes locais
+- **[Guia de Build](examples/BUILD.md)** - Build e publicação no npm
+
+---
+
 ## Criadores
 
 | [<img src="https://avatars.githubusercontent.com/u/59918400?s=400&u=3554ebcf0f75263637516867945ebd371e68da71&v=4" width="75px;"/>](https://github.com/Maurelima) |

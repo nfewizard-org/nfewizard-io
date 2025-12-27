@@ -9,3 +9,4 @@ export { XmlParser } from './XmlParser.js';
 export { ValidaCPFCNPJ } from './ValidaCPFCNPJ.js';
 export { getCodIBGE } from './getCodIBGE.js';
 export { getDesTipoPag } from './getDesTipoPag.js';
+export { mountICMS, mountPIS, mountCOFINS } from './NFEImposto.js';

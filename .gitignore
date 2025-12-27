@@ -28,5 +28,12 @@ certificado.pfx
 yarn.lock
 certificado_teste.pfx
 
+# Local install temporary directories
+.local-packages
+.local-packages-single
+
+# Turbo cache
+.turbo
+
 NTs
 modules.md

@@ -16,10 +16,8 @@
  */
 import pako from 'pako';
 import xml2js from 'xml2js';
-import XmlParser from '@Utils/XmlParser.js';
-import Utility from '@Utils/Utility.js';
-import { GenericObject } from '@Types';
-import { Environment } from '@nfewizard/shared';
+import { XmlParser, Utility, Environment } from '@nfewizard/shared';
+import { GenericObject } from '@nfewizard/types/shared';
 import { AxiosResponse } from 'axios';
 import { logger } from '@nfewizard/shared';
 

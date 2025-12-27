@@ -15,11 +15,8 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
-import { Environment } from '@nfewizard/shared';
-import Utility from '@Utils/Utility.js';
-import { XmlBuilder } from '@nfewizard/shared';
-import { EventoNFe, GenericObject, TipoEvento } from '@Types';
-import { BaseNFE } from '@nfewizard/shared';
+import { Environment, Utility, XmlBuilder, BaseNFE } from '@nfewizard/shared';
+import { EventoNFe, GenericObject, TipoEvento } from '@nfewizard/types/nfe';
 import { GerarConsultaImpl, NFERecepcaoEventoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 import { logger } from '@nfewizard/shared';
 import { Agent } from 'http';

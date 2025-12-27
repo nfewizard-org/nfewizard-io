@@ -9,7 +9,8 @@ import path from 'path';
 import { logger } from '../exceptions/logger.js';
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url));
-const dir = process.env.NODE_ENV === 'production' ? '../resources/certs' : '../../resources/certs';
+// From dist/ to package root, then to resources/certs
+const dir = path.join(baseDir, '../resources/certs');
 
 class LoadCertificate {
     private config: NFeWizardProps;
@@ -30,10 +31,16 @@ class LoadCertificate {
 
                 const pfxFile = fs.readFileSync(pfxPath);
                 const certsDir = path.resolve(baseDir, dir);
-                const caCerts = fs.readdirSync(certsDir).map(filename => {
-                    const tmp = `${certsDir}/${filename}`;
-                    return fs.readFileSync(tmp);
-                });
+                
+                // Read CA certificates if directory exists and has files
+                let caCerts: Buffer[] = [];
+                if (fs.existsSync(certsDir)) {
+                    const files = fs.readdirSync(certsDir).filter(f => !f.startsWith('.'));
+                    caCerts = files.map(filename => {
+                        const tmp = `${certsDir}/${filename}`;
+                        return fs.readFileSync(tmp);
+                    });
+                }
 
                 pem.readPkcs12(pfxFile, { p12Password: pfxPassword }, async (error, result) => {
                     if (error) {
@@ -56,11 +63,21 @@ class LoadCertificate {
                         return reject(new Error("Erro ao carregar o certificado: O certificado fornecido expirou ou ainda não é válido."));
                     }
 
-                    const agent = new https.Agent({
+                    // Configure HTTPS agent based on environment
+                    const agentOptions: https.AgentOptions = {
                         key: key,
                         cert: cert,
-                        ca: caCerts,
-                    });
+                    };
+                    
+                    // Add CA certs if available, otherwise allow self-signed for homologação
+                    if (caCerts.length > 0) {
+                        agentOptions.ca = caCerts;
+                    } else if (this.config.dfe.ambiente === 2) {
+                        // Homologação: accept self-signed certificates
+                        agentOptions.rejectUnauthorized = false;
+                    }
+                    
+                    const agent = new https.Agent(agentOptions);
 
                     resolve({
                         success: true,
@@ -123,17 +140,32 @@ class LoadCertificate {
 
                 // Carrega os certificados da CA
                 const certsDir = path.resolve(baseDir, dir);
-                const caCerts = fs.readdirSync(certsDir).map(filename => {
-                    const tmp = `${certsDir}/${filename}`;
-                    return fs.readFileSync(tmp);
-                });
+                
+                // Read CA certificates if directory exists and has files
+                let caCerts: Buffer[] = [];
+                if (fs.existsSync(certsDir)) {
+                    const files = fs.readdirSync(certsDir).filter(f => !f.startsWith('.'));
+                    caCerts = files.map(filename => {
+                        const tmp = `${certsDir}/${filename}`;
+                        return fs.readFileSync(tmp);
+                    });
+                }
 
                 // Configura o agente HTTPS
-                const agent = new https.Agent({
+                const agentOptions: https.AgentOptions = {
                     key: keyPem,
                     cert: certPem,
-                    ca: caCerts,
-                });
+                };
+                
+                // Add CA certs if available, otherwise allow self-signed for homologação
+                if (caCerts.length > 0) {
+                    agentOptions.ca = caCerts;
+                } else if (this.config.dfe.ambiente === 2) {
+                    // Homologação: accept self-signed certificates
+                    agentOptions.rejectUnauthorized = false;
+                }
+                
+                const agent = new https.Agent(agentOptions);
 
                 resolve({
                     success: true,

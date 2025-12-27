@@ -81,5 +81,5 @@ export { NFEEpec } from './nfe/operations/NFERecepcaoEvento/NFEEpec.js';
 export { NFeWizard } from './NFeWizard.js';
 export { NFeWizard as default } from './NFeWizard.js';
 
-// Export utility functions
-export * from './NFEImposto.js';
+// Export tax calculation functions (now from shared)
+export { mountICMS, mountPIS, mountCOFINS } from '@nfewizard/shared';

@@ -15,7 +15,7 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { NFERetornoAutorizacaoServiceImpl } from '@nfewizard/types/shared';
-import { ProtNFe } from '@Types/NFEAutorizacao';
+import { ProtNFe } from '@nfewizard/types/nfe';
 
 export class NFERetornoAutorizacao implements NFERetornoAutorizacaoServiceImpl {
     nfeRetornoAutorizacaoService: NFERetornoAutorizacaoServiceImpl;

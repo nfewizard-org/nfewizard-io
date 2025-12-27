@@ -15,7 +15,7 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { Environment } from '@nfewizard/shared';
-import Utility from '@Utils/Utility.js';
+import { Utility } from '@nfewizard/shared';
 import { XmlBuilder } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
 import NFERecepcaoEventoService from './NFERecepcaoEventoService.js';

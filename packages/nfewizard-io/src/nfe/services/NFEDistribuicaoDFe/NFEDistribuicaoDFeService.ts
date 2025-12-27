@@ -15,11 +15,9 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
-import DistribuicaoHandler from './util/DistribuicaoHandler.js';
-import { Environment } from '@nfewizard/shared';
-import Utility from '@Utils/Utility.js';
-import { XmlBuilder } from '@nfewizard/shared';
-import { ConsultaNFe, GenericObject } from '@Types';
+import { DistribuicaoHandler } from './util/DistribuicaoHandler.js';
+import { Environment, Utility, XmlBuilder } from '@nfewizard/shared';
+import { ConsultaNFe, GenericObject } from '@nfewizard/types/shared';
 import { BaseNFE } from '@nfewizard/shared';
 import { GerarConsultaImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 import { logger } from '@nfewizard/shared';

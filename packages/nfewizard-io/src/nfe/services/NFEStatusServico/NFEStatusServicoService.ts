@@ -14,11 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-import { getCodIBGE } from '@Utils/getCodIBGE.js';
-import { Environment } from '@nfewizard/shared';
-import { XmlBuilder } from '@nfewizard/shared';
-import Utility from '@Utils/Utility.js';
-import { BaseNFE } from '@nfewizard/shared';
+import { getCodIBGE, Environment, XmlBuilder, Utility, BaseNFE } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
 import { SaveFilesImpl, GerarConsultaImpl, NFEStatusServicoServiceImpl } from '@nfewizard/types/shared';
 import { logger } from '@nfewizard/shared';
