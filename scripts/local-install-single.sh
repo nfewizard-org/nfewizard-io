@@ -58,6 +58,7 @@ case "$PACKAGE" in
         MAIN_PKG="nfewizard-io"
         MAIN_DIR="nfewizard-io"
         DEPS=("types" "shared")
+        # Nota: xsd-schema-validator removido (requer Java)
         ;;
     "@nfewizard/nfce")
         MAIN_PKG="@nfewizard/nfce"
@@ -91,6 +92,31 @@ echo ""
 echo -e "${BLUE}📦 Passo 1: Instalando dependências externas...${NC}"
 cd "$TARGET_DIR"
 
+# Verificar se Java está instalado (necessário para xsd-schema-validator)
+if ! command -v java &> /dev/null; then
+    echo -e "${YELLOW}⚠️  Java não encontrado. xsd-schema-validator precisa do Java.${NC}"
+    echo -e "${YELLOW}📋 Instalando OpenJDK...${NC}"
+    
+    # Detectar distribuição Linux
+    if command -v apt-get &> /dev/null; then
+        sudo apt-get update && sudo apt-get install -y default-jdk
+    elif command -v yum &> /dev/null; then
+        sudo yum install -y java-11-openjdk-devel
+    elif command -v dnf &> /dev/null; then
+        sudo dnf install -y java-11-openjdk-devel
+    else
+        echo -e "${RED}❌ Não foi possível instalar Java automaticamente.${NC}"
+        echo -e "${YELLOW}Por favor, instale o Java manualmente:${NC}"
+        echo -e "  Ubuntu/Debian: sudo apt-get install default-jdk"
+        echo -e "  Fedora/RHEL: sudo dnf install java-11-openjdk-devel"
+        exit 1
+    fi
+    
+    echo -e "${GREEN}✅ Java instalado com sucesso${NC}"
+else
+    echo -e "${GREEN}✅ Java já está instalado: $(java -version 2>&1 | head -n 1)${NC}"
+fi
+
 # Garantir que .npmrc permite build scripts
 echo "enable-pre-post-scripts=true" > .npmrc
 echo "unsafe-perm=true" >> .npmrc
@@ -98,16 +124,16 @@ echo "unsafe-perm=true" >> .npmrc
 # Lista de dependências baseada no pacote principal
 case "$MAIN_PKG" in
     "nfewizard-io")
-        EXT_DEPS="date-fns axios xml2js nodemailer node-fetch pdfkit qrcode bwip-js pako xml-crypto node-forge libxmljs2 xsd-schema-validator easy-soap-request soap pem winston xml-js sha1 winston-transport xsd-assembler"
+        EXT_DEPS="date-fns axios xml2js nodemailer node-fetch pako xml-crypto node-forge libxmljs2 xsd-schema-validator easy-soap-request soap pem winston xml-js sha1 winston-transport xsd-assembler"
         ;;
     "@nfewizard/nfce")
-        EXT_DEPS="date-fns axios xml2js node-fetch pako xml-crypto node-forge libxmljs2 xsd-schema-validator easy-soap-request soap pem winston xml-js sha1 winston-transport xsd-assembler"
+        EXT_DEPS="date-fns axios xml2js node-fetch pako xml-crypto node-forge libxmljs2 xsd-schema-validator easy-soap-request soap pem winston xml-js sha1 winston-transport xsd-assembler pdfkit qrcode bwip-js"
         ;;
     "@nfewizard/cte")
         EXT_DEPS="date-fns axios xml2js node-fetch pako xml-crypto node-forge libxmljs2 xsd-schema-validator easy-soap-request soap pem winston xml-js sha1 winston-transport xsd-assembler"
         ;;
     "@nfewizard/danfe")
-        EXT_DEPS="pdfkit qrcode bwip-js"
+        EXT_DEPS="pdfkit qrcode bwip-js date-fns libxmljs2"
         ;;
 esac
 
@@ -121,24 +147,34 @@ done
 
 if [ -n "$MISSING_DEPS" ]; then
     echo -e "${YELLOW}  Instalando:${MISSING_DEPS}${NC}"
-    pnpm add $MISSING_DEPS
-    
-    # Compilar módulos nativos se necessário
-    if [[ "$MISSING_DEPS" == *"libxmljs2"* ]]; then
-        echo -e "${YELLOW}  Compilando libxmljs2...${NC}"
-        cd node_modules/.pnpm/libxmljs2@*/node_modules/libxmljs2 2>/dev/null && npm run install 2>&1 | grep -v "npm warn" || true
-        cd "$TARGET_DIR"
-    fi
-    
-    if [[ "$MISSING_DEPS" == *"xsd-schema-validator"* ]]; then
-        echo -e "${YELLOW}  Compilando xsd-schema-validator...${NC}"
-        cd node_modules/.pnpm/xsd-schema-validator@*/node_modules/xsd-schema-validator 2>/dev/null && npm run build 2>&1 | grep -v "npm warn" || true
-        cd "$TARGET_DIR"
-    fi
-    
+    npm install $MISSING_DEPS --no-save
     echo -e "${GREEN}  ✅ Dependências externas instaladas${NC}"
 else
     echo -e "${GREEN}  ✅ Todas as dependências já instaladas${NC}"
+fi
+
+# Garantir que libxmljs2 está compilado (módulo nativo)
+if [ -d "node_modules/libxmljs2" ] || [ -d "node_modules/.pnpm/libxmljs2"* ]; then
+    echo -e "${BLUE}  🔧 Verificando compilação de módulos nativos...${NC}"
+    
+    # Tentar encontrar libxmljs2 instalado via pnpm
+    LIBXML_PATH=$(find node_modules/.pnpm -name "libxmljs2" -type d 2>/dev/null | grep "node_modules/libxmljs2$" | head -1)
+    
+    if [ -n "$LIBXML_PATH" ]; then
+        if [ ! -f "$LIBXML_PATH/build/Release/xmljs.node" ] && [ ! -f "$LIBXML_PATH/compiled/"*/linux/x64/xmljs.node ]; then
+            echo -e "${YELLOW}  📦 Compilando libxmljs2...${NC}"
+            cd "$LIBXML_PATH"
+            npm run install 2>&1 | grep -E "(gyp|prebuild|Download|Prebuild)" || true
+            cd "$TARGET_DIR"
+        fi
+    elif [ -d "node_modules/libxmljs2" ]; then
+        if [ ! -f "node_modules/libxmljs2/build/Release/xmljs.node" ] && [ ! -f "node_modules/libxmljs2/compiled/"*/linux/x64/xmljs.node ]; then
+            echo -e "${YELLOW}  📦 Compilando libxmljs2...${NC}"
+            cd node_modules/libxmljs2
+            npm run install 2>&1 | grep -E "(gyp|prebuild|Download|Prebuild)" || true
+            cd "$TARGET_DIR"
+        fi
+    fi
 fi
 echo ""
 
