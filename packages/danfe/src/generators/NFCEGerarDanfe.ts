@@ -28,6 +28,8 @@
  */
 import bwipjs from 'bwip-js';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import fs from 'fs';
 import { DetProd, Ide, Dest, Emit, Total, Transp, InfAdic, ProtNFe, Pag, InfNFeSupl, NFEGerarDanfeProps } from '@nfewizard/types/nfe';
 import { format, parseISO } from 'date-fns';
@@ -35,9 +37,14 @@ import PDFDocument from 'pdfkit';
 import QRCode from 'qrcode';
 import { ValidaCPFCNPJ, getDesTipoPag } from '@nfewizard/shared';
 
-const baseDir = __dirname;
-const fontDir = process.env.NODE_ENV === 'production' ? '../resources/fonts/ARIAL.TTF' : '../../../../resources/fonts/ARIAL.TTF';
-const fontDirBold = process.env.NODE_ENV === 'production' ? '../resources/fonts/ARIALBD.TTF' : '../../../../resources/fonts/ARIALBD.TTF';
+// Suporte para módulos ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Caminho das fontes relativo ao pacote instalado
+// Rollup faz bundle em dist/index.mjs, então dist/ -> ../resources/
+const fontDir = path.resolve(__dirname, '../resources/fonts/ARIAL.TTF');
+const fontDirBold = path.resolve(__dirname, '../resources/fonts/ARIALBD.TTF');
 
 class NFCeGerarDanfe {
     data: NFEGerarDanfeProps['data'];
@@ -119,24 +126,19 @@ class NFCeGerarDanfe {
         this.itemHeight = fontSize * 1.116;
         const pageHeight = calculateHeight(itensLength, this.itemHeight);
 
-        const fontPath = path.resolve(baseDir, fontDir);
-        const fontPathBold = path.resolve(baseDir, fontDirBold);
-
         this.doc = new PDFDocument({
             margins: { top: 5.67, right: 5.67, bottom: 5.67, left: 5.67 },
             size: [this.documentWidth, pageHeight],
             bufferPages: true,
             layout: 'portrait',
         });
-        this.doc.registerFont('Arial', fontPath)
-        this.doc.registerFont('Arial-bold', fontPathBold)
+        this.doc.registerFont('Arial', fontDir)
+        this.doc.registerFont('Arial-bold', fontDirBold)
     }
 
     saveQRCode = async (text: string) => {
-        const filePath = path.resolve(baseDir, this.qrcodePath);
-
         try {
-            await QRCode.toFile(`${filePath}/qrcode.png`, text, {
+            await QRCode.toFile(`${this.qrcodePath}/qrcode.png`, text, {
                 color: {
                     dark: '#000000', // Cor do código
                     light: '#FFFFFF', // Cor de fundo

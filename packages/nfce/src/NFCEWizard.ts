@@ -83,10 +83,16 @@ export class NFCEWizard {
                 this.gerarConsulta
             );
             const nfceAutorizacao = new NFCEAutorizacao(nfceAutorizacaoService);
-            return await nfceAutorizacao.Exec(nfce);
-        } catch (error) {
+            const response = await nfceAutorizacao.Exec(nfce);
+
+            console.log('Retorno NFCE_Autorizacao');
+            console.table(response.xMotivo);
+            console.log('===================================');
+
+            return response.xmls
+        } catch (error: any) {
             logger.error(``, error, { context: 'NFCE_Autorizacao' });
-            throw error;
+            throw new Error(`NFCE_Autorizacao: ${error.message}`)
         }
     }
 

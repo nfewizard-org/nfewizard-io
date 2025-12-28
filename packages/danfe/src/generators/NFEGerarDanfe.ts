@@ -16,11 +16,22 @@
  */
 import bwipjs from 'bwip-js';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import fs from 'fs';
 import { ICMS, IPI, DetProd, Ide, Dest, Emit, Total, Transp, InfAdic, Vol, ProtNFe, NFEGerarDanfeProps } from '@nfewizard/types/nfe';
 import { format } from 'date-fns';
 import PDFDocument from 'pdfkit';
 import { ValidaCPFCNPJ } from '@nfewizard/shared';
+
+// Suporte para módulos ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Caminho das fontes relativo ao pacote instalado
+// Rollup faz bundle em dist/index.mjs, então dist/ -> ../resources/
+const fontDir = path.resolve(__dirname, '../resources/fonts/ARIAL.TTF');
+const fontDirBold = path.resolve(__dirname, '../resources/fonts/ARIALBD.TTF');
 
 
 class NFeGerarDanfe {
