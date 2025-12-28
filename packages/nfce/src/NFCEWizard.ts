@@ -16,12 +16,13 @@
  */
 
 import { NFeWizardProps } from '@nfewizard/types/nfe';
+import { Cancelamento } from '@nfewizard/types/nfe';
 import { Environment, Utility, XmlBuilder, GerarConsulta, SaveFiles, logger } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
 import { NFCEAutorizacaoService } from './services/NFCEAutorizacao/NFCEAutorizacaoService.js';
-import { NFCERetornoAutorizacaoService } from './services/NFCERetornoAutorizacao/NFCERetornoAutorizacaoService.js';
+import { NFCECancelamentoService } from './services/NFCERecepcaoEvento/NFCECancelamentoService.js';
 import { NFCEAutorizacao } from './operations/NFCEAutorizacao/NFCEAutorizacao.js';
-import { NFCERetornoAutorizacao } from './operations/NFCERetornoAutorizacao/NFCERetornoAutorizacao.js';
+import { NFCECancelamento } from './operations/NFCERecepcaoEvento/NFCECancelamento.js';
 
 /**
  * Classe principal para operações NFCe
@@ -118,6 +119,41 @@ export class NFCEWizard {
     //         throw error;
     //     }
     // }
+
+    /**
+     * Cancelamento de NFCe
+     * @param evento - Dados do evento de cancelamento
+     * @returns Resultado do cancelamento
+     */
+    async NFCE_Cancelamento(evento: Cancelamento): Promise<any> {
+        try {
+            // Adiciona automaticamente o modelo 65 para NFCe
+            const eventoComModelo = {
+                ...evento,
+                modelo: '65'
+            };
+
+            const nfceCancelamentoService = new NFCECancelamentoService(
+                this.environment, 
+                this.utility, 
+                this.xmlBuilder, 
+                this.axios, 
+                this.saveFiles, 
+                this.gerarConsulta
+            );
+            const nfceCancelamento = new NFCECancelamento(nfceCancelamentoService);
+            const response = await nfceCancelamento.Exec(eventoComModelo);
+
+            console.log('Retorno NFCE_Cancelamento');
+            console.table(response.xMotivos);
+            console.log('===================================');
+
+            return response;
+        } catch (error: any) {
+            logger.error(``, error, { context: 'NFCE_Cancelamento' });
+            throw new Error(`NFCE_Cancelamento: ${error.message}`);
+        }
+    }
 
     /**
      * Obtém a instância do Environment (para acesso avançado)

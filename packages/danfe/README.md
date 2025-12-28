@@ -57,36 +57,36 @@ pnpm add @nfewizard/danfe
 ### DANFE para NFe
 
 ```typescript
-import { NFCeGerarDanfe } from '@nfewizard/danfe';
+import { NFE_GerarDanfe } from '@nfewizard/danfe';
 
-// Json de retorno da lib nfewizard-io ou @nfewizard/nfce
+// Json de retorno da lib nfewizard-io
 const data = {} as any;
+const chave = '99999999999999999999999999999999999999999999';
 
 // Gerar DANFE
-const danfe = new NFCeGerarDanfe({
+await NFE_GerarDanfe({
     data, // Objeto completo com NFe, protNFe e xml
-    chave: chave,
-    outputPath: './nfce-danfe.pdf', // Caminho onde o PDF será salvo
-    pageWidth: 226.772 
-})
-
+    chave,
+    outputPath: './danfe.pdf' // Caminho onde o PDF será salvo
+});
 ```
 
 ### DANFE para NFCe
 
 ```typescript
-import { NFeGerarDanfe } from '@nfewizard/danfe';
+import { NFCE_GerarDanfe } from '@nfewizard/danfe';
 
-// Json de retorno da lib nfewizard-io ou @nfewizard/nfce
+// Json de retorno da lib @nfewizard/nfce
 const data = {} as any;
+const chave = '99999999999999999999999999999999999999999999';
 
 // Gerar DANFE
-const danfe = new NFeGerarDanfe({
+await NFCE_GerarDanfe({
     data, // Objeto completo com NFe, protNFe e xml
-    chave: chave,
-    outputPath: './nfe-danfe.pdf', // Caminho onde o PDF será salvo
-})
-
+    chave,
+    outputPath: './nfce-danfe.pdf', // Caminho onde o PDF será salvo
+    pageWidth: 226.772 // Largura para NFCe (80mm)
+});
 ```
 
 ## Documentação

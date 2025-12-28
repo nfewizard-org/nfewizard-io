@@ -83,7 +83,20 @@ export class CTEWizard {
                 this.gerarConsulta
             );
             const cteDistribuicaoDFe = new CTEDistribuicaoDFe(cteDistribuicaoDFeService);
-            return await cteDistribuicaoDFe.Exec(data);
+            const response = await cteDistribuicaoDFe.Exec(data);
+            
+            // Exibe resultado no console
+            if (response?.data?.retDistDFeInt) {
+                console.table([{
+                    Status: response.data.retDistDFeInt.cStat,
+                    Motivo: response.data.retDistDFeInt.xMotivo,
+                    UltNSU: response.data.retDistDFeInt.ultNSU || '-',
+                    MaxNSU: response.data.retDistDFeInt.maxNSU || '-',
+                    Arquivos: response.filesList?.length || 0
+                }]);
+            }
+            
+            return response;
         } catch (error) {
             logger.error(``, error, { context: 'CTE_DistribuicaoDFe' });
             throw error;
@@ -105,7 +118,19 @@ export class CTEWizard {
                 this.saveFiles, 
                 this.gerarConsulta
             );
-            return await cteDistribuicaoDFePorNSU.Exec(data);
+            const response = await cteDistribuicaoDFePorNSU.Exec(data);
+            
+            // Exibe resultado no console
+            if (response?.data?.retDistDFeInt) {
+                console.table([{
+                    Status: response.data.retDistDFeInt.cStat,
+                    Motivo: response.data.retDistDFeInt.xMotivo,
+                    NSU: data.consNSU?.NSU || '-',
+                    Arquivos: response.filesList?.length || 0
+                }]);
+            }
+            
+            return response;
         } catch (error) {
             logger.error(``, error, { context: 'CTE_DistribuicaoDFePorNSU' });
             throw error;
@@ -127,7 +152,20 @@ export class CTEWizard {
                 this.saveFiles, 
                 this.gerarConsulta
             );
-            return await cteDistribuicaoDFePorUltNSU.Exec(data);
+            const response = await cteDistribuicaoDFePorUltNSU.Exec(data);
+            
+            // Exibe resultado no console
+            if (response?.data?.retDistDFeInt) {
+                console.table([{
+                    Status: response.data.retDistDFeInt.cStat,
+                    Motivo: response.data.retDistDFeInt.xMotivo,
+                    UltNSU: response.data.retDistDFeInt.ultNSU || '-',
+                    MaxNSU: response.data.retDistDFeInt.maxNSU || '-',
+                    Arquivos: response.filesList?.length || 0
+                }]);
+            }
+            
+            return response;
         } catch (error) {
             logger.error(``, error, { context: 'CTE_DistribuicaoDFePorUltNSU' });
             throw error;

@@ -28,8 +28,9 @@ Lembre-se de adicionar os logs **app.jsonl**, **error.jsonl** e **http.jsonl**.
 @nfewizard/nfce é uma biblioteca Node.js especializada em NFCe (Nota Fiscal de Consumidor Eletrônica), projetada para simplificar a interação com os webservices da SEFAZ. A biblioteca oferece uma solução robusta e otimizada para automação de processos relacionados à NFCe, incluindo:
 
 - **Autorização (Emissão de NFCe)**: Submissão de Notas Fiscais de Consumidor Eletrônica para autorização junto à SEFAZ.
+- **Consulta de Protocolo**: Verificação da situação atual da NFCe na Base de Dados do Portal da Secretaria de Fazenda Estadual.
 - **Recepção de Eventos**: Tratamento de eventos relacionados à NFCe:
-    - Cancelamento de NFCe
+    - **Cancelamento de NFCe**: Cancelamento de notas fiscais autorizadas dentro do prazo permitido pela SEFAZ.
 
 ## Características
 
@@ -38,6 +39,7 @@ Lembre-se de adicionar os logs **app.jsonl**, **error.jsonl** e **http.jsonl**.
 - ✅ **TypeScript** - Tipos completos incluídos
 - ✅ **Validação de Schema** - Validação automática de XMLs
 - ✅ **Logs estruturados** - Sistema de logs em JSONL
+- ✅ **Eventos NFCe** - Cancelamento e outros eventos
 
 ## Instalação
 
@@ -107,6 +109,29 @@ const nfceData: NFe = {} as NFe;
 
 const resultado = await nfceWizard.NFCE_Autorizacao(nfceData);
 console.log(resultado);
+
+// Exemplo de Cancelamento de NFCe
+const eventoCancelamento: Cancelamento = {
+    idLote: Date.now(),
+    evento: [{
+        cOrgao: 35, // Código do órgão (35 = São Paulo)
+        tpAmb: 2,   // 1=Produção, 2=Homologação
+        CNPJ: '99999999999999',
+        chNFe: '35000000000000000000000000000000000000000001',
+        dhEvento: new Date().toISOString(),
+        tpEvento: '110111', // Cancelamento
+        nSeqEvento: 1,
+        verEvento: '1.00',
+        detEvento: {
+            descEvento: 'Cancelamento',
+            nProt: '135000000000000',
+            xJust: 'Motivo do cancelamento com no mínimo 15 caracteres'
+        }
+    }]
+};
+
+const resultadoCancelamento = await nfceWizard.NFCE_Cancelamento(eventoCancelamento);
+console.log(resultadoCancelamento);
 ```
 
 ## Documentação
