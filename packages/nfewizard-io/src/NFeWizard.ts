@@ -18,12 +18,8 @@ import {
     NFeWizardProps,
     EventoNFe,
     ConsultaNFe,
-    ConsultaCTe,
-    DFePorUltimoNSUCTe,
-    DFePorNSUCTe,
     NFe,
     InutilizacaoData,
-    NFEGerarDanfeProps,
     DFePorChaveNFe,
     DFePorUltimoNSU,
     DFePorNSU,
@@ -36,7 +32,7 @@ import {
     EPEC,
     EmailParams,
 } from '@nfewizard/types/nfe';
-import { NFeWizardImpl, NFeWizardServiceImpl } from '@nfewizard/types/shared';
+import { NFeWizardServiceImpl } from '@nfewizard/types/shared';
 import { NFeWizardService } from './nfe/services/NFeWizard/NFeWizardService.js';
 
 export class NFeWizard implements NFeWizardImpl {
@@ -109,26 +105,70 @@ export class NFeWizard implements NFeWizardImpl {
     }
 
     /**
-     * Distribuição DFe CTe
+     * @deprecated A partir da v1.0.0, use o pacote @nfewizard/cte diretamente
+     * @example
+     * import { CTEWizard } from '@nfewizard/cte';
+     * const cteWizard = new CTEWizard();
+     * await cteWizard.NFE_LoadEnvironment({ config });
+     * await cteWizard.CTE_DistribuicaoDFe(data);
      */
-    async CTE_DistribuicaoDFe(data: ConsultaCTe) {
-        return await this.nfeWizardService.CTE_DistribuicaoDFe(data);
-    }
-    async CTE_DistribuicaoDFePorUltNSU(data: DFePorUltimoNSUCTe) {
-        return await this.nfeWizardService.CTE_DistribuicaoDFePorUltNSU(data);
-    }
-    async CTE_DistribuicaoDFePorNSU(data: DFePorNSUCTe) {
-        return await this.nfeWizardService.CTE_DistribuicaoDFePorNSU(data);
+    async CTE_DistribuicaoDFe(_data: any) {
+        console.warn('⚠️  AVISO: CTE_DistribuicaoDFe foi movido para o pacote @nfewizard/cte');
+        console.warn('📦 Instale: pnpm add @nfewizard/cte');
+        console.warn('📖 Use: import { CTEWizard } from "@nfewizard/cte"');
+        throw new Error('CTE_DistribuicaoDFe não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/cte');
     }
 
     /**
-     * Autorização
+     * @deprecated A partir da v1.0.0, use o pacote @nfewizard/cte diretamente
+     * @example
+     * import { CTEWizard } from '@nfewizard/cte';
+     * const cteWizard = new CTEWizard();
+     * await cteWizard.NFE_LoadEnvironment({ config });
+     * await cteWizard.CTE_DistribuicaoDFePorUltNSU(data);
+     */
+    async CTE_DistribuicaoDFePorUltNSU(_data: any) {
+        console.warn('⚠️  AVISO: CTE_DistribuicaoDFePorUltNSU foi movido para o pacote @nfewizard/cte');
+        console.warn('📦 Instale: pnpm add @nfewizard/cte');
+        console.warn('📖 Use: import { CTEWizard } from "@nfewizard/cte"');
+        throw new Error('CTE_DistribuicaoDFePorUltNSU não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/cte');
+    }
+
+    /**
+     * @deprecated A partir da v1.0.0, use o pacote @nfewizard/cte diretamente
+     * @example
+     * import { CTEWizard } from '@nfewizard/cte';
+     * const cteWizard = new CTEWizard();
+     * await cteWizard.NFE_LoadEnvironment({ config });
+     * await cteWizard.CTE_DistribuicaoDFePorNSU(data);
+     */
+    async CTE_DistribuicaoDFePorNSU(_data: any) {
+        console.warn('⚠️  AVISO: CTE_DistribuicaoDFePorNSU foi movido para o pacote @nfewizard/cte');
+        console.warn('📦 Instale: pnpm add @nfewizard/cte');
+        console.warn('📖 Use: import { CTEWizard } from "@nfewizard/cte"');
+        throw new Error('CTE_DistribuicaoDFePorNSU não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/cte');
+    }
+
+    /**
+     * Autorização NFe
      */
     async NFE_Autorizacao(data: NFe) {
         return await this.nfeWizardService.NFE_Autorizacao(data);
     }
-    async NFCE_Autorizacao(data: NFe) {
-        return await this.nfeWizardService.NFCE_Autorizacao(data);
+
+    /**
+     * @deprecated A partir da v1.0.0, use o pacote @nfewizard/nfce diretamente
+     * @example
+     * import { NFCEWizard } from '@nfewizard/nfce';
+     * const nfceWizard = new NFCEWizard();
+     * await nfceWizard.NFE_LoadEnvironment({ config });
+     * await nfceWizard.NFCE_Autorizacao(data);
+     */
+    async NFCE_Autorizacao(_data: any) {
+        console.warn('⚠️  AVISO: NFCE_Autorizacao foi movido para o pacote @nfewizard/nfce');
+        console.warn('📦 Instale: pnpm add @nfewizard/nfce');
+        console.warn('📖 Use: import { NFCEWizard } from "@nfewizard/nfce"');
+        throw new Error('NFCE_Autorizacao não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/nfce');
     }
 
     /**
@@ -140,13 +180,31 @@ export class NFeWizard implements NFeWizardImpl {
 
 
     /**
-     * DANFE
+     * @deprecated A partir da v1.0.0, use o pacote @nfewizard/danfe diretamente
+     * @example
+     * import { NFEGerarDanfe } from '@nfewizard/danfe';
+     * const danfe = new NFEGerarDanfe(data);
+     * await danfe.generatePDF();
      */
-    async NFE_GerarDanfe(data: NFEGerarDanfeProps) {
-        return await this.nfeWizardService.NFE_GerarDanfe(data);
+    async NFE_GerarDanfe(_data: any) {
+        console.warn('⚠️  AVISO: NFE_GerarDanfe foi movido para o pacote @nfewizard/danfe');
+        console.warn('📦 Instale: pnpm add @nfewizard/danfe');
+        console.warn('📖 Use: import { NFEGerarDanfe } from "@nfewizard/danfe"');
+        throw new Error('NFE_GerarDanfe não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/danfe');
     }
-    async NFCE_GerarDanfe(data: NFEGerarDanfeProps) {
-        return await this.nfeWizardService.NFCE_GerarDanfe(data);
+
+    /**
+     * @deprecated A partir da v1.0.0, use o pacote @nfewizard/danfe diretamente
+     * @example
+     * import { NFCEGerarDanfe } from '@nfewizard/danfe';
+     * const danfe = new NFCEGerarDanfe(data);
+     * await danfe.generatePDF();
+     */
+    async NFCE_GerarDanfe(_data: any) {
+        console.warn('⚠️  AVISO: NFCE_GerarDanfe foi movido para o pacote @nfewizard/danfe');
+        console.warn('📦 Instale: pnpm add @nfewizard/danfe');
+        console.warn('📖 Use: import { NFCEGerarDanfe } from "@nfewizard/danfe"');
+        throw new Error('NFCE_GerarDanfe não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/danfe');
     }
 
     /**

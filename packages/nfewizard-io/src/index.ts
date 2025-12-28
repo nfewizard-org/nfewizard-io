@@ -56,9 +56,6 @@ export {
 // Re-export types from shared
 export type { ErrorContext, JsonArrayTransport } from '@nfewizard/shared';
 
-// Re-export DANFE generators
-export { NFEGerarDanfe, NFCEGerarDanfe } from '@nfewizard/danfe';
-
 // Export NFE operations and services from local files
 export { NFEAutorizacao } from './nfe/operations/NFEAutorizacao/NFEAutorizacao.js';
 export { NFEStatusServico } from './nfe/operations/NFEStatusServico/NFEStatusServico.js';

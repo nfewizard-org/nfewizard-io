@@ -12,9 +12,6 @@
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"],
   "references": [
     { "path": "../types" },
-    { "path": "../shared" },
-    { "path": "../danfe" },
-    { "path": "../nfce" },
-    { "path": "../cte" }
+    { "path": "../shared" }
   ]
 }

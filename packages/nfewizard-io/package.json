@@ -49,9 +49,6 @@
     "nodemailer": "^6.9.14",
     "node-fetch": "^3.3.2"
   },
-  "optionalDependencies": {
-    "@nfewizard/danfe": "workspace:*"
-  },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.1",
     "@rollup/plugin-commonjs": "^28.0.1",

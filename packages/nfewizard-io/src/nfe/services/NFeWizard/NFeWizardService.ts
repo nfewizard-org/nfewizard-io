@@ -13,8 +13,6 @@ import { NFECienciaDaOperacao } from '../../operations/NFERecepcaoEvento/NFECien
 import { NFEConfirmacaoDaOperacao } from '../../operations/NFERecepcaoEvento/NFEConfirmacaoDaOperacao.js';
 import { NFEOperacaoNaoRealizada } from '../../operations/NFERecepcaoEvento/NFEOperacaoNaoRealizada.js';
 import { MailController } from '../../../MailAdapter.js';
-import { NFCEGerarDanfe } from '@nfewizard/danfe';
-import { NFEGerarDanfe } from '@nfewizard/danfe';
 import { NFEDistribuicaoDFe } from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFe.js';
 import { NFEDistribuicaoDFePorChave } from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorChave.js';
 import { NFEDistribuicaoDFePorNSU } from '../../operations/NFEDistribuicaoDFe/NFEDistribuicaoDFePorNSU.js';
@@ -39,7 +37,7 @@ import {
     EventoNFe,
     InutilizacaoData,
     NFe,
-    NFEGerarDanfeProps,
+
     NFeWizardProps,
     OperacaoNaoRealizada
 } from '@nfewizard/types/nfe';
@@ -402,23 +400,23 @@ export class NFeWizardService implements NFeWizardServiceImpl {
 
 
     /**
-     * DANFE
+     * @deprecated A partir da v1.0.0, use o pacote @nfewizard/danfe
      */
-    async NFE_GerarDanfe(data: NFEGerarDanfeProps) {
-        try {
-            const { dfe: { exibirMarcaDaguaDanfe } } = this.environment.getConfig();
-            const distribuicaoDFe = new NFEGerarDanfe(data);
-            const response = await distribuicaoDFe.generatePDF(exibirMarcaDaguaDanfe);
+    async NFE_GerarDanfe(_data: any) {
+        console.warn('⚠️  AVISO: NFE_GerarDanfe foi movido para o pacote @nfewizard/danfe');
+        console.warn('📦 Instale: pnpm add @nfewizard/danfe');
+        console.warn('📖 Use: import { NFEGerarDanfe } from "@nfewizard/danfe"');
+        throw new Error('NFE_GerarDanfe não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/danfe');
+    }
 
-            console.log('Retorno NFE_GerarDanfe');
-            console.log(response.message);
-            console.log('===================================');
-
-            return response
-        } catch (error: any) {
-            logger.error(``, error, { context: 'NFE_GerarDanfe', });
-            throw new Error(`NFE_GerarDanfe: ${error.message}`)
-        }
+    /**
+     * @deprecated A partir da v1.0.0, use o pacote @nfewizard/danfe
+     */
+    async NFCE_GerarDanfe(_data: any) {
+        console.warn('⚠️  AVISO: NFCE_GerarDanfe foi movido para o pacote @nfewizard/danfe');
+        console.warn('📦 Instale: pnpm add @nfewizard/danfe');
+        console.warn('📖 Use: import { NFCEGerarDanfe } from "@nfewizard/danfe"');
+        throw new Error('NFCE_GerarDanfe não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/danfe');
     }
 
     /**
