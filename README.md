@@ -2,6 +2,37 @@
 
 ## 🛠️ Lib atualizada com NT 2025.002 v.130 - Reforma Tributária
 
+---
+
+## 🚨 BREAKING CHANGES - Versão 1.0.0 (Modularização)
+
+A partir da versão 1.0.0, o **NFeWizard-io foi modularizado** em pacotes independentes:
+
+| Pacote | Descrição | Tamanho |
+|--------|-----------|---------|
+| `nfewizard-io` | ✅ Operações NFe (pacote principal) | 507.5 KB |
+| `@nfewizard/nfce` | 🆕 Operações NFCe + Cancelamento | 965.0 KB |
+| `@nfewizard/danfe` | 🆕 Geração de DANFE (NFe e NFCe) | 2.29 MB |
+| `@nfewizard/cte` | 🆕 Operações CTe | 787.3 KB |
+| `@nfewizard/types` | 📦 Tipos TypeScript | 491.6 KB |
+| `@nfewizard/shared` | 📦 Utilitários compartilhados | 3.38 MB |
+
+### 🎯 Principais Mudanças
+
+- ⚠️ **NFCe**: Agora em pacote separado `@nfewizard/nfce` (use `new NFCeWizard()`)
+- ⚠️ **DANFE**: Removido do pacote principal, use `@nfewizard/danfe` com funções `NFE_GerarDanfe()` e `NFCE_GerarDanfe()`
+- ⚠️ **CTe**: Movido para `@nfewizard/cte` (use `new CTEWizard()`)
+- ✅ **NFe**: API permanece 100% compatível no pacote `nfewizard-io`
+- 🎁 **Novo**: Cancelamento de NFCe disponível
+- 📉 **Benefício**: Redução de até 77% no bundle (4.37 MB vs 19.1 MB para NFe)
+
+### 📖 Guia Completo de Migração
+
+Para detalhes completos sobre como migrar, exemplos de código e casos de uso, consulte:
+**[📋 BREAKING_CHANGES.md](BREAKING_CHANGES.md)**
+
+---
+
 ## Atenção: Ao abrir uma issue certifique-se de adicionar as informações abaixo:
 
 Ao abrir issue ou PR, inclua:
