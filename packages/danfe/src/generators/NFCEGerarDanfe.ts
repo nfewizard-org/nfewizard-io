@@ -29,18 +29,17 @@
 import bwipjs from 'bwip-js';
 import path from 'path';
 import fs from 'fs';
-import { DetProd, NFEGerarDanfeProps, Ide, Dest, Emit, Total, Transp, InfAdic, ProtNFe, Pag, InfNFeSupl } from '@nfewizard/types/nfce';
+import { DetProd, Ide, Dest, Emit, Total, Transp, InfAdic, ProtNFe, Pag, InfNFeSupl, NFEGerarDanfeProps } from '@nfewizard/types/nfe';
 import { format, parseISO } from 'date-fns';
 import PDFDocument from 'pdfkit';
 import QRCode from 'qrcode';
-import { fileURLToPath } from 'url';
 import { ValidaCPFCNPJ, getDesTipoPag } from '@nfewizard/shared';
 
-const baseDir = path.dirname(fileURLToPath(import.meta.url))
+const baseDir = __dirname;
 const fontDir = process.env.NODE_ENV === 'production' ? '../resources/fonts/ARIAL.TTF' : '../../../../resources/fonts/ARIAL.TTF';
 const fontDirBold = process.env.NODE_ENV === 'production' ? '../resources/fonts/ARIALBD.TTF' : '../../../../resources/fonts/ARIALBD.TTF';
 
-class NFCEGerarDanfe {
+class NFCeGerarDanfe {
     data: NFEGerarDanfeProps['data'];
     chave: string;
     enviada: boolean;
@@ -593,4 +592,4 @@ class NFCEGerarDanfe {
     }
 }
 
-export { NFCEGerarDanfe };
+export { NFCeGerarDanfe };

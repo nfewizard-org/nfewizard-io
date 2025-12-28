@@ -2,14 +2,14 @@
   "name": "@nfewizard/types",
   "version": "1.0.0",
   "description": "Tipos TypeScript para NFeWizard ecosystem (NFe, NFCe, CTe)",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "exports": {
-    ".": "./dist/index.js",
-    "./nfe": "./dist/nfe/index.js",
-    "./nfce": "./dist/nfce/index.js",
-    "./cte": "./dist/cte/index.js",
-    "./shared": "./dist/shared/index.js"
+    ".": "./dist/src/index.js",
+    "./nfe": "./dist/src/nfe/index.js",
+    "./nfce": "./dist/src/nfce/index.js",
+    "./cte": "./dist/src/cte/index.js",
+    "./shared": "./dist/src/shared/index.js"
   },
   "sideEffects": false,
   "publishConfig": {

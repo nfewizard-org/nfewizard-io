@@ -4,12 +4,12 @@
   "description": "Core utilities compartilhadas (XML, HTTP, Certificate, Schema)",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/src/index.d.ts"
     }
   },
   "publishConfig": {

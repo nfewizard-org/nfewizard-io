@@ -17,14 +17,13 @@
 import bwipjs from 'bwip-js';
 import path from 'path';
 import fs from 'fs';
-import { ICMS, IPI, DetProd, NFEGerarDanfeProps, Ide, Dest, Emit, Total, Transp, InfAdic, Vol, ProtNFe } from '@nfewizard/types/nfe';
+import { ICMS, IPI, DetProd, Ide, Dest, Emit, Total, Transp, InfAdic, Vol, ProtNFe, NFEGerarDanfeProps } from '@nfewizard/types/nfe';
 import { format } from 'date-fns';
 import PDFDocument from 'pdfkit';
-import { fileURLToPath } from 'url';
 import { ValidaCPFCNPJ } from '@nfewizard/shared';
 
 
-class NFEGerarDanfe {
+class NFeGerarDanfe {
     data: NFEGerarDanfeProps['data'];
     chave: string;
     enviada: boolean;
@@ -1222,4 +1221,4 @@ class NFEGerarDanfe {
     }
 }
 
-export { NFEGerarDanfe };
+export { NFeGerarDanfe };

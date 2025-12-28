@@ -32,8 +32,8 @@ import {
     EPEC,
     EmailParams,
 } from '@nfewizard/types/nfe';
-import { NFeWizardServiceImpl } from '@nfewizard/types/shared';
-import { NFeWizardService } from './nfe/services/NFeWizard/NFeWizardService.js';
+import { NFeWizardServiceImpl, NFeWizardImpl } from '@nfewizard/types/shared';
+import NFeWizardService from './nfe/services/NFeWizard/NFeWizardService.js';
 
 export class NFeWizard implements NFeWizardImpl {
     private nfeWizardService: NFeWizardServiceImpl;
@@ -113,9 +113,19 @@ export class NFeWizard implements NFeWizardImpl {
      * await cteWizard.CTE_DistribuicaoDFe(data);
      */
     async CTE_DistribuicaoDFe(_data: any) {
-        console.warn('⚠️  AVISO: CTE_DistribuicaoDFe foi movido para o pacote @nfewizard/cte');
-        console.warn('📦 Instale: pnpm add @nfewizard/cte');
-        console.warn('📖 Use: import { CTEWizard } from "@nfewizard/cte"');
+        console.warn('\n╔═══════════════════════════════════════════════════════════════════╗');
+        console.warn('║  ⚠️  MÉTODO MOVIDO - CTE_DistribuicaoDFe                         ║');
+        console.warn('╠═══════════════════════════════════════════════════════════════════╣');
+        console.warn('║  Este método foi movido para o pacote @nfewizard/cte            ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📦 Instalação:                                                  ║');
+        console.warn('║     pnpm add @nfewizard/cte                                      ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📖 Exemplo de uso:                                              ║');
+        console.warn('║     import CTeWizard from "@nfewizard/cte"                       ║');
+        console.warn('║     const cte = new CTeWizard();                                 ║');
+        console.warn('║     await cte.CTE_DistribuicaoDFe(data);                         ║');
+        console.warn('╚═══════════════════════════════════════════════════════════════════╝\n');
         throw new Error('CTE_DistribuicaoDFe não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/cte');
     }
 
@@ -128,9 +138,19 @@ export class NFeWizard implements NFeWizardImpl {
      * await cteWizard.CTE_DistribuicaoDFePorUltNSU(data);
      */
     async CTE_DistribuicaoDFePorUltNSU(_data: any) {
-        console.warn('⚠️  AVISO: CTE_DistribuicaoDFePorUltNSU foi movido para o pacote @nfewizard/cte');
-        console.warn('📦 Instale: pnpm add @nfewizard/cte');
-        console.warn('📖 Use: import { CTEWizard } from "@nfewizard/cte"');
+        console.warn('\n╔═══════════════════════════════════════════════════════════════════╗');
+        console.warn('║  ⚠️  MÉTODO MOVIDO - CTE_DistribuicaoDFePorUltNSU               ║');
+        console.warn('╠═══════════════════════════════════════════════════════════════════╣');
+        console.warn('║  Este método foi movido para o pacote @nfewizard/cte            ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📦 Instalação:                                                  ║');
+        console.warn('║     pnpm add @nfewizard/cte                                      ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📖 Exemplo de uso:                                              ║');
+        console.warn('║     import CTeWizard from "@nfewizard/cte"                       ║');
+        console.warn('║     const cte = new CTeWizard();                                 ║');
+        console.warn('║     await cte.CTE_DistribuicaoDFePorUltNSU(data);                ║');
+        console.warn('╚═══════════════════════════════════════════════════════════════════╝\n');
         throw new Error('CTE_DistribuicaoDFePorUltNSU não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/cte');
     }
 
@@ -143,9 +163,19 @@ export class NFeWizard implements NFeWizardImpl {
      * await cteWizard.CTE_DistribuicaoDFePorNSU(data);
      */
     async CTE_DistribuicaoDFePorNSU(_data: any) {
-        console.warn('⚠️  AVISO: CTE_DistribuicaoDFePorNSU foi movido para o pacote @nfewizard/cte');
-        console.warn('📦 Instale: pnpm add @nfewizard/cte');
-        console.warn('📖 Use: import { CTEWizard } from "@nfewizard/cte"');
+        console.warn('\n╔═══════════════════════════════════════════════════════════════════╗');
+        console.warn('║  ⚠️  MÉTODO MOVIDO - CTE_DistribuicaoDFePorNSU                  ║');
+        console.warn('╠═══════════════════════════════════════════════════════════════════╣');
+        console.warn('║  Este método foi movido para o pacote @nfewizard/cte            ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📦 Instalação:                                                  ║');
+        console.warn('║     pnpm add @nfewizard/cte                                      ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📖 Exemplo de uso:                                              ║');
+        console.warn('║     import CTeWizard from "@nfewizard/cte"                       ║');
+        console.warn('║     const cte = new CTeWizard();                                 ║');
+        console.warn('║     await cte.CTE_DistribuicaoDFePorNSU(data);                   ║');
+        console.warn('╚═══════════════════════════════════════════════════════════════════╝\n');
         throw new Error('CTE_DistribuicaoDFePorNSU não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/cte');
     }
 
@@ -165,9 +195,19 @@ export class NFeWizard implements NFeWizardImpl {
      * await nfceWizard.NFCE_Autorizacao(data);
      */
     async NFCE_Autorizacao(_data: any) {
-        console.warn('⚠️  AVISO: NFCE_Autorizacao foi movido para o pacote @nfewizard/nfce');
-        console.warn('📦 Instale: pnpm add @nfewizard/nfce');
-        console.warn('📖 Use: import { NFCEWizard } from "@nfewizard/nfce"');
+        console.warn('\n╔═══════════════════════════════════════════════════════════════════╗');
+        console.warn('║  ⚠️  MÉTODO MOVIDO - NFCE_Autorizacao                           ║');
+        console.warn('╠═══════════════════════════════════════════════════════════════════╣');
+        console.warn('║  Este método foi movido para o pacote @nfewizard/nfce           ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📦 Instalação:                                                  ║');
+        console.warn('║     pnpm add @nfewizard/nfce                                     ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📖 Exemplo de uso:                                              ║');
+        console.warn('║     import NFCeWizard from "@nfewizard/nfce"                     ║');
+        console.warn('║     const nfce = new NFCeWizard();                               ║');
+        console.warn('║     await nfce.NFCE_Autorizacao(data);                           ║');
+        console.warn('╚═══════════════════════════════════════════════════════════════════╝\n');
         throw new Error('NFCE_Autorizacao não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/nfce');
     }
 
@@ -182,28 +222,48 @@ export class NFeWizard implements NFeWizardImpl {
     /**
      * @deprecated A partir da v1.0.0, use o pacote @nfewizard/danfe diretamente
      * @example
-     * import { NFEGerarDanfe } from '@nfewizard/danfe';
-     * const danfe = new NFEGerarDanfe(data);
+     * import { NFeGerarDanfe } from '@nfewizard/danfe';
+     * const danfe = new NFeGerarDanfe(data);
      * await danfe.generatePDF();
      */
     async NFE_GerarDanfe(_data: any) {
-        console.warn('⚠️  AVISO: NFE_GerarDanfe foi movido para o pacote @nfewizard/danfe');
-        console.warn('📦 Instale: pnpm add @nfewizard/danfe');
-        console.warn('📖 Use: import { NFEGerarDanfe } from "@nfewizard/danfe"');
+        console.warn('\n╔═══════════════════════════════════════════════════════════════════╗');
+        console.warn('║  ⚠️  MÉTODO MOVIDO - NFE_GerarDanfe                             ║');
+        console.warn('╠═══════════════════════════════════════════════════════════════════╣');
+        console.warn('║  Este método foi movido para o pacote @nfewizard/danfe          ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📦 Instalação:                                                  ║');
+        console.warn('║     pnpm add @nfewizard/danfe                                    ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📖 Exemplo de uso:                                              ║');
+        console.warn('║     import { NFeGerarDanfe } from "@nfewizard/danfe"             ║');
+        console.warn('║     const danfe = new NFeGerarDanfe(data);                       ║');
+        console.warn('║     await danfe.generatePDF();                                   ║');
+        console.warn('╚═══════════════════════════════════════════════════════════════════╝\n');
         throw new Error('NFE_GerarDanfe não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/danfe');
     }
 
     /**
      * @deprecated A partir da v1.0.0, use o pacote @nfewizard/danfe diretamente
      * @example
-     * import { NFCEGerarDanfe } from '@nfewizard/danfe';
-     * const danfe = new NFCEGerarDanfe(data);
+     * import { NFCeGerarDanfe } from '@nfewizard/danfe';
+     * const danfe = new NFCeGerarDanfe(data);
      * await danfe.generatePDF();
      */
     async NFCE_GerarDanfe(_data: any) {
-        console.warn('⚠️  AVISO: NFCE_GerarDanfe foi movido para o pacote @nfewizard/danfe');
-        console.warn('📦 Instale: pnpm add @nfewizard/danfe');
-        console.warn('📖 Use: import { NFCEGerarDanfe } from "@nfewizard/danfe"');
+        console.warn('\n╔═══════════════════════════════════════════════════════════════════╗');
+        console.warn('║  ⚠️  MÉTODO MOVIDO - NFCE_GerarDanfe                            ║');
+        console.warn('╠═══════════════════════════════════════════════════════════════════╣');
+        console.warn('║  Este método foi movido para o pacote @nfewizard/danfe          ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📦 Instalação:                                                  ║');
+        console.warn('║     pnpm add @nfewizard/danfe                                    ║');
+        console.warn('║                                                                   ║');
+        console.warn('║  📖 Exemplo de uso:                                              ║');
+        console.warn('║     import { NFCeGerarDanfe } from "@nfewizard/danfe"            ║');
+        console.warn('║     const danfe = new NFCeGerarDanfe(data);                      ║');
+        console.warn('║     await danfe.generatePDF();                                   ║');
+        console.warn('╚═══════════════════════════════════════════════════════════════════╝\n');
         throw new Error('NFCE_GerarDanfe não está mais disponível no nfewizard-io v1.0.0+. Use @nfewizard/danfe');
     }
 
@@ -215,3 +275,5 @@ export class NFeWizard implements NFeWizardImpl {
         return this.nfeWizardService.NFE_EnviaEmail(mailParams);
     }
 }
+
+export default NFeWizard;

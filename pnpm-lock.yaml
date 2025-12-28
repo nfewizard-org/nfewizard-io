@@ -164,6 +164,12 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^11.1.6
         version: 11.1.6(rollup@4.54.0)(typescript@5.9.3)
+      '@types/pdfkit':
+        specifier: ^0.13.5
+        version: 0.13.9
+      '@types/qrcode':
+        specifier: ^1.5.5
+        version: 1.5.6
       rollup:
         specifier: ^4.0.0
         version: 4.54.0
@@ -223,16 +229,21 @@ importers:
       '@nfewizard/types':
         specifier: workspace:*
         version: link:../types
+      axios:
+        specifier: ^1.7.7
+        version: 1.13.2(debug@4.4.3)
+      date-fns:
+        specifier: ^2.30.0
+        version: 2.30.0
       node-fetch:
         specifier: ^3.3.2
         version: 3.3.2
       nodemailer:
         specifier: ^6.9.14
         version: 6.10.1
-    optionalDependencies:
-      '@nfewizard/danfe':
-        specifier: workspace:*
-        version: link:../danfe
+      pako:
+        specifier: ^2.1.0
+        version: 2.1.0
     devDependencies:
       '@rollup/plugin-alias':
         specifier: ^5.1.1
@@ -2884,8 +2895,20 @@ packages:
     resolution: {integrity: sha512-VWDCbrLeVXJM9fihYodcLiIv0ku+AlOa/TQ1SvYOaBuyrSKgEcro95LJyIsJ4vSo6BXIxOKxiJAat04CmST9Fw==}
     dev: true
 
+  /@types/pdfkit@0.13.9:
+    resolution: {integrity: sha512-RDG8Yb1zT7I01FfpwK7nMSA433XWpblMqSCtA5vJlSyavWZb303HUYPCel6JTiDDFqwGLvtAnYbH8N/e0Cb89g==}
+    dependencies:
+      '@types/node': 20.19.27
+    dev: true
+
   /@types/pem@1.14.4:
     resolution: {integrity: sha512-Xt6qY6kX1RD4UmYNhWCCf3OSJrRcwbQIaJ/mQSjjAHxIjXMHx/vHNPOgEU3HdVKS1k/U5CZ6ClQlRo8egkl8xg==}
+    dependencies:
+      '@types/node': 20.19.27
+    dev: true
+
+  /@types/qrcode@1.5.6:
+    resolution: {integrity: sha512-te7NQcV2BOvdj2b1hCAHzAoMNuj65kNBMz0KBaxM6c3VGBOhU0dURQKOtH8CFNI/dsKkwlv32p26qYQTWoB5bw==}
     dependencies:
       '@types/node': 20.19.27
     dev: true

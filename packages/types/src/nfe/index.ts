@@ -21,6 +21,7 @@ export * from './NFEDistribuicaoDFe.js';
 export * from './NFEInutilizacao.js';
 export * from './NFERecepcaoEvento.js';
 export * from './EmailConfig.js';
+export * from './NFEDanfeGenerator.js';
 
 // Re-export GenericObject from shared
 export type { GenericObject } from '../shared/Utils.js';

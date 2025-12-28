@@ -57,7 +57,7 @@ case "$PACKAGE" in
     "nfewizard-io")
         MAIN_PKG="nfewizard-io"
         MAIN_DIR="nfewizard-io"
-        DEPS=("types" "shared" "danfe")
+        DEPS=("types" "shared")
         ;;
     "@nfewizard/nfce")
         MAIN_PKG="@nfewizard/nfce"
@@ -72,7 +72,7 @@ case "$PACKAGE" in
     "@nfewizard/danfe")
         MAIN_PKG="@nfewizard/danfe"
         MAIN_DIR="danfe"
-        DEPS=("types")
+        DEPS=("types" "shared")
         ;;
     *)
         echo -e "${RED}❌ Erro: Pacote '$PACKAGE' não reconhecido${NC}"

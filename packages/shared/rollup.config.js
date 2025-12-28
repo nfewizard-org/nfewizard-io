@@ -51,6 +51,7 @@ export default [
       typescript({
         tsconfig: './tsconfig.json',
         declaration: true,
+        declarationDir: './dist',
         declarationMap: false,
         exclude: ['**/*.json'],
         compilerOptions: {
@@ -105,6 +106,7 @@ export default [
       typescript({
         tsconfig: './tsconfig.json',
         declaration: true,
+        declarationDir: './dist',
         declarationMap: false,
         exclude: ['**/*.json'],
         compilerOptions: {

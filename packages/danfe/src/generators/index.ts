@@ -4,5 +4,5 @@
  * @license GPL-3.0-or-later
  */
 
-export { NFEGerarDanfe } from './NFEGerarDanfe.js';
-export { NFCEGerarDanfe } from './NFCEGerarDanfe.js';
+export { NFeGerarDanfe } from './NFEGerarDanfe.js';
+export { NFCeGerarDanfe } from './NFCEGerarDanfe.js';

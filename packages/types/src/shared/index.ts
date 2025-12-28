@@ -17,7 +17,9 @@
 
 export * from './Utils.js';
 export * from './LoadCertificate.js';
-export * from './NFEDanfeGenerator.js';
+
+// Export NFeWizardImpl interface
+export type { NFeWizardImpl } from './NFeWizardImpl.js';
 
 // Service implementation interfaces (stubs for now)
 export interface SaveFilesImpl { salvaArquivos(...args: any[]): void; }

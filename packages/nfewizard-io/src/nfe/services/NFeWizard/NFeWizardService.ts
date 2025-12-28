@@ -59,7 +59,7 @@ import { NFEDistribuicaoDFePorChaveService } from '../NFEDistribuicaoDFe/NFEDist
 import { NFEInutilizacaoService } from '../NFEInutilizacao/NFEInutilizacaoService.js';
 import { logger } from '@nfewizard/shared';
 
-export class NFeWizardService implements NFeWizardServiceImpl {
+class NFeWizardService implements NFeWizardServiceImpl {
     private config: NFeWizardProps = {} as NFeWizardProps;
     private environment: Environment = {} as Environment;
     private utility: Utility = {} as Utility;
@@ -449,4 +449,4 @@ export class NFeWizardService implements NFeWizardServiceImpl {
     }
 }
 
-export { NFeWizardService };
+export default NFeWizardService;
