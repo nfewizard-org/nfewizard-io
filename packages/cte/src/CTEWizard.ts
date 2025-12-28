@@ -19,8 +19,6 @@ import { NFeWizardProps, ConsultaCTe, DFePorNSUCTe, DFePorUltimoNSUCTe } from '@
 import { Environment, Utility, XmlBuilder, GerarConsulta, SaveFiles, logger } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
 import { CTEDistribuicaoDFeService } from './services/CTEDistribuicaoDFe/CTEDistribuicaoDFeService.js';
-import { CTEDistribuicaoDFePorNSUService } from './services/CTEDistribuicaoDFe/CTEDistribuicaoDFePorNSU.js';
-import { CTEDistribuicaoDFePorUltNSUService } from './services/CTEDistribuicaoDFe/CTEDistribuicaoDFePorUltNSU.js';
 import { CTEDistribuicaoDFe } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFe.js';
 import { CTEDistribuicaoDFePorNSU } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorNSU.js';
 import { CTEDistribuicaoDFePorUltNSU } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorUltNSU.js';
@@ -99,7 +97,7 @@ export class CTEWizard {
      */
     async CTE_DistribuicaoDFePorNSU(data: DFePorNSUCTe): Promise<any> {
         try {
-            const cteDistribuicaoDFePorNSUService = new CTEDistribuicaoDFePorNSUService(
+            const cteDistribuicaoDFePorNSU = new CTEDistribuicaoDFePorNSU(
                 this.environment, 
                 this.utility, 
                 this.xmlBuilder, 
@@ -107,7 +105,6 @@ export class CTEWizard {
                 this.saveFiles, 
                 this.gerarConsulta
             );
-            const cteDistribuicaoDFePorNSU = new CTEDistribuicaoDFePorNSU(cteDistribuicaoDFePorNSUService);
             return await cteDistribuicaoDFePorNSU.Exec(data);
         } catch (error) {
             logger.error(``, error, { context: 'CTE_DistribuicaoDFePorNSU' });
@@ -122,7 +119,7 @@ export class CTEWizard {
      */
     async CTE_DistribuicaoDFePorUltNSU(data: DFePorUltimoNSUCTe): Promise<any> {
         try {
-            const cteDistribuicaoDFePorUltNSUService = new CTEDistribuicaoDFePorUltNSUService(
+            const cteDistribuicaoDFePorUltNSU = new CTEDistribuicaoDFePorUltNSU(
                 this.environment, 
                 this.utility, 
                 this.xmlBuilder, 
@@ -130,7 +127,6 @@ export class CTEWizard {
                 this.saveFiles, 
                 this.gerarConsulta
             );
-            const cteDistribuicaoDFePorUltNSU = new CTEDistribuicaoDFePorUltNSU(cteDistribuicaoDFePorUltNSUService);
             return await cteDistribuicaoDFePorUltNSU.Exec(data);
         } catch (error) {
             logger.error(``, error, { context: 'CTE_DistribuicaoDFePorUltNSU' });

@@ -49,8 +49,11 @@ export default [
       commonjs(),
       typescript({
         tsconfig: './tsconfig.json',
-        declaration: false,
-        declarationMap: false
+        declaration: true,
+        declarationMap: false,
+        compilerOptions: {
+          rootDir: '.'
+        }
       })
     ]
   },
@@ -73,8 +76,11 @@ export default [
       commonjs(),
       typescript({
         tsconfig: './tsconfig.json',
-        declaration: false,
-        declarationMap: false
+        declaration: true,
+        declarationMap: false,
+        compilerOptions: {
+          rootDir: '.'
+        }
       })
     ]
   }

@@ -98,6 +98,9 @@ importers:
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
+      pako:
+        specifier: ^2.1.0
+        version: 2.1.0
       xml2js:
         specifier: ^0.6.2
         version: 0.6.2
@@ -118,6 +121,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^11.1.6
         version: 11.1.6(rollup@2.79.2)(typescript@5.9.3)
+      '@types/pako':
+        specifier: ^2.0.4
+        version: 2.0.4
       rollup:
         specifier: ^2.79.2
         version: 2.79.2
@@ -2872,6 +2878,10 @@ packages:
       '@types/node': 20.19.27
     transitivePeerDependencies:
       - aws-crt
+    dev: true
+
+  /@types/pako@2.0.4:
+    resolution: {integrity: sha512-VWDCbrLeVXJM9fihYodcLiIv0ku+AlOa/TQ1SvYOaBuyrSKgEcro95LJyIsJ4vSo6BXIxOKxiJAat04CmST9Fw==}
     dev: true
 
   /@types/pem@1.14.4:

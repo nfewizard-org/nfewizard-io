@@ -17,7 +17,7 @@
 import pako from 'pako';
 import xml2js from 'xml2js';
 import { XmlParser, Utility, Environment, logger } from '@nfewizard/shared';
-import { GenericObject } from '@nfewizard/types/cte';
+import { GenericObject } from '@nfewizard/types/nfe';
 import { AxiosResponse } from 'axios';
 
 class DistribuicaoHandler {

@@ -95,23 +95,23 @@ export class NFCEWizard {
      * @param recibo - Número do recibo da autorização
      * @returns Resultado da consulta
      */
-    async NFCE_RetornoAutorizacao(recibo?: string): Promise<any> {
-        try {
-            const nfceRetornoAutorizacaoService = new NFCERetornoAutorizacaoService(
-                this.environment, 
-                this.utility, 
-                this.xmlBuilder, 
-                this.axios, 
-                this.saveFiles, 
-                this.gerarConsulta
-            );
-            const nfceRetornoAutorizacao = new NFCERetornoAutorizacao(nfceRetornoAutorizacaoService);
-            return await nfceRetornoAutorizacao.Exec(recibo);
-        } catch (error) {
-            logger.error(``, error, { context: 'NFCE_RetornoAutorizacao' });
-            throw error;
-        }
-    }
+    // async NFCE_RetornoAutorizacao(recibo?: string): Promise<any> {
+    //     try {
+    //         const nfceRetornoAutorizacaoService = new NFCERetornoAutorizacaoService(
+    //             this.environment, 
+    //             this.utility, 
+    //             this.xmlBuilder, 
+    //             this.axios, 
+    //             this.saveFiles, 
+    //             this.gerarConsulta
+    //         );
+    //         const nfceRetornoAutorizacao = new NFCERetornoAutorizacao(nfceRetornoAutorizacaoService);
+    //         return await nfceRetornoAutorizacao.Exec(recibo);
+    //     } catch (error) {
+    //         logger.error(``, error, { context: 'NFCE_RetornoAutorizacao' });
+    //         throw error;
+    //     }
+    // }
 
     /**
      * Obtém a instância do Environment (para acesso avançado)

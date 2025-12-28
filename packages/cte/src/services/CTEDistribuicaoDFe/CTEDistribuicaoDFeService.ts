@@ -17,7 +17,7 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { DistribuicaoHandler } from './util/DistribuicaoHandler.js';
 import { Environment, Utility, XmlBuilder, BaseNFE, logger } from '@nfewizard/shared';
-import { ConsultaNFe, GenericObject } from '@nfewizard/types/cte';
+import { ConsultaNFe, GenericObject } from '@nfewizard/types/nfe';
 import { GerarConsultaImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 import { Agent } from 'http';
 

@@ -50,9 +50,12 @@ export default [
       commonjs(),
       typescript({
         tsconfig: './tsconfig.json',
-        declaration: false,
+        declaration: true,
         declarationMap: false,
-        exclude: ['**/*.json']
+        exclude: ['**/*.json'],
+        compilerOptions: {
+          rootDir: '.'
+        }
       })
     ]
   },
@@ -101,9 +104,12 @@ export default [
       commonjs(),
       typescript({
         tsconfig: './tsconfig.json',
-        declaration: false,
+        declaration: true,
         declarationMap: false,
-        exclude: ['**/*.json']
+        exclude: ['**/*.json'],
+        compilerOptions: {
+          rootDir: '.'
+        }
       })
     ]
   }
