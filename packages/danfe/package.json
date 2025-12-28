@@ -4,12 +4,12 @@
   "description": "Geração de DANFE/DACTE em PDF para NFe, NFCe e CTe",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/src/index.d.ts"
     }
   },
   "files": [

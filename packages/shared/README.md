@@ -1,13 +1,13 @@
 # @nfewizard/shared
 
-Core utilities compartilhadas para comunicação com SEFAZ (XML, HTTP, Certificados, Schemas).
+Core utilities do ecossistema NFeWizard para comunicação com SEFAZ (XML, HTTP, Certificados, Schemas).
 
 ## Instalação
 
 ```bash
-npm install @nfewizard/shared @nfewizard/types
+npm install @nfewizard/shared
 # ou
-pnpm add @nfewizard/shared @nfewizard/types
+pnpm add @nfewizard/shared
 ```
 
 ## Características

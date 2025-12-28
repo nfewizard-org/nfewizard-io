@@ -19,14 +19,14 @@
  * @packageDocumentation
  * NFeWizard-io - Biblioteca completa para emissão de Nota Fiscal Eletrônica
  * 
- * Este pacote mantém 100% de retrocompatibilidade com versões anteriores,
- * agora organizado como monorepo modular:
+ * Este pacote mantém 100% de retrocompatibilidade com versões anteriores, mas move alguns métodos para packages especificos.
+ * Agora organizado como monorepo modular:
  * 
  * - @nfewizard/types - Definições TypeScript
  * - @nfewizard/shared - Utilitários compartilhados
- * - @nfewizard/danfe - Geração de DANFE/DACTE
- * - @nfewizard/nfce - Operações NFCe (opcional)
- * - @nfewizard/cte - Operações CTe (opcional)
+ * - @nfewizard/danfe - Geração de DANFE
+ * - @nfewizard/nfce - Operações NFCe
+ * - @nfewizard/cte - Operações CTe
  */
 
 // Re-export all types for backward compatibility
