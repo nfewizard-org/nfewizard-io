@@ -133,7 +133,8 @@ case "$MAIN_PKG" in
         EXT_DEPS="date-fns axios xml2js node-fetch pako xml-crypto node-forge libxmljs2 xsd-schema-validator easy-soap-request soap pem winston xml-js sha1 winston-transport xsd-assembler"
         ;;
     "@nfewizard/danfe")
-        EXT_DEPS="pdfkit qrcode bwip-js date-fns libxmljs2"
+        # danfe + shared dependencies
+        EXT_DEPS="pdfkit qrcode bwip-js date-fns date-fns-tz libxmljs2 axios easy-soap-request ini node-forge pako pem sha1 soap winston winston-transport xml-crypto xml-js xml2js xsd-assembler xsd-schema-validator"
         ;;
 esac
 
