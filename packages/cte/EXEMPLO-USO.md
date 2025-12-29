@@ -11,12 +11,12 @@ pnpm add @nfewizard/cte
 ### 1. Importar e Inicializar
 
 ```typescript
-import { CTEWizard } from '@nfewizard/cte';
+import CTeWizard from '@nfewizard/cte';
 
-const cteWizard = new CTEWizard();
+const CTeWizard = new CTeWizard();
 
 // Configurar ambiente
-await cteWizard.NFE_LoadEnvironment({
+await CTeWizard.NFE_LoadEnvironment({
   config: {
     nfe: {
       ambiente: 2, // 1=Produção, 2=Homologação
@@ -35,7 +35,7 @@ await cteWizard.NFE_LoadEnvironment({
 ### 2. Distribuição CTe por NSU Específico
 
 ```typescript
-const resultado = await cteWizard.CTE_DistribuicaoDFePorNSU({
+const resultado = await CTeWizard.CTE_DistribuicaoDFePorNSU({
   cUFAutor: 35,  // Código da UF (35 = São Paulo)
   CNPJ: '12345678901234',  // CNPJ do interessado
   consNSU: {
@@ -50,7 +50,7 @@ console.log('Arquivos baixados:', resultado.filesList);
 ### 3. Distribuição CTe por Último NSU
 
 ```typescript
-const resultado = await cteWizard.CTE_DistribuicaoDFePorUltNSU({
+const resultado = await CTeWizard.CTE_DistribuicaoDFePorUltNSU({
   cUFAutor: 35,  // Código da UF (35 = São Paulo)
   CNPJ: '12345678901234',  // CNPJ do interessado
   distNSU: {
@@ -65,7 +65,7 @@ console.log('Arquivos baixados:', resultado.filesList);
 ### 4. Distribuição CTe Geral
 
 ```typescript
-const resultado = await cteWizard.CTE_DistribuicaoDFe({
+const resultado = await CTeWizard.CTE_DistribuicaoDFe({
   cUFAutor: 35,
   CNPJ: '12345678901234',
   distNSU: {
@@ -116,14 +116,14 @@ Para lista completa, consulte [tabela IBGE](https://www.ibge.gov.br/explica/codi
 ## Exemplo Completo
 
 ```typescript
-import { CTEWizard } from '@nfewizard/cte';
+import CTeWizard from '@nfewizard/cte';
 
 async function consultarCTe() {
-  const cteWizard = new CTEWizard();
+  const CTeWizard = new CTeWizard();
   
   try {
     // 1. Carregar ambiente
-    await cteWizard.NFE_LoadEnvironment({
+    await CTeWizard.NFE_LoadEnvironment({
       config: {
         nfe: {
           ambiente: 2,
@@ -139,7 +139,7 @@ async function consultarCTe() {
     });
     
     // 2. Consultar CTe por último NSU
-    const resultado = await cteWizard.CTE_DistribuicaoDFePorUltNSU({
+    const resultado = await CTeWizard.CTE_DistribuicaoDFePorUltNSU({
       cUFAutor: 35,
       CNPJ: '12345678901234',
       distNSU: {
