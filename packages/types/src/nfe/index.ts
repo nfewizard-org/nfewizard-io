@@ -15,7 +15,6 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './NFeWizard.js';
 export * from './NFEAutorizacao.js';
 export * from './NFEDistribuicaoDFe.js';
 export * from './NFEInutilizacao.js';

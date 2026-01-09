@@ -17,6 +17,7 @@
 
 export * from './Utils.js';
 export * from './LoadCertificate.js';
+export * from './NFeWizardProps.js';
 
 // Export NFeWizardImpl interface
 export type { NFeWizardImpl } from './NFeWizardImpl.js';

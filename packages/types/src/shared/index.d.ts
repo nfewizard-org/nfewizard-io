@@ -1,18 +1,13 @@
 export * from './Utils.js';
 export * from './LoadCertificate.js';
 export * from './NFEDanfeGenerator.js';
+export * from './NFeWizardProps.js';
+export * from './HttpClient.js';
 export interface SaveFilesImpl {
     salvaArquivos(...args: any[]): void;
 }
 export interface GerarConsultaImpl {
     gerarConsulta(...args: any[]): Promise<any>;
-}
-export interface HttpClient {
-    get(...args: any[]): Promise<any>;
-    post(...args: any[]): Promise<any>;
-}
-export interface HttpClientConfig {
-    [key: string]: any;
 }
 export interface NFeWizardServiceImpl {
     [key: string]: any;

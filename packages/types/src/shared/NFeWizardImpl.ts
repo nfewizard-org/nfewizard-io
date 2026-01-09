@@ -16,6 +16,7 @@
  */
 
 import { GenericObject } from './Utils.js';
+import { NFeWizardProps } from './NFeWizardProps.js';
 import {
     Cancelamento,
     CartaDeCorrecao,
@@ -31,7 +32,6 @@ import {
     InutilizacaoData,
     LayoutNFe,
     NFe,
-    NFeWizardProps,
     OperacaoNaoRealizada,
     ProtNFe,
     EmailParams

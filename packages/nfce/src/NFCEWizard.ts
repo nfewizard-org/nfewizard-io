@@ -15,7 +15,7 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { NFeWizardProps } from '@nfewizard/types/nfe';
+import { NFeWizardProps } from '@nfewizard/types/shared';
 import { Cancelamento } from '@nfewizard/types/nfe';
 import { Environment, Utility, XmlBuilder, GerarConsulta, SaveFiles, logger } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
