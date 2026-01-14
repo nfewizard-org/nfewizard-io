@@ -21,6 +21,7 @@ if [ -z "$1" ] || [ -z "$2" ]; then
     echo "Pacotes disponíveis:"
     echo "  - nfewizard-io    (Pacote principal NFe)"
     echo "  - @nfewizard/nfce (Pacote NFCe)"
+    echo "  - @nfewizard/nfse (Pacote NFSe)"
     echo "  - @nfewizard/cte  (Pacote CTe)"
     echo "  - @nfewizard/danfe (Gerador de DANFE - opcional)"
     echo ""
@@ -65,6 +66,11 @@ case "$PACKAGE" in
         MAIN_DIR="nfce"
         DEPS=("types" "shared")
         ;;
+    "@nfewizard/nfse")
+        MAIN_PKG="@nfewizard/nfse"
+        MAIN_DIR="nfse"
+        DEPS=("types" "shared")
+        ;;
     "@nfewizard/cte")
         MAIN_PKG="@nfewizard/cte"
         MAIN_DIR="cte"
@@ -77,7 +83,7 @@ case "$PACKAGE" in
         ;;
     *)
         echo -e "${RED}❌ Erro: Pacote '$PACKAGE' não reconhecido${NC}"
-        echo "Pacotes válidos: nfewizard-io, @nfewizard/nfce, @nfewizard/cte, @nfewizard/danfe"
+        echo "Pacotes válidos: nfewizard-io, @nfewizard/nfce, @nfewizard/nfse, @nfewizard/cte, @nfewizard/danfe"
         exit 1
         ;;
 esac

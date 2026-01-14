@@ -13,7 +13,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 # Pacotes a serem publicados (em ordem de dependência)
-PACKAGES_TO_PUBLISH=("types" "shared" "danfe" "nfce")
+PACKAGES_TO_PUBLISH=("types" "shared" "danfe" "nfce" "nfse")
 
 echo -e "${BLUE}════════════════════════════════════════════════════════${NC}"
 echo -e "${BLUE}   📦 Publicação de Pacotes NFeWizard${NC}"
@@ -34,7 +34,7 @@ echo ""
 
 # Build de todos os pacotes
 echo -e "${BLUE}🔨 Fazendo build dos pacotes...${NC}"
-pnpm turbo run build --filter=@nfewizard/types --filter=@nfewizard/shared --filter=@nfewizard/danfe --filter=@nfewizard/nfce
+pnpm turbo run build --filter=@nfewizard/types --filter=@nfewizard/shared --filter=@nfewizard/danfe --filter=@nfewizard/nfce --filter=@nfewizard/nfse
 echo -e "${GREEN}✅ Build concluído${NC}"
 echo ""
 

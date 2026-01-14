@@ -95,7 +95,7 @@ rm -rf "$TEMP_DIR"
 mkdir -p "$TEMP_DIR"
 
 # Copiar cada pacote com sua estrutura completa
-for pkg in types shared danfe nfce cte nfewizard-io; do
+for pkg in types shared danfe nfce nfse cte nfewizard-io; do
     if [ "$pkg" = "nfewizard-io" ]; then
         PKG_NAME="nfewizard-io"
         PKG_DIR="$MONOREPO_DIR/packages/nfewizard-io"
@@ -148,6 +148,9 @@ cp -r "$TEMP_DIR/@nfewizard/danfe" node_modules/@nfewizard/
 echo -e "  Instalando @nfewizard/nfce..."
 cp -r "$TEMP_DIR/@nfewizard/nfce" node_modules/@nfewizard/
 
+echo -e "  Instalando @nfewizard/nfse..."
+cp -r "$TEMP_DIR/@nfewizard/nfse" node_modules/@nfewizard/
+
 echo -e "  Instalando @nfewizard/cte..."
 cp -r "$TEMP_DIR/@nfewizard/cte" node_modules/@nfewizard/
 
@@ -171,6 +174,7 @@ echo -e "  • @nfewizard/types@1.0.0"
 echo -e "  • @nfewizard/shared@1.0.0"
 echo -e "  • @nfewizard/danfe@1.0.0"
 echo -e "  • @nfewizard/nfce@1.0.0"
+echo -e "  • @nfewizard/nfse@1.0.0"
 echo -e "  • @nfewizard/cte@1.0.0"
 echo -e "  • nfewizard-io@1.0.0"
 echo ""

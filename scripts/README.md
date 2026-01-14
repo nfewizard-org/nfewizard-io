@@ -19,6 +19,7 @@ Instala **TODOS** os pacotes do monorepo de uma vez.
 - `@nfewizard/shared` (com 335 CA certs + 143 schemas)
 - `@nfewizard/danfe`
 - `@nfewizard/nfce`
+- `@nfewizard/nfse`
 - `@nfewizard/cte`
 - `nfewizard-io`
 
@@ -54,6 +55,12 @@ Instala **apenas 1 pacote** + suas dependências (simula `npm install <pacote>`)
 ./scripts/local-install-single.sh @nfewizard/cte ~/meu-projeto
 ```
 → Instala: `@nfewizard/cte` + `@nfewizard/types` + `@nfewizard/shared`
+
+**Instalar apenas NFSe:**
+```bash
+./scripts/local-install-single.sh @nfewizard/nfse ~/meu-projeto
+```
+→ Instala: `@nfewizard/nfse` + `@nfewizard/types` + `@nfewizard/shared`
 
 **Instalar apenas DANFE:**
 ```bash
@@ -107,6 +114,7 @@ node index.js
 |--------|-----------|--------------|
 | `nfewizard-io` | Pacote principal NFe | types, shared, danfe |
 | `@nfewizard/nfce` | Operações NFCe | types, shared |
+| `@nfewizard/nfse` | Operações NFSe | types, shared |
 | `@nfewizard/cte` | Operações CTe | types, shared |
 | `@nfewizard/danfe` | Gerador de DANFE PDF | types |
 | `@nfewizard/shared` | Core (XML, SOAP, Certs) | types |

@@ -282,6 +282,37 @@ importers:
         specifier: ^5.4.5
         version: 5.9.3
 
+  packages/nfse:
+    dependencies:
+      '@nfewizard/shared':
+        specifier: workspace:*
+        version: link:../shared
+      '@nfewizard/types':
+        specifier: workspace:*
+        version: link:../types
+      axios:
+        specifier: ^1.7.7
+        version: 1.13.2(debug@4.4.3)
+    devDependencies:
+      '@rollup/plugin-commonjs':
+        specifier: ^25.0.7
+        version: 25.0.8(rollup@4.54.0)
+      '@rollup/plugin-json':
+        specifier: ^6.1.0
+        version: 6.1.0(rollup@4.54.0)
+      '@rollup/plugin-node-resolve':
+        specifier: ^15.2.3
+        version: 15.3.1(rollup@4.54.0)
+      '@rollup/plugin-typescript':
+        specifier: ^11.1.6
+        version: 11.1.6(rollup@4.54.0)(typescript@5.9.3)
+      rollup:
+        specifier: ^4.0.0
+        version: 4.54.0
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+
   packages/shared:
     dependencies:
       '@nfewizard/types':
