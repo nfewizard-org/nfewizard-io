@@ -11,8 +11,7 @@ A partir da versão 1.0.0, o **NFeWizard-io foi modularizado** em pacotes indepe
 | Pacote | Descrição | Tamanho |
 |--------|-----------|---------|
 | `nfewizard-io` | ✅ Operações NFe (pacote principal) | 507.5 KB |
-| `@nfewizard/nfce` | 🆕 Operações NFCe + Cancelamento | 965.0 KB |
-| `@nfewizard/danfe` | 🆕 Geração de DANFE (NFe e NFCe) | 2.29 MB |
+| `@nfewizard/nfce` | 🆕 Operações NFCe + Cancelamento | 965.0 KB || `@nfewizard/nfse` | 🆕 Operações NFSe | TBD || `@nfewizard/danfe` | 🆕 Geração de DANFE (NFe e NFCe) | 2.29 MB |
 | `@nfewizard/cte` | 🆕 Operações CTe | 787.3 KB |
 | `@nfewizard/types` | 📦 Tipos TypeScript | 491.6 KB |
 | `@nfewizard/shared` | 📦 Utilitários compartilhados | 3.38 MB |
@@ -20,6 +19,7 @@ A partir da versão 1.0.0, o **NFeWizard-io foi modularizado** em pacotes indepe
 ### 🎯 Principais Mudanças
 
 - ⚠️ **NFCe**: Agora em pacote separado `@nfewizard/nfce` (use `new NFCeWizard()`)
+- ⚠️ **NFSe**: Novo pacote `@nfewizard/nfse` para Nota Fiscal de Serviços Eletrônica
 - ⚠️ **DANFE**: Removido do pacote principal, use `@nfewizard/danfe` com funções `NFE_GerarDanfe()` e `NFCE_GerarDanfe()`
 - ⚠️ **CTe**: Movido para `@nfewizard/cte` (use `new CTEWizard()`)
 - ✅ **NFe**: API permanece 100% compatível no pacote `nfewizard-io`
@@ -69,11 +69,10 @@ npm i @nfewizard-io/nfce
 🚀 Pronto, agora você pode decidir utilizar apenas os serviços que precisa! -->
 
 ## Sobre a Biblioteca
-NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e) e Conhecimento de Transporte Eletrônico (CT-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
+NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e), Nota Fiscal de Consumidor Eletrônica (NFC-e), Nota Fiscal de Serviços Eletrônica (NFS-e) e Conhecimento de Transporte Eletrônico (CT-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
 
-- **Autorização (Emissão de NFe e NFCe)**: Submissão de Notas Fiscais Eletrônicas e Notas Fiscais de Consumidor Eletrônica
-para autorização.
-- **Distribuição DFe (NF-e e CT-e)**: Consulta e Download de DF-e (Documentos fiscais eletrônicos), facilitando o acesso a documentos fiscais eletrônicos de NF-e e CT-e.
+- **Autorização (Emissão de NFe, NFCe e NFSe)**: Submissão de Notas Fiscais Eletrônicas, Notas Fiscais de Consumidor Eletrônica e Notas Fiscais de Serviços Eletrônica para autorização.
+- **Distribuição DFe (NF-e, NFS-e e CT-e)**: Consulta e Download de DF-e (Documentos fiscais eletrônicos), facilitando o acesso a documentos fiscais eletrônicos de NF-e, NFS-e e CT-e.
 - **Consulta de Protocolo**: Verificação da situação atual da NF-e na Base de Dados do Portal da Secretaria de Fazenda Estadual.
 - **Inutilização de NFe**: Processo de inutilização de números de NF-e que não serão utilizados, assegurando a conformidade fiscal.
 - **Consulta de Status do Serviço**: Monitoramento do status dos serviços da SEFAZ, garantindo a disponibilidade dos webservices.
@@ -199,6 +198,60 @@ await nfeWizard.NFE_LoadEnvironment({
     await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 ```
 
+## Exemplo de Utilização - NFSe
+
+```typescript
+import NFSe from '@nfewizard/nfse';
+
+// Instanciar
+const nfseWizard = new NFSe();
+
+// Inicializar
+await nfseWizard.LoadEnvironment({
+    config: {
+        dfe: {
+            baixarXMLDistribuicao: true,
+            pathXMLDistribuicao: "tmp/DistribuicaoDFe/NFSe",
+            armazenarXMLAutorizacao: true,
+            pathXMLAutorizacao: "tmp/Autorizacao/NFSe",
+            armazenarXMLRetorno: true,
+            pathXMLRetorno: "tmp/RequestLogs/NFSe",
+            
+            pathCertificado: "certificado.pfx",
+            senhaCertificado: "1234",
+            UF: "SP",
+            CPFCNPJ: "99999999999999",
+        },
+        nfse: {
+            ambiente: 2, // 1 = Produção, 2 = Homologação
+            versao: "1.00"
+        },
+        lib: {
+            connection: {
+                timeout: 30000,
+            },
+            log: {
+                exibirLogNoConsole: true,
+                armazenarLogs: true,
+                pathLogs: 'tmp/Logs/NFSe'
+            },
+            useOpenSSL: false,
+            useForSchemaValidation: 'validateSchemaJsBased',
+        }
+    }
+});
+
+// Consultar NFSe por chave
+await nfseWizard.Consulta({
+    chaveAcesso: '00000000000000000000000000000000000000000000'
+});
+
+// Consultar parâmetros municipais
+await nfseWizard.ConsultaParametrosMunicipais({
+    codigoMunicipio: '3550308' // São Paulo
+});
+```
+
 ## Documentação
 
 - Para a documentação completa acesse [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
@@ -290,7 +343,15 @@ await nfeWizard.NFE_LoadEnvironment({
 ### Próximos passos
 
 - Adicionar tratamento de LOGs
-- Estudo para implementação de NFSe
+- ✅ NFSe implementada no pacote `@nfewizard/nfse`
+
+### Funcionalidades NFSe Disponíveis
+
+- ✅ Autorização de NFSe
+- ✅ Consulta de NFSe por chave
+- ✅ Consulta de Parâmetros Municipais
+- ✅ Registro de Eventos (Cancelamento, etc.)
+- ✅ Distribuição por NSU
 
 ## Contribua para Nossa Biblioteca Open Source
 
