@@ -6,7 +6,7 @@ Ao abrir issue ou PR, inclua:
 
 ```markdown
 ## Parametrização
-- Tipo de DANFE: NFe / NFCe
+- Tipo de DANFE: NFe / NFCe / NFSe
 ```
 
 ## Logs Relevantes
@@ -36,11 +36,17 @@ Inclua também informações detalhadas sobre o erro:
     - Produtos e totalizadores
     - Informações de pagamento
 
+- **DANFSe para NFSe**: Geração do Documento Auxiliar da Nota Fiscal de Serviços Eletrônica via webservice:
+    - Download direto do PDF do servidor municipal
+    - Autenticação mútua TLS com certificado digital
+    - Suporte para diferentes municípios
+
 ## Características
 
-- ✅ **Suporta NFe e NFCe**
+- ✅ **Suporta NFe, NFCe e NFSe**
 - ✅ **QR Code** para NFCe
 - ✅ **Código de barras** para NFe
+- ✅ **Download via webservice** para NFSe
 - ✅ **TypeScript** - Tipos completos incluídos
 - ✅ **Alta qualidade** - PDFs profissionais e bem formatados
 
@@ -87,6 +93,44 @@ await NFCE_GerarDanfe({
     outputPath: './nfce-danfe.pdf', // Caminho onde o PDF será salvo
     pageWidth: 226.772 // Largura para NFCe (80mm)
 });
+```
+
+### DANFSe para NFSe
+
+```typescript
+import { NFSE_GerarDanfe } from '@nfewizard/danfe';
+import { Environment } from '@nfewizard/shared';
+import axios from 'axios';
+
+// Configurar environment com certificado
+const environment = new Environment({
+    dfe: {
+        pathCertificado: "certificado.pfx",
+        senhaCertificado: "1234",
+        UF: "SP",
+    },
+    nfse: {
+        ambiente: 2, // 1=Produção, 2=Homologação
+    }
+});
+
+// Carregar environment
+await environment.loadEnvironment();
+
+// Criar axios instance
+const axiosInstance = axios.create();
+
+// Gerar DANFSe
+const resultado = await NFSE_GerarDanfe({
+    environment,
+    axios: axiosInstance,
+    data: {
+        chaveAcesso: '35000000000000000000000000000000000000000001',
+        outputPath: './danfse.pdf' // Caminho onde o PDF será salvo
+    }
+});
+
+console.log(resultado.message); // DANFSe gerada em './danfse.pdf'
 ```
 
 ## Documentação

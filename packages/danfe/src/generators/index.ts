@@ -23,10 +23,12 @@
 
 import { NFeGerarDanfe } from './NFEGerarDanfe.js';
 import { NFCeGerarDanfe } from './NFCEGerarDanfe.js';
+import { NFSeGerarDanfe } from './NFSeGerarDanfe.js';
 import type { NFEGerarDanfeProps, NFCEGerarDanfeProps } from '@nfewizard/types/nfe';
+import type { NFSeGerarDanfeProps } from './NFSeGerarDanfe.js';
 
 // Exporta as classes originais
-export { NFeGerarDanfe, NFCeGerarDanfe };
+export { NFeGerarDanfe, NFCeGerarDanfe, NFSeGerarDanfe };
 
 /**
  * Gera DANFE para NFe
@@ -46,4 +48,17 @@ export async function NFE_GerarDanfe(params: NFEGerarDanfeProps) {
 export async function NFCE_GerarDanfe(params: NFCEGerarDanfeProps) {
     const danfe = new NFCeGerarDanfe(params);
     return await danfe.generatePDF();
+}
+
+/**
+ * Gera DANFSe (Documento Auxiliar da NFSe)
+ * @param params - Parâmetros para geração do DANFSe
+ * @returns Promise com o resultado da geração do PDF
+ */
+export async function NFSE_GerarDanfe(params: {
+    environment: any;
+    axios: any;
+    data: NFSeGerarDanfeProps;
+}) {
+    return await NFSeGerarDanfe(params);
 }
