@@ -20,7 +20,7 @@ lerna-debug.log*
 .env
 .env.*
 !.env.example
-examples/NFe/teste.ts
+examples/**/teste.ts
 
 # Testes e temp
 tmp/

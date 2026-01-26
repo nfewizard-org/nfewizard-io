@@ -35,4 +35,5 @@ export { generateQRCodeURLOnline, generateQRCodeURLOffline } from './services/NF
 
 // Re-export types for convenience (user doesn't need to install @nfewizard/types separately)
 export type * from '@nfewizard/types/nfce';
+export type * from '@nfewizard/types/nfe';
 export type * from '@nfewizard/types/shared';
