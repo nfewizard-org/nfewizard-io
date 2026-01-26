@@ -264,6 +264,16 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
             NFe.infNFe.ide.verProc = NFe.infNFe.ide.verProc || '1.0.0.0';
             delete NFe.infNFe.Id
 
+            // Gera hashCSRT automaticamente se infRespTec e idCSRT existirem
+            if (NFe.infNFe.infRespTec?.idCSRT) {
+                const csrt = this.environment.getConfig().nfe?.CSRT;
+                if (csrt) {
+                    // Remove o prefixo "NFe" da chave de acesso para concatenar apenas os 44 dígitos
+                    const chaveAcessoSemPrefixo = chaveAcesso.replace('NFe', '');
+                    NFe.infNFe.infRespTec.hashCSRT = this.utility.gerarHashCSRT(csrt, chaveAcessoSemPrefixo);
+                }
+            }
+
             // Valida Documento do emitente
             NFe.infNFe.emit = Object.assign({ [this.validaDocumento(String(NFe.infNFe.emit.CNPJCPF), 'emitente')]: NFe.infNFe.emit.CNPJCPF }, NFe.infNFe.emit)
             delete NFe.infNFe.emit.CNPJCPF;

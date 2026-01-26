@@ -1717,9 +1717,9 @@ export type Imposto = {
      */
     impostoDevol?: impostoDevol;
     /**
-     * @param {string} vTotTrib - Valor aproximado total de tributos federais, estaduais e municipais.
+     * @param {number | string;} vTotTrib - Valor aproximado total de tributos federais, estaduais e municipais.
      */
-    vTotTrib?: number;
+    vTotTrib?: number | string;
     /**
      * @param {IS} IS - Informações do Imposto Seletivo
      */
@@ -4311,11 +4311,11 @@ export type IPITrib = {
     /**
      * @param {number} qUnid - Quantidade total na unidade padrão para tributação (somente para os produtos tributados por unidade)
      */
-    qUnid: number | string;
+    qUnid?: number | string;
     /**
      * @param {number} vUnid - Valor por Unidade Tributável
      */
-    vUnid: number | string;
+    vUnid?: number | string;
     /**
      * @param {number} vIPI - Valor do IPI
      * Informar os campos O11 e O12 se o cálculo do IPI for de valor por unidade.
@@ -5048,10 +5048,10 @@ export type ICMSTot = {
      */
     vNF: string;
     /**
-     * @param {string} vTotTrib - Valor aproximado total de tributos federais, estaduais e municipais.
+     * @param {number | string;} vTotTrib - Valor aproximado total de tributos federais, estaduais e municipais.
      * Observação: (NT 2013/003)
      */
-    vTotTrib?: string;
+    vTotTrib?: number | string;
 }
 export type ISSQNtot = {
     /**

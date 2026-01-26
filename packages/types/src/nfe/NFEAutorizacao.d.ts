@@ -4200,11 +4200,11 @@ export type IPITrib = {
     /**
      * @param {number} qUnid - Quantidade total na unidade padrão para tributação (somente para os produtos tributados por unidade)
      */
-    qUnid: number;
+    qUnid?: number | string;
     /**
      * @param {number} vUnid - Valor por Unidade Tributável
      */
-    vUnid: number;
+    vUnid?: number | string;
     /**
      * @param {number} vIPI - Valor do IPI
      * Informar os campos O11 e O12 se o cálculo do IPI for de valor por unidade.

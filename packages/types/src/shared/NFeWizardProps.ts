@@ -111,6 +111,11 @@ export type NFeWizardProps = {
          * @param {number} idCSC - Identificador do Código de Segurança do Contribuinte (Utilizado para NFCe)
          */
         idCSC?: number;
+        /**
+         * @param {string} CSRT - Código de Segurança do Responsável Técnico (16 a 36 bytes alfanumérico)
+         * Utilizado para gerar automaticamente o hashCSRT quando infRespTec.idCSRT for informado
+         */
+        CSRT?: string;
     };
     /**
     * @param email -Preencher para casos onde for necessário utilizar envio de e-mail;

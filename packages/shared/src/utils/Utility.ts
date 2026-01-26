@@ -28,6 +28,7 @@
  */
 
 import fs from 'fs';
+import crypto from 'crypto';
 import xsdValidator from 'xsd-schema-validator';
 import NFeServicosUrl from '../config/NFeServicosUrl.json';
 import CTeServicosUrl from '../config/CTeServicosUrl.json';
@@ -500,7 +501,18 @@ class Utility {
 
         // Busca o cStat no retorno
         const cStat = this.findInObj(responseInJson, 'cStat');
-        const cStatNumber = cStat ? parseInt(cStat[0] || cStat) : null;
+        
+        // cStat pode ser: string, number, ou array de strings/numbers
+        let cStatNumber: number | null = null;
+        if (cStat !== undefined && cStat !== null) {
+            if (Array.isArray(cStat)) {
+                // Se for array, pega o primeiro elemento
+                cStatNumber = parseInt(String(cStat[0]), 10);
+            } else {
+                // Se for string ou number direto
+                cStatNumber = parseInt(String(cStat), 10);
+            }
+        }
 
         // Se existe cStat e não está na lista de códigos válidos, é rejeição
         if (cStatNumber && !codigosValidos.includes(cStatNumber)) {
@@ -621,6 +633,34 @@ class Utility {
                 });
             }
         }
+    }
+
+    /**
+     * Gera o hashCSRT conforme documentação da SEFAZ
+     * 
+     * O hash é gerado a partir da concatenação do CSRT da empresa com a chave de acesso da NF-e/NFC-e.
+     * Utiliza o algoritmo SHA-1 para a geração do hash.
+     * 
+     * @param csrt - Código de Segurança do Responsável Técnico (16 a 36 bytes alfanumérico)
+     * @param chaveAcesso - Chave de acesso da NF-e/NFC-e (44 dígitos)
+     * @returns Hash em Base64 com 28 caracteres
+     * 
+     * @example
+     * // Exemplo de uso:
+     * const hashCSRT = utility.gerarHashCSRT('G8063VRTNDMO886SFNK5LDUDEI24XJ22YIPO', '41180678393592000146558900000006041028190697');
+     * // Resultado: aWv6LeEM4X6u4+qBI2OYZ8grigw=
+     */
+    gerarHashCSRT(csrt: string, chaveAcesso: string): string {
+        // Passo 1: Concatenar o CSRT com a chave de acesso
+        const concatenacao = csrt + chaveAcesso;
+
+        // Passo 2: Aplicar o algoritmo SHA-1 sobre o resultado da concatenação
+        const sha1Hash = crypto.createHash('sha1').update(concatenacao).digest();
+
+        // Passo 3: Converter o resultado para Base64 (resulta em 28 caracteres)
+        const hashBase64 = sha1Hash.toString('base64');
+
+        return hashBase64;
     }
 }
 
