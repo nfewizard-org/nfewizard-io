@@ -5,11 +5,30 @@
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "exports": {
-    ".": "./dist/src/index.js",
-    "./nfe": "./dist/src/nfe/index.js",
-    "./nfce": "./dist/src/nfce/index.js",
-    "./cte": "./dist/src/cte/index.js",
-    "./shared": "./dist/src/shared/index.js"
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    },
+    "./nfe": {
+      "types": "./dist/src/nfe/index.d.ts",
+      "default": "./dist/src/nfe/index.js"
+    },
+    "./nfce": {
+      "types": "./dist/src/nfce/index.d.ts",
+      "default": "./dist/src/nfce/index.js"
+    },
+    "./nfse": {
+      "types": "./dist/src/nfse/index.d.ts",
+      "default": "./dist/src/nfse/index.js"
+    },
+    "./cte": {
+      "types": "./dist/src/cte/index.d.ts",
+      "default": "./dist/src/cte/index.js"
+    },
+    "./shared": {
+      "types": "./dist/src/shared/index.d.ts",
+      "default": "./dist/src/shared/index.js"
+    }
   },
   "sideEffects": false,
   "publishConfig": {

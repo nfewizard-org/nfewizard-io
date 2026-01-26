@@ -32,7 +32,7 @@ import xsdValidator from 'xsd-schema-validator';
 import NFeServicosUrl from '../config/NFeServicosUrl.json';
 import CTeServicosUrl from '../config/CTeServicosUrl.json';
 import soapMethod from '../config/soapMethod.json';
-import cStatError from '../config/cStatError.json';
+// import cStatError from '../config/cStatError.json';
 import { getSchema } from '../adapters/SchemaLoader.js';
 import { Environment } from '../environment/Environment.js';
 import { GenericObject, SoapMethod, NFeServicosUrlType, SaveXMLProps, SaveJSONProps, ServicesUrl, NFeWizardProps } from '@nfewizard/types/shared';
@@ -456,7 +456,7 @@ class Utility {
             try {
                 const { schemaPath } = getSchema(metodo);
 
-                xsdValidator.validateXML(xml, schemaPath, (err, validationResult) => {
+                xsdValidator.validateXML(xml, schemaPath, (err: any, validationResult: any) => {
                     if (err) {
                         reject({
                             success: false,
@@ -492,7 +492,30 @@ class Utility {
         // Salva XML de retorno
         this.salvaRetorno(data, responseInJson, metodo, name);
 
-        // Busca todos os xMotivo no objeto
+        // Códigos de status de sucesso/processamento válidos
+        const codigosValidos = [
+            100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
+            124, 128, 135, 136, 137, 138, 139, 140, 142, 150, 151
+        ];
+
+        // Busca o cStat no retorno
+        const cStat = this.findInObj(responseInJson, 'cStat');
+        const cStatNumber = cStat ? parseInt(cStat[0] || cStat) : null;
+
+        // Se existe cStat e não está na lista de códigos válidos, é rejeição
+        if (cStatNumber && !codigosValidos.includes(cStatNumber)) {
+            const xMotivo = this.findInObj(responseInJson, 'xMotivo');
+            let mensagemErro = `Rejeição com código ${cStatNumber}`;
+            
+            if (xMotivo) {
+                // Se xMotivo for array, pega o primeiro elemento; senão, usa diretamente
+                mensagemErro = Array.isArray(xMotivo) ? xMotivo[0] : xMotivo;
+            }
+            
+            throw new Error(mensagemErro);
+        }
+
+        // Busca todos os xMotivo no objeto (verificação adicional)
         const allXMotivos = this.findAllInObj(responseInJson, 'xMotivo');
 
         // Verifica se algum xMotivo contém "Rejeição" ou "Rejeicao"

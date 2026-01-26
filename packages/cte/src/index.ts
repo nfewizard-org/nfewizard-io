@@ -31,3 +31,7 @@ export { CTEDistribuicaoDFePorUltNSUService } from './services/CTEDistribuicaoDF
 
 // CTe Utilities
 export { DistribuicaoHandler } from './services/CTEDistribuicaoDFe/util/DistribuicaoHandler.js';
+
+// Re-export types for convenience (user doesn't need to install @nfewizard/types separately)
+export type * from '@nfewizard/types/cte';
+export type * from '@nfewizard/types/shared';

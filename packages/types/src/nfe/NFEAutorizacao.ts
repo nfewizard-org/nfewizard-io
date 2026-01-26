@@ -4280,7 +4280,7 @@ export type IPI = {
      * @param {number} cEnq - Código de Enquadramento Legal do IPI
      * Preenchimento conforme item 8.9. Código de Enquadramento Legal do IPI do MOC – Visão Geral
      */
-    cEnq: number;
+    cEnq: number | string;
     /**
      * @param {IPITrib} IPITrib - Grupo do CST 00, 49, 50 e 99
      * Informar apenas um dos grupos O07 ou O08 com base valor atribuído ao campo O09 – CST do IPI
@@ -4299,7 +4299,7 @@ export type IPITrib = {
      * 50=Saída tributada
      * 99=Outras saídas
      */
-    CST: number;
+    CST: number | string;
     /**
      * @param {number} vBC - Valor da BC do IPI
      */
@@ -4307,15 +4307,15 @@ export type IPITrib = {
     /**
      * @param {number} pIPI - Alíquota do IPI
      */
-    pIPI: number;
+    pIPI: number | string;
     /**
      * @param {number} qUnid - Quantidade total na unidade padrão para tributação (somente para os produtos tributados por unidade)
      */
-    qUnid: number;
+    qUnid: number | string;
     /**
      * @param {number} vUnid - Valor por Unidade Tributável
      */
-    vUnid: number;
+    vUnid: number | string;
     /**
      * @param {number} vIPI - Valor do IPI
      * Informar os campos O11 e O12 se o cálculo do IPI for de valor por unidade.
@@ -5848,19 +5848,13 @@ export type InfRespTec = {
      */
     fone: string;
     /**
-     * @param {CSRT} - Sequência XML
+     * @param {string | number} idCSRT - Identificador do CSRT
      */
-    CSRT?: CSRT;
-}
-export type CSRT = {
-    /**
-     * @param {number} idCSRT - Identificador do CSRT
-     */
-    idCSRT: number;
+    idCSRT?: string | number;
     /**
      * @param {string} hashCSRT - Hash do CSRT
      */
-    hashCSRT: string;
+    hashCSRT?: string;
 }
 
 /**

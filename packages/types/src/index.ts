@@ -24,5 +24,8 @@ export * from './nfe/index.js';
 // Export NFCe types
 export * from './nfce/index.js';
 
+// Export NFSe types
+export * from './nfse/index.js';
+
 // Export CTe types
 export * from './cte/index.js';
