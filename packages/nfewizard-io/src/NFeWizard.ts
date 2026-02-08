@@ -15,7 +15,6 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import {
-    NFeWizardProps,
     EventoNFe,
     ConsultaNFe,
     NFe,
@@ -32,7 +31,7 @@ import {
     EPEC,
     EmailParams,
 } from '@nfewizard/types/nfe';
-import { NFeWizardServiceImpl, NFeWizardImpl } from '@nfewizard/types/shared';
+import { NFeWizardServiceImpl, NFeWizardImpl, NFeWizardProps } from '@nfewizard/types/shared';
 import NFeWizardService from './nfe/services/NFeWizard/NFeWizardService.js';
 
 export class NFeWizard implements NFeWizardImpl {

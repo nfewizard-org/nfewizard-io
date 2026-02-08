@@ -38,7 +38,7 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         return this.gerarXmlNFeAutorizacao(data);
     }
 
-    protected salvaArquivos(xmlConsulta: string, responseInJson: GenericObject, xmlRetorno: AxiosResponse<any, any>, options?: Record<string, any>): GenericObject {
+    protected salvaArquivos(_xmlConsulta: string, responseInJson: GenericObject, _xmlRetorno: AxiosResponse<any, any>, options?: Record<string, any>): GenericObject {
 
         // Recupera configuração do ambiente para verificar se os arquivos gerados serão gravados em disco
         const config = this.environment.getConfig();
@@ -67,7 +67,6 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
             });
         };
 
-        let chNFe = ''
         let xmlAutorizacaoInJson: GenericObject = {} as GenericObject;
         let xMotivoPorXml: GenericObject[] = [];
         let xmlsInJson: GenericObject[] = [];
@@ -156,10 +155,10 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         return ano + mes;
     }
 
-    private gerarCodigoNumerico() {
-        // Lógica para gerar um código numérico aleatório de 8 dígitos
-        return Math.floor(Math.random() * 100000000).toString().padStart(8, '0');
-    }
+    // private _gerarCodigoNumerico() {
+    //     // Lógica para gerar um código numérico aleatório de 8 dígitos
+    //     return Math.floor(Math.random() * 100000000).toString().padStart(8, '0');
+    // }
 
     private calcularModulo11(sequencia: string) {
         const pesos = [4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
@@ -406,7 +405,6 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
     }> {
         let xmlConsulta: string = '';
         let xmlConsultaSoap: string = '';
-        let webServiceUrlTmp: string = '';
         let responseInJson: GenericObject | undefined = undefined;
         let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
         const ContentType = this.setContentType();
@@ -417,7 +415,6 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
 
             xmlConsultaSoap = xmlFormated;
-            webServiceUrlTmp = webServiceUrl;
 
             // Efetua requisição para o webservice NFEStatusServico
             const xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);

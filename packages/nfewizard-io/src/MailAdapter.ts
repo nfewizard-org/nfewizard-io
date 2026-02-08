@@ -72,7 +72,7 @@ class MailController {
             const transporter = this.createTransporter(email);
             const mailOptions = this.mountMail(email, mailParams);
 
-            transporter.sendMail(mailOptions, (error: any, info) => {
+            transporter.sendMail(mailOptions, (error: any, _info) => {
                 if (error) {
                     console.log(error);
                     throw new Error(error);

@@ -57,7 +57,7 @@ export class DistribuicaoHandler {
         }
     }
 
-    deCompressDFeXML(loteDistDFeInt: AxiosResponse<any, any>, metodo: string, xmlConsulta: string) {
+    deCompressDFeXML(loteDistDFeInt: AxiosResponse<any, any>, metodo: string, _xmlConsulta: string) {
         logger.info('Descomprimindo XML', {
             context: 'DistribuicaoHandler',
         });

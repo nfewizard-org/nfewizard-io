@@ -35,6 +35,9 @@ importers:
       '@types/node-forge':
         specifier: ^1.3.14
         version: 1.3.14
+      '@types/pako':
+        specifier: ^2.0.4
+        version: 2.0.4
       '@types/pem':
         specifier: ^1.14.4
         version: 1.14.4

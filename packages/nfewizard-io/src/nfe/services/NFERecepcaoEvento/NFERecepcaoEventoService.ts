@@ -135,13 +135,12 @@ export class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEven
      */
     private gerarXmlRecepcaoEvento(evento: TipoEvento[], idLote: number, ambienteNacional: boolean) {
 
-        const { nfe: { ambiente, versaoDF }, dfe: { UF } } = this.environment.getConfig();
+        const { nfe: { ambiente } } = this.environment.getConfig();
 
         for (let i = 0; i < evento.length; i++) {
             const eventoProps = evento[i];
 
             const {
-                tpAmb,
                 cOrgao,
                 tpEvento,
                 chNFe,
@@ -285,7 +284,6 @@ export class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEven
     protected async enviaEvento(evento: TipoEvento[], idLote: number, tipoAmbiente: number) {
         let xmlConsulta: string = '';
         let xmlConsultaSoap: string = '';
-        let webServiceUrlTmp: string = '';
         const ContentType = this.setContentType();
         const ambienteNacional = tipoAmbiente === 0 ? true : false;
         try {
@@ -295,7 +293,6 @@ export class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEven
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, ambienteNacional || this.isAmbienteNacional(this.tpEvento), '', this.modelo);
 
             xmlConsultaSoap = xmlFormated;
-            webServiceUrlTmp = webServiceUrl;
 
             const xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);
 

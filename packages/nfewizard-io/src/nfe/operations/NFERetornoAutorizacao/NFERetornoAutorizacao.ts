@@ -23,6 +23,19 @@ export class NFERetornoAutorizacao implements NFERetornoAutorizacaoServiceImpl {
         this.nfeRetornoAutorizacaoService = nfeRetornoAutorizacaoService;
     }
 
+    async Exec(data: {
+        tipoEmissao: number;
+        nRec?: string;
+        protNFe?: ProtNFe[];
+        xmlNFe: string[];
+    }): Promise<{
+        success: boolean;
+        message: any;
+        data: string[];
+    }> {
+        return await this.getXmlRetorno(data);
+    }
+
     async getXmlRetorno(data: {
         tipoEmissao: number;
         nRec?: string;

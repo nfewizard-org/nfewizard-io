@@ -33,7 +33,10 @@ export interface NFEconsultaProtocoloServiceImpl { Exec(...args: any[]): Promise
 export interface NFEDistribuicaoDFeServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface NFEInutilizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface NFERecepcaoEventoServiceImpl { Exec(...args: any[]): Promise<any>; }
-export interface NFERetornoAutorizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
+export interface NFERetornoAutorizacaoServiceImpl { 
+    Exec(...args: any[]): Promise<any>; 
+    getXmlRetorno(...args: any[]): Promise<any>;
+}
 export interface NFEStatusServicoServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface NFCEAutorizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface NFCERetornoAutorizacaoServiceImpl { getXmlRetorno(...args: any[]): Promise<any>; }

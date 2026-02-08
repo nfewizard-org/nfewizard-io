@@ -17,9 +17,9 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { DistribuicaoHandler } from './util/DistribuicaoHandler.js';
 import { Environment, Utility, XmlBuilder } from '@nfewizard/shared';
-import { ConsultaNFe, GenericObject } from '@nfewizard/types/shared';
+import { GenericObject, GerarConsultaImpl, SaveFilesImpl } from '@nfewizard/types/shared';
+import { ConsultaNFe } from '@nfewizard/types/nfe';
 import { BaseNFE } from '@nfewizard/shared';
-import { GerarConsultaImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 import { logger } from '@nfewizard/shared';
 import { Agent } from 'http';
 
@@ -87,7 +87,6 @@ export class NFEDistribuicaoDFeService extends BaseNFE {
     async Exec(data: ConsultaNFe) {
         let xmlConsulta: string = '';
         let xmlConsultaSoap: string = '';
-        let webServiceUrlTmp: string = '';
         let responseInJson: GenericObject | undefined = undefined;
         let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
         const ContentType = this.setContentType();
@@ -99,7 +98,6 @@ export class NFEDistribuicaoDFeService extends BaseNFE {
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, true, '1.01', 'NFe', true, 'nfeDistDFeInteresse');
 
             xmlConsultaSoap = xmlFormated;
-            webServiceUrlTmp = webServiceUrl;
 
             const xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);
 

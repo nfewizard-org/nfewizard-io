@@ -54,10 +54,9 @@ import {
     EventoNFe,
     InutilizacaoData,
     NFe,
-
-    NFeWizardProps,
     OperacaoNaoRealizada
 } from '@nfewizard/types/nfe';
+import { NFeWizardProps } from '@nfewizard/types/shared';
 import { NFEconsultaProtocoloService } from '../NFEConsultaProtocolo/NFEconsultaProtocoloService.js';
 import { NFEStatusServico } from '../../operations/NFEStatusServico/NFEStatusServico.js';
 import { NFERecepcaoEvento } from '../../operations/NFERecepcaoEvento/NFERecepcaoEvento.js';
