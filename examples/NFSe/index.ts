@@ -1,7 +1,7 @@
-import NFSe, { NFSe as NFSeType } from '@nfewizard/nfse';
+import NFSeWizard, { NFSe } from '@nfewizard/nfse';
 
 const testNFSe = async () => {
-    const nfse = new NFSe({
+    const nfse = new NFSeWizard({
         ambiente: 2, // 1 = Produção, 2 = Homologação
         pathCertificado: "../certificate/certificate.pfx",
         senhaCertificado: "SUA_SENHA_CERTIFICADO",
@@ -17,7 +17,7 @@ const testNFSe = async () => {
         exibirLogNoConsole: true,
     });
 
-    const autorizacao: NFSeType = {
+    const autorizacao: NFSe = {
         DPS: {
             infDps: {
                 tpAmb: 2, // 1 = Produção, 2 = Homologação
@@ -35,21 +35,22 @@ const testNFSe = async () => {
                     IM: "0000000", // Inscrição Municipal
                     xNome: "RAZAO SOCIAL DA SUA EMPRESA LTDA",
                     end: {
+                        xLgr: "Rua Exemplo",
+                        nro: "123",
+                        xCpl: "Sala 1",
+                        xBairro: "Centro",
                         endNac: {
                             cMun: "4115200",
                             CEP: "87000000",
-                            xLgr: "Rua Exemplo",
-                            nro: "123",
-                            xCpl: "Sala 1",
-                            xBairro: "Centro"
+                            UF: "PR"
                         }
                     },
                     fone: "4400000000",
                     email: "contato@suaempresa.com.br",
                     regTrib: {
-                        opSimpNac: 1, // 1 = Sim, 2 = Não
+                        opSimpNac: 1, // 1 = Não Optante, 2 = MEI, 3 = ME/EPP
                         regApTribSN: 1, // Regime de apuração (Simples Nacional)
-                        tpTribSN: "01" // Tipo de tributação
+                        regEspTrib: 0 // 0 = Nenhum, 1-9 = Outros
                     }
                 },
                 
@@ -58,12 +59,13 @@ const testNFSe = async () => {
                     CNPJ: "11111111000111",
                     xNome: "CLIENTE EXEMPLO LTDA",
                     end: {
+                        xLgr: "Avenida Exemplo",
+                        nro: "1000",
+                        xBairro: "Centro",
                         endNac: {
                             cMun: "4115200",
                             CEP: "87000000",
-                            xLgr: "Avenida Exemplo",
-                            nro: "1000",
-                            xBairro: "Centro"
+                            UF: "PR"
                         }
                     },
                     fone: "4400000001",
@@ -72,67 +74,41 @@ const testNFSe = async () => {
                 
                 // Informações do serviço
                 serv: {
-                    cServ: {
-                        cTribNac: "01.01", // Código do serviço (tabela nacional)
-                        cTribMun: "0101", // Código do serviço no município
-                        cCNAE: "6201500" // CNAE
+                    // Local da prestação (primeiro elemento obrigatório)
+                    locPrest: {
+                        cLocPrestacao: "4115200" // Município da prestação (IBGE)
                     },
-                    xServ: "SERVICOS DE DESENVOLVIMENTO DE PROGRAMAS DE COMPUTADOR SOB ENCOMENDA",
-                    cExigSusp: 0, // Exigibilidade: 0 = Normal
-                    cLocIncid: "4115200", // Local da incidência
-                    cLocPrestacao: "4115200" // Local da prestação
+                    // Código do serviço (segundo elemento obrigatório)
+                    cServ: {
+                        cTribNac: "010100", // Código nacional (6 dígitos)
+                        cTribMun: "0101", // Código municipal (opcional)
+                        xDescServ: "SERVICOS DE DESENVOLVIMENTO DE PROGRAMAS DE COMPUTADOR SOB ENCOMENDA"
+                    }
                 },
                 
                 // Valores do serviço
                 valores: {
-                    vServPrest: "1000.00", // Valor do serviço
-                    vDescIncond: "0.00", // Desconto incondicional
-                    vDescCond: "0.00", // Desconto condicional
-                    vDedRed: "0.00", // Deduções/Reduções
-                    vTotTrib: "150.00", // Total de tributos
-                    vLiq: "1000.00", // Valor líquido
-                    
-                    // Tributos federais
-                    tribFed: {
-                        // PIS
-                        pis: {
-                            vBCPIS: "1000.00",
-                            pPIS: "0.65",
-                            vPIS: "6.50"
-                        },
-                        // COFINS
-                        cofins: {
-                            vBCCOFINS: "1000.00",
-                            pCOFINS: "3.00",
-                            vCOFINS: "30.00"
-                        },
-                        // INSS
-                        inss: {
-                            vBCINSS: "1000.00",
-                            pINSS: "11.00",
-                            vINSS: "110.00"
-                        },
-                        // IR
-                        ir: {
-                            vBCIR: "1000.00",
-                            pIR: "1.50",
-                            vIR: "15.00"
-                        },
-                        // CSLL
-                        csll: {
-                            vBCCSLL: "1000.00",
-                            pCSLL: "1.00",
-                            vCSLL: "10.00"
-                        }
+                    // Valor do serviço prestado (primeiro elemento obrigatório)
+                    vServPrest: {
+                        vServ: 1000.00 // Valor em número
                     },
-                    
-                    // ISS
+                    // Descontos (opcional)
+                    vDescCondIncond: {
+                        vDescIncond: 0.00,
+                        vDescCond: 0.00
+                    },
+                    // Tributação (obrigatório)
                     trib: {
-                        vBCISS: "1000.00",
-                        pISS: "2.00",
-                        vISS: "20.00",
-                        indISS: 1, // 1 = Exigível, 2 = Não incidência, etc.
-                        cMunIncid: "4115200" // Município de incidência do ISS
+                        // Tributação municipal (obrigatório)
+                        tribMun: {
+                            tribISSQN: 1, // 1 = Operação tributável
+                            tpRetISSQN: 1, // 1 = Não retido
+                            pAliq: 2.00 // Alíquota do ISS em %
+                        },
+                        // Totais (obrigatório)
+                        totTrib: {
+                            vTotTrib: 150.00
+                        }
                     }
                 }
             }

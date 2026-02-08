@@ -16,14 +16,14 @@
  */
 
 // Main NFSe class (default export for easy usage)
-export { default as NFSe } from './adapters/NFSe';
-export { default } from './adapters/NFSe';
+export { default as NFSeWizard } from './adapters/NFSe.js';
+export { default } from './adapters/NFSe.js';
 
 // Export operations
-export * from './operations/index';
+export * from './operations/index.js';
 
 // Export services
-export * from './services/index';
+export * from './services/index.js';
 
 // Re-export types for convenience (user doesn't need to install @nfewizard/types separately)
 export type * from '@nfewizard/types/nfse';

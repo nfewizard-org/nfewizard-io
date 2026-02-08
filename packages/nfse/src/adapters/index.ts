@@ -15,4 +15,4 @@
  * along with Treeunfe DFe. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export { default as NFSe } from './NFSe';
+export { default as NFSe } from './NFSe.js';

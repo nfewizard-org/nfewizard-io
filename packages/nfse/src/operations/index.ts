@@ -15,8 +15,8 @@
  * along with Treeunfe DFe. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export { default as NFSeAutorizacao } from './NFSeAutorizacao/NFSeAutorizacao';
-export { default as NFSeConsulta } from './NFSeConsulta/NFSeConsulta';
-export { default as NFSeDistribuicao } from './NFSeDistribuicao/NFSeDistribuicao';
-export { default as NFSeEventos } from './NFSeEventos/NFSeEventos';
-export { default as NFSeParametrosMunicipais } from './NFSeParametrosMunicipais/NFSeParametrosMunicipais';
+export { default as NFSeAutorizacao } from './NFSeAutorizacao/NFSeAutorizacao.js';
+export { default as NFSeConsulta } from './NFSeConsulta/NFSeConsulta.js';
+export { default as NFSeDistribuicao } from './NFSeDistribuicao/NFSeDistribuicao.js';
+export { default as NFSeEventos } from './NFSeEventos/NFSeEventos.js';
+export { default as NFSeParametrosMunicipais } from './NFSeParametrosMunicipais/NFSeParametrosMunicipais.js';
