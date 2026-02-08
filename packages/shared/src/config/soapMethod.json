@@ -42,5 +42,25 @@
     "CTeDistribuicaoDFe": {
         "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe",
         "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe/cteDistDFeInteresse"
+    },
+    "NFSe_Autorizacao": {
+        "method": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeRecepcao",
+        "action": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeRecepcao/recepcionar"
+    },
+    "NFSe_Consulta": {
+        "method": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeConsulta",
+        "action": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeConsulta/consultar"
+    },
+    "NFSe_Distribuicao": {
+        "method": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeDistribuicao",
+        "action": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeDistribuicao/distribuir"
+    },
+    "NFSe_Eventos": {
+        "method": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeRecepcaoEvento",
+        "action": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeRecepcaoEvento/recepcionar"
+    },
+    "NFSe_ParametrosMunicipais": {
+        "method": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeParametros",
+        "action": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeParametros/consultar"
     }
 }

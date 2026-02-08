@@ -42,6 +42,12 @@ export const getSchema = (metodo: string) => {
     NFEInutilizacao: `${pathSchemas}/inutNFe_v4.00.xsd`,
     NFERetAutorizacao: `${pathSchemas}/consReciNFe_v4.00.xsd`,
     CTeDistribuicaoDFe: `${pathSchemas}/cte/distDFeInt_v1.00.xsd`,
+    // NFSe - Schemas da Nota Fiscal de Serviços Eletrônica
+    NFSe_Autorizacao: `${pathSchemas}/nfse/DPS_v1.01.xsd`,
+    NFSe_Consulta: `${pathSchemas}/nfse/NFSe_v1.01.xsd`,
+    NFSe_Distribuicao: `${pathSchemas}/nfse/NFSe_v1.01.xsd`,
+    NFSe_Eventos: `${pathSchemas}/nfse/pedRegEvento_v1.01.xsd`,
+    NFSe_ParametrosMunicipais: undefined, // API REST - não usa XML schema
   }
 
   try {

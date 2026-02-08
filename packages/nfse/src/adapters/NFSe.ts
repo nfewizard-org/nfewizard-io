@@ -59,8 +59,8 @@ export default class NFSe {
 
   constructor(config: NFSeConfig) {
     // Valida se a configuração obrigatória foi fornecida
-    if (!config.ambiente) {
-      throw new Error('Configuração NFSe incompleta. Por favor, forneça "ambiente".');
+    if (!config.nfe?.ambiente) {
+      throw new Error('Configuração NFSe incompleta. Por favor, forneça "nfe.ambiente".');
     }
 
     // Cria o environment próprio - passa a config diretamente

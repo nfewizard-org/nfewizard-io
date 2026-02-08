@@ -32,6 +32,7 @@ import crypto from 'crypto';
 import xsdValidator from 'xsd-schema-validator';
 import NFeServicosUrl from '../config/NFeServicosUrl.json';
 import CTeServicosUrl from '../config/CTeServicosUrl.json';
+import NFSeServicosUrl from '../config/NFSeServicosUrl.json';
 import soapMethod from '../config/soapMethod.json';
 // import cStatError from '../config/cStatError.json';
 import { getSchema } from '../adapters/SchemaLoader.js';
@@ -51,6 +52,13 @@ class Utility {
     constructor(environment: Environment) {
         this.environment = environment;
         this.xmlParser = new XmlParser();
+    }
+
+    /**
+     * Retorna schema XSD para validação do XML
+     */
+    getSchema(metodo: string) {
+        return getSchema(metodo);
     }
 
     /**
@@ -356,9 +364,45 @@ class Utility {
     }
 
     /**
+     * Retorna a url correta do webservice NFSe (REST API)
+     */
+    getWebServiceUrlNFSe(metodo: string): string {
+        const nfseUrls = NFSeServicosUrl as any;
+        const config = this.environment.config;
+
+        if (!config.nfe.ambiente) {
+            throw new Error('Configuração de ambiente não encontrada. É necessária para operações de NFSe.');
+        }
+
+        const ambiente = config.nfe.ambiente === 1 ? 'P' : 'H';
+        const chave = `NFSe_AN_${ambiente}`; // AN = Ambiente Nacional
+
+        const url = nfseUrls[chave] && nfseUrls[chave][metodo];
+        if (!url) {
+            throw new Error(`Não foi possível recuperar a url para o webservice NFSe: ${metodo} no ambiente ${ambiente}`);
+        }
+        return url;
+    }
+
+    /**
      * Retorna a url correta do webservice
      */
     getWebServiceUrl(metodo: string, ambienteNacional = false, versao = "", mod = "NFe"): string {
+        // Detecta se é NFSe
+        const isNFSe = metodo.startsWith('NFSe_');
+        
+        if (isNFSe) {
+            const nfseUrls = NFSeServicosUrl as any;
+            const ambiente = this.environment.config.nfe.ambiente === 1 ? 'P' : 'H';
+            const chave = `NFSe_Nacional_${ambiente}`; // Nacional = ADN (Ambiente de Dados Nacional)
+            
+            const url = nfseUrls[chave] && nfseUrls[chave][metodo];
+            if (!url) {
+                throw new Error(`Não foi possível recuperar a url para o webservice NFSe: ${metodo} no ambiente ${ambiente}`);
+            }
+            return url;
+        }
+
         // Detecta se é CTe
         const isCTe = metodo.startsWith('CTe');
 

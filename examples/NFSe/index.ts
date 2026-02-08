@@ -2,19 +2,28 @@ import NFSeWizard, { NFSe } from '@nfewizard/nfse';
 
 const testNFSe = async () => {
     const nfse = new NFSeWizard({
-        ambiente: 2, // 1 = Produção, 2 = Homologação
-        pathCertificado: "../certificate/certificate.pfx",
-        senhaCertificado: "SUA_SENHA_CERTIFICADO",
-        CPFCNPJ: "00000000000000",
-        UF: "PR",
-        codigoMunicipio: "4115200", // Maringá/PR
-        pathXMLAutorizacao: "tmp/NFSe/Autorizacao",
-        armazenarXMLAutorizacao: true,
-        pathXMLRetorno: "tmp/NFSe/Retorno",
-        armazenarXMLRetorno: true,
-        pathLogs: "tmp/NFSe/Logs",
-        armazenarLogs: true,
-        exibirLogNoConsole: true,
+        dfe: {
+            pathCertificado: "../certificate/certificate.pfx",
+            senhaCertificado: "SUA_SENHA_CERTIFICADO",
+            CPFCNPJ: "00000000000000",
+            UF: "PR",
+            armazenarXMLAutorizacao: true,
+            pathXMLAutorizacao: "tmp/NFSe/Autorizacao",
+            armazenarXMLRetorno: true,
+            pathXMLRetorno: "tmp/NFSe/Retorno",
+        },
+        nfe: {
+            ambiente: 2, // 1 = Produção, 2 = Homologação
+            versaoDF: "1.0.0",
+        },
+        lib: {
+            useForSchemaValidation: 'validateSchemaJsBased', // Usar validação JavaScript para NFSe
+            log: {
+                pathLogs: "tmp/NFSe/Logs",
+                armazenarLogs: true,
+                exibirLogNoConsole: true,
+            }
+        }
     });
 
     const autorizacao: NFSe = {
@@ -25,51 +34,33 @@ const testNFSe = async () => {
                 verAplic: "1.0.0",
                 serie: "1",
                 nDPS: "1",
-                dCompet: "20260125", // AAAAMMDD
+                dCompet: "2026-01-25", // Data de competência (YYYY-MM-DD)
                 tpEmit: 1, // 1 = Prestador, 2 = Tomador, 3 = Intermediário
                 cLocEmi: "4115200", // Código do município (IBGE)
                 
                 // Informações do prestador
+                // Quando tpEmit=1 (prestador), não deve informar IM, xNome, end, fone, email
                 prest: {
                     CNPJ: "00000000000000",
-                    IM: "0000000", // Inscrição Municipal
-                    xNome: "RAZAO SOCIAL DA SUA EMPRESA LTDA",
-                    end: {
-                        xLgr: "Rua Exemplo",
-                        nro: "123",
-                        xCpl: "Sala 1",
-                        xBairro: "Centro",
-                        endNac: {
-                            cMun: "4115200",
-                            CEP: "87000000",
-                            UF: "PR"
-                        }
-                    },
-                    fone: "4400000000",
-                    email: "contato@suaempresa.com.br",
                     regTrib: {
-                        opSimpNac: 1, // 1 = Não Optante, 2 = MEI, 3 = ME/EPP
-                        regApTribSN: 1, // Regime de apuração (Simples Nacional)
+                        opSimpNac: 1, // 1 = Não Optante pelo Simples Nacional
                         regEspTrib: 0 // 0 = Nenhum, 1-9 = Outros
                     }
                 },
                 
                 // Informações do tomador
                 toma: {
-                    CNPJ: "11111111000111",
-                    xNome: "CLIENTE EXEMPLO LTDA",
+                    CPF: "11144477735", // CPF válido de teste para homologação
+                    xNome: "NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL",
                     end: {
-                        xLgr: "Avenida Exemplo",
-                        nro: "1000",
-                        xBairro: "Centro",
                         endNac: {
                             cMun: "4115200",
-                            CEP: "87000000",
-                            UF: "PR"
-                        }
-                    },
-                    fone: "4400000001",
-                    email: "cliente@exemplo.com.br"
+                            CEP: "87000000"
+                        },
+                        xLgr: "Rua Exemplo",
+                        nro: "123",
+                        xBairro: "Centro"
+                    }
                 },
                 
                 // Informações do serviço
@@ -80,9 +71,9 @@ const testNFSe = async () => {
                     },
                     // Código do serviço (segundo elemento obrigatório)
                     cServ: {
-                        cTribNac: "010100", // Código nacional (6 dígitos)
-                        cTribMun: "0101", // Código municipal (opcional)
-                        xDescServ: "SERVICOS DE DESENVOLVIMENTO DE PROGRAMAS DE COMPUTADOR SOB ENCOMENDA"
+                        cTribNac: "110101", // Código nacional (Estacionamento de veículos - exemplo válido)
+                        xDescServ: "SERVICOS DE DESENVOLVIMENTO DE PROGRAMAS DE COMPUTADOR SOB ENCOMENDA",
+                        cNBS: "106043000" // Código NBS (Nomenclatura Brasileira de Serviços)
                     }
                 },
                 
@@ -90,24 +81,22 @@ const testNFSe = async () => {
                 valores: {
                     // Valor do serviço prestado (primeiro elemento obrigatório)
                     vServPrest: {
-                        vServ: 1000.00 // Valor em número
-                    },
-                    // Descontos (opcional)
-                    vDescCondIncond: {
-                        vDescIncond: 0.00,
-                        vDescCond: 0.00
+                        vServ: 100.00 // Valor em número
                     },
                     // Tributação (obrigatório)
                     trib: {
                         // Tributação municipal (obrigatório)
                         tribMun: {
                             tribISSQN: 1, // 1 = Operação tributável
-                            tpRetISSQN: 1, // 1 = Não retido
-                            pAliq: 2.00 // Alíquota do ISS em %
+                            tpRetISSQN: 1 // 1 = Não retido (não informar pAliq para não optantes do Simples)
                         },
                         // Totais (obrigatório)
                         totTrib: {
-                            vTotTrib: 150.00
+                            vTotTrib: {
+                                vTotTribFed: 10.00, // Tributos federais
+                                vTotTribEst: 5.00,  // Tributos estaduais
+                                vTotTribMun: 4.00   // Tributos municipais
+                            }
                         }
                     }
                 }

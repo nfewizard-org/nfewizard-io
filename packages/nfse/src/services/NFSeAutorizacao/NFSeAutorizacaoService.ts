@@ -232,6 +232,10 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
         throw new Error('É necessário fornecer DPS (JSON) ou dpsXmlGZipB64 (Base64)');
     }
 
+    /**
+     * Implementação do método abstrato da BaseNFSe (REST API)
+     * Prepara os dados JSON que serão enviados ao webservice
+     */
     protected prepararDados(data: NFSe): any {
         // Processa o DPS antes de enviar
         this.dpsXmlGZipB64 = this.processarDPS(data);

@@ -15,13 +15,10 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * NFeWizard - Base Classes
- * @module @nfewizard/shared/base
- * @license GPL-3.0-or-later
- */
+import { NFeWizardProps } from '../shared/NFeWizardProps.js';
 
-export { BaseNFE } from './BaseNFe.js';
-export { BaseNFSe } from './BaseNFSe.js';
-export { GerarConsulta } from './GerarConsulta.js';
-export { SaveFiles } from './SaveFiles.js';
+/**
+ * Configuração para NFSeWizard
+ * Herda toda estrutura de NFeWizardProps
+ */
+export type NFSeConfig = NFeWizardProps;

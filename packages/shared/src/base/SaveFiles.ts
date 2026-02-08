@@ -51,8 +51,15 @@ class SaveFiles implements SaveFilesImpl{
             const fileName = createFileName(prefix);
             const method = fileType === 'xml' ? 'salvaXML' : 'salvaJSON';
 
+            // Para REST API (NFSe), o data pode ser um objeto JSON mesmo quando fileType é 'xml'
+            // Neste caso, converte para string JSON
+            let dataToSave = data || '';
+            if (fileType === 'xml' && typeof data === 'object' && data !== null) {
+                dataToSave = JSON.stringify(data, null, 2);
+            }
+
             this.utility[method]({
-                data: data || '',
+                data: dataToSave,
                 fileName,
                 metodo: metodo,
                 path,

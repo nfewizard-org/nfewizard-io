@@ -18,9 +18,11 @@
 export * from './LayoutDPS';
 export * from './LayoutPedRegEvento';
 export * from './NFSeAutorizacao';
+export * from './NFSeConfig';
 export * from './NFSeConsulta';
 export * from './NFSeDistribuicao';
 export * from './NFSeEventos';
 export * from './NFSeParametrosMunicipais';
 export * from './NFSeDanfeGenerator';
+
 
