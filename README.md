@@ -10,11 +10,13 @@ A partir da versão 1.0.0, o **NFeWizard-io foi modularizado** em pacotes indepe
 
 | Pacote | Descrição | Tamanho |
 |--------|-----------|---------|
-| `nfewizard-io` | ✅ Operações NFe (pacote principal) | 507.5 KB |
-| `@nfewizard/nfce` | 🆕 Operações NFCe + Cancelamento | 965.0 KB || `@nfewizard/nfse` | 🆕 Operações NFSe | TBD || `@nfewizard/danfe` | 🆕 Geração de DANFE (NFe e NFCe) | 2.29 MB |
-| `@nfewizard/cte` | 🆕 Operações CTe | 787.3 KB |
-| `@nfewizard/types` | 📦 Tipos TypeScript | 491.6 KB |
-| `@nfewizard/shared` | 📦 Utilitários compartilhados | 3.38 MB |
+| `nfewizard-io` | ✅ Operações NFe (pacote principal) | 511.2 KB |
+| `@nfewizard/nfce` | 🆕 Operações NFCe + Cancelamento | 997.7 KB |
+| `@nfewizard/nfse` | 🆕 Operações NFSe | 578.0 KB |
+| `@nfewizard/danfe` | 🆕 Geração de DANFE (NFe e NFCe) | 2.31 MB |
+| `@nfewizard/cte` | 🆕 Operações CTe | 801.9 KB |
+| `@nfewizard/types` | 📦 Tipos TypeScript | 542.4 KB |
+| `@nfewizard/shared` | 📦 Utilitários compartilhados | 4.03 MB |
 
 ### 🎯 Principais Mudanças
 
@@ -22,9 +24,9 @@ A partir da versão 1.0.0, o **NFeWizard-io foi modularizado** em pacotes indepe
 - ⚠️ **NFSe**: Novo pacote `@nfewizard/nfse` para Nota Fiscal de Serviços Eletrônica
 - ⚠️ **DANFE**: Removido do pacote principal, use `@nfewizard/danfe` com funções `NFE_GerarDanfe()` e `NFCE_GerarDanfe()`
 - ⚠️ **CTe**: Movido para `@nfewizard/cte` (use `new CTEWizard()`)
-- ✅ **NFe**: API permanece 100% compatível no pacote `nfewizard-io`
-- 🎁 **Novo**: Cancelamento de NFCe disponível
-- 📉 **Benefício**: Redução de até 77% no bundle (4.37 MB vs 19.1 MB para NFe)
+- ✅ **NFe**: Permanece 100% compatível no pacote `nfewizard-io`
+- 🎁 **Novo**: Cancelamento de NFCe disponível em `@nfewizard/nfce`
+- 📉 **Benefício**: Redução de até 77% no bundle 
 
 ### 📖 Guia Completo de Migração
 
@@ -88,7 +90,7 @@ NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação 
 
 ## 🚧 ATENÇÃO 🚧
 ### Requisitos para instalação
-Para utilizar esta biblioteca, é necessário ter o JDK instalado no ambiente.
+Para utilizar algusn funções desta biblioteca, é necessário ter o JDK instalado no ambiente.
 
 Caso esteja rodando em um ambiente sem suporte ao JDK (como a Vercel) ou que não permita a adição de layers (diferente do AWS Lambda), é possível configurar a biblioteca como uma external lib e utilizar a seguinte opção ao inicializá-la:
 ```typescript
@@ -196,60 +198,6 @@ await nfeWizard.NFE_LoadEnvironment({
     }
 
     await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
-```
-
-## Exemplo de Utilização - NFSe
-
-```typescript
-import NFSe from '@nfewizard/nfse';
-
-// Instanciar
-const nfseWizard = new NFSe();
-
-// Inicializar
-await nfseWizard.LoadEnvironment({
-    config: {
-        dfe: {
-            baixarXMLDistribuicao: true,
-            pathXMLDistribuicao: "tmp/DistribuicaoDFe/NFSe",
-            armazenarXMLAutorizacao: true,
-            pathXMLAutorizacao: "tmp/Autorizacao/NFSe",
-            armazenarXMLRetorno: true,
-            pathXMLRetorno: "tmp/RequestLogs/NFSe",
-            
-            pathCertificado: "certificado.pfx",
-            senhaCertificado: "1234",
-            UF: "SP",
-            CPFCNPJ: "99999999999999",
-        },
-        nfse: {
-            ambiente: 2, // 1 = Produção, 2 = Homologação
-            versao: "1.00"
-        },
-        lib: {
-            connection: {
-                timeout: 30000,
-            },
-            log: {
-                exibirLogNoConsole: true,
-                armazenarLogs: true,
-                pathLogs: 'tmp/Logs/NFSe'
-            },
-            useOpenSSL: false,
-            useForSchemaValidation: 'validateSchemaJsBased',
-        }
-    }
-});
-
-// Consultar NFSe por chave
-await nfseWizard.Consulta({
-    chaveAcesso: '00000000000000000000000000000000000000000000'
-});
-
-// Consultar parâmetros municipais
-await nfseWizard.ConsultaParametrosMunicipais({
-    codigoMunicipio: '3550308' // São Paulo
-});
 ```
 
 ## Documentação

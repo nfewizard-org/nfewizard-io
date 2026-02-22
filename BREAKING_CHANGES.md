@@ -36,13 +36,14 @@ await NFEGerarDanfe({ xml: nfeXml });
 
 ### ✅ Versão Nova (>= 1.0.0)
 
-A biblioteca agora é dividida em **6 pacotes independentes**:
+A biblioteca agora é dividida em **7 pacotes**:
 
 | Pacote | Descrição | Compactado | Descompactado |
 |--------|-----------|------------|---------------|
 | `@nfewizard/types` | Tipos TypeScript compartilhados | 97.5 KB | 491.6 KB |
 | `@nfewizard/shared` | Utilitários compartilhados (XML, HTTP, Certificado) | 764.4 KB | 3.38 MB |
 | `@nfewizard/nfce` | Operações NFCe | 200.4 KB | 965.0 KB |
+| `@nfewizard/nfse` | Operações NFS-e (NOVO - não existia antes) | - | - |
 | `@nfewizard/danfe` | Geração de DANFE (NFe e NFCe) em PDF | 1.07 MB | 2.29 MB |
 | `@nfewizard/cte` | Operações CTe | 164.2 KB | 787.3 KB |
 | `nfewizard-io` | Operações NFe (pacote principal) | 101.4 KB | 507.5 KB |
@@ -146,7 +147,7 @@ npm install @nfewizard/danfe
 - ✅ Comportamento: Agora retorna Promise (usar com `await`)
 - ✅ Pacote: `nfewizard-io` → `@nfewizard/danfe`
 - 🎯 **Benefício**: DANFE agora é **opcional** - só instala quem precisa gerar PDF
-- ⚠️ **Breaking**: nfewizard-io não inclui mais geração de DANFE
+- ⚠️ **Breaking**: Pacote nfewizard-io não inclui mais geração de DANFE
 
 ---
 
@@ -226,7 +227,7 @@ nfewizard-io + @nfewizard/danfe + @nfewizard/types + @nfewizard/shared:
 nfewizard-io + @nfewizard/nfce + @nfewizard/danfe + @nfewizard/types + @nfewizard/shared: 
   Compactado: 2.23 MB | Descompactado: 7.63 MB
 
-# Todos os pacotes
+# Todos os pacotes (incluindo NFS-e - novo módulo)
 TOTAL: Compactado: 2.37 MB | Descompactado: 8.36 MB
 ```
 
@@ -246,6 +247,7 @@ import NFeWizard from 'nfewizard-io';
 // ⚠️ DANFE removido - use @nfewizard/danfe separadamente
 // ⚠️ NFCe removido - use @nfewizard/nfce separadamente
 // ⚠️ CTe removido - use @nfewizard/cte separadamente
+// ℹ️ NFS-e - @nfewizard/nfse (novo módulo, não existia antes)
 ```
 
 ### Caso 2: Uso Apenas NFCe
