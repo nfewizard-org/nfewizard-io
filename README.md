@@ -202,14 +202,31 @@ await nfeWizard.NFE_LoadEnvironment({
 
 ## Documentação
 
-- Para a documentação completa acesse [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
+- **Documentação completa**: [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
+- **Guia de Migração Completo**: [BREAKING_CHANGES.md](BREAKING_CHANGES.md)
+- **Exemplos de Uso**: Consulte a pasta [examples/](examples/) com exemplos práticos para NFe, NFCe, NFSe e CTe
+  - [Guia de Build](examples/BUILD.md)
+  - [Instalação Local para Testes](examples/INSTALACAO_LOCAL.md)
+  - [Exemplos de NFe](examples/NFe/)
+  - [Exemplos de NFCe](examples/NFCe/)
+  - [Exemplos de NFSe](examples/NFSe/)
+  - [Documentação CTe](DOCS_CTE.md)
   
 
-## Última Release (0.3.1)
+## Última Release (1.0.0)
 
-- Implementado suporte completo para Distribuição de CT-e (Conhecimento de Transporte Eletrônico)
-- Adicionados métodos `CTE_DistribuicaoDFePorNSU` e `CTE_DistribuicaoDFePorUltNSU`
-- Suporte para download automático de documentos CT-e (proc, res, event)
+### 🎉 Modularização Completa
+
+- **Breaking Change**: Biblioteca modularizada em 7 pacotes  para otimização de bundle
+- **NFCe**: Movido para `@nfewizard/nfce`
+- **NFSe**: Novo pacote `@nfewizard/nfse` com suporte a Nota Fiscal de Serviços Eletrônica (em testes)
+- **DANFE**: Movido para `@nfewizard/danfe` - agora é opcional
+- **CTe**: Movido para `@nfewizard/cte`
+- **Redução de bundle**: Até 77% menor para casos de uso específicos (4.37 MB vs 19.1 MB)
+- **Novo**: Método `NFCE_Cancelamento()` disponível no pacote NFCe
+- **NT 2025.002 v.130**: Suporte à Reforma Tributária
+
+📋 **Consulte o [Guia de Migração Completo](BREAKING_CHANGES.md)** para atualizar seu código
 
 ## Observações
 
@@ -288,18 +305,24 @@ await nfeWizard.NFE_LoadEnvironment({
 
 ## Em Desenvolvimento
 
-### Próximos passos
+### 🧪 NFSe - Em Fase de Testes
 
-- Adicionar tratamento de LOGs
-- ✅ NFSe implementada no pacote `@nfewizard/nfse`
+O pacote `@nfewizard/nfse` está disponível mas ainda **em fase de testes**. Use com cautela em produção.
 
-### Funcionalidades NFSe Disponíveis
-
+**Funcionalidades implementadas:**
 - ✅ Autorização de NFSe
 - ✅ Consulta de NFSe por chave
 - ✅ Consulta de Parâmetros Municipais
 - ✅ Registro de Eventos (Cancelamento, etc.)
 - ✅ Distribuição por NSU
+
+**Status**: Aguardando feedback da comunidade para estabilização.
+
+### Próximos Passos
+
+- 🔄 Estabilização do módulo NFSe com base em feedback
+- 📊 Melhorias no tratamento de LOGs
+- 🧪 Testes adicionais em diferentes municípios
 
 ## Contribua para Nossa Biblioteca Open Source
 
