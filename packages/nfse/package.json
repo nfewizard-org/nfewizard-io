@@ -1,6 +1,6 @@
 {
   "name": "@nfewizard/nfse",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Operações NFSe para NFeWizard",
   "main": "./dist/index.cjs",

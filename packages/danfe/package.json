@@ -1,6 +1,6 @@
 {
   "name": "@nfewizard/danfe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Geração de DANFE/DACTE em PDF para NFe, NFCe e CTe",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
