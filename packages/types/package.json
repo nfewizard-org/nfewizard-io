@@ -1,0 +1,61 @@
+{
+  "name": "@nfewizard/types",
+  "version": "1.0.1",
+  "description": "Tipos TypeScript para NFeWizard ecosystem (NFe, NFCe, CTe)",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    },
+    "./nfe": {
+      "types": "./dist/src/nfe/index.d.ts",
+      "default": "./dist/src/nfe/index.js"
+    },
+    "./nfce": {
+      "types": "./dist/src/nfce/index.d.ts",
+      "default": "./dist/src/nfce/index.js"
+    },
+    "./nfse": {
+      "types": "./dist/src/nfse/index.d.ts",
+      "default": "./dist/src/nfse/index.js"
+    },
+    "./cte": {
+      "types": "./dist/src/cte/index.d.ts",
+      "default": "./dist/src/cte/index.js"
+    },
+    "./shared": {
+      "types": "./dist/src/shared/index.d.ts",
+      "default": "./dist/src/shared/index.js"
+    }
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nfe",
+    "nfce",
+    "cte",
+    "types",
+    "typescript",
+    "sefaz"
+  ],
+  "author": "maurelima",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfewizard-org/nfewizard-io",
+    "directory": "packages/types"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

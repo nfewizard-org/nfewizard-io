@@ -1,0 +1,711 @@
+/**
+    * @description      : 
+    * @author           : 
+    * @group            : 
+    * @created          : 21/03/2025 - 21:50:20
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 21/03/2025
+    * - Author          : 
+    * - Modification    : 
+**/
+/*
+ * This file is part of NFeWizard-io.
+ * 
+ * NFeWizard-io is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NFeWizard-io is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import fs from 'fs';
+import crypto from 'crypto';
+import xsdValidator from 'xsd-schema-validator';
+import NFeServicosUrl from '../config/NFeServicosUrl.json';
+import CTeServicosUrl from '../config/CTeServicosUrl.json';
+import NFSeServicosUrl from '../config/NFSeServicosUrl.json';
+import soapMethod from '../config/soapMethod.json';
+// import cStatError from '../config/cStatError.json';
+import { getSchema } from '../adapters/SchemaLoader.js';
+import { Environment } from '../environment/Environment.js';
+import { GenericObject, SoapMethod, NFeServicosUrlType, SaveXMLProps, SaveJSONProps, ServicesUrl, NFeWizardProps } from '@nfewizard/types/shared';
+import { ProtNFe } from '@nfewizard/types/nfe';
+import { XmlParser } from './XmlParser.js';
+import xml2js from 'xml2js';
+import libxmljs from 'libxmljs2';
+import xsdAssembler from 'xsd-assembler';
+import { logger } from '../exceptions/logger.js';
+
+class Utility {
+    environment;
+    xmlParser: XmlParser;
+
+    constructor(environment: Environment) {
+        this.environment = environment;
+        this.xmlParser = new XmlParser();
+    }
+
+    /**
+     * Retorna schema XSD para validação do XML
+     */
+    getSchema(metodo: string) {
+        return getSchema(metodo);
+    }
+
+    /**
+     * Método utilitário para criar diretórios
+     */
+    createDir(path: string) {
+        if (!fs.existsSync(path)) {
+            fs.mkdirSync(path, { recursive: true });
+        }
+    }
+
+    /**
+     * Método utilitário para escrever arquivo
+     */
+    createFile(path: string, fileName: string, file: any, extension: string) {
+        if (extension.toLowerCase() === 'json') {
+            fs.writeFileSync(`${path}/${fileName}.${extension}`, JSON.stringify(file));
+        } else {
+            fs.writeFileSync(`${path}/${fileName}.${extension}`, file);
+        }
+    }
+
+    /**
+     * Função recursiva para encontrar a chave em qualquer nivel do objeto
+     */
+    findInObj = (obj: GenericObject, chave: string): any => {
+        if (obj.hasOwnProperty(chave)) {
+            return obj[chave];
+        }
+        for (let prop in obj) {
+            if (typeof obj[prop] === 'object') {
+                const result = this.findInObj(obj[prop], chave); // Passar a chave aqui
+                if (result) {
+                    return result;
+                }
+            }
+        }
+        return '';
+    };
+
+    /**
+     * Função recursiva para encontrar todas as ocorrências de uma chave em qualquer nivel do objeto
+     */
+    findAllInObj = (obj: GenericObject, chave: string): any[] => {
+        const results: any[] = [];
+
+        if (obj.hasOwnProperty(chave)) {
+            results.push(obj[chave]);
+        }
+
+        for (let prop in obj) {
+            if (typeof obj[prop] === 'object' && obj[prop] !== null) {
+                const nestedResults = this.findAllInObj(obj[prop], chave);
+                results.push(...nestedResults);
+            }
+        }
+
+        return results;
+    };
+
+    /**
+     * Método responsável por gravar o XML como json
+     */
+    salvaJSON(props: SaveJSONProps) {
+        const { fileName, metodo, path, data } = props;
+
+        let pathJson = path;
+
+        if (!pathJson || pathJson.trim() === '') {
+            pathJson = `../tmp/${metodo}/`
+        }
+
+        logger.info('Gravando JSON', {
+            context: 'XmlBuilder',
+            file: `${pathJson}/${fileName}.json`,
+        });
+
+
+        // Utiliza a função recursiva para encontrar a chave chNFe
+        // const chNFe = this.findInObj(json, 'chNFe');
+
+        this.createDir(pathJson);
+
+        this.createFile(pathJson, fileName, data, 'json');
+    }
+
+    /**
+     * Método responsável por gravar os XML recebidos em disco
+     */
+    salvaXMLFromJson(config: NFeWizardProps, xmlInJson: any, fileName = "", metodo = "") {
+        let pathXml = config.dfe.pathXMLRetorno;
+
+        if (!pathXml || pathXml.trim() === '') {
+            pathXml = `../tmp/${metodo}/`
+        }
+
+        logger.info('Gravando XML do JSON', {
+            context: 'XmlBuilder',
+            file: `${pathXml}/${fileName}.json`,
+        });
+
+        const { xml } = xmlInJson;
+
+        // Utiliza a função recursiva para encontrar a chave chNFe
+        const chNFe = this.findInObj(xmlInJson, 'chNFe');
+
+        this.createDir(pathXml);
+
+        this.createFile(pathXml, fileName || chNFe, xml, 'xml');
+    }
+
+    salvaXML(props: SaveXMLProps) {
+        // const stack = new Error().stack?.split('\n');
+
+        // const callerLine = stack?.[2] || ''; // linha que chamou `salvaXML`
+        // const callerMatch = callerLine.match(/at (\S+)/);
+        // const callerName = callerMatch ? callerMatch[1] : 'desconhecido';
+
+        // logger.info('Gravando XML', {
+        //     context: 'XmlBuilder',
+        //     chamadoPor: callerName
+        // });
+        const { fileName, metodo, path, data } = props;
+
+        let pathXml = path;
+
+        if (!pathXml || pathXml.trim() === '') {
+            pathXml = `../tmp/${metodo}/`
+        }
+
+        logger.info('Gravando XML', {
+            context: 'XmlBuilder',
+            file: `${pathXml}/${fileName}.json`,
+        });
+
+        this.createDir(pathXml);
+
+        this.createFile(pathXml, fileName, data, 'xml');
+    }
+
+    /**
+     * Recupera url para action e metoodo do SOAP
+     */
+    getSoapInfo1(uf: string, metodo: string) {
+        const methodConfig = soapMethod as SoapMethod;
+        const methodInfo = methodConfig[metodo];
+        if (!methodInfo) {
+            throw new Error("Método não encontrado no arquivo de configuração SOAP.");
+        }
+
+        return {
+            method: methodInfo.method,
+            action: methodInfo.action,
+        };
+    }
+
+    getSoapInfo(uf: string, method: string) {
+        // Detecta se é CTe ou NFe pelo nome do método
+        const isCTe = method.startsWith('CTe');
+        const servicos = isCTe ? CTeServicosUrl as any : NFeServicosUrl as ServicesUrl;
+        let chaveMethod = '';
+        let chaveSoap = '';
+
+        if (isCTe) {
+            // Para CTe, as URLs são diretas (não há variação por UF como em NFe)
+            const soapMethodConfig = (soapMethod as any)[method];
+            if (!soapMethodConfig) {
+                throw new Error("Método CTe não encontrado no arquivo de configuração SOAP.");
+            }
+
+            logger.info(`Buscando URL's do webservice CTe`, {
+                context: 'GerarConsulta',
+                chaveSoap,
+                chaveMethod,
+                CTeServicosUrl: 'src/core/config/CTeServicosUrl.json'
+            });
+
+            return {
+                method: soapMethodConfig.method,
+                action: soapMethodConfig.action,
+            };
+        }
+
+        // Lógica existente para NFe
+        switch (uf) {
+            case 'SP':
+                chaveSoap = 'SOAP_V4_SP';
+                break;
+            case 'BA':
+                chaveSoap = 'SOAP_V4_BA';
+                break;
+            default:
+                chaveSoap = 'SOAP_V4';
+                break;
+        }
+
+        switch (uf) {
+            case 'SP':
+                chaveMethod = 'WSDL_V4_SP';
+                break;
+            default:
+                chaveMethod = 'WSDL_V4';
+                break;
+        }
+
+        const methodServices = servicos[chaveMethod];
+        const methodUrl = this.getLatestURLConsulta(methodServices, method);
+
+        const soapServices = servicos[chaveSoap];
+        const soapUrl = this.getLatestURLConsulta(soapServices, method);
+
+        const soapInfo = {
+            method: methodUrl,
+            action: soapUrl,
+        };
+
+        logger.info(`Buscando URL's do webservice`, {
+            context: 'GerarConsulta',
+            chaveSoap,
+            chaveMethod,
+            NFeServicosUrl: 'src/core/config/NFeServicosUrl.json'
+        });
+
+        if (!methodUrl || !soapUrl) {
+            throw new Error("Método não encontrado no arquivo de configuração SOAP.");
+        }
+
+        return {
+            method: methodUrl,
+            action: soapUrl,
+        };
+    }
+
+    /**
+     * Marco, adicionei este metodo para concatenar todas url incluido as na Usar, mas no fim nao precisei usar por enquanto
+     * @param chave 
+     * @returns 
+     */
+    getLatestURLConsultaFix(chave: string): Record<string, string> {
+        const urls = NFeServicosUrl as NFeServicosUrlType;
+        const temp_urls: Record<string, string> = { ...urls[chave] };
+        if ('Usar' in temp_urls) {
+            const referencedChave = temp_urls['Usar'];
+            const referencedUrls = urls[referencedChave] || {};
+            Object.keys(referencedUrls).forEach((key) => {
+                if (!(key in temp_urls)) {
+                    temp_urls[key] = referencedUrls[key];
+                }
+            });
+            delete temp_urls['Usar'];
+        }
+        return temp_urls;
+    }
+
+    getLatestURLConsulta(data: Record<string, string>, metodo: string): string | null {
+        // Obtem todas as chaves do objeto
+        const keys = Object.keys(data);
+
+        // Monta o prefixo dinâmico com base no método fornecido
+        const prefix = `${metodo}_`;
+
+        // Filtra as chaves que começam com o prefixo dinâmico e extrai as versões
+        const versions = keys
+            .map(key => {
+                const match = key.match(new RegExp(`^${prefix}(\\d+\\.\\d+)$`));
+                return match ? parseFloat(match[1]) : null; // Extrai a versão como número
+            })
+            .filter(version => version !== null) // Remove versões que não existem
+            .sort((a, b) => b - a); // Ordena em ordem decrescente
+
+        // Busca a primeira URL que corresponder à versão mais alta
+        for (let version of versions) {
+            const key = `${prefix}${version.toFixed(2)}`; // Formata a chave
+            if (data[key]) {
+                return data[key]; // Retorna a URL encontrada
+            }
+        }
+
+        // Caso não encontre nenhuma versão numerada, retorna a URL sem versão
+        return data[metodo] || null;
+    };
+
+    /**
+     * Define o ambiente (UF e Produção ou Homologação) para geração das chaves de recuperação da URL do webservice
+     */
+    setAmbiente(metodo: string, ambienteNacional = false, versao: string, mod: string) {
+        const config = this.environment.getConfig();
+        const ambiente = config.nfe.ambiente === 2 ? 'H' : 'P';
+
+        const versaoDF = versao !== "" ? versao : config.nfe.versaoDF;
+
+        if (ambienteNacional) {
+            const chaveMae = `${mod}_AN_${ambiente}`;
+            const chaveFilha = `${metodo}_${versaoDF}`;
+
+            return { chaveMae, chaveFilha };
+        }
+
+        const chaveMae = `${mod}_${config.dfe.UF}_${ambiente}`;
+        const chaveFilha = `${metodo}_${versaoDF}`;
+
+        return { chaveMae, chaveFilha };
+    }
+
+    /**
+     * Retorna a url correta do webservice NFSe (REST API)
+     */
+    getWebServiceUrlNFSe(metodo: string): string {
+        const nfseUrls = NFSeServicosUrl as any;
+        const config = this.environment.config;
+
+        if (!config.nfe.ambiente) {
+            throw new Error('Configuração de ambiente não encontrada. É necessária para operações de NFSe.');
+        }
+
+        const ambiente = config.nfe.ambiente === 1 ? 'P' : 'H';
+        const chave = `NFSe_AN_${ambiente}`; // AN = Ambiente Nacional
+
+        const url = nfseUrls[chave] && nfseUrls[chave][metodo];
+        if (!url) {
+            throw new Error(`Não foi possível recuperar a url para o webservice NFSe: ${metodo} no ambiente ${ambiente}`);
+        }
+        return url;
+    }
+
+    /**
+     * Retorna a url correta do webservice
+     */
+    getWebServiceUrl(metodo: string, ambienteNacional = false, versao = "", mod = "NFe"): string {
+        // Detecta se é NFSe
+        const isNFSe = metodo.startsWith('NFSe_');
+        
+        if (isNFSe) {
+            const nfseUrls = NFSeServicosUrl as any;
+            const ambiente = this.environment.config.nfe.ambiente === 1 ? 'P' : 'H';
+            const chave = `NFSe_Nacional_${ambiente}`; // Nacional = ADN (Ambiente de Dados Nacional)
+            
+            const url = nfseUrls[chave] && nfseUrls[chave][metodo];
+            if (!url) {
+                throw new Error(`Não foi possível recuperar a url para o webservice NFSe: ${metodo} no ambiente ${ambiente}`);
+            }
+            return url;
+        }
+
+        // Detecta se é CTe
+        const isCTe = metodo.startsWith('CTe');
+
+        if (isCTe) {
+            const cteUrls = CTeServicosUrl as any;
+            const ambiente = this.environment.config.nfe.ambiente === 1 ? 'P' : 'H';
+            const chave = `CTe_AN_${ambiente}`; // AN = Ambiente Nacional
+            const metodoComVersao = `${metodo}_${versao}`;
+
+            const url = cteUrls[chave] && cteUrls[chave][metodoComVersao];
+            if (!url) {
+                throw new Error(`Não foi possível recuperar a url para o webservice CTe: ${metodoComVersao} no ambiente ${ambiente}`);
+            }
+            return url;
+        }
+
+        // Lógica existente para NFe
+        let { chaveMae, chaveFilha } = this.setAmbiente(metodo, ambienteNacional, versao, mod);
+        const urls = NFeServicosUrl as NFeServicosUrlType;
+
+        if ('Usar' in urls[chaveMae])
+            chaveMae = urls[chaveMae].Usar
+
+        const url = urls[chaveMae] && urls[chaveMae][chaveFilha];
+        if (!url) {
+            throw new Error(`Não foi possível recuperar a url para o webservice: ${chaveFilha}`);
+        }
+        return url;
+    }
+
+    getUrlNFCe(metodo: string, ambienteNacional = false, versao = ""): string {
+        let { chaveMae } = this.setAmbiente(metodo, ambienteNacional, versao, 'NFCe');
+        const urls = NFeServicosUrl as NFeServicosUrlType;
+        // removendo este codigo funciona
+        // if ('Usar' in urls[chaveMae]){
+        //     chaveMae = urls[chaveMae].Usar
+        // }
+        // const tempUrls = this.getLatestURLConsultaFix(chaveMae);
+        // const urlnew =tempUrls[metodo];
+        // const chaveFilha = this.getLatestURLConsulta(urls[chaveMae], metodo);
+        const url = urls[chaveMae] && this.getLatestURLConsulta(urls[chaveMae], metodo)
+        if (!url) {
+            throw new Error(`Não foi possível recuperar a url para consulta de NFCe: ${chaveMae}`);
+        }
+        return url;
+    }
+    /**
+     * Função para validar XML com Schema
+     */
+
+    formatErrorMessage(message: string) {
+        // Esta função extrai e formata a mensagem de erro
+        const regex = /\[error\]\s(.+?)\:\s(.+?)\s\((\d+):(\d+)\)/;
+        const match = message.match(regex);
+        if (match) {
+            const [_, errorCode, errorDescription, line, column] = match;
+            return `Erro na Validação do XML: ${errorCode} na linha ${line}, coluna ${column}. Descrição: ${errorDescription}`;
+        } else {
+            return `Erro Não Identificado na Validação do XML: ${message}`; // Retorna a mensagem original se ela não corresponder ao formato esperado
+        }
+    }
+
+    validateSchemaJsBased(xml: any, metodo: string) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { basePath, schemaPath } = getSchema(metodo);
+                const completeXSD = await xsdAssembler.assemble(schemaPath);
+
+                const xmlDoc = libxmljs.parseXml(xml);
+                const xsdDoc = libxmljs.parseXml(completeXSD, { baseUrl: `${basePath}/` });
+
+                const isValid = xmlDoc.validate(xsdDoc);
+
+                if (isValid) {
+                    resolve({
+                        success: true,
+                        message: 'XML válido.',
+                    });
+                } else {
+                    reject({
+                        success: false,
+                        message: this.formatErrorMessage(xmlDoc.validationErrors[0].message),
+                    });
+                }
+            } catch (error: any) {
+                reject({
+                    success: false,
+                    message: this.formatErrorMessage(error.message),
+                });
+            }
+        });
+    }
+
+    validateSchemaJavaBased(xml: any, metodo: string) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { schemaPath } = getSchema(metodo);
+
+                xsdValidator.validateXML(xml, schemaPath, (err: any, validationResult: any) => {
+                    if (err) {
+                        reject({
+                            success: false,
+                            message: this.formatErrorMessage(err.message),
+                        });
+                    } else if (!validationResult.valid) {
+                        reject({
+                            success: false,
+                            message: this.formatErrorMessage(validationResult.messages[0]),
+                        });
+                    } else {
+                        resolve({
+                            success: true,
+                            message: 'XML válido.',
+                        });
+                    }
+                });
+            } catch (error: any) {
+                reject({
+                    success: false,
+                    message: this.formatErrorMessage(error.message),
+                });
+            }
+        });
+    }
+
+    verificaRejeicao(data: string, metodo: string, name?: string) {
+        logger.info(`Verificando retorno [${metodo}]`, {
+            context: 'Utility',
+        });
+        const responseInJson = this.xmlParser.convertXmlToJson(data, metodo);
+
+        // Salva XML de retorno
+        this.salvaRetorno(data, responseInJson, metodo, name);
+
+        // Códigos de status de sucesso/processamento válidos
+        const codigosValidos = [
+            100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
+            124, 128, 135, 136, 137, 138, 139, 140, 142, 150, 151
+        ];
+
+        // Busca o cStat no retorno
+        const cStat = this.findInObj(responseInJson, 'cStat');
+        
+        // cStat pode ser: string, number, ou array de strings/numbers
+        let cStatNumber: number | null = null;
+        if (cStat !== undefined && cStat !== null) {
+            if (Array.isArray(cStat)) {
+                // Se for array, pega o primeiro elemento
+                cStatNumber = parseInt(String(cStat[0]), 10);
+            } else {
+                // Se for string ou number direto
+                cStatNumber = parseInt(String(cStat), 10);
+            }
+        }
+
+        // Se existe cStat e não está na lista de códigos válidos, é rejeição
+        if (cStatNumber && !codigosValidos.includes(cStatNumber)) {
+            const xMotivo = this.findInObj(responseInJson, 'xMotivo');
+            let mensagemErro = `Rejeição com código ${cStatNumber}`;
+            
+            if (xMotivo) {
+                // Se xMotivo for array, pega o primeiro elemento; senão, usa diretamente
+                mensagemErro = Array.isArray(xMotivo) ? xMotivo[0] : xMotivo;
+            }
+            
+            throw new Error(mensagemErro);
+        }
+
+        // Busca todos os xMotivo no objeto (verificação adicional)
+        const allXMotivos = this.findAllInObj(responseInJson, 'xMotivo');
+
+        // Verifica se algum xMotivo contém "Rejeição" ou "Rejeicao"
+        for (const xMotivo of allXMotivos) {
+            if (xMotivo && (xMotivo.includes('Rejeição') || xMotivo.includes('Rejeicao'))) {
+                throw new Error(xMotivo);
+            }
+        }
+
+        // Verifica infProt (mantendo verificação original como fallback)
+        const infProt = this.findInObj(responseInJson, 'infProt');
+        if (infProt && (infProt?.xMotivo?.includes('Rejeição') || infProt?.xMotivo?.includes('Rejeicao'))) {
+            throw new Error(infProt?.xMotivo);
+        }
+
+        return responseInJson;
+    }
+
+    getProtNFe(xmlRetorno: string): {
+        protNFe: ProtNFe[] | undefined;
+        nRec: string;
+    } {
+        let nRec = '';
+        let protNFe: ProtNFe[] | undefined;
+        xml2js.parseString(xmlRetorno, (err, result) => {
+            if (err) {
+                console.error('Erro ao parsear o XML para captura do nRec e protNFe:', err);
+            } else {
+                const nRecTag = this.findInObj(result, 'nRec')
+                nRec = nRecTag[0]
+
+                const protNFeTag = this.findInObj(result, 'protNFe')
+                protNFe = protNFeTag
+            }
+        });
+        return {
+            protNFe,
+            nRec
+        };
+    }
+
+    private getRequestLogFileName(metodo: string, tipo: string) {
+        switch (metodo) {
+            case 'NFEStatusServico':
+                return `NFeStatusServico-${tipo}`
+            case 'NFEConsultaProtocolo':
+                return `NFeConsultaProtocolo-${tipo}`
+            case 'NFeDistribuicaoDFe':
+                return `NFeDistribuicaoDFe-${tipo}`
+            case 'RecepcaoEvento':
+                return `RecepcaoEvento-${tipo}`
+            case 'NFECancelamento':
+                return `NFECancelamento-${tipo}`
+            case 'NFEInutilizacao':
+                return `NFEInutilizacao-${tipo}`
+            case 'NFEAutorizacao':
+                return `NFEAutorizacao-${tipo}`
+            case 'NFCEAutorizacao':
+                return `NFCEAutorizacao-${tipo}`
+            case 'NFERetAutorizacao':
+                return `NFERetAutorizacao-${tipo}`
+            case 'CTeDistribuicaoDFe':
+                return `CTeDistribuicaoDFe-${tipo}`
+
+            default:
+                throw new Error('Erro: Requisição de nome para método não implementado.')
+        }
+    }
+
+    salvaConsulta(xmlConsulta: string, xmlFormated: string, metodo: string, name?: string) {
+        const fileName = name || this.getRequestLogFileName(metodo, 'consulta');
+        const { armazenarXMLConsulta, pathXMLConsulta, armazenarXMLConsultaComTagSoap } = this.environment.config.dfe
+        const xmlConsultaASalvar = armazenarXMLConsultaComTagSoap ? xmlFormated : xmlConsulta;
+
+        if (armazenarXMLConsulta) {
+            this.salvaXML({
+                data: xmlConsultaASalvar,
+                fileName,
+                metodo,
+                path: pathXMLConsulta,
+            });
+        }
+    }
+
+    salvaRetorno(xmlRetorno: string, responseInJson: GenericObject | undefined, metodo: string, name?: string) {
+        const fileName = name || this.getRequestLogFileName(metodo, 'retorno');
+        const { armazenarXMLRetorno, pathXMLRetorno, armazenarRetornoEmJSON } = this.environment.config.dfe
+
+        if (armazenarXMLRetorno && xmlRetorno) {
+            this.salvaXML({
+                data: xmlRetorno,
+                fileName,
+                metodo,
+                path: pathXMLRetorno,
+            });
+
+            if (armazenarRetornoEmJSON && responseInJson) {
+                this.salvaJSON({
+                    data: responseInJson,
+                    fileName,
+                    metodo,
+                    path: pathXMLRetorno,
+                });
+            }
+        }
+    }
+
+    /**
+     * Gera o hashCSRT conforme documentação da SEFAZ
+     * 
+     * O hash é gerado a partir da concatenação do CSRT da empresa com a chave de acesso da NF-e/NFC-e.
+     * Utiliza o algoritmo SHA-1 para a geração do hash.
+     * 
+     * @param csrt - Código de Segurança do Responsável Técnico (16 a 36 bytes alfanumérico)
+     * @param chaveAcesso - Chave de acesso da NF-e/NFC-e (44 dígitos)
+     * @returns Hash em Base64 com 28 caracteres
+     * 
+     * @example
+     * // Exemplo de uso:
+     * const hashCSRT = utility.gerarHashCSRT('G8063VRTNDMO886SFNK5LDUDEI24XJ22YIPO', '41180678393592000146558900000006041028190697');
+     * // Resultado: aWv6LeEM4X6u4+qBI2OYZ8grigw=
+     */
+    gerarHashCSRT(csrt: string, chaveAcesso: string): string {
+        // Passo 1: Concatenar o CSRT com a chave de acesso
+        const concatenacao = csrt + chaveAcesso;
+
+        // Passo 2: Aplicar o algoritmo SHA-1 sobre o resultado da concatenação
+        const sha1Hash = crypto.createHash('sha1').update(concatenacao).digest();
+
+        // Passo 3: Converter o resultado para Base64 (resulta em 28 caracteres)
+        const hashBase64 = sha1Hash.toString('base64');
+
+        return hashBase64;
+    }
+}
+
+export { Utility };

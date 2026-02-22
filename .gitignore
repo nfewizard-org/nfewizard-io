@@ -1,31 +1,49 @@
-base_conhecimento
-node_modules
-tmp
-dist
-src/metodos
-src/__tests__
-src/classes/FieldOrganizer.ts
-src/testes.ts
-src/utils/ini2json.ts
-src/assets/barcode.png
-src/assets/DANFE_NFCE.pdf
-src/assets/DANFE.pdf
-src/assets/logo.jpg
-src/assets/qrcode.png
-
-src/core/config/verifica-urls.js
-src/core/config/atualizaUrls.js
-src/core/config/urls_atualizadas.ini
-src/core/config/NFeServicosUrl_backup.json
-
-tmp
+# Node.js
+**/node_modules/
 package-lock.json
-src/old
-
-certificado.pfx
-
-*:Zone.Identifier
 yarn.lock
-certificado_teste.pfx
+pnpm-debug.log*
+lerna-debug.log*
 
-NTs
+# Build outputs
+**/dist/
+*.tsbuildinfo
+**/.rollup.cache
+
+# Turborepo
+.turbo/
+**/.turbo/
+
+# Certificados e dados sensíveis
+*.pfx
+*.p12
+.env
+.env.*
+!.env.example
+examples/**/teste.ts
+
+# Testes e temp
+tmp/
+coverage/
+.nyc_output/
+
+# IDEs
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*:Zone.Identifier
+
+# Scripts de instalação local (temporários)
+.local-packages/
+.local-packages-single/
+
+# Logs
+logs/
+*.log
+*.jsonl
+
+# Arquivos de pacote npm (gerados por npm pack)
+*.tgz

@@ -1,0 +1,22 @@
+{
+  "NFSe_AN_P": {
+    "NFSe_Autorizacao": "https://sefin.nfse.gov.br/SefinNacional/nfse",
+    "NFSe_Consulta": "https://sefin.nfse.gov.br/SefinNacional/nfse",
+    "NFSe_ConsultaDPS": "https://sefin.nfse.gov.br/SefinNacional/dps",
+    "NFSe_Eventos": "https://sefin.nfse.gov.br/SefinNacional/nfse",
+    "NFSe_Distribuicao": "https://adn.nfse.gov.br/contribuintes/DFe",
+    "NFSe_EventosPorChave": "https://adn.nfse.gov.br/contribuintes/NFSe",
+    "NFSe_DANFSe": "https://adn.nfse.gov.br/danfse",
+    "NFSe_ParametrosMunicipais": "https://adn.nfse.gov.br/parametrizacao"
+  },
+  "NFSe_AN_H": {
+    "NFSe_Autorizacao": "https://sefin.producaorestrita.nfse.gov.br/SefinNacional/nfse",
+    "NFSe_Consulta": "https://sefin.producaorestrita.nfse.gov.br/SefinNacional/nfse",
+    "NFSe_ConsultaDPS": "https://sefin.producaorestrita.nfse.gov.br/SefinNacional/dps",
+    "NFSe_Eventos": "https://sefin.producaorestrita.nfse.gov.br/SefinNacional/nfse",
+    "NFSe_Distribuicao": "https://adn.producaorestrita.nfse.gov.br/contribuintes/DFe",
+    "NFSe_EventosPorChave": "https://adn.producaorestrita.nfse.gov.br/contribuintes/NFSe",
+    "NFSe_DANFSe": "https://adn.producaorestrita.nfse.gov.br/danfse",
+    "NFSe_ParametrosMunicipais": "https://adn.producaorestrita.nfse.gov.br/parametrizacao"
+  }
+}

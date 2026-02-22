@@ -2,6 +2,39 @@
 
 ## 🛠️ Lib atualizada com NT 2025.002 v.130 - Reforma Tributária
 
+---
+
+## 🚨 BREAKING CHANGES - Versão 1.0.0 (Modularização)
+
+A partir da versão 1.0.0, o **NFeWizard-io foi modularizado** em pacotes independentes:
+
+| Pacote | Descrição | Tamanho |
+|--------|-----------|---------|
+| `nfewizard-io` | ✅ Operações NFe (pacote principal) | 511.2 KB |
+| `@nfewizard/nfce` | 🆕 Operações NFCe + Cancelamento | 997.7 KB |
+| `@nfewizard/nfse` | 🆕 Operações NFSe | 578.0 KB |
+| `@nfewizard/danfe` | 🆕 Geração de DANFE (NFe e NFCe) | 2.31 MB |
+| `@nfewizard/cte` | 🆕 Operações CTe | 801.9 KB |
+| `@nfewizard/types` | 📦 Tipos TypeScript | 542.4 KB |
+| `@nfewizard/shared` | 📦 Utilitários compartilhados | 4.03 MB |
+
+### 🎯 Principais Mudanças
+
+- ⚠️ **NFCe**: Agora em pacote separado `@nfewizard/nfce` (use `new NFCeWizard()`)
+- ⚠️ **NFSe**: Novo pacote `@nfewizard/nfse` para Nota Fiscal de Serviços Eletrônica
+- ⚠️ **DANFE**: Removido do pacote principal, use `@nfewizard/danfe` com funções `NFE_GerarDanfe()` e `NFCE_GerarDanfe()`
+- ⚠️ **CTe**: Movido para `@nfewizard/cte` (use `new CTEWizard()`)
+- ✅ **NFe**: Permanece 100% compatível no pacote `nfewizard-io`
+- 🎁 **Novo**: Cancelamento de NFCe disponível em `@nfewizard/nfce`
+- 📉 **Benefício**: Redução de até 77% no bundle 
+
+### 📖 Guia Completo de Migração
+
+Para detalhes completos sobre como migrar, exemplos de código e casos de uso, consulte:
+**[📋 BREAKING_CHANGES.md](BREAKING_CHANGES.md)**
+
+---
+
 ## Atenção: Ao abrir uma issue certifique-se de adicionar as informações abaixo:
 
 Ao abrir issue ou PR, inclua:
@@ -38,11 +71,10 @@ npm i @nfewizard-io/nfce
 🚀 Pronto, agora você pode decidir utilizar apenas os serviços que precisa! -->
 
 ## Sobre a Biblioteca
-NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e) e Conhecimento de Transporte Eletrônico (CT-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
+NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e), Nota Fiscal de Consumidor Eletrônica (NFC-e), Nota Fiscal de Serviços Eletrônica (NFS-e) e Conhecimento de Transporte Eletrônico (CT-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
 
-- **Autorização (Emissão de NFe e NFCe)**: Submissão de Notas Fiscais Eletrônicas e Notas Fiscais de Consumidor Eletrônica
-para autorização.
-- **Distribuição DFe (NF-e e CT-e)**: Consulta e Download de DF-e (Documentos fiscais eletrônicos), facilitando o acesso a documentos fiscais eletrônicos de NF-e e CT-e.
+- **Autorização (Emissão de NFe, NFCe e NFSe)**: Submissão de Notas Fiscais Eletrônicas, Notas Fiscais de Consumidor Eletrônica e Notas Fiscais de Serviços Eletrônica para autorização.
+- **Distribuição DFe (NF-e, NFS-e e CT-e)**: Consulta e Download de DF-e (Documentos fiscais eletrônicos), facilitando o acesso a documentos fiscais eletrônicos de NF-e, NFS-e e CT-e.
 - **Consulta de Protocolo**: Verificação da situação atual da NF-e na Base de Dados do Portal da Secretaria de Fazenda Estadual.
 - **Inutilização de NFe**: Processo de inutilização de números de NF-e que não serão utilizados, assegurando a conformidade fiscal.
 - **Consulta de Status do Serviço**: Monitoramento do status dos serviços da SEFAZ, garantindo a disponibilidade dos webservices.
@@ -58,7 +90,7 @@ para autorização.
 
 ## 🚧 ATENÇÃO 🚧
 ### Requisitos para instalação
-Para utilizar esta biblioteca, é necessário ter o JDK instalado no ambiente.
+Para utilizar algusn funções desta biblioteca, é necessário ter o JDK instalado no ambiente.
 
 Caso esteja rodando em um ambiente sem suporte ao JDK (como a Vercel) ou que não permita a adição de layers (diferente do AWS Lambda), é possível configurar a biblioteca como uma external lib e utilizar a seguinte opção ao inicializá-la:
 ```typescript
@@ -170,14 +202,31 @@ await nfeWizard.NFE_LoadEnvironment({
 
 ## Documentação
 
-- Para a documentação completa acesse [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
+- **Documentação completa**: [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
+- **Guia de Migração Completo**: [BREAKING_CHANGES.md](BREAKING_CHANGES.md)
+- **Exemplos de Uso**: Consulte a pasta [examples/](examples/) com exemplos práticos para NFe, NFCe, NFSe e CTe
+  - [Guia de Build](examples/BUILD.md)
+  - [Instalação Local para Testes](examples/INSTALACAO_LOCAL.md)
+  - [Exemplos de NFe](examples/NFe/)
+  - [Exemplos de NFCe](examples/NFCe/)
+  - [Exemplos de NFSe](examples/NFSe/)
+  - [Documentação CTe](DOCS_CTE.md)
   
 
-## Última Release (0.3.1)
+## Última Release (1.0.0)
 
-- Implementado suporte completo para Distribuição de CT-e (Conhecimento de Transporte Eletrônico)
-- Adicionados métodos `CTE_DistribuicaoDFePorNSU` e `CTE_DistribuicaoDFePorUltNSU`
-- Suporte para download automático de documentos CT-e (proc, res, event)
+### 🎉 Modularização Completa
+
+- **Breaking Change**: Biblioteca modularizada em 7 pacotes  para otimização de bundle
+- **NFCe**: Movido para `@nfewizard/nfce`
+- **NFSe**: Novo pacote `@nfewizard/nfse` com suporte a Nota Fiscal de Serviços Eletrônica (em testes)
+- **DANFE**: Movido para `@nfewizard/danfe` - agora é opcional
+- **CTe**: Movido para `@nfewizard/cte`
+- **Redução de bundle**: Até 77% menor para casos de uso específicos (4.37 MB vs 19.1 MB)
+- **Novo**: Método `NFCE_Cancelamento()` disponível no pacote NFCe
+- **NT 2025.002 v.130**: Suporte à Reforma Tributária
+
+📋 **Consulte o [Guia de Migração Completo](BREAKING_CHANGES.md)** para atualizar seu código
 
 ## Observações
 
@@ -256,10 +305,24 @@ await nfeWizard.NFE_LoadEnvironment({
 
 ## Em Desenvolvimento
 
-### Próximos passos
+### 🧪 NFSe - Em Fase de Testes
 
-- Adicionar tratamento de LOGs
-- Estudo para implementação de NFSe
+O pacote `@nfewizard/nfse` está disponível mas ainda **em fase de testes**. Use com cautela em produção.
+
+**Funcionalidades implementadas:**
+- ✅ Autorização de NFSe
+- ✅ Consulta de NFSe por chave
+- ✅ Consulta de Parâmetros Municipais
+- ✅ Registro de Eventos (Cancelamento, etc.)
+- ✅ Distribuição por NSU
+
+**Status**: Aguardando feedback da comunidade para estabilização.
+
+### Próximos Passos
+
+- 🔄 Estabilização do módulo NFSe com base em feedback
+- 📊 Melhorias no tratamento de LOGs
+- 🧪 Testes adicionais em diferentes municípios
 
 ## Contribua para Nossa Biblioteca Open Source
 
@@ -338,6 +401,39 @@ Agradecemos imensamente aos nossos patrocinadores pela sua generosidade.
     <!-- Adicione mais contribuidores conforme necessário -->
   </tr>
 </table>
+
+---
+
+## 🛠️ Desenvolvimento
+
+### Testar Localmente (antes de publicar no npm)
+
+Esta biblioteca é um monorepo. Para testar localmente:
+
+**Instalação completa (todos os módulos):**
+```bash
+./scripts/local-install.sh ~/seu-projeto-teste
+```
+
+**Instalação única (simula `npm install <pacote>`):**
+```bash
+# Testar apenas NFe
+./scripts/local-install-single.sh nfewizard-io ~/seu-projeto-teste
+
+# Testar apenas NFCe
+./scripts/local-install-single.sh @nfewizard/nfce ~/seu-projeto-teste
+
+# Testar apenas CTe
+./scripts/local-install-single.sh @nfewizard/cte ~/seu-projeto-teste
+```
+
+### 📖 Documentação
+
+- **[Scripts de Instalação Local](scripts/README.md)** - Como usar os scripts de teste
+- **[Guia de Instalação Local](examples/INSTALACAO_LOCAL.md)** - Detalhes sobre testes locais
+- **[Guia de Build](examples/BUILD.md)** - Build e publicação no npm
+
+---
 
 ## Criadores
 

@@ -1,0 +1,49 @@
+{
+  "name": "@nfewizard/nfse",
+  "version": "1.0.1",
+  "type": "module",
+  "description": "Operações NFSe para NFeWizard",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nfse",
+    "nota fiscal de serviço eletrônica",
+    "sefaz"
+  ],
+  "author": "maurelima",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfewizard-io/nfewizard-io",
+    "directory": "packages/nfse"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nfewizard/types": "workspace:*",
+    "@nfewizard/shared": "workspace:*",
+    "axios": "^1.7.7"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.0.0",
+    "typescript": "^5.4.5"
+  }
+}

@@ -17,10 +17,10 @@ Certifique-se de ter inicializado o ambiente com o método `NFE_LoadEnvironment(
 ### Exemplo 1: Consulta por NSU Específico
 
 ```typescript
-import NFeWizard from 'nfewizard-io';
+import CTeWizard from '@nfewizard/cte';
 import { DFePorNSUCTe } from 'nfewizard-io';
 
-const nfeWizard = new NFeWizard();
+const nfeWizard = new CTeWizard();
 
 // Inicializar ambiente (veja README.md para configuração completa)
 await nfeWizard.NFE_LoadEnvironment({ config: { /* ... */ } });
@@ -40,10 +40,10 @@ await nfeWizard.CTE_DistribuicaoDFePorNSU(NSUCTe);
 ### Exemplo 2: Consulta por Último NSU
 
 ```typescript
-import NFeWizard from 'nfewizard-io';
-import { DFePorUltimoNSUCTe } from 'nfewizard-io';
+import CTeWizard from '@nfewizard/cte';
+import { DFePorUltimoNSUCTe } from '@nfewizard/type/cte';
 
-const nfeWizard = new NFeWizard();
+const nfeWizard = new CTeWizard();
 
 // Inicializar ambiente
 await nfeWizard.NFE_LoadEnvironment({ config: { /* ... */ } });

@@ -1,0 +1,60 @@
+{
+  "name": "@nfewizard/danfe",
+  "version": "1.0.1",
+  "description": "Geração de DANFE/DACTE em PDF para NFe, NFCe e CTe",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "resources"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "danfe",
+    "dacte",
+    "pdf",
+    "nfe",
+    "nfce",
+    "cte"
+  ],
+  "author": "maurelima",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfewizard-org/nfewizard-io",
+    "directory": "packages/danfe"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nfewizard/types": "workspace:*",
+    "@nfewizard/shared": "workspace:*",
+    "pdfkit": "^0.15.0",
+    "qrcode": "^1.5.4",
+    "bwip-js": "^4.3.2",
+    "date-fns": "^2.30.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "rollup": "^4.0.0",
+    "@types/pdfkit": "^0.13.5",
+    "@types/qrcode": "^1.5.5"
+  }
+}

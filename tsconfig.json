@@ -1,47 +1,15 @@
 {
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"],
+  "files": [],
+  "references": [
+    { "path": "./packages/types" },
+    { "path": "./packages/shared" },
+    { "path": "./packages/danfe" },
+    { "path": "./packages/nfce" },
+    { "path": "./packages/cte" },
+    { "path": "./packages/nfewizard-io" }
+  ],
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ESNext",
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "esModuleInterop": true,
-    "declaration": true,
-    "declarationDir": "./dist/types",
-    "sourceMap": true, 
-    "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "rootDir": "./src",
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "@Adapters/*": [
-        "src/adapters/*"
-      ],
-      "@Modules/*": [
-        "src/modules/*"
-      ],
-      "@Interfaces/*": [
-        "src/core/interfaces/*"
-      ],
-      "@Interfaces": [
-        "src/core/interfaces/index"
-      ],
-      "@Types/*": [
-        "src/core/types/*"
-      ],
-      "@Types": [
-        "src/core/types/index"
-      ],
-      "@Core/*": [
-        "src/core/*"
-      ],
-      "@Utils/*": [
-        "src/core/utils/*"
-      ]
-    },
-  },
+    "composite": true,
+    "skipLibCheck": true
+  }
 }

@@ -1,0 +1,57 @@
+{
+  "name": "@nfewizard/nfce",
+  "version": "1.0.1",
+  "description": "Biblioteca Node.js para NFCe - Nota Fiscal de Consumidor Eletrônica",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nfce",
+    "nota fiscal consumidor",
+    "sefaz",
+    "dfe"
+  ],
+  "author": "maurelima",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfewizard-org/nfewizard-io",
+    "directory": "packages/nfce"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@nfewizard/shared": "workspace:*",
+    "@nfewizard/types": "workspace:*",
+    "axios": "^1.6.7",
+    "date-fns": "^2.30.0",
+    "sha1": "^1.1.1",
+    "xml2js": "^0.6.2"
+  },
+  "optionalDependencies": {
+    "@nfewizard/danfe": "workspace:*"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/sha1": "^1.1.5",
+    "rollup": "^2.79.2",
+    "typescript": "^5.4.5"
+  }
+}

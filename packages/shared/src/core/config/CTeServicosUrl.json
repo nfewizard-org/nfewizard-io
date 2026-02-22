@@ -1,0 +1,8 @@
+{
+    "CTe_AN_P": {
+        "CTeDistribuicaoDFe_1.00": "https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx"
+    },
+    "CTe_AN_H": {
+        "CTeDistribuicaoDFe_1.00": "https://hom1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx"
+    }
+}

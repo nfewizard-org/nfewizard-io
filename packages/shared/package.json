@@ -1,0 +1,68 @@
+{
+  "name": "@nfewizard/shared",
+  "version": "1.0.1",
+  "description": "Core utilities compartilhadas (XML, HTTP, Certificate, Schema)",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "xml",
+    "soap",
+    "certificate",
+    "sefaz",
+    "nfe-utils"
+  ],
+  "author": "maurelima",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfewizard-org/nfewizard-io",
+    "directory": "packages/shared"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "build:types": "tsc --project tsconfig.types.json",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nfewizard/types": "workspace:*",
+    "axios": "^1.7.7",
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0",
+    "easy-soap-request": "^5.4.0",
+    "ini": "^4.1.1",
+    "libxmljs2": "^0.37.0",
+    "node-forge": "^1.3.1",
+    "pako": "^2.1.0",
+    "pem": "^1.14.8",
+    "sha1": "^1.1.1",
+    "soap": "^1.0.0",
+    "winston": "^3.17.0",
+    "winston-transport": "^4.9.0",
+    "xml-crypto": "^6.0.0",
+    "xml-js": "^1.6.11",
+    "xml2js": "^0.6.2",
+    "xsd-assembler": "^0.0.3",
+    "xsd-schema-validator": "^0.7.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/winston": "^2.4.4",
+    "rollup": "^4.0.0",
+    "typescript": "^5.4.5"
+  }
+}
