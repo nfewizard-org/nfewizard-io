@@ -80,7 +80,3 @@ export { default } from './NFeWizard.js';
 
 // Export tax calculation functions (now from shared)
 export { mountICMS, mountPIS, mountCOFINS } from '@nfewizard/shared';
-
-// Re-export types for convenience (user doesn't need to install @nfewizard/types separately)
-export type * from '@nfewizard/types/nfe';
-export type * from '@nfewizard/types/shared';
