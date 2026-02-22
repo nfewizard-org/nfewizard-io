@@ -243,7 +243,16 @@ class NFCeGerarDanfe {
                 .fontSize(this.fontSize)
                 .font('Arial')
                 .text(identificationJoined, centeredPosEnd)
-                .text('Documento Auxiliar da Nota Fiscal de Consumidor Eletrônica', centeredPosText)
+                .text('Documento Auxiliar da Nota Fiscal de Consumidor Eletrônica', centeredPosText);
+
+            // Adiciona mensagem de contingência se tpEmis = 4 ou 9 (NT 2018.006)
+            if ([4, 9].includes(this.ide.tpEmis)) {
+                const msgContingencia = 'EMITIDA EM CONTINGÊNCIA';
+                const centeredPosContingencia = this.centeredPos(msgContingencia);
+                this.doc.font('Arial-bold')
+                    .fontSize(this.fontSize + 2)
+                    .text(msgContingencia, centeredPosContingencia, this.doc.y + 2);
+            }
         }
 
         _buildIdentificacaoEmit();
@@ -560,7 +569,7 @@ class NFCeGerarDanfe {
 
         tableTop = this.doc.y + 20;
         topBeforeQrCode += 70.87
-        this.doc.text(`Tributos Totais Incidentes (Lei Federal 12.741/2012): R$ ${parseFloat(this.total.ICMSTot.vTotTrib || '0').toFixed(2)}`, 0, topBeforeQrCode, {
+        this.doc.text(`Tributos Totais Incidentes (Lei Federal 12.741/2012): R$ ${parseFloat(String(this.total.ICMSTot.vTotTrib) || '0').toFixed(2)}`, 0, topBeforeQrCode, {
             align: 'center'
         });
     }

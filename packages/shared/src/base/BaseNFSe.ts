@@ -174,6 +174,18 @@ abstract class BaseNFSe {
                 if (error.response.data) {
                     if (typeof error.response.data === 'string') {
                         errorMessage = `HTTP ${error.response.status}: ${error.response.data}`;
+                    } else if (error.response.data.erros && Array.isArray(error.response.data.erros) && error.response.data.erros.length > 0) {
+                        // NFSe retorna erros em um array
+                        const primeiroErro = error.response.data.erros[0];
+                        const codigo = primeiroErro.codigo || primeiroErro.Codigo || '';
+                        const descricao = primeiroErro.descricao || primeiroErro.Descricao || 'Erro desconhecido';
+                        errorMessage = codigo ? `${codigo}: ${descricao}` : descricao;
+                    } else if (error.response.data.Erros && Array.isArray(error.response.data.Erros) && error.response.data.Erros.length > 0) {
+                        // Variação com E maiúsculo
+                        const primeiroErro = error.response.data.Erros[0];
+                        const codigo = primeiroErro.Codigo || primeiroErro.codigo || '';
+                        const descricao = primeiroErro.Descricao || primeiroErro.descricao || 'Erro desconhecido';
+                        errorMessage = codigo ? `${codigo}: ${descricao}` : descricao;
                     } else if (error.response.data.message) {
                         errorMessage = error.response.data.message;
                     } else if (error.response.data.descricao) {

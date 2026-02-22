@@ -226,9 +226,9 @@ export type EnderecoNacional = {
      */
     cMun: string;
     /**
-     * UF
+     * UF (opcional - não deve ser informado conforme schema NFSe)
      */
-    UF: string;
+    UF?: string;
 };
 
 /**

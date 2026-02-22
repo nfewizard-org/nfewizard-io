@@ -15,8 +15,7 @@
  * along with Treeunfe DFe. If not, see <https://www.gnu.org/licenses/>.
  */
 import { XmlBuilder, Environment, Utility, logger, XmlParser, BaseNFSe } from '@nfewizard/shared';
-import { GerarConsultaImpl, NFSeAutorizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/interfaces';
-import { GenericObject, LayoutDPS, LayoutNFSe, NFSe, NFSeAutorizacaoResponse } from '@nfewizard/types';
+import { GerarConsultaImpl, NFSeAutorizacaoServiceImpl, SaveFilesImpl, GenericObject, LayoutDPS, LayoutNFSe, NFSe, NFSeAutorizacaoResponse } from '@nfewizard/types';
 import { AxiosInstance } from 'axios';
 import { Buffer } from 'buffer';
 import { gunzipSync, gzipSync } from 'zlib';
@@ -102,7 +101,7 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
      */
     private gerarXmlDPS(dps: LayoutDPS): string {
         const config = this.environment.getConfig();
-        const ambiente = config.ambiente || 2;
+        const ambiente = config.nfe.ambiente || 2;
 
         // Gera o ID do DPS se não foi fornecido
         const idDPS = dps.infDps.Id || this.gerarIdDPS(dps);
@@ -251,6 +250,7 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
 
     public async Exec(data: NFSe): Promise<{
         success: boolean;
+        status: number;
         response: NFSeAutorizacaoResponse | GenericObject;
         xmls?: {
             NFSe: LayoutNFSe;
@@ -269,12 +269,12 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
 
                     // Salva o XML da NFSe descompactado
                     const config = this.environment.getConfig();
-                    if (config.armazenarXMLAutorizacao && response.chaveAcesso) {
+                    if (config.dfe.armazenarXMLAutorizacao && response.chaveAcesso) {
                         this.utility.salvaXML({
                             data: nfseXml,
                             fileName: response.chaveAcesso,
                             metodo: this.metodo,
-                            path: config.pathXMLAutorizacao,
+                            path: config.dfe.pathXMLAutorizacao,
                         });
                     }
 
@@ -297,6 +297,7 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
 
             return {
                 success: true,
+                status: 200,
                 response,
                 xmls: xmls.length > 0 ? xmls : undefined
             };

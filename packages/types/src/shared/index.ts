@@ -40,4 +40,5 @@ export interface NFERetornoAutorizacaoServiceImpl {
 export interface NFEStatusServicoServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface NFCEAutorizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface NFCERetornoAutorizacaoServiceImpl { getXmlRetorno(...args: any[]): Promise<any>; }
+export interface NFSeAutorizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface CTEDistribuicaoDFeServiceImpl { Exec(...args: any[]): Promise<any>; }

@@ -240,6 +240,23 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             context: 'NFCEAutorizacaoService',
         });
         const createXML = (NFe: LayoutNFe) => {
+            // Validações de contingência conforme NT 2018.006
+            const { tpEmis, mod, dhCont, xJust } = NFe.infNFe.ide;
+
+            // Validação 1: Contingência off-line (tpEmis=9) só é permitida para NFC-e (mod=65)
+            if (tpEmis === 9 && mod !== 65) {
+                throw new Error('Contingência off-line (tpEmis=9) só é permitida para NFC-e (mod=65)');
+            }
+
+            // Validação 2: Campos dhCont e xJust são obrigatórios quando tpEmis = 4 ou 9
+            if ([4, 9].includes(tpEmis)) {
+                if (!dhCont || dhCont.trim() === '') {
+                    throw new Error(`Campo dhCont (Data e Hora de entrada em contingência) é obrigatório quando tpEmis=${tpEmis}`);
+                }
+                if (!xJust || xJust.trim() === '' || xJust.length < 15) {
+                    throw new Error(`Campo xJust (Justificativa da entrada em contingência) é obrigatório e deve ter no mínimo 15 caracteres quando tpEmis=${tpEmis}`);
+                }
+            }
 
             // Verificando se existe mais de um produto
             if (NFe?.infNFe?.det instanceof Array) {
@@ -475,6 +492,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             NFe: LayoutNFe;
             protNFe: ProtNFe
         }[];
+        emContingencia?: boolean;
     }> {
         let xmlConsulta: string = '';
         let xmlConsultaSoap: string = '';
@@ -482,16 +500,93 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         let responseInJson: GenericObject | undefined = undefined;
         let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
         const ContentType = this.setContentType();
+        
+        // Verifica se está em contingência (tpEmis = 4 ou 9)
+        const nfeData = Array.isArray(data.NFe) ? data.NFe[0] : data.NFe;
+        const emContingencia = [4, 9].includes(nfeData.infNFe.ide.tpEmis);
+        
         try {
-            // Gerando XML para consulta de Status do Serviço
+            // Gerando XML da NFC-e
             xmlConsulta = this.gerarXmlNFCEAutorizacao(data);
 
+            // Se está em contingência (tpEmis = 4 ou 9), NÃO transmite para SEFAZ
+            // Conforme NT 2018.006: "As NFC-e são geradas, assinadas e os respectivos 
+            // DANFE NFC-e são impressos sem a autorização prévia da SEFAZ."
+            if (emContingencia) {
+                logger.info('NFC-e gerada em CONTINGÊNCIA - Não será transmitida para SEFAZ', {
+                    context: 'NFCEAutorizacaoService',
+                    tpEmis: nfeData.infNFe.ide.tpEmis,
+                    nNF: nfeData.infNFe.ide.nNF,
+                });
+
+                // Extrai os XMLs das NFCe geradas (já assinados)
+                const xmlsGerados = this.xmlNFe.map((xmlAssinado, index) => {
+                    const nfeItem = Array.isArray(data.NFe) ? data.NFe[index] : data.NFe;
+                    return {
+                        NFe: nfeItem,
+                        xmlAssinado: xmlAssinado,
+                    };
+                });
+
+                // Salva os arquivos XML localmente
+                const config = this.environment.getConfig();
+                xmlsGerados.forEach(({ xmlAssinado, NFe }, index) => {
+                    const chaveNFe = this.chaveNfe;
+                    
+                    if (config.dfe.armazenarXMLAutorizacao) {
+                        const fileName = `NFCe-Contingencia-${chaveNFe}`;
+                        this.utility.salvaXML({
+                            data: xmlAssinado,
+                            fileName,
+                            metodo: this.metodo,
+                            path: config.dfe.pathXMLAutorizacao,
+                        });
+
+                        logger.info('XML de contingência salvo localmente', {
+                            context: 'NFCEAutorizacaoService',
+                            fileName: `${fileName}.xml`,
+                            path: config.dfe.pathXMLAutorizacao,
+                        });
+                    }
+                });
+
+                const mensagemContingencia = nfeData.infNFe.ide.tpEmis === 4 
+                    ? 'NFC-e gerada em Contingência EPEC (tpEmis=4)'
+                    : 'NFC-e gerada em Contingência Off-line (tpEmis=9)';
+
+                return {
+                    success: true,
+                    emContingencia: true,
+                    xMotivo: [{
+                        chNFe: this.chaveNfe,
+                        xMotivo: mensagemContingencia + '. Transmita para autorização quando o problema técnico for resolvido (prazo: até o final do primeiro dia útil subsequente).',
+                        cStat: '000', // Código customizado para contingência
+                    }],
+                    xmls: xmlsGerados.map(({ NFe, xmlAssinado }) => ({
+                        NFe,
+                        protNFe: {
+                            infProt: {
+                                tpAmb: NFe.infNFe.ide.tpAmb,
+                                verAplic: 'contingencia',
+                                chNFe: this.chaveNfe,
+                                dhRecbto: new Date().toISOString(),
+                                nProt: 'CONTINGENCIA',
+                                digVal: '',
+                                cStat: '000',
+                                xMotivo: mensagemContingencia,
+                            }
+                        } as ProtNFe
+                    })),
+                };
+            }
+
+            // Se NÃO está em contingência (tpEmis = 1), transmite normalmente
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, false, '', 'NFCe');
 
             xmlConsultaSoap = xmlFormated;
             webServiceUrlTmp = webServiceUrl;
 
-            // Efetua requisição para o webservice NFEStatusServico
+            // Efetua requisição para o webservice NFCEAutorizacao
             const xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);
 
             /**
@@ -523,11 +618,15 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             }
 
         } finally {
-            // Salva XML de Consulta
-            this.utility.salvaConsulta(xmlConsulta, xmlConsultaSoap, this.metodo);
+            // Salva XML de Consulta (apenas se não está em contingência, pois não há comunicação com SEFAZ)
+            if (!emContingencia && xmlConsulta) {
+                this.utility.salvaConsulta(xmlConsulta, xmlConsultaSoap, this.metodo);
+            }
 
-            // Salva XML de Retorno
-            this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
+            // Salva XML de Retorno (apenas se não está em contingência, pois não há retorno da SEFAZ)
+            if (!emContingencia && xmlRetorno.data) {
+                this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
+            }
         }
     }
 
