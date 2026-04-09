@@ -48,13 +48,14 @@
     "epec"
   ],
   "dependencies": {
-    "@nfewizard/types": "workspace:*",
     "@nfewizard/shared": "workspace:*",
+    "@nfewizard/types": "workspace:*",
     "axios": "^1.7.7",
     "date-fns": "^2.30.0",
-    "nodemailer": "^6.9.14",
     "node-fetch": "^3.3.2",
-    "pako": "^2.1.0"
+    "nodemailer": "^6.9.14",
+    "pako": "^2.1.0",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.1",

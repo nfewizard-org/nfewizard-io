@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { listSyncJobs, createSyncJob } from '@/lib/db/queries';
+import { processSyncJob } from '@/lib/jobs/sync-orchestrator';
 
 // GET /api/sync?companyId=...
 export async function GET(req: NextRequest) {
@@ -25,5 +26,9 @@ export async function POST(req: NextRequest) {
   }
 
   const job = createSyncJob({ companyId, companyName, tipoExecucao, modelos, tipos, periodoStart, periodoEnd });
+  
+  // Fire and forget (in a real app, use a queue like BullMQ. In MVP, this works)
+  processSyncJob((job as any).id).catch(console.error);
+
   return NextResponse.json(job, { status: 201 });
 }

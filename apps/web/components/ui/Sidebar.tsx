@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import {
   LayoutDashboard,
@@ -12,6 +12,7 @@ import {
   FileText,
   ScrollText,
   Zap,
+  LogOut,
 } from 'lucide-react';
 
 const nav = [
@@ -26,6 +27,12 @@ const nav = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/login');
+  };
 
   return (
     <aside className="glass-sidebar fixed top-0 left-0 bottom-0 flex flex-col"
@@ -66,6 +73,12 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div className="px-4 py-5 border-t border-slate-900/[0.08]">
+        <button 
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-medium text-slate-500 hover:text-red-500 hover:bg-red-50 transition-all mb-4"
+        >
+          <LogOut className="w-[18px] h-[18px]" /> Sair do sistema
+        </button>
         <div className="glass-card !p-3 !rounded-xl">
           <p className="text-[11px] text-slate-500 font-medium">Versão MVP</p>
           <p className="text-[12px] text-slate-600 mt-0.5">v0.1.0 — internal</p>

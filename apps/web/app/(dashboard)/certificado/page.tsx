@@ -44,6 +44,13 @@ export default function CertificadoPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Upload state
+  const [uploadCompany, setUploadCompany] = useState('');
+  const [password, setPassword] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+
   useEffect(() => {
     fetch('/api/empresas').then(res => res.json()).then(setCompanies);
   }, []);
@@ -72,6 +79,46 @@ export default function CertificadoPage() {
     if (companies.length > 0) fetchCerts();
   }, [fetchCerts, companies]);
 
+  const handleUpload = async () => {
+    if (!uploadCompany || !password || !file) {
+      setUploadError('Preencha empresa, selecione o arquivo .pfx e digite a senha.');
+      return;
+    }
+    
+    setUploading(true);
+    setUploadError('');
+
+    const formData = new FormData();
+    formData.append('companyId', uploadCompany);
+    formData.append('senha', password);
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/certificados/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!res.ok) {
+        const data = await res.json();
+        setUploadError(data.error || 'Erro ao validar o certificado.');
+      } else {
+        // Success
+        setUploadCompany('');
+        setPassword('');
+        setFile(null);
+        if (document.getElementById('file-upload')) {
+          (document.getElementById('file-upload') as HTMLInputElement).value = '';
+        }
+        fetchCerts(); // Refresh list
+      }
+    } catch (e) {
+      setUploadError('Erro de conexão ao enviar arquivo.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div>
       {/* Header */}
@@ -88,7 +135,7 @@ export default function CertificadoPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1.5">Empresa *</label>
-            <select className="input" defaultValue="">
+            <select className="input" value={uploadCompany} onChange={e => setUploadCompany(e.target.value)}>
               <option value="">Selecione a empresa</option>
               {companies.map((c) => (
                 <option key={c.id} value={c.id}>{c.nome_fantasia}</option>
@@ -97,19 +144,39 @@ export default function CertificadoPage() {
           </div>
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1.5">Arquivo .pfx *</label>
-            <div className="input flex items-center gap-3 cursor-pointer hover:border-[var(--accent)] transition-colors">
-              <Upload className="w-4 h-4 text-slate-500" />
-              <span className="text-slate-500 text-sm">Selecionar arquivo...</span>
-            </div>
+            <label className="input flex items-center gap-3 cursor-pointer hover:border-[var(--accent)] transition-colors">
+              <Upload className="w-4 h-4 text-slate-500 shrink-0" />
+              <span className="text-slate-500 text-sm truncate">
+                {file ? file.name : 'Selecionar arquivo...'}
+              </span>
+              <input 
+                id="file-upload"
+                type="file" 
+                accept=".pfx,.p12" 
+                className="hidden" 
+                onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
+              />
+            </label>
           </div>
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1.5">Senha do Certificado *</label>
-            <input type="password" className="input" placeholder="••••••••" />
+            <input 
+              type="password" 
+              className="input" 
+              placeholder="••••••••" 
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
           </div>
         </div>
+        {uploadError && (
+          <div className="mt-4 flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-100 px-3 py-2 rounded-xl">
+            <AlertTriangle className="w-4 h-4 shrink-0" /> {uploadError}
+          </div>
+        )}
         <div className="flex gap-3 mt-6">
-          <button className="btn btn-primary" onClick={() => alert("Upload backend integration pending...")}>
-            <Upload className="w-4 h-4" /> Enviar e Validar
+          <button className="btn btn-primary" onClick={handleUpload} disabled={uploading}>
+            {uploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Processando...</> : <><Upload className="w-4 h-4" /> Enviar e Validar</>}
           </button>
         </div>
       </div>
