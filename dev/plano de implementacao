@@ -1,0 +1,84 @@
+Plano de Desenvolvimento — MVP Coletor de XMLs Fiscais
+Resumo
+Objetivo do MVP: construir uma ferramenta interna de operação para cadastrar empresas, validar certificado A1, sincronizar XMLs dos modelos 55 e 65, armazenar os arquivos, acompanhar cobertura por competência e tratar falhas com baixo atrito operacional.
+
+Direção de UI: interface premium pragmática. O visual deve transmitir software interno de alto nível, mas sem transformar design em eixo principal do cronograma. A prioridade é clareza operacional com acabamento forte.
+
+Mudanças e implementação
+1. Base do produto
+Criar um novo app web no monorepo, isolado da biblioteca atual, usando apps/*.
+Stack inicial: Next.js + TypeScript + Tailwind + banco relacional simples + storage local.
+Estruturar desde o início os módulos de domínio: CompanyService, CertificateService, SyncOrchestrator, NFe55SyncService, NFCe65SyncService, XmlStorageService, CoverageService, JobLogService.
+Usar stubs/mocks para integrações fiscais no primeiro corte, preservando interfaces reais para troca futura.
+2. Fluxo funcional do MVP
+Entregar o fluxo principal ponta a ponta nesta ordem:
+cadastro e edição de empresa
+upload e validação de certificado .pfx
+configuração de sincronização
+criação de job de backfill
+execução separada para 55 e 65 com consolidação no backend
+persistência de XMLs e metadados
+visualização em tabela de XMLs
+cálculo de cobertura por competência
+logs, falhas e reprocessamento
+checkpoint para sync incremental
+Manter a regra central do produto: o usuário seleciona 55 e 65 numa única interface, mas o backend abre dois fluxos independentes e consolida status, progresso e resultado.
+3. Modelagem inicial
+Implementar as entidades base: Company, Certificate, SyncJob, SyncCheckpoint, XmlDocument, CoverageSnapshot, JobLog.
+Definir estados mínimos:
+empresa: active, inactive
+certificado: pending, valid, expired, invalid
+job: pending, running, paused, completed, failed, partial
+documento: stored, duplicate, invalid, failed
+cobertura: not_processed, partial, complete, failed
+Adotar storage local com convenção fixa:
+/storage/{cnpj}/{modelo}/{tipo}/{ano}/{mes}/xmls
+/storage/{cnpj}/logs
+/storage/{cnpj}/exports
+4. UI e experiência
+Criar as páginas: Dashboard, Empresas, Certificado, Sincronização, Cobertura, XMLs e Logs.
+Aplicar uma linguagem visual consistente:
+tema dark
+cards translúcidos
+bordas suaves
+gradientes frios
+tabelas legíveis
+estados vazios desenhados
+ações críticas com destaque claro
+Priorizar componentes reutilizáveis em components/ui, components/forms, components/tables e components/dashboard.
+Na tela de sincronização, destacar visualmente:
+seleção conjunta de modelos 55 e 65
+progresso por fluxo
+status consolidado do job
+ações de pausar e reprocessar
+Na tela de cobertura, usar grade mensal com quatro eixos fixos: entrada 55, saída 55, entrada 65, saída 65.
+5. Preparação para evolução
+Deixar a camada de persistência organizada para trocar depois de banco local para Postgres/Supabase sem refatorar serviços de domínio.
+Isolar acesso a storage e jobs em adapters simples.
+Incluir seed e dados fake para demonstrar o fluxo completo sem dependência externa real.
+Documentar no README como subir o app, popular dados e entender o fluxo do MVP.
+APIs, interfaces e tipos públicos
+Novo app web no monorepo em apps/*, sem alterar a API pública atual da biblioteca fiscal.
+Criar contratos internos estáveis para:
+validação de certificado
+criação e execução de job de sincronização
+persistência de XML e metadados
+cálculo de cobertura
+registro de logs
+O orquestrador deve receber uma configuração única da UI e quebrar internamente em execuções por modelo.
+Testes e cenários
+Cadastro de empresa com criação, edição e listagem.
+Upload de certificado com casos válido, expirado, inválido e senha incorreta.
+Criação de job com seleção conjunta de 55 e 65.
+Execução separada dos dois fluxos e consolidação correta do resultado.
+Persistência de XML no caminho esperado e gravação de metadados.
+Atualização de cobertura por competência após sync.
+Registro de logs de sucesso, erro e reprocessamento.
+Reexecução de jobs com falha sem duplicar documentos válidos.
+Renderização das telas com estados vazios, loading, sucesso, parcial e erro.
+Assunções e defaults
+O MVP será um sistema interno, não SaaS multi-tenant.
+Banco inicial: relacional simples local, preparado para migração futura.
+Storage inicial: local em disco.
+Integrações fiscais reais podem entrar depois; primeiro corte usa mocks/stubs com contratos definitivos.
+O escopo não inclui emissão de nota, modelo 59, automações extras nem integrações externas desnecessárias.
