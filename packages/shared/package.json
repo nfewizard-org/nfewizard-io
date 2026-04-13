@@ -62,7 +62,7 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/winston": "^2.4.4",
-    "rollup": "^4.0.0",
+    "rollup": "^4.59.0",
     "typescript": "^5.4.5"
   }
 }
