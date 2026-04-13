@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@nfewizard/types": "workspace:*",
-    "axios": "^1.7.7",
+    "axios": "^1.15.0",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "easy-soap-request": "^5.4.0",

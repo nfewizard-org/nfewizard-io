@@ -36,7 +36,7 @@
   "dependencies": {
     "@nfewizard/types": "workspace:*",
     "@nfewizard/shared": "workspace:*",
-    "axios": "^1.7.7"
+    "axios": "^1.15.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
