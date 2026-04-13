@@ -37,7 +37,7 @@
   "dependencies": {
     "@nfewizard/shared": "workspace:*",
     "@nfewizard/types": "workspace:*",
-    "axios": "^1.6.7",
+    "axios": "^1.15.0",
     "date-fns": "^2.30.0",
     "sha1": "^1.1.1",
     "xml2js": "^0.6.2"
