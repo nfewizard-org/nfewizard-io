@@ -1,0 +1,1717 @@
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ critical            │ fast-xml-parser has an entity encoding bypass via      │
+│                     │ regex injection in DOCTYPE entity names                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ fast-xml-parser                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=5.0.0 <5.3.5                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.3.5                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 > @aws-sdk/core@3.956.0 >  │
+│                     │ @aws-sdk/xml-builder@3.956.0 > fast-xml-parser@5.2.5   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-env@3.956.0 >             │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-http@3.956.0 >            │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ ... Found 41 paths, run `pnpm why fast-xml-parser` for │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-m7jm-9gc2-mpf2      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ critical            │ Handlebars.js has JavaScript Injection via AST Type    │
+│                     │ Confusion                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ handlebars                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <=4.7.8                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.7.9                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > ts-jest@29.4.6 > handlebars@4.7.8                  │
+│                     │                                                        │
+│                     │ . > handlebars@4.7.8                                   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > ts-jest@29.4.6 >               │
+│                     │ handlebars@4.7.8                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-2w6w-674q-4c4q      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ node-tar Vulnerable to Arbitrary File                  │
+│                     │ Creation/Overwrite via Hardlink Path Traversal         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ tar                                                    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <7.5.7                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=7.5.7                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > make-fetch-happen@14.0.3 >           │
+│                     │ cacache@19.0.1 > tar@7.5.2                             │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > tar@7.5.2                            │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 > tar@7.5.2  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why tar` for more        │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-34x7-hfp2-rc4v      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ semver vulnerable to Regular Expression Denial of      │
+│                     │ Service                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ semver                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=2.0.0-alpha <5.7.2                                   │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.7.2                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ browserify-fs@1.0.0 > levelup@0.18.6 > semver@2.3.2    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-c2qf-rxjj-qqgw      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ @isaacs/brace-expansion has Uncontrolled Resource      │
+│                     │ Consumption                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ @isaacs/brace-expansion                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=5.0.0                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.0.1                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-copy@3.5.0 > globby@10.0.1 >         │
+│                     │ @types/glob@7.2.0 > @types/minimatch@6.0.0 >           │
+│                     │ minimatch@10.1.1 > @isaacs/brace-expansion@5.0.0       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-7h2j-956f-4vf2      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ fast-xml-parser has RangeError DoS Numeric Entities    │
+│                     │ Bug                                                    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ fast-xml-parser                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=5.0.9 <=5.3.3                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.3.4                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 > @aws-sdk/core@3.956.0 >  │
+│                     │ @aws-sdk/xml-builder@3.956.0 > fast-xml-parser@5.2.5   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-env@3.956.0 >             │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-http@3.956.0 >            │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ ... Found 41 paths, run `pnpm why fast-xml-parser` for │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-37qj-frw5-hhjh      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Nodemailer’s addressparser is vulnerable to DoS caused │
+│                     │ by recursive calls                                     │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ nodemailer                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=7.0.10                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=7.0.11                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > nodemailer@6.10.1                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > nodemailer@6.10.1              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-rcmh-qjqh-p98v      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Axios is Vulnerable to Denial of Service via __proto__ │
+│                     │ Key in mergeConfig                                     │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ axios                                                  │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=1.0.0 <=1.13.4                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=1.13.5                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > axios@1.13.2        │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared >                     │
+│                     │ easy-soap-request@5.7.0 > axios@1.13.2                 │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ axios@1.13.2                                           │
+│                     │                                                        │
+│                     │ ... Found 36 paths, run `pnpm why axios` for more      │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-43fc-jf86-j433      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ node-tar is Vulnerable to Arbitrary File Overwrite and │
+│                     │ Symlink Poisoning via Insufficient Path Sanitization   │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ tar                                                    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=7.5.2                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=7.5.3                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > make-fetch-happen@14.0.3 >           │
+│                     │ cacache@19.0.1 > tar@7.5.2                             │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > tar@7.5.2                            │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 > tar@7.5.2  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why tar` for more        │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-8qq5-rm4j-mr97      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Arbitrary File Read/Write via Hardlink Target Escape   │
+│                     │ Through Symlink Chain in node-tar Extraction           │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ tar                                                    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <7.5.8                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=7.5.8                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > make-fetch-happen@14.0.3 >           │
+│                     │ cacache@19.0.1 > tar@7.5.2                             │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > tar@7.5.2                            │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 > tar@7.5.2  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why tar` for more        │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-83g3-92jg-28cx      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch has a ReDoS via repeated wildcards with      │
+│                     │ non-matching literal in pattern                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <3.1.3                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=3.1.3                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > @jest/transform@29.7.0 >      │
+│                     │ babel-plugin-istanbul@6.1.1 > test-exclude@6.0.0 >     │
+│                     │ glob@7.2.3 > minimatch@3.1.2                           │
+│                     │                                                        │
+│                     │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > @jest/transform@29.7.0 >      │
+│                     │ babel-plugin-istanbul@6.1.1 > test-exclude@6.0.0 >     │
+│                     │ minimatch@3.1.2                                        │
+│                     │                                                        │
+│                     │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > glob@7.2.3 > minimatch@3.1.2  │
+│                     │                                                        │
+│                     │ ... Found 602 paths, run `pnpm why minimatch` for more │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-3ppc-4f35-3m26      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch has a ReDoS via repeated wildcards with      │
+│                     │ non-matching literal in pattern                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=5.0.0 <5.1.7                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.1.7                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @rollup/plugin-commonjs@25.0.8 >        │
+│                     │ glob@8.1.0 > minimatch@5.1.6                           │
+│                     │                                                        │
+│                     │ packages/danfe > @rollup/plugin-commonjs@25.0.8 >      │
+│                     │ glob@8.1.0 > minimatch@5.1.6                           │
+│                     │                                                        │
+│                     │ packages/nfce > @rollup/plugin-commonjs@25.0.8 >       │
+│                     │ glob@8.1.0 > minimatch@5.1.6                           │
+│                     │                                                        │
+│                     │ ... Found 5 paths, run `pnpm why minimatch` for more   │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-3ppc-4f35-3m26      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch has a ReDoS via repeated wildcards with      │
+│                     │ non-matching literal in pattern                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=9.0.0 <9.0.6                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=9.0.6                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > make-fetch-happen@14.0.3 >           │
+│                     │ cacache@19.0.1 > glob@10.5.0 > minimatch@9.0.5         │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 >            │
+│                     │ glob@10.5.0 > minimatch@9.0.5                          │
+│                     │                                                        │
+│                     │ packages/danfe > @nfewizard/shared@link:../shared >    │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 >            │
+│                     │ glob@10.5.0 > minimatch@9.0.5                          │
+│                     │                                                        │
+│                     │ ... Found 8 paths, run `pnpm why minimatch` for more   │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-3ppc-4f35-3m26      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch has a ReDoS via repeated wildcards with      │
+│                     │ non-matching literal in pattern                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=10.0.0 <10.2.1                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=10.2.1                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-copy@3.5.0 > globby@10.0.1 >         │
+│                     │ @types/glob@7.2.0 > @types/minimatch@6.0.0 >           │
+│                     │ minimatch@10.1.1                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-3ppc-4f35-3m26      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Rollup 4 has Arbitrary File Write via Path Traversal   │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ rollup                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <4.59.0                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.59.0                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > @rollup/plugin-alias@5.1.1 > rollup@4.54.0         │
+│                     │                                                        │
+│                     │ . > @rollup/plugin-commonjs@28.0.9 >                   │
+│                     │ @rollup/pluginutils@5.3.0 > rollup@4.54.0              │
+│                     │                                                        │
+│                     │ . > @rollup/plugin-commonjs@28.0.9 > rollup@4.54.0     │
+│                     │                                                        │
+│                     │ ... Found 117 paths, run `pnpm why rollup` for more    │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-mw96-cpmx-2vgc      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Rollup 4 has Arbitrary File Write via Path Traversal   │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ rollup                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <2.80.0                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=2.80.0                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @rollup/plugin-commonjs@25.0.8 >        │
+│                     │ @rollup/pluginutils@5.3.0 > rollup@2.79.2              │
+│                     │                                                        │
+│                     │ packages/cte > @rollup/plugin-commonjs@25.0.8 >        │
+│                     │ rollup@2.79.2                                          │
+│                     │                                                        │
+│                     │ packages/cte > @rollup/plugin-json@6.1.0 >             │
+│                     │ @rollup/pluginutils@5.3.0 > rollup@2.79.2              │
+│                     │                                                        │
+│                     │ ... Found 18 paths, run `pnpm why rollup` for more     │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-mw96-cpmx-2vgc      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch has ReDoS: matchOne() combinatorial          │
+│                     │ backtracking via multiple non-adjacent GLOBSTAR        │
+│                     │ segments                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <3.1.3                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=3.1.3                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > @jest/transform@29.7.0 >      │
+│                     │ babel-plugin-istanbul@6.1.1 > test-exclude@6.0.0 >     │
+│                     │ glob@7.2.3 > minimatch@3.1.2                           │
+│                     │                                                        │
+│                     │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > @jest/transform@29.7.0 >      │
+│                     │ babel-plugin-istanbul@6.1.1 > test-exclude@6.0.0 >     │
+│                     │ minimatch@3.1.2                                        │
+│                     │                                                        │
+│                     │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > glob@7.2.3 > minimatch@3.1.2  │
+│                     │                                                        │
+│                     │ ... Found 602 paths, run `pnpm why minimatch` for more │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-7r86-cg39-jmmj      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch has ReDoS: matchOne() combinatorial          │
+│                     │ backtracking via multiple non-adjacent GLOBSTAR        │
+│                     │ segments                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=5.0.0 <5.1.8                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.1.8                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @rollup/plugin-commonjs@25.0.8 >        │
+│                     │ glob@8.1.0 > minimatch@5.1.6                           │
+│                     │                                                        │
+│                     │ packages/danfe > @rollup/plugin-commonjs@25.0.8 >      │
+│                     │ glob@8.1.0 > minimatch@5.1.6                           │
+│                     │                                                        │
+│                     │ packages/nfce > @rollup/plugin-commonjs@25.0.8 >       │
+│                     │ glob@8.1.0 > minimatch@5.1.6                           │
+│                     │                                                        │
+│                     │ ... Found 5 paths, run `pnpm why minimatch` for more   │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-7r86-cg39-jmmj      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch has ReDoS: matchOne() combinatorial          │
+│                     │ backtracking via multiple non-adjacent GLOBSTAR        │
+│                     │ segments                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=9.0.0 <9.0.7                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=9.0.7                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > make-fetch-happen@14.0.3 >           │
+│                     │ cacache@19.0.1 > glob@10.5.0 > minimatch@9.0.5         │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 >            │
+│                     │ glob@10.5.0 > minimatch@9.0.5                          │
+│                     │                                                        │
+│                     │ packages/danfe > @nfewizard/shared@link:../shared >    │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 >            │
+│                     │ glob@10.5.0 > minimatch@9.0.5                          │
+│                     │                                                        │
+│                     │ ... Found 8 paths, run `pnpm why minimatch` for more   │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-7r86-cg39-jmmj      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch has ReDoS: matchOne() combinatorial          │
+│                     │ backtracking via multiple non-adjacent GLOBSTAR        │
+│                     │ segments                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=10.0.0 <10.2.3                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=10.2.3                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-copy@3.5.0 > globby@10.0.1 >         │
+│                     │ @types/glob@7.2.0 > @types/minimatch@6.0.0 >           │
+│                     │ minimatch@10.1.1                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-7r86-cg39-jmmj      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch ReDoS: nested *() extglobs generate          │
+│                     │ catastrophically backtracking regular expressions      │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <3.1.4                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=3.1.4                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > @jest/transform@29.7.0 >      │
+│                     │ babel-plugin-istanbul@6.1.1 > test-exclude@6.0.0 >     │
+│                     │ glob@7.2.3 > minimatch@3.1.2                           │
+│                     │                                                        │
+│                     │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > @jest/transform@29.7.0 >      │
+│                     │ babel-plugin-istanbul@6.1.1 > test-exclude@6.0.0 >     │
+│                     │ minimatch@3.1.2                                        │
+│                     │                                                        │
+│                     │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > glob@7.2.3 > minimatch@3.1.2  │
+│                     │                                                        │
+│                     │ ... Found 602 paths, run `pnpm why minimatch` for more │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-23c5-xmqv-rm74      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch ReDoS: nested *() extglobs generate          │
+│                     │ catastrophically backtracking regular expressions      │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=5.0.0 <5.1.8                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.1.8                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @rollup/plugin-commonjs@25.0.8 >        │
+│                     │ glob@8.1.0 > minimatch@5.1.6                           │
+│                     │                                                        │
+│                     │ packages/danfe > @rollup/plugin-commonjs@25.0.8 >      │
+│                     │ glob@8.1.0 > minimatch@5.1.6                           │
+│                     │                                                        │
+│                     │ packages/nfce > @rollup/plugin-commonjs@25.0.8 >       │
+│                     │ glob@8.1.0 > minimatch@5.1.6                           │
+│                     │                                                        │
+│                     │ ... Found 5 paths, run `pnpm why minimatch` for more   │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-23c5-xmqv-rm74      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch ReDoS: nested *() extglobs generate          │
+│                     │ catastrophically backtracking regular expressions      │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=9.0.0 <9.0.7                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=9.0.7                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > make-fetch-happen@14.0.3 >           │
+│                     │ cacache@19.0.1 > glob@10.5.0 > minimatch@9.0.5         │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 >            │
+│                     │ glob@10.5.0 > minimatch@9.0.5                          │
+│                     │                                                        │
+│                     │ packages/danfe > @nfewizard/shared@link:../shared >    │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 >            │
+│                     │ glob@10.5.0 > minimatch@9.0.5                          │
+│                     │                                                        │
+│                     │ ... Found 8 paths, run `pnpm why minimatch` for more   │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-23c5-xmqv-rm74      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ minimatch ReDoS: nested *() extglobs generate          │
+│                     │ catastrophically backtracking regular expressions      │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ minimatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=10.0.0 <10.2.3                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=10.2.3                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-copy@3.5.0 > globby@10.0.1 >         │
+│                     │ @types/glob@7.2.0 > @types/minimatch@6.0.0 >           │
+│                     │ minimatch@10.1.1                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-23c5-xmqv-rm74      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ fast-xml-parser affected by DoS through entity         │
+│                     │ expansion in DOCTYPE (no expansion limit)              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ fast-xml-parser                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=5.0.0 <5.3.6                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.3.6                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 > @aws-sdk/core@3.956.0 >  │
+│                     │ @aws-sdk/xml-builder@3.956.0 > fast-xml-parser@5.2.5   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-env@3.956.0 >             │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-http@3.956.0 >            │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ ... Found 41 paths, run `pnpm why fast-xml-parser` for │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-jmr7-xgp7-cmfj      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Serialize JavaScript is Vulnerable to RCE via          │
+│                     │ RegExp.flags and Date.prototype.toISOString()          │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ serialize-javascript                                   │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=7.0.2                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=7.0.3                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-terser@7.0.2 >                       │
+│                     │ serialize-javascript@4.0.0                             │
+│                     │                                                        │
+│                     │ . > serialize-javascript@4.0.0                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-5c6j-r48x-rmvq      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Regular Expression Denial of Service in semver         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ semver                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=1.0.4 <4.3.2                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.3.2                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ browserify-fs@1.0.0 > levelup@0.18.6 > semver@2.3.2    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-x6fg-f45m-jf5q      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ tar has Hardlink Path Traversal via Drive-Relative     │
+│                     │ Linkpath                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ tar                                                    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=7.5.9                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=7.5.10                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > make-fetch-happen@14.0.3 >           │
+│                     │ cacache@19.0.1 > tar@7.5.2                             │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > tar@7.5.2                            │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 > tar@7.5.2  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why tar` for more        │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-qffp-2rhf-9h96      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ node-tar Symlink Path Traversal via Drive-Relative     │
+│                     │ Linkpath                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ tar                                                    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=7.5.10                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=7.5.11                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > make-fetch-happen@14.0.3 >           │
+│                     │ cacache@19.0.1 > tar@7.5.2                             │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > tar@7.5.2                            │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 > tar@7.5.2  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why tar` for more        │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-9ppj-qmqm-q256      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Race Condition in node-tar Path Reservations via       │
+│                     │ Unicode Ligature Collisions on macOS APFS              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ tar                                                    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=7.5.3                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=7.5.4                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > make-fetch-happen@14.0.3 >           │
+│                     │ cacache@19.0.1 > tar@7.5.2                             │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > tar@7.5.2                            │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 > tar@7.5.2  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why tar` for more        │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-r6q2-hw4h-h46w      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ fast-xml-parser affected by numeric entity expansion   │
+│                     │ bypassing all entity expansion limits (incomplete fix  │
+│                     │ for CVE-2026-26278)                                    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ fast-xml-parser                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=5.0.0 <5.5.6                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.5.6                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 > @aws-sdk/core@3.956.0 >  │
+│                     │ @aws-sdk/xml-builder@3.956.0 > fast-xml-parser@5.2.5   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-env@3.956.0 >             │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-http@3.956.0 >            │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ ... Found 41 paths, run `pnpm why fast-xml-parser` for │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-8gc5-j5rx-235r      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Handlebars.js has JavaScript Injection via AST Type    │
+│                     │ Confusion by tampering @partial-block                  │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ handlebars                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <=4.7.8                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.7.9                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > ts-jest@29.4.6 > handlebars@4.7.8                  │
+│                     │                                                        │
+│                     │ . > handlebars@4.7.8                                   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > ts-jest@29.4.6 >               │
+│                     │ handlebars@4.7.8                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-3mfm-83xf-c92r      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Forge has a basicConstraints bypass in its certificate │
+│                     │ chain verification (RFC 5280 violation)                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ node-forge                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=1.3.3                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=1.4.0                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > node-forge@1.3.3    │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ node-forge@1.3.3                                       │
+│                     │                                                        │
+│                     │ packages/danfe > @nfewizard/shared@link:../shared >    │
+│                     │ node-forge@1.3.3                                       │
+│                     │                                                        │
+│                     │ ... Found 8 paths, run `pnpm why node-forge` for more  │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-2328-f5f3-gj25      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Forge has signature forgery in Ed25519 due to missing  │
+│                     │ S > L check                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ node-forge                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <1.4.0                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=1.4.0                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > node-forge@1.3.3    │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ node-forge@1.3.3                                       │
+│                     │                                                        │
+│                     │ packages/danfe > @nfewizard/shared@link:../shared >    │
+│                     │ node-forge@1.3.3                                       │
+│                     │                                                        │
+│                     │ ... Found 8 paths, run `pnpm why node-forge` for more  │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-q67f-28xg-22rw      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Forge has Denial of Service via Infinite Loop in       │
+│                     │ BigInteger.modInverse() with Zero Input                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ node-forge                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <1.4.0                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=1.4.0                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > node-forge@1.3.3    │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ node-forge@1.3.3                                       │
+│                     │                                                        │
+│                     │ packages/danfe > @nfewizard/shared@link:../shared >    │
+│                     │ node-forge@1.3.3                                       │
+│                     │                                                        │
+│                     │ ... Found 8 paths, run `pnpm why node-forge` for more  │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-5m6q-g25r-mvwx      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Picomatch has a ReDoS vulnerability via extglob        │
+│                     │ quantifiers                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ picomatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <2.3.2                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=2.3.2                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > @changesets/cli@2.29.8 >                           │
+│                     │ @changesets/apply-release-plan@7.0.14 >                │
+│                     │ @changesets/config@3.1.2 >                             │
+│                     │ @changesets/get-dependents-graph@2.1.3 >               │
+│                     │ @manypkg/get-packages@1.1.3 > globby@11.1.0 >          │
+│                     │ fast-glob@3.3.3 > micromatch@4.0.8 > picomatch@2.3.1   │
+│                     │                                                        │
+│                     │ . > @changesets/cli@2.29.8 >                           │
+│                     │ @changesets/apply-release-plan@7.0.14 >                │
+│                     │ @changesets/config@3.1.2 > @manypkg/get-packages@1.1.3 │
+│                     │ > globby@11.1.0 > fast-glob@3.3.3 > micromatch@4.0.8 > │
+│                     │ picomatch@2.3.1                                        │
+│                     │                                                        │
+│                     │ . > @changesets/cli@2.29.8 >                           │
+│                     │ @changesets/apply-release-plan@7.0.14 >                │
+│                     │ @changesets/config@3.1.2 > micromatch@4.0.8 >          │
+│                     │ picomatch@2.3.1                                        │
+│                     │                                                        │
+│                     │ ... Found 4982 paths, run `pnpm why picomatch` for     │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-c2c7-rcm5-vvqj      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Picomatch has a ReDoS vulnerability via extglob        │
+│                     │ quantifiers                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ picomatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <4.0.4                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.0.4                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > @rollup/plugin-commonjs@28.0.9 >                   │
+│                     │ @rollup/pluginutils@5.3.0 > picomatch@4.0.3            │
+│                     │                                                        │
+│                     │ . > @rollup/plugin-commonjs@28.0.9 > fdir@6.5.0 >      │
+│                     │ picomatch@4.0.3                                        │
+│                     │                                                        │
+│                     │ . > @rollup/plugin-commonjs@28.0.9 > picomatch@4.0.3   │
+│                     │                                                        │
+│                     │ ... Found 90 paths, run `pnpm why picomatch` for more  │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-c2c7-rcm5-vvqj      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Forge has signature forgery in RSA-PKCS due to ASN.1   │
+│                     │ extra field                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ node-forge                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <1.4.0                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=1.4.0                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > node-forge@1.3.3    │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ node-forge@1.3.3                                       │
+│                     │                                                        │
+│                     │ packages/danfe > @nfewizard/shared@link:../shared >    │
+│                     │ node-forge@1.3.3                                       │
+│                     │                                                        │
+│                     │ ... Found 8 paths, run `pnpm why node-forge` for more  │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-ppp5-5v6c-4jwp      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Handlebars.js has JavaScript Injection in CLI          │
+│                     │ Precompiler via Unescaped Names and Options            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ handlebars                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <=4.7.8                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.7.9                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > ts-jest@29.4.6 > handlebars@4.7.8                  │
+│                     │                                                        │
+│                     │ . > handlebars@4.7.8                                   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > ts-jest@29.4.6 >               │
+│                     │ handlebars@4.7.8                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-xjpj-3mr7-gcpf      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Handlebars.js has JavaScript Injection via AST Type    │
+│                     │ Confusion when passing an object as dynamic partial    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ handlebars                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <=4.7.8                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.7.9                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > ts-jest@29.4.6 > handlebars@4.7.8                  │
+│                     │                                                        │
+│                     │ . > handlebars@4.7.8                                   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > ts-jest@29.4.6 >               │
+│                     │ handlebars@4.7.8                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-xhpv-hc6g-r9c6      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ Handlebars.js has Denial of Service via Malformed      │
+│                     │ Decorator Syntax in Template Compilation               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ handlebars                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <=4.7.8                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.7.9                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > ts-jest@29.4.6 > handlebars@4.7.8                  │
+│                     │                                                        │
+│                     │ . > handlebars@4.7.8                                   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > ts-jest@29.4.6 >               │
+│                     │ handlebars@4.7.8                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-9cx6-37pm-9jff      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ lodash vulnerable to Code Injection via `_.template`   │
+│                     │ imports key names                                      │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ lodash                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <=4.17.23                                      │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.18.0                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > lodash@4.17.21                                     │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ lodash@4.17.21                                         │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ soap@1.6.1 > lodash@4.17.21                            │
+│                     │                                                        │
+│                     │ ... Found 9 paths, run `pnpm why lodash` for more      │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-r5fr-rjxr-66jc      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ xmldom: XML injection via unsafe CDATA serialization   │
+│                     │ allows attacker-controlled markup insertion            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ @xmldom/xmldom                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <0.8.12                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=0.8.12                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ xml-crypto@6.1.2 > @xmldom/xmldom@0.8.11               │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > xml-crypto@6.1.2 >  │
+│                     │ @xmldom/xmldom@0.8.11                                  │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ soap@1.6.1 > xml-crypto@6.1.2 > @xmldom/xmldom@0.8.11  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why @xmldom/xmldom` for  │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-wh4c-j3r5-mjhp      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ xmldom: Uncontrolled recursion in XML serialization    │
+│                     │ leads to DoS                                           │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ @xmldom/xmldom                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <0.8.13                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=0.8.13                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ xml-crypto@6.1.2 > @xmldom/xmldom@0.8.11               │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > xml-crypto@6.1.2 >  │
+│                     │ @xmldom/xmldom@0.8.11                                  │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ soap@1.6.1 > xml-crypto@6.1.2 > @xmldom/xmldom@0.8.11  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why @xmldom/xmldom` for  │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-2v35-w6hq-6mfw      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ xmldom has XML injection through unvalidated           │
+│                     │ DocumentType serialization                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ @xmldom/xmldom                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <0.8.13                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=0.8.13                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ xml-crypto@6.1.2 > @xmldom/xmldom@0.8.11               │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > xml-crypto@6.1.2 >  │
+│                     │ @xmldom/xmldom@0.8.11                                  │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ soap@1.6.1 > xml-crypto@6.1.2 > @xmldom/xmldom@0.8.11  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why @xmldom/xmldom` for  │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-f6ww-3ggp-fr8h      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ xmldom has XML node injection through unvalidated      │
+│                     │ processing instruction serialization                   │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ @xmldom/xmldom                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <0.8.13                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=0.8.13                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ xml-crypto@6.1.2 > @xmldom/xmldom@0.8.11               │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > xml-crypto@6.1.2 >  │
+│                     │ @xmldom/xmldom@0.8.11                                  │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ soap@1.6.1 > xml-crypto@6.1.2 > @xmldom/xmldom@0.8.11  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why @xmldom/xmldom` for  │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-x6wf-f3px-wcqx      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ high                │ xmldom has XML node injection through unvalidated      │
+│                     │ comment serialization                                  │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ @xmldom/xmldom                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <0.8.13                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=0.8.13                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ xml-crypto@6.1.2 > @xmldom/xmldom@0.8.11               │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > xml-crypto@6.1.2 >  │
+│                     │ @xmldom/xmldom@0.8.11                                  │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ soap@1.6.1 > xml-crypto@6.1.2 > @xmldom/xmldom@0.8.11  │
+│                     │                                                        │
+│                     │ ... Found 16 paths, run `pnpm why @xmldom/xmldom` for  │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-j759-j44w-7fr8      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Memory Exposure in bl                                  │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ bl                                                     │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <0.9.5                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=0.9.5                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ browserify-fs@1.0.0 > levelup@0.18.6 > bl@0.8.2        │
+│                     │                                                        │
+│                     │ . > bl@0.8.2                                           │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-wrw9-m778-g6mc      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Remote Memory Exposure in bl                           │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ bl                                                     │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <1.2.3                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=1.2.3                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ browserify-fs@1.0.0 > levelup@0.18.6 > bl@0.8.2        │
+│                     │                                                        │
+│                     │ . > bl@0.8.2                                           │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-pp7h-53gx-mx7r      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Nodemailer: Email to an unintended domain can occur    │
+│                     │ due to Interpretation Conflict                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ nodemailer                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <7.0.7                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=7.0.7                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > nodemailer@6.10.1                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > nodemailer@6.10.1              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-mm7p-fcc7-pg87      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Lodash has Prototype Pollution Vulnerability in        │
+│                     │ `_.unset` and `_.omit` functions                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ lodash                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <=4.17.22                                      │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.17.23                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > lodash@4.17.21                                     │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ lodash@4.17.21                                         │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ soap@1.6.1 > lodash@4.17.21                            │
+│                     │                                                        │
+│                     │ ... Found 9 paths, run `pnpm why lodash` for more      │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-xxjr-mmjv-4gpg      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ bn.js affected by an infinite loop                     │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ bn.js                                                  │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=5.0.0 <5.2.3                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.2.3                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ crypto-browserify@3.12.1 > browserify-sign@4.2.5 >     │
+│                     │ bn.js@5.2.2                                            │
+│                     │                                                        │
+│                     │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ crypto-browserify@3.12.1 > browserify-sign@4.2.5 >     │
+│                     │ browserify-rsa@4.1.1 > bn.js@5.2.2                     │
+│                     │                                                        │
+│                     │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ crypto-browserify@3.12.1 > public-encrypt@4.0.3 >      │
+│                     │ browserify-rsa@4.1.1 > bn.js@5.2.2                     │
+│                     │                                                        │
+│                     │ ... Found 4 paths, run `pnpm why bn.js` for more       │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-378v-28hj-76wf      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ bn.js affected by an infinite loop                     │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ bn.js                                                  │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <4.12.3                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.12.3                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ crypto-browserify@3.12.1 > browserify-sign@4.2.5 >     │
+│                     │ elliptic@6.6.1 > bn.js@4.12.2                          │
+│                     │                                                        │
+│                     │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ crypto-browserify@3.12.1 > browserify-sign@4.2.5 >     │
+│                     │ parse-asn1@5.1.9 > asn1.js@4.10.1 > bn.js@4.12.2       │
+│                     │                                                        │
+│                     │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ crypto-browserify@3.12.1 > create-ecdh@4.0.4 >         │
+│                     │ bn.js@4.12.2                                           │
+│                     │                                                        │
+│                     │ ... Found 8 paths, run `pnpm why bn.js` for more       │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-378v-28hj-76wf      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ brace-expansion: Zero-step sequence causes process     │
+│                     │ hang and memory exhaustion                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ brace-expansion                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <1.1.13                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=1.1.13                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > @jest/transform@29.7.0 >      │
+│                     │ babel-plugin-istanbul@6.1.1 > test-exclude@6.0.0 >     │
+│                     │ glob@7.2.3 > minimatch@3.1.2 > brace-expansion@1.1.12  │
+│                     │                                                        │
+│                     │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > @jest/transform@29.7.0 >      │
+│                     │ babel-plugin-istanbul@6.1.1 > test-exclude@6.0.0 >     │
+│                     │ minimatch@3.1.2 > brace-expansion@1.1.12               │
+│                     │                                                        │
+│                     │ . > jest@29.7.0 > @jest/core@29.7.0 >                  │
+│                     │ @jest/reporters@29.7.0 > glob@7.2.3 > minimatch@3.1.2  │
+│                     │ > brace-expansion@1.1.12                               │
+│                     │                                                        │
+│                     │ ... Found 602 paths, run `pnpm why brace-expansion`    │
+│                     │ for more information                                   │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-f886-m6hf-6m8v      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ brace-expansion: Zero-step sequence causes process     │
+│                     │ hang and memory exhaustion                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ brace-expansion                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=2.0.0 <2.0.3                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=2.0.3                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > libxmljs2@0.37.0 >  │
+│                     │ node-gyp@11.5.0 > make-fetch-happen@14.0.3 >           │
+│                     │ cacache@19.0.1 > glob@10.5.0 > minimatch@9.0.5 >       │
+│                     │ brace-expansion@2.0.2                                  │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ libxmljs2@0.37.0 > node-gyp@11.5.0 >                   │
+│                     │ make-fetch-happen@14.0.3 > cacache@19.0.1 >            │
+│                     │ glob@10.5.0 > minimatch@9.0.5 > brace-expansion@2.0.2  │
+│                     │                                                        │
+│                     │ packages/cte > @rollup/plugin-commonjs@25.0.8 >        │
+│                     │ glob@8.1.0 > minimatch@5.1.6 > brace-expansion@2.0.2   │
+│                     │                                                        │
+│                     │ ... Found 13 paths, run `pnpm why brace-expansion` for │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-f886-m6hf-6m8v      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Handlebars.js has Prototype Pollution Leading to XSS   │
+│                     │ through Partial Template Injection                     │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ handlebars                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <4.7.9                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.7.9                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > ts-jest@29.4.6 > handlebars@4.7.8                  │
+│                     │                                                        │
+│                     │ . > handlebars@4.7.8                                   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > ts-jest@29.4.6 >               │
+│                     │ handlebars@4.7.8                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-2qvq-rjwj-gvw9      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Picomatch: Method Injection in POSIX Character Classes │
+│                     │ causes incorrect Glob Matching                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ picomatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <2.3.2                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=2.3.2                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > @changesets/cli@2.29.8 >                           │
+│                     │ @changesets/apply-release-plan@7.0.14 >                │
+│                     │ @changesets/config@3.1.2 >                             │
+│                     │ @changesets/get-dependents-graph@2.1.3 >               │
+│                     │ @manypkg/get-packages@1.1.3 > globby@11.1.0 >          │
+│                     │ fast-glob@3.3.3 > micromatch@4.0.8 > picomatch@2.3.1   │
+│                     │                                                        │
+│                     │ . > @changesets/cli@2.29.8 >                           │
+│                     │ @changesets/apply-release-plan@7.0.14 >                │
+│                     │ @changesets/config@3.1.2 > @manypkg/get-packages@1.1.3 │
+│                     │ > globby@11.1.0 > fast-glob@3.3.3 > micromatch@4.0.8 > │
+│                     │ picomatch@2.3.1                                        │
+│                     │                                                        │
+│                     │ . > @changesets/cli@2.29.8 >                           │
+│                     │ @changesets/apply-release-plan@7.0.14 >                │
+│                     │ @changesets/config@3.1.2 > micromatch@4.0.8 >          │
+│                     │ picomatch@2.3.1                                        │
+│                     │                                                        │
+│                     │ ... Found 4982 paths, run `pnpm why picomatch` for     │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-3v7f-55p6-f55p      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Picomatch: Method Injection in POSIX Character Classes │
+│                     │ causes incorrect Glob Matching                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ picomatch                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <4.0.4                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.0.4                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > @rollup/plugin-commonjs@28.0.9 >                   │
+│                     │ @rollup/pluginutils@5.3.0 > picomatch@4.0.3            │
+│                     │                                                        │
+│                     │ . > @rollup/plugin-commonjs@28.0.9 > fdir@6.5.0 >      │
+│                     │ picomatch@4.0.3                                        │
+│                     │                                                        │
+│                     │ . > @rollup/plugin-commonjs@28.0.9 > picomatch@4.0.3   │
+│                     │                                                        │
+│                     │ ... Found 90 paths, run `pnpm why picomatch` for more  │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-3v7f-55p6-f55p      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Handlebars.js has a Prototype Method Access Control    │
+│                     │ Gap via Missing __lookupSetter__ Blocklist Entry       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ handlebars                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.6.0 <=4.7.8                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.7.9                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > ts-jest@29.4.6 > handlebars@4.7.8                  │
+│                     │                                                        │
+│                     │ . > handlebars@4.7.8                                   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > ts-jest@29.4.6 >               │
+│                     │ handlebars@4.7.8                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-7rx3-28cr-v5wh      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Serialize JavaScript has CPU Exhaustion Denial of      │
+│                     │ Service via crafted array-like objects                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ serialize-javascript                                   │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <7.0.5                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=7.0.5                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-terser@7.0.2 >                       │
+│                     │ serialize-javascript@4.0.0                             │
+│                     │                                                        │
+│                     │ . > serialize-javascript@4.0.0                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-qj8w-gfj5-8c6v      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ lodash vulnerable to Prototype Pollution via array     │
+│                     │ path bypass in `_.unset` and `_.omit`                  │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ lodash                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=4.17.23                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.18.0                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > lodash@4.17.21                                     │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ lodash@4.17.21                                         │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/shared@link:../shared >      │
+│                     │ soap@1.6.1 > lodash@4.17.21                            │
+│                     │                                                        │
+│                     │ ... Found 9 paths, run `pnpm why lodash` for more      │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-f23m-r3pf-42rh      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Nodemailer Vulnerable to SMTP Command Injection via    │
+│                     │ CRLF in Transport name Option (EHLO/HELO)              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ nodemailer                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=8.0.4                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=8.0.5                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > nodemailer@6.10.1                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > nodemailer@6.10.1              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-vvjj-xcjg-gr5g      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Entity Expansion Limits Bypassed When Set to Zero Due  │
+│                     │ to JavaScript Falsy Evaluation in fast-xml-parser      │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ fast-xml-parser                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=5.0.0 <5.5.7                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.5.7                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 > @aws-sdk/core@3.956.0 >  │
+│                     │ @aws-sdk/xml-builder@3.956.0 > fast-xml-parser@5.2.5   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-env@3.956.0 >             │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-http@3.956.0 >            │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ ... Found 41 paths, run `pnpm why fast-xml-parser` for │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-jp2q-39xq-3w4g      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ follow-redirects leaks Custom Authentication Headers   │
+│                     │ to Cross-Domain Redirect Targets                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ follow-redirects                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=1.15.11                                              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=1.16.0                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > follow-redirects@1.15.11                           │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > axios@1.13.2 >      │
+│                     │ follow-redirects@1.15.11                               │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared >                     │
+│                     │ easy-soap-request@5.7.0 > axios@1.13.2 >               │
+│                     │ follow-redirects@1.15.11                               │
+│                     │                                                        │
+│                     │ ... Found 37 paths, run `pnpm why follow-redirects`    │
+│                     │ for more information                                   │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-r4q5-vmmm-2653      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Axios has a NO_PROXY Hostname Normalization Bypass     │
+│                     │ that Leads to SSRF                                     │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ axios                                                  │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=1.0.0 <1.15.0                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=1.15.0                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > axios@1.13.2        │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared >                     │
+│                     │ easy-soap-request@5.7.0 > axios@1.13.2                 │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ axios@1.13.2                                           │
+│                     │                                                        │
+│                     │ ... Found 36 paths, run `pnpm why axios` for more      │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-3p68-rc4w-qgx5      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ Axios has Unrestricted Cloud Metadata Exfiltration via │
+│                     │ Header Injection Chain                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ axios                                                  │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=1.0.0 <1.15.0                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=1.15.0                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > axios@1.13.2        │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared >                     │
+│                     │ easy-soap-request@5.7.0 > axios@1.13.2                 │
+│                     │                                                        │
+│                     │ packages/cte > @nfewizard/danfe@link:../danfe >        │
+│                     │ @nfewizard/shared@link:../shared > soap@1.6.1 >        │
+│                     │ axios@1.13.2                                           │
+│                     │                                                        │
+│                     │ ... Found 36 paths, run `pnpm why axios` for more      │
+│                     │ information                                            │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-fvcv-3m26-pcqx      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ moderate            │ fast-xml-parser XMLBuilder: XML Comment and CDATA      │
+│                     │ Injection via Unescaped Delimiters                     │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ fast-xml-parser                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <5.7.0                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.7.0                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 > @aws-sdk/core@3.956.0 >  │
+│                     │ @aws-sdk/xml-builder@3.956.0 > fast-xml-parser@5.2.5   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-env@3.956.0 >             │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-http@3.956.0 >            │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ ... Found 41 paths, run `pnpm why fast-xml-parser` for │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-gh4j-gqv2-49f6      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ low                 │ Elliptic Uses a Cryptographic Primitive with a Risky   │
+│                     │ Implementation                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ elliptic                                               │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <=6.6.1                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ <0.0.0                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ crypto-browserify@3.12.1 > browserify-sign@4.2.5 >     │
+│                     │ elliptic@6.6.1                                         │
+│                     │                                                        │
+│                     │ . > rollup-plugin-node-builtins@2.1.2 >                │
+│                     │ crypto-browserify@3.12.1 > create-ecdh@4.0.4 >         │
+│                     │ elliptic@6.6.1                                         │
+│                     │                                                        │
+│                     │ . > elliptic@6.6.1                                     │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-848j-6mx2-7j84      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ low                 │ fast-xml-parser has stack overflow in XMLBuilder with  │
+│                     │ preserveOrder                                          │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ fast-xml-parser                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=5.0.0 <5.3.8                                         │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=5.3.8                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 > @aws-sdk/core@3.956.0 >  │
+│                     │ @aws-sdk/xml-builder@3.956.0 > fast-xml-parser@5.2.5   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-env@3.956.0 >             │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > @types/nodemailer@6.4.21 >     │
+│                     │ @aws-sdk/client-ses@3.956.0 >                          │
+│                     │ @aws-sdk/credential-provider-node@3.956.0 >            │
+│                     │ @aws-sdk/credential-provider-http@3.956.0 >            │
+│                     │ @aws-sdk/core@3.956.0 > @aws-sdk/xml-builder@3.956.0 > │
+│                     │ fast-xml-parser@5.2.5                                  │
+│                     │                                                        │
+│                     │ ... Found 41 paths, run `pnpm why fast-xml-parser` for │
+│                     │ more information                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-fj3w-jwp8-x2g3      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ low                 │ Nodemailer has SMTP command injection due to           │
+│                     │ unsanitized `envelope.size` parameter                  │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ nodemailer                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ <8.0.4                                                 │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=8.0.4                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > nodemailer@6.10.1                                  │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > nodemailer@6.10.1              │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-c7w3-x93f-qmm8      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────────────────┐
+│ low                 │ Handlebars.js has a Property Access Validation Bypass  │
+│                     │ in container.lookup                                    │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Package             │ handlebars                                             │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Vulnerable versions │ >=4.0.0 <=4.7.8                                        │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Patched versions    │ >=4.7.9                                                │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ Paths               │ . > ts-jest@29.4.6 > handlebars@4.7.8                  │
+│                     │                                                        │
+│                     │ . > handlebars@4.7.8                                   │
+│                     │                                                        │
+│                     │ packages/nfewizard-io > ts-jest@29.4.6 >               │
+│                     │ handlebars@4.7.8                                       │
+├─────────────────────┼────────────────────────────────────────────────────────┤
+│ More info           │ https://github.com/advisories/GHSA-442j-39wm-28r2      │
+└─────────────────────┴────────────────────────────────────────────────────────┘
+71 vulnerabilities found
+Severity: 4 low | 20 moderate | 45 high | 2 critical

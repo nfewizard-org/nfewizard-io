@@ -1821,7 +1821,7 @@ export type IBSCBS = {
      */
     gTransfCred?: gTransfCred;
     /**
-     * @param {gCredPresIBSZFM} gCredPresIBSZFM - Informações do crédito presumido de IBS para fornecimentos a partir da ZFM - [UB109]
+     * @param {gCredPresIBSZFM} gCredPresIBSZFM - Grupo para apropriação de crédito presumido de IBS sobre o saldo devedor na ZFM - [UB131]
      */
     gCredPresIBSZFM?: gCredPresIBSZFM;
     /**
@@ -1875,6 +1875,8 @@ export type gIBSCBS = {
 
 /**
  * Grupo de Informações do IBS e CBS em operações com imposto monofásico - [UB84]
+ * Validação UB13-40: exigido quando ind_gIBSCBSMono = 1. Implantação em produção a partir de 04/01/2027.
+ * NT 2025.002 v1.35: implementação em homologação postergada (implementação futura).
  */
 export type gIBSCBSMono = {
     /**
@@ -1918,19 +1920,30 @@ export type gTransfCred = {
 };
 
 /**
- * Informações do crédito presumido de IBS para fornecimentos a partir da ZFM - [UB109]
+ * Grupo para apropriação de crédito presumido de IBS sobre o saldo devedor na ZFM - [UB131]
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador "ind_gCredPresIBSZFM" da tabela de CST do IBS e da CBS.
+ * NT 2025.002 v1.30
  */
 export type gCredPresIBSZFM = {
     /**
-     * @param {number} tpCredPresIBSZFM - Tipo de classificação de acordo com o art. 450, § 1º, da LC 214/25 para o cálculo do crédito presumido na ZFM - [UB110]
-     * Classificação conforme percentuais definidos no art. 450, § 1º, da LC 214/25 para o cálculo do crédito presumido: 0 - Sem Crédito Presumido, 1 - Bens de consumo final (55%), 2 - Bens de capital (75%), 3 - Bens intermediários (90,25%), 4 - Bens de informática e outros definidos em legislação (100%)
+     * @param {string} competApur - Ano e mês referência do período de apuração (AAAA-MM) - [UB132]
+     * Informar período atual ou retroativo.
+     */
+    competApur: string;
+    /**
+     * @param {number} tpCredPresIBSZFM - Tipo de classificação de acordo com o art. 450, § 1º, da LC 214/25 para o cálculo do crédito presumido na ZFM - [UB133]
+     * Classificação conforme percentuais definidos no art. 450, § 1º, da LC 214/25 para o cálculo do crédito presumido:
+     * 0 - Sem Crédito Presumido
+     * 1 - Bens de consumo final (55%)
+     * 2 - Bens de capital (75%)
+     * 3 - Bens intermediários (90,25%)
+     * 4 - Bens de informática e outros definidos em legislação (100%)
      */
     tpCredPresIBSZFM: number;
     /**
-     * @param {number} vCredPresIBSZFM - Valor do crédito presumido calculado sobre o saldo devedor apurado - [UB111]
-     * É obrigatório para nota de crédito com tpNFCredito = 02 - Apropriação de crédito presumido de IBS sobre o saldo devedor na ZFM. (art. 450, § 1º, LC 214/25). Vedado para documentos que não sejam nota de crédito com tpNFCredito = 02.
+     * @param {number} vCredPresIBSZFM - Valor do crédito presumido calculado sobre o saldo devedor apurado - [UB134]
      */
-    vCredPresIBSZFM?: number;
+    vCredPresIBSZFM: number;
 };
 
 
@@ -1996,6 +2009,7 @@ export type gIBSUF = {
     gDevTrib?: gDevTrib;
     /**
      * @param {gRed} gRed - Grupo de informações da redução da alíquota - [UB26]
+     * NT 2025.002 v1.34 (UB26-20): exigido quando ind_gRed = 1 ou gCompraGov preenchido, desde que pIBSUF seja maior que zero.
      */
     gRed?: gRed;
     /**
@@ -2026,6 +2040,7 @@ export type gIBSMun = {
     gDevTrib?: gDevTrib;
     /**
      * @param {gRed} gRed - Grupo de informações da redução da alíquota - [UB45]
+     * NT 2025.002 v1.34 (UB45-20): exigido quando ind_gRed = 1 ou gCompraGov preenchido, desde que pIBSMun seja maior que zero.
      */
     gRed?: gRed;
     /**
@@ -2042,7 +2057,8 @@ export type gIBSMun = {
 export type gCBS = {
     /**
      * @param {string} pCBS - Alíquota da CBS - [UB56]
-     * Alíquota vigente da CBS
+     * Alíquota vigente da CBS. Para 2025-2026: 0,9% (Art. 346 da LC 214/2025).
+     * NT 2025.002 v1.33 (UB56-10): alíquota zero é permitida somente quando emitente e destinatário estão na mesma área incentivada (ZFM ou ALC) e o NCM não é de produtos restritos (armas, fumo, bebidas alcoólicas, automóveis, perfumaria).
      */
     pCBS: string;
     /**
@@ -2056,6 +2072,7 @@ export type gCBS = {
     gDevTrib?: gDevTrib;
     /**
      * @param {gRed} gRed - Grupo de informações da redução da alíquota - [UB64]
+     * NT 2025.002 v1.34 (UB64-20): exigido quando ind_gRed = 1 ou gCompraGov preenchido, desde que pCBS seja maior que zero.
      */
     gRed?: gRed;
     /**
@@ -2147,7 +2164,9 @@ export type gTribCompraGov = {
 
 /**
  * Grupo de informações da Tributação Monofásica Padrão - [UB84a]
- * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “indMonoPadrao” da tabela cClassTrib
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “ind_gMonoPadrao” da tabela de cClassTrib do IBS e da CBS.
+ * Validação UB84a-10: exigido quando ind_gMonoPadrao = 1. Implantação em produção a partir de 04/01/2027.
+ * NT 2025.002 v1.35: implementação em homologação postergada (implementação futura).
  */
 export type gMonoPadrao = {
     /**
@@ -2178,7 +2197,9 @@ export type gMonoPadrao = {
 /**
  * Grupo de informações da Tributação Monofásica Sujeita à Retenção - [UB90]
  * Uso em operações com combustíveis derivados de petróleo (Gasolina A) [ou *Óleo Diesel A*] para retenção do imposto sobre o biocombustível a ser misturado. Art. 178 da LC 214/2025.
- * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “indMonoReten” da tabela cClassTrib
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “ind_gMonoReten” da tabela de cClassTrib do IBS e da CBS.
+ * Validação UB90-10: exigido quando ind_gMonoReten = 1. Implantação em produção a partir de 04/01/2027.
+ * NT 2025.002 v1.35: implementação em homologação postergada (implementação futura).
  */
 export type gMonoReten = {
     /**
@@ -2209,7 +2230,9 @@ export type gMonoReten = {
 /**
  * Grupo de informações da Tributação Monofásica Retida Anteriormente - [UB94]
  * Tributação monofásica própria sobre combustíveis cobrada anteriormente.
- * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “indMonoRet” da tabela cClassTrib.
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “ind_gMonoRet” da tabela de cClassTrib do IBS e da CBS.
+ * Validação UB94-10: exigido quando ind_gMonoRet = 1. Implantação em produção a partir de 04/01/2027.
+ * NT 2025.002 v1.35: implementação em homologação postergada (implementação futura).
  */
 export type gMonoRet = {
     /**
@@ -2242,7 +2265,9 @@ export type gMonoRet = {
 /**
  * Grupo de informações do Diferimento da Tributação Monofásica - [UB99]
  * Operações com diferimento, aplicado aos biocombustíveis. Exemplo: operação do produtor de biocombustível (usina).
- * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “indMonoDif” da tabela cClassTrib.
+ * Observação: a obrigatoriedade ou vedação do preenchimento deste grupo está condicionada ao indicador “ind_gMonoDif” da tabela de cClassTrib do IBS e da CBS.
+ * Validação UB99-10: exigido quando ind_gMonoDif = 1. Implantação em produção a partir de 04/01/2027.
+ * NT 2025.002 v1.35: implementação em homologação postergada (implementação futura).
  */
 export type gMonoDif = {
     /**
@@ -4367,6 +4392,8 @@ export type II = {
  * [PIS] 
  * Grupo PIS
  * GRUPO Q
+ * Validação Q01-20: obrigatório para NF-e modelo 55.
+ * NT 2025.002 v1.31: não exigido para NF-e de Crédito (finNFe=5), NF-e de Débito (finNFe=6) e tpOperGov=2 (Recebimento do pagamento).
  */
 export type PIS = {
     /**
@@ -4557,6 +4584,8 @@ export type PISST = {
  * [COFINS] 
  * Grupo COFINS	
  * GRUPO S
+ * Validação S01-20: obrigatório para NF-e modelo 55.
+ * NT 2025.002 v1.31: não exigido para NF-e de Crédito (finNFe=5), NF-e de Débito (finNFe=6) e tpOperGov=2 (Recebimento do pagamento).
  */
 export type COFINS = {
     /**

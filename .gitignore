@@ -47,3 +47,5 @@ logs/
 
 # Arquivos de pacote npm (gerados por npm pack)
 *.tgz
+
+docs

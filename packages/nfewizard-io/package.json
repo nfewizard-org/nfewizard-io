@@ -50,9 +50,9 @@
   "dependencies": {
     "@nfewizard/types": "workspace:*",
     "@nfewizard/shared": "workspace:*",
-    "axios": "^1.7.7",
+    "axios": "^1.15.0",
     "date-fns": "^2.30.0",
-    "nodemailer": "^6.9.14",
+    "nodemailer": "^8.0.5",
     "node-fetch": "^3.3.2",
     "pako": "^2.1.0"
   },

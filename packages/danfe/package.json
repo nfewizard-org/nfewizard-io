@@ -50,10 +50,10 @@
   "devDependencies": {
     "typescript": "^5.4.5",
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-typescript": "^11.1.6",
     "@rollup/plugin-json": "^6.1.0",
-    "rollup": "^4.0.0",
+    "rollup": "^4.59.0",
     "@types/pdfkit": "^0.13.5",
     "@types/qrcode": "^1.5.5"
   }
