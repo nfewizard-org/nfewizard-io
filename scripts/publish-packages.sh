@@ -20,6 +20,15 @@ echo -e "${BLUE}   📦 Publicação de Pacotes NFeWizard${NC}"
 echo -e "${BLUE}════════════════════════════════════════════════════════${NC}"
 echo ""
 
+# Bump de versão (opcional)
+echo -e "${YELLOW}🔖 Deseja fazer bump de versão antes de publicar? (y/n)${NC}"
+read -rp "  Opção: " DO_BUMP
+if [[ "$DO_BUMP" =~ ^[Yy]$ ]]; then
+    source "$(dirname "$0")/bump-version.sh"
+    bump_all_interactive
+    echo ""
+fi
+
 # Verificar se está logado no npm
 echo -e "${YELLOW}🔐 Verificando autenticação npm...${NC}"
 if ! npm whoami &> /dev/null; then

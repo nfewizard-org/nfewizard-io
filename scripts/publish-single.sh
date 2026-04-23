@@ -70,12 +70,22 @@ PACKAGE_VERSION=$(node -p "require('./package.json').version")
 PACKAGE_DESCRIPTION=$(node -p "require('./package.json').description")
 
 echo -e "${BLUE}Pacote:${NC} ${YELLOW}${FULL_PACKAGE_NAME}${NC}"
-echo -e "${BLUE}Versão:${NC} ${YELLOW}${PACKAGE_VERSION}${NC}"
+echo -e "${BLUE}Versão atual:${NC} ${YELLOW}${PACKAGE_VERSION}${NC}"
 echo -e "${BLUE}Descrição:${NC} ${PACKAGE_DESCRIPTION}"
 echo ""
 
 # Voltar para raiz
 cd ../..
+
+# Bump de versão (opcional)
+echo -e "${YELLOW}🔖 Deseja fazer bump de versão antes de publicar? (y/n)${NC}"
+read -rp "  Opção: " DO_BUMP
+if [[ "$DO_BUMP" =~ ^[Yy]$ ]]; then
+    source "$(dirname "$0")/bump-version.sh"
+    bump_package "$PACKAGE_NAME" ""
+    PACKAGE_VERSION="$BUMPED_VERSION"
+    echo ""
+fi
 
 # Build do pacote
 echo -e "${BLUE}🔨 Fazendo build do pacote...${NC}"
