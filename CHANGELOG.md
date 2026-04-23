@@ -1,5 +1,38 @@
 # Changelog
 
+## [1.0.3] - 2026-04-23
+
+### Feat
+- **Leiaute da NF-e (Modelo 55 e 65) - Reforma Tributária - [NT 2025.002 v1.31 → v1.35]**
+  - Atualiza Grupo UB - Informações dos tributos IBS / CBS e Imposto Seletivo
+    - Corrige estrutura do Grupo `gCredPresIBSZFM` (UB131-UB134)
+      - Adiciona campo `competApur` (UB132) - Ano e mês de referência do período de apuração
+      - Renomeia campos para numeração correta (UB131-UB134, antes UB109-UB111)
+      - Torna campo `vCredPresIBSZFM` (UB134) obrigatório
+    - Atualiza referência do campo `gCredPresIBSZFM` na interface `IBSCBS` (UB131)
+    - Atualiza documentação de `gIBSCBSMono` (UB13-40): validação em produção a partir de 04/01/2027; implementação em homologação postergada (NT v1.35)
+    - Atualiza documentação de `gMonoPadrao` (UB84a-10): idem acima
+    - Atualiza documentação de `gMonoReten` (UB90-10): idem acima
+    - Atualiza documentação de `gMonoRet` (UB94-10): idem acima
+    - Atualiza documentação de `gMonoDif` (UB99-10): idem acima
+    - Atualiza documentação de `gCBS.pCBS` (UB56-10): alíquota zero permitida em operações entre emitente e destinatário na mesma área incentivada (ZFM/ALC) para NCM não restrito (NT v1.33)
+    - Atualiza documentação de `gIBSUF.gRed` (UB26-20): `gRed` exigido somente quando `pIBSUF > 0` (NT v1.34)
+    - Atualiza documentação de `gIBSMun.gRed` (UB45-20): `gRed` exigido somente quando `pIBSMun > 0` (NT v1.34)
+    - Atualiza documentação de `gCBS.gRed` (UB64-20): `gRed` exigido somente quando `pCBS > 0` (NT v1.34)
+  - Atualiza Grupo Q - PIS
+    - Atualiza documentação de `PIS` (Q01-20): não exigido para `finNFe=5`, `finNFe=6` e `tpOperGov=2` (NT v1.31)
+  - Atualiza Grupo S - COFINS
+    - Atualiza documentação de `COFINS` (S01-20): não exigido para `finNFe=5`, `finNFe=6` e `tpOperGov=2` (NT v1.31)
+
+### Fix
+- **Aplicados diversos FIX para vulnerabilidades conhecidas**
+
+## [1.0.0]
+
+### Modularização do Projeto
+
+A partir da versão 1.0.0, o projeto **NFeWizard-io** foi modularizado em pacotes menores para melhor manutenibilidade, otimização de bundle e separação de responsabilidades.
+
 ## [0.5.5] - 2025-12-17
 
 ### Feat

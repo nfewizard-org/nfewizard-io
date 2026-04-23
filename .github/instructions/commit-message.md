@@ -56,6 +56,4 @@ feat: Adiciona templates de PR.
 update stuff  
 
 ## Regras Incontestáveis
-
-- NUNCA crie Pull Requests com destino direto para main ou master
 - NUNCA execute git push automaticamente ou altere histórico remoto
