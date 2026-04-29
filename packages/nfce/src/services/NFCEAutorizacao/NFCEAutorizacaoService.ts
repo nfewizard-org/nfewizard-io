@@ -485,7 +485,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         return response;
     }
 
-    async Exec(data: NFe): Promise<{
+    async Exec(data: NFe | string): Promise<{
         success: boolean;
         xMotivo: GenericObject;
         xmls: {
@@ -500,14 +500,19 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         let responseInJson: GenericObject | undefined = undefined;
         let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
         const ContentType = this.setContentType();
-        
+
+        // Se receber XML em string, converte para o JSON do padrão esperado pela lib
+        const dataAsJson: NFe = typeof data === 'string'
+            ? new XmlParser().convertXmlEnvioNFeToJson(data) as NFe
+            : data;
+
         // Verifica se está em contingência (tpEmis = 4 ou 9)
-        const nfeData = Array.isArray(data.NFe) ? data.NFe[0] : data.NFe;
+        const nfeData = Array.isArray(dataAsJson.NFe) ? dataAsJson.NFe[0] : dataAsJson.NFe;
         const emContingencia = [4, 9].includes(nfeData.infNFe.ide.tpEmis);
         
         try {
             // Gerando XML da NFC-e
-            xmlConsulta = this.gerarXmlNFCEAutorizacao(data);
+            xmlConsulta = this.gerarXmlNFCEAutorizacao(dataAsJson);
 
             // Se está em contingência (tpEmis = 4 ou 9), NÃO transmite para SEFAZ
             // Conforme NT 2018.006: "As NFC-e são geradas, assinadas e os respectivos 
@@ -521,7 +526,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
 
                 // Extrai os XMLs das NFCe geradas (já assinados)
                 const xmlsGerados = this.xmlNFe.map((xmlAssinado, index) => {
-                    const nfeItem = Array.isArray(data.NFe) ? data.NFe[index] : data.NFe;
+                    const nfeItem = Array.isArray(dataAsJson.NFe) ? dataAsJson.NFe[index] : dataAsJson.NFe;
                     return {
                         NFe: nfeItem,
                         xmlAssinado: xmlAssinado,
@@ -594,7 +599,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
              */
             const responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
 
-            const retorno = await this.trataRetorno(xmlRetorno.data, data.indSinc, responseInJson);
+            const retorno = await this.trataRetorno(xmlRetorno.data, dataAsJson.indSinc, responseInJson);
 
             const xmlFinal = this.salvaArquivos(xmlConsulta, responseInJson, xmlRetorno.data,
                 {

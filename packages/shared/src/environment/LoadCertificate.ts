@@ -23,6 +23,7 @@ import forge from 'node-forge';
 
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { Readable } from 'stream';
 import { logger } from '../exceptions/logger.js';
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url));
@@ -39,14 +40,42 @@ class LoadCertificate {
         this.cert_key = '';
     }
 
-    private loadCertificateWithPEM(): Promise<CertificateLoadResult> {
+    /**
+     * Resolve o conteúdo binário do PFX a partir do `pathCertificado` informado em
+     * config. Aceita `string` (caminho), `Buffer` ou `NodeJS.ReadableStream`.
+     */
+    private async resolvePfxBuffer(): Promise<Buffer> {
+        const input = this.config.dfe.pathCertificado as unknown;
+
+        if (typeof input === 'string') {
+            return fs.readFileSync(input);
+        }
+
+        if (Buffer.isBuffer(input)) {
+            return input;
+        }
+
+        if (input && typeof (input as any).pipe === 'function') {
+            const stream = input as Readable;
+            return await new Promise<Buffer>((resolve, reject) => {
+                const chunks: Buffer[] = [];
+                stream.on('data', (chunk: Buffer | string) => {
+                    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+                });
+                stream.on('end', () => resolve(Buffer.concat(chunks)));
+                stream.on('error', (err: Error) => reject(err));
+            });
+        }
+
+        throw new Error('pathCertificado deve ser uma string (path), Buffer ou Stream legível.');
+    }
+
+    private loadCertificateWithPEM(pfxFile: Buffer): Promise<CertificateLoadResult> {
         return new Promise((resolve, reject) => {
             try {
 
-                const pfxPath = this.config.dfe.pathCertificado;
                 const pfxPassword = this.config.dfe.senhaCertificado;
 
-                const pfxFile = fs.readFileSync(pfxPath);
                 const certsDir = path.resolve(baseDir, dir);
                 
                 // Read CA certificates if directory exists and has files
@@ -112,14 +141,10 @@ class LoadCertificate {
         });
     }
 
-    private loadCertificateWithNodeForge(): Promise<CertificateLoadResult> {
+    private loadCertificateWithNodeForge(pfxFile: Buffer): Promise<CertificateLoadResult> {
         return new Promise((resolve, reject) => {
             try {
-                const pfxPath = this.config.dfe.pathCertificado;
                 const pfxPassword = this.config.dfe.senhaCertificado;
-
-                // Lê o arquivo PFX
-                const pfxFile = fs.readFileSync(pfxPath);
 
                 // Decodifica o arquivo PFX (PKCS#12)
                 const p12Asn1 = forge.asn1.fromDer(pfxFile.toString('binary'));
@@ -204,8 +229,11 @@ class LoadCertificate {
         logger.info('Validando certificado', {
             context: 'LoadCertificate',
         });
+
+        const pfxFile = await this.resolvePfxBuffer();
+
         if (this.config.lib?.useOpenSSL || this.config.lib?.useOpenSSL === undefined) {
-            const { agent } = await this.loadCertificateWithPEM();
+            const { agent } = await this.loadCertificateWithPEM(pfxFile);
 
             return {
                 certificate: this.certificate,
@@ -213,7 +241,7 @@ class LoadCertificate {
                 agent
             };
         }
-        const { agent } = await this.loadCertificateWithNodeForge();
+        const { agent } = await this.loadCertificateWithNodeForge(pfxFile);
 
         return {
             certificate: this.certificate,

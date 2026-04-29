@@ -181,7 +181,14 @@ export class NFeWizard implements NFeWizardImpl {
     /**
      * Autorização NFe
      */
-    async NFE_Autorizacao(data: NFe) {
+    /**
+     * Autoriza uma NFe.
+     *
+     * @param data Dados da NFe em JSON do padrão da lib (`NFe`) ou um XML
+     * de envio (`enviNFe` / `NFe` solo) em string. Quando string, o XML é
+     * convertido para JSON antes de seguir o fluxo normal.
+     */
+    async NFE_Autorizacao(data: NFe | string) {
         return await this.nfeWizardService.NFE_Autorizacao(data);
     }
 

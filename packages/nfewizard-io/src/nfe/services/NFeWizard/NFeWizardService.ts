@@ -377,7 +377,7 @@ class NFeWizardService implements NFeWizardServiceImpl {
     /**
      * Autorização
      */
-    async NFE_Autorizacao(data: NFe) {
+    async NFE_Autorizacao(data: NFe | string) {
         try {
             const autorizacaoService = new NFEAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
             const autorizacao = new NFEAutorizacao(autorizacaoService);

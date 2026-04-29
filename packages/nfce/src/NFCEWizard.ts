@@ -70,7 +70,9 @@ export class NFCEWizard {
 
     /**
      * Autoriza uma NFCe
-     * @param nfce - Dados da NFCe (opcional, pode ser passado na inicialização)
+     * @param nfce - Dados da NFCe em JSON do padrão da lib (`NFe`) ou um XML
+     *               de envio (`enviNFe` / `NFe` solo) em string. Quando string,
+     *               o XML é convertido para JSON antes de seguir o fluxo normal.
      * @returns Resultado da autorização
      */
     async NFCE_Autorizacao(nfce?: any): Promise<any> {

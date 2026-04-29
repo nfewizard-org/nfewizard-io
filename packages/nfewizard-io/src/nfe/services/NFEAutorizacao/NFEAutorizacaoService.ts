@@ -395,7 +395,7 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         return response;
     }
 
-    public async Exec(data: NFe): Promise<{
+    public async Exec(data: NFe | string): Promise<{
         success: boolean;
         xMotivo: GenericObject;
         xmls: {
@@ -409,8 +409,13 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
         const ContentType = this.setContentType();
         try {
+            // Se receber XML em string, converte para o JSON do padrão esperado pela lib
+            const dataAsJson: NFe = typeof data === 'string'
+                ? new XmlParser().convertXmlEnvioNFeToJson(data) as NFe
+                : data;
+
             // Gerando XML para consulta de Status do Serviço
-            xmlConsulta = this.gerarXmlNFeAutorizacao(data);
+            xmlConsulta = this.gerarXmlNFeAutorizacao(dataAsJson);
 
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
 
@@ -424,7 +429,7 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
              */
             responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
 
-            const retorno = await this.trataRetorno(xmlRetorno.data, data.indSinc, responseInJson);
+            const retorno = await this.trataRetorno(xmlRetorno.data, dataAsJson.indSinc, responseInJson);
 
             const xmlFinal = this.salvaArquivos(xmlConsulta, responseInJson, xmlRetorno.data,
                 {

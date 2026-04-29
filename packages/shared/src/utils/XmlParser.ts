@@ -179,4 +179,112 @@ export class XmlParser {
 
         return jsonBody;
     }
+
+    /**
+     * Converte um XML de envio (`enviNFe`) ou uma `NFe` solo em uma
+     * estrutura JSON compatível com o tipo `NFe` esperado pelos serviços
+     * de Autorização de NFe/NFCe (`{ idLote, indSinc, NFe }`).
+     *
+     * Formatos aceitos:
+     *  - Envelope `enviNFe` contendo uma ou mais `NFe`.
+     *  - `nfeProc` (XML autorizado) — extrai a `NFe` interna.
+     *  - `NFe` solo — empacota com defaults (`idLote=1`, `indSinc=1`).
+     *
+     * Defaults são aplicáveis somente para os campos do envelope; o
+     * conteúdo de `infNFe` não é alterado e segue o fluxo normal de
+     * geração/assinatura no service.
+     *
+     * @param xml String XML de entrada.
+     * @param overrides Permite sobrescrever `idLote`/`indSinc` quando o XML
+     *                  não contém envelope.
+     */
+    convertXmlEnvioNFeToJson(xml: string, overrides?: { idLote?: string | number; indSinc?: 0 | 1 }): GenericObject {
+        logger.info('Convertendo XML de envio para JSON', {
+            context: 'XmlParser',
+            method: 'convertXmlEnvioNFeToJson',
+        });
+
+        const jsonAsString = convert.xml2json(xml, {
+            compact: true,
+            spaces: 2,
+            ignoreAttributes: true,
+            ignoreDeclaration: true,
+            trim: true,
+            ignoreInstruction: true,
+            ignoreComment: true,
+            ignoreCdata: true,
+            ignoreDoctype: true,
+            textFn: this.removeJsonTextAttribute,
+        });
+
+        const jsonData = JSON.parse(jsonAsString);
+
+        let envelope: any = this.findInObj(jsonData, 'enviNFe');
+        if (!envelope) {
+            const nfeProc = this.findInObj(jsonData, 'nfeProc');
+            const nfeNode = nfeProc ? this.findInObj(nfeProc, 'NFe') : this.findInObj(jsonData, 'NFe');
+            if (!nfeNode) {
+                throw new Error('XML inválido: não foi possível localizar `enviNFe` ou `NFe`.');
+            }
+            envelope = {
+                idLote: overrides?.idLote ?? '1',
+                indSinc: overrides?.indSinc ?? 1,
+                NFe: nfeNode,
+            };
+        }
+
+        return {
+            idLote: envelope.idLote ?? overrides?.idLote ?? '1',
+            indSinc: Number(envelope.indSinc ?? overrides?.indSinc ?? 1),
+            NFe: envelope.NFe,
+        };
+    }
+
+    /**
+     * Converte um XML autorizado (`nfeProc`) ou uma `NFe` solo em uma
+     * estrutura JSON compatível com o gerador de DANFE
+     * (`{ NFe, protNFe? }`), além de retornar a chave de acesso quando
+     * disponível.
+     *
+     * @param xml String XML de entrada.
+     */
+    convertXmlNfeProcToJson(xml: string): { data: GenericObject; chave: string } {
+        logger.info('Convertendo nfeProc para JSON', {
+            context: 'XmlParser',
+            method: 'convertXmlNfeProcToJson',
+        });
+
+        const jsonAsString = convert.xml2json(xml, {
+            compact: true,
+            spaces: 2,
+            ignoreAttributes: true,
+            ignoreDeclaration: true,
+            trim: true,
+            ignoreInstruction: true,
+            ignoreComment: true,
+            ignoreCdata: true,
+            ignoreDoctype: true,
+            textFn: this.removeJsonTextAttribute,
+        });
+
+        const jsonData = JSON.parse(jsonAsString);
+
+        const nfeProc = this.findInObj(jsonData, 'nfeProc');
+        const NFe = nfeProc ? this.findInObj(nfeProc, 'NFe') : this.findInObj(jsonData, 'NFe');
+        if (!NFe) {
+            throw new Error('XML inválido: não foi possível localizar `NFe` ou `nfeProc`.');
+        }
+
+        const protNFe = nfeProc ? this.findInObj(nfeProc, 'protNFe') : this.findInObj(jsonData, 'protNFe');
+
+        const chFromProt = protNFe?.infProt?.chNFe;
+        const idAttr: string = NFe?.infNFe?.Id ?? '';
+        const chFromId = typeof idAttr === 'string' ? idAttr.replace(/^NFe/, '') : '';
+        const chave = chFromProt || chFromId || '';
+
+        const data: GenericObject = { NFe };
+        if (protNFe) data.protNFe = protNFe;
+
+        return { data, chave };
+    }
 }

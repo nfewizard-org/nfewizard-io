@@ -73,9 +73,13 @@ export type NFeWizardProps = {
          */
         exibirMarcaDaguaDanfe?: boolean;
         /**
-         * @param {string} pathCertificado - Define de onde o certificado digital será importado
+         * @param {string | Buffer | NodeJS.ReadableStream} pathCertificado - Origem do certificado digital.
+         * Aceita:
+         *  - `string`  → caminho no filesystem do arquivo `.pfx`
+         *  - `Buffer`  → conteúdo binário do certificado (útil para certificados em memória / KMS / Vault)
+         *  - `Stream`  → `NodeJS.ReadableStream` que emite o conteúdo binário do `.pfx`
          */
-        pathCertificado: string;
+        pathCertificado: string | Buffer | NodeJS.ReadableStream;
         /**
          * @param {string} senhaCertificado - Senha do certificado digital
          */
