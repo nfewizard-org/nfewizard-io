@@ -204,20 +204,7 @@ export class XmlParser {
             method: 'convertXmlEnvioNFeToJson',
         });
 
-        const jsonAsString = convert.xml2json(xml, {
-            compact: true,
-            spaces: 2,
-            ignoreAttributes: true,
-            ignoreDeclaration: true,
-            trim: true,
-            ignoreInstruction: true,
-            ignoreComment: true,
-            ignoreCdata: true,
-            ignoreDoctype: true,
-            textFn: this.removeJsonTextAttribute,
-        });
-
-        const jsonData = JSON.parse(jsonAsString);
+        const jsonData = this.parseNfeLikeXml(xml);
 
         let envelope: any = this.findInObj(jsonData, 'enviNFe');
         if (!envelope) {
@@ -232,6 +219,10 @@ export class XmlParser {
                 NFe: nfeNode,
             };
         }
+
+        // Normaliza CNPJ/CPF -> CNPJCPF nas NFe (formato esperado pela lib)
+        const nfeList = Array.isArray(envelope.NFe) ? envelope.NFe : [envelope.NFe];
+        nfeList.forEach((n: any) => this.normalizeNfeForLibFormat(n));
 
         return {
             idLote: envelope.idLote ?? overrides?.idLote ?? '1',
@@ -254,20 +245,7 @@ export class XmlParser {
             method: 'convertXmlNfeProcToJson',
         });
 
-        const jsonAsString = convert.xml2json(xml, {
-            compact: true,
-            spaces: 2,
-            ignoreAttributes: true,
-            ignoreDeclaration: true,
-            trim: true,
-            ignoreInstruction: true,
-            ignoreComment: true,
-            ignoreCdata: true,
-            ignoreDoctype: true,
-            textFn: this.removeJsonTextAttribute,
-        });
-
-        const jsonData = JSON.parse(jsonAsString);
+        const jsonData = this.parseNfeLikeXml(xml);
 
         const nfeProc = this.findInObj(jsonData, 'nfeProc');
         const NFe = nfeProc ? this.findInObj(nfeProc, 'NFe') : this.findInObj(jsonData, 'NFe');
@@ -286,5 +264,126 @@ export class XmlParser {
         if (protNFe) data.protNFe = protNFe;
 
         return { data, chave };
+    }
+
+    /**
+     * Faz o parse de um XML de NFe/NFCe (envio, retorno ou solo) preservando
+     * atributos e elevando-os para o nível do elemento (ex.: `Id` em `infNFe`,
+     * `versao` em `NFe`, `nItem` em `det`). Necessário para alimentar o
+     * fluxo interno da lib que espera atributos como propriedades comuns.
+     */
+    private parseNfeLikeXml(xml: string): any {
+        const jsonAsString = convert.xml2json(xml, {
+            compact: true,
+            spaces: 2,
+            ignoreAttributes: false,
+            ignoreDeclaration: true,
+            trim: true,
+            ignoreInstruction: true,
+            ignoreComment: true,
+            ignoreCdata: true,
+            ignoreDoctype: true,
+            textFn: this.removeJsonTextAttribute,
+        });
+
+        const parsed = JSON.parse(jsonAsString);
+        this.liftAttributes(parsed);
+        return parsed;
+    }
+
+    /**
+     * Eleva, recursivamente, as chaves de `_attributes` para o próprio nível
+     * do elemento e remove o nó `_attributes`. Compatível com a saída de
+     * `xml-js` em modo compacto.
+     */
+    private liftAttributes(node: any): void {
+        if (!node || typeof node !== 'object') return;
+
+        if (Array.isArray(node)) {
+            node.forEach(item => this.liftAttributes(item));
+            return;
+        }
+
+        if (node._attributes && typeof node._attributes === 'object') {
+            for (const attrKey of Object.keys(node._attributes)) {
+                if (!(attrKey in node)) {
+                    node[attrKey] = node._attributes[attrKey];
+                }
+            }
+            delete node._attributes;
+        }
+
+        for (const key of Object.keys(node)) {
+            const value = node[key];
+            if (value && typeof value === 'object') {
+                this.liftAttributes(value);
+            }
+        }
+    }
+
+    /**
+     * Normaliza uma `NFe` parseada de XML para o formato interno da lib:
+     *  - converte `CNPJ`/`CPF`/`idEstrangeiro` em `CNPJCPF` em `emit`,
+     *    `dest`, `transp.transporta` e `NFref.refNFP`.
+     *  - remove atributos elevados que a lib re-aplica via `$` ao montar
+     *    o XML final (`infNFe.versao`, `det.nItem`), evitando duplicidade
+     *    no XML gerado.
+     *
+     * Observação: `infRespTec` mantém o campo `CNPJ` original — a lib não
+     * unifica documento para esse nó.
+     */
+    private normalizeNfeForLibFormat(nfeNode: any): void {
+        const infNFe = nfeNode?.infNFe;
+        if (!infNFe || typeof infNFe !== 'object') return;
+
+        // versao é re-aplicado pela lib via $ ao montar `infNFe`
+        delete infNFe.versao;
+
+        // O atributo `Id` no XML vem com prefixo "NFe" (ex.: "NFe4126..."),
+        // mas a lib espera apenas a chave de 44 dígitos em `infNFe.Id` —
+        // ela própria re-prefixa com "NFe" ao calcular `chaveAcesso`.
+        if (typeof infNFe.Id === 'string' && /^NFe\d{44}$/.test(infNFe.Id)) {
+            infNFe.Id = infNFe.Id.slice(3);
+        }
+
+        this.unifyDocFields(infNFe.emit);
+        this.unifyDocFields(infNFe.dest);
+        this.unifyDocFields(infNFe.transp?.transporta);
+
+        // nItem é re-aplicado pela lib via $ em cada `det` quando é array.
+        // Por isso normalizamos sempre para array (no XML, com 1 item, viraria
+        // objeto único e a lib não re-aplicaria nItem, quebrando a validação XSD).
+        const det = infNFe.det;
+        if (Array.isArray(det)) {
+            det.forEach((d: any) => { if (d && typeof d === 'object') delete d.nItem; });
+        } else if (det && typeof det === 'object') {
+            delete det.nItem;
+            infNFe.det = [det];
+        }
+
+        const NFref = infNFe.NFref;
+        if (Array.isArray(NFref)) {
+            NFref.forEach((ref: any) => this.unifyDocFields(ref?.refNFP));
+        } else if (NFref && typeof NFref === 'object') {
+            this.unifyDocFields(NFref.refNFP);
+        }
+    }
+
+    /**
+     * Em um nó (ex.: `emit`, `dest`), unifica `CNPJ`/`CPF`/`idEstrangeiro`
+     * em um único campo `CNPJCPF`, removendo as chaves originais. Mantém a
+     * primeira não-vazia encontrada na ordem `CNPJ → CPF → idEstrangeiro`.
+     */
+    private unifyDocFields(target: any): void {
+        if (!target || typeof target !== 'object') return;
+        if (target.CNPJCPF) return;
+
+        const candidate = target.CNPJ || target.CPF || target.idEstrangeiro;
+        if (candidate) {
+            target.CNPJCPF = candidate;
+        }
+        delete target.CNPJ;
+        delete target.CPF;
+        delete target.idEstrangeiro;
     }
 }
