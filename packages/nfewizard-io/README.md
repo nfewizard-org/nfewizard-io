@@ -34,7 +34,7 @@ npm install nfewizard-io
 
 Este pacote fornece métodos para operações de NFe, incluindo:
 
-- ✅ **Autorização (Emissão de NFe)**: Submissão de Notas Fiscais Eletrônicas para autorização
+- ✅ **Autorização (Emissão de NFe)**: Submissão de Notas Fiscais Eletrônicas para autorização. Aceita tanto o **objeto tipado `NFe`** quanto uma **string XML** (com ou sem o envelope `<enviNFe>`)
 - ✅ **Distribuição DFe**: Consulta e Download de documentos fiscais eletrônicos
 - ✅ **Consulta de Protocolo**: Verificação da situação da NFe na SEFAZ
 - ✅ **Inutilização**: Inutilização de números de NFe não utilizados
@@ -47,6 +47,7 @@ Este pacote fornece métodos para operações de NFe, incluindo:
   - Desconhecimento da Operação
   - EPEC (Evento Prévio de Emissão em Contingência)
   - Operação Não Realizada
+- ✅ **Validação de Schema XSD (`NFE_SchemaValidate`)**: Valida qualquer XML fiscal contra o schema XSD oficial da SEFAZ, com relatório humanizado e `console.table` integrado
 
 > **⚠️ Importante**: 
 > - Para **DANFE** (geração de PDF), instale separadamente: `npm install @nfewizard/danfe`
@@ -200,6 +201,79 @@ build:
 - ✅ **NT 2025.002 v.130**: Suporte completo à Reforma Tributária
 
 📋 **[Consulte o Guia Completo de Migração](../../BREAKING_CHANGES.md)**
+
+---
+
+## ✨ Novidades recentes (pós 1.0.0)
+
+### Autorização aceita XML string
+
+`NFE_Autorizacao` agora aceita diretamente uma string XML (além do objeto tipado), tanto com o envelope `<enviNFe>` quanto apenas com o elemento `<NFe>`:
+
+```typescript
+// Objeto tipado (comportamento original — mantido)
+await nfeWizard.NFE_Autorizacao(nfeObject);
+
+// String XML completa (com enviNFe)
+const xmlComEnvelope = '<enviNFe versao="4.00" ...>...</enviNFe>';
+await nfeWizard.NFE_Autorizacao(xmlComEnvelope);
+
+// String XML sem envelope (a lib adiciona <enviNFe> automaticamente)
+const xmlSemEnvelope = '<NFe xmlns="http://www.portalfiscal.inf.br/nfe">...</NFe>';
+await nfeWizard.NFE_Autorizacao(xmlSemEnvelope);
+```
+
+### NFE_SchemaValidate — Validação de Schema XSD
+
+Novo método que valida qualquer XML fiscal contra o schema XSD oficial, retornando um relatório detalhado com erros humanizados:
+
+```typescript
+import NFeWizard, { SchemaValidationResult } from 'nfewizard-io';
+
+const result: SchemaValidationResult = await nfeWizard.NFE_SchemaValidate(
+    xmlString,
+    'NFeAutorizacao',           // SchemaValidateMethod
+    // 'validateSchemaJsBased'  // validador opcional — usa config da lib se omitido
+);
+
+// result.success   — boolean
+// result.message   — resumo humanizado
+// result.errors[]  — lista de SchemaValidationIssue com: raw, humanized, element, line, column, expected
+// result.report    — string multilinha estilo SEFAZ-RS (já impressa automaticamente)
+// result.tableRows — prontos para console.table (já exibido automaticamente)
+// result.schema    — nome do arquivo XSD utilizado
+```
+
+**Métodos (`SchemaValidateMethod`) disponíveis:**
+
+| Valor | Schema XSD |
+|-------|-----------|
+| `'NFeAutorizacao'` / `'NFEAutorizacao'` | `enviNFe_v4.00.xsd` |
+| `'NFEStatusServico'` | `consStatServ_v4.00.xsd` |
+| `'NFEConsultaProtocolo'` | `consSitNFe_v4.00.xsd` |
+| `'RecepcaoEvento'` | `envEvento_v1.00.xsd` |
+| `'NFeDistribuicaoDFe'` | `distDFeInt_v1.01.xsd` |
+| `'NFEInutilizacao'` | `inutNFe_v4.00.xsd` |
+| `'NFERetAutorizacao'` | `consReciNFe_v4.00.xsd` |
+| `'CTeDistribuicaoDFe'` | `cte/distDFeInt_v1.00.xsd` |
+| `'NFSe_Autorizacao'` | `nfse/DPS_v1.01.xsd` |
+| `'NFSe_Consulta'` / `'NFSe_Distribuicao'` | `nfse/NFSe_v1.01.xsd` |
+| `'NFSe_Eventos'` | `nfse/pedRegEvento_v1.01.xsd` |
+
+> **Nota**: para `NFeAutorizacao`/`NFEAutorizacao`, se o XML passado começar com `<NFe>`, o envelope `<enviNFe versao="4.00">` é adicionado automaticamente antes da validação.
+
+**Tratamento de erro:**
+
+```typescript
+try {
+    await nfeWizard.NFE_SchemaValidate(xml, 'NFeAutorizacao');
+} catch (err: any) {
+    // err.message  — mensagem resumida
+    // err.errors   — SchemaValidationIssue[]
+    // err.report   — relatório completo
+    // err.tableRows — linhas para console.table
+}
+```
 
 ---
 

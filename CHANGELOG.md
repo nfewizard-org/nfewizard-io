@@ -1,5 +1,25 @@
 # Changelog
 
+## [Unreleased] — pós 1.0.3
+
+### Feat
+
+- **`NFE_SchemaValidate` — Validação de schema pública** (`nfewizard-io`, `@nfewizard/nfse`, `@nfewizard/shared`)
+  - Novo método `NFE_SchemaValidate(xml, metodo, validator?)` exposto na facade `NFeWizard` e em `@nfewizard/shared` como função standalone.
+  - Retorna `SchemaValidationResult` com campos `success`, `message`, `errors[]` (humanizados + raw), `report` (multilinha estilo SEFAZ-RS) e `tableRows` (pronto para `console.table`).
+  - Relatório e tabela são impressos automaticamente no console em sucesso **e** em falha.
+  - Em caso de erro, o `Error` lançado carrega `err.errors`, `err.report` e `err.tableRows` para inspeção programática.
+  - Novo tipo exportado `SchemaValidateMethod` (union literal) restringe o parâmetro `metodo` aos valores mapeados em `SchemaLoader`.
+  - Novos tipos exportados: `SchemaValidationIssue`, `SchemaValidationResult` — disponíveis em `@nfewizard/shared`, `@nfewizard/types/shared`, `nfewizard-io` e `@nfewizard/nfce`.
+  - Para `NFeAutorizacao`/`NFEAutorizacao`: se o XML passado começar com `<NFe>` (sem envelope `<enviNFe>`), o envelope é adicionado automaticamente antes da validação XSD.
+  - Seleção de validador por ordem de prioridade: argumento explícito → `lib.useForSchemaValidation` do config → `validateSchemaJsBased` (padrão, sem JDK).
+
+- **`NFE_Autorizacao` / `NFCE_Autorizacao` aceitam XML string**
+  - Além do objeto tipado `NFe`, o método de autorização agora aceita diretamente uma string XML (com ou sem o envelope `<enviNFe versao="4.00">`).
+  - Sem breaking change: o comportamento anterior (objeto tipado) é preservado.
+
+---
+
 ## [1.0.3] - 2026-04-23
 
 ### Feat

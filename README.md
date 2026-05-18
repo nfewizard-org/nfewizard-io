@@ -87,6 +87,7 @@ NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação 
     - EPEC (Evento Prévio de Emissão em Contingência)
     - Operação Não Realizada
 - **Geração de DANFE**: Criação do Documento Auxiliar da Nota Fiscal Eletrônica (DANFE), um resumo impresso da NFe.
+- **Validação de Schema XSD (`NFE_SchemaValidate`)**: Valida qualquer XML fiscal contra o schema XSD oficial, com relatório de erros humanizado e pronto para `console.table`. Suporta validação JS-based (sem JDK) ou Java-based.
 
 ## 🚧 ATENÇÃO 🚧
 ### Requisitos para instalação
@@ -227,6 +228,16 @@ await nfeWizard.NFE_LoadEnvironment({
 - **NT 2025.002 v.130**: Suporte à Reforma Tributária
 
 📋 **Consulte o [Guia de Migração Completo](BREAKING_CHANGES.md)** para atualizar seu código
+
+### Novidades recentes (pós 1.0.0)
+
+- **`NFE_Autorizacao` / `NFCE_Autorizacao` aceitam XML string**: além do objeto tipado `NFe`, os métodos de autorização agora aceitam diretamente uma string XML completa (com ou sem o envelope `<enviNFe>`).
+- **`NFE_SchemaValidate`** (novo — `nfewizard-io` e `@nfewizard/nfse`):
+  - Valida qualquer XML contra o schema XSD oficial da SEFAZ.
+  - Aceita `<NFe>` solo ou `<enviNFe>` completo para `NFeAutorizacao` — o envelope é gerado automaticamente quando necessário.
+  - Retorna `SchemaValidationResult` com `errors[]` (humanizados + raw), `report` textual estilo SEFAZ-RS e `tableRows` prontos para `console.table`.
+  - Seleção de validador: `validateSchemaJsBased` (padrão, sem JDK) ou `validateSchemaJavaBased`.
+  - Em caso de erro, o `Error` lançado também carrega `err.errors`, `err.report` e `err.tableRows`.
 
 ## Observações
 
