@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Treeunfe DFe. If not, see <https://www.gnu.org/licenses/>.
  */
-import { Environment, GerarConsulta, logger, SaveFiles, Utility, XmlBuilder } from '@nfewizard/shared';
+import { Environment, GerarConsulta, logger, NFE_SchemaValidate, SaveFiles, SchemaValidateMethod, Utility, XmlBuilder } from '@nfewizard/shared';
 import {
   DpsConsultaPorId,
   NFSeAlteracaoBeneficioMunicipal,
@@ -348,6 +348,41 @@ export default class NFSe {
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_AlterarRetencoes' });
       throw new Error(`NFSE_AlterarRetencoes: ${error.message}`);
+    }
+  }
+
+  /**
+   * Valida um XML contra o schema XSD do método fiscal informado.
+   * O `environment` é injetado automaticamente a partir da configuração da lib.
+   *
+   * @param xml      - String XML a ser validada.
+   * @param metodo   - Nome do método/operação fiscal (ex.: `'NFSeAutorizacao'`).
+   * @param validator - Força um validador específico. Se omitido, usa
+   *                    `lib.useForSchemaValidation` do config; caso não definido,
+   *                    usa `'validateSchemaJsBased'` como padrão.
+   */
+  async NFSe_SchemaValidate(xml: string, metodo: SchemaValidateMethod, validator?: 'validateSchemaJsBased' | 'validateSchemaJavaBased') {
+    await this.loadEnvironmentPromise;
+    try {
+      const response = await NFE_SchemaValidate(xml, metodo, { validator, environment: this.environment });
+
+      console.log(response.report);
+      console.table(response.tableRows);
+
+      return response;
+    } catch (error: any) {
+      if (error && typeof error === 'object' && 'errors' in error && 'report' in error) {
+        console.log(error.report);
+        console.table(error.tableRows);
+        logger.error('', { message: error.message, errors: error.errors }, { context: 'NFSe_SchemaValidate' });
+        const err = new Error(`NFSe_SchemaValidate: ${error.message}`);
+        (err as any).errors = error.errors;
+        (err as any).report = error.report;
+        (err as any).tableRows = error.tableRows;
+        throw err;
+      }
+      logger.error('', error, { context: 'NFSe_SchemaValidate' });
+      throw new Error(`NFSe_SchemaValidate: ${error?.message ?? error}`);
     }
   }
 }

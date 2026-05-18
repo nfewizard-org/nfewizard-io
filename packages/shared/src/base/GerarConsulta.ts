@@ -53,7 +53,7 @@ class GerarConsulta implements GerarConsultaImpl {
             
             // Capturando o schema path
             const { schemaPath } = this.utility.getSchema(metodo);
-            
+            logger.info(xmlConsulta);
             // Valida Schema apenas se o schema path estiver definido
             if (schemaPath) {
                 if (config.lib?.useForSchemaValidation !== 'validateSchemaJsBased') {

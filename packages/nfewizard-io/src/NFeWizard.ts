@@ -31,7 +31,7 @@ import {
     EPEC,
     EmailParams,
 } from '@nfewizard/types/nfe';
-import { NFeWizardServiceImpl, NFeWizardImpl, NFeWizardProps } from '@nfewizard/types/shared';
+import { NFeWizardServiceImpl, NFeWizardImpl, NFeWizardProps, SchemaValidateMethod } from '@nfewizard/types/shared';
 import NFeWizardService from './nfe/services/NFeWizard/NFeWizardService.js';
 
 export class NFeWizard implements NFeWizardImpl {
@@ -190,6 +190,20 @@ export class NFeWizard implements NFeWizardImpl {
      */
     async NFE_Autorizacao(data: NFe | string) {
         return await this.nfeWizardService.NFE_Autorizacao(data);
+    }
+
+    /**
+     * Valida um XML contra o schema XSD do método fiscal informado.
+     * O `environment` é injetado automaticamente a partir da configuração da lib.
+     *
+     * @param xml      - String XML a ser validada.
+     * @param metodo   - Nome do método/operação fiscal (ex.: `'NFeAutorizacao'`).
+     * @param validator - Força um validador específico. Se omitido, usa
+     *                    `lib.useForSchemaValidation` do config; caso não definido,
+     *                    usa `'validateSchemaJsBased'` como padrão.
+     */
+    async NFE_SchemaValidate(xml: string, metodo: SchemaValidateMethod, validator?: 'validateSchemaJsBased' | 'validateSchemaJavaBased') {
+        return await this.nfeWizardService.NFE_SchemaValidate(xml, metodo, validator);
     }
 
     /**

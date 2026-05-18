@@ -37,6 +37,48 @@ import {
     EmailParams
 } from '../nfe/index.js';
 
+/**
+ * Nomes de métodos/operações fiscais aceitos por `NFE_SchemaValidate`.
+ * Sincronizado com as chaves mapeadas em `@nfewizard/shared` (`SchemaValidateMethod`).
+ */
+export type SchemaValidateMethod =
+    | 'NFEStatusServico'
+    | 'NFEConsultaProtocolo'
+    | 'RecepcaoEvento'
+    | 'NFeDistribuicaoDFe'
+    | 'NFEAutorizacao'
+    | 'NFeAutorizacao'
+    | 'NFEInutilizacao'
+    | 'NFERetAutorizacao'
+    | 'CTeDistribuicaoDFe'
+    | 'NFSe_Autorizacao'
+    | 'NFSe_Consulta'
+    | 'NFSe_Distribuicao'
+    | 'NFSe_Eventos'
+    | 'NFSe_ParametrosMunicipais';
+
+/** Erro individual de validação de schema. */
+export interface SchemaValidationIssue {
+    raw: string;
+    humanized: string;
+    element?: string;
+    attribute?: string;
+    expected?: string[];
+    line?: number;
+    column?: number;
+}
+
+/** Resultado da validação de schema retornado por `NFE_SchemaValidate` / `NFSe_SchemaValidate`. */
+export interface SchemaValidationResult {
+    success: boolean;
+    message: string;
+    errors: SchemaValidationIssue[];
+    report: string;
+    tableRows: Array<{ '#': number; Linha: number | ''; Elemento: string; Mensagem: string }>;
+    metodo: SchemaValidateMethod;
+    schema: string;
+}
+
 export interface NFeWizardImpl {
     NFE_LoadEnvironment({ config }: { config: NFeWizardProps }): Promise<void>;
     NFE_ConsultaStatusServico(): Promise<any>;
@@ -56,4 +98,5 @@ export interface NFeWizardImpl {
     NFE_Autorizacao(data: NFe): Promise<{ NFe: LayoutNFe, protNFe: ProtNFe }[]>;
     NFE_Inutilizacao(data: InutilizacaoData): Promise<any>;
     NFE_EnviaEmail(mailParams: EmailParams): any;
+    NFE_SchemaValidate(xml: string, metodo: SchemaValidateMethod, validator?: 'validateSchemaJsBased' | 'validateSchemaJavaBased'): Promise<SchemaValidationResult>;
 }

@@ -33,6 +33,10 @@ export { NFCERecepcaoEventoService } from './services/NFCERecepcaoEvento/NFCERec
 // NFCe Utilities
 export { generateQRCodeURLOnline, generateQRCodeURLOffline } from './services/NFCEAutorizacao/util/NFCEQRCode.js';
 
+// Schema validation (re-export from @nfewizard/shared)
+export { NFE_SchemaValidate } from '@nfewizard/shared';
+export type { SchemaValidator, SchemaValidateMethod, NFESchemaValidateOptions } from '@nfewizard/shared';
+
 // Re-export types for convenience (user doesn't need to install @nfewizard/types separately)
 export type * from '@nfewizard/types/nfce';
 export type * from '@nfewizard/types/nfe';

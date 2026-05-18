@@ -20,7 +20,7 @@ export * from './LoadCertificate.js';
 export * from './NFeWizardProps.js';
 
 // Export NFeWizardImpl interface
-export type { NFeWizardImpl } from './NFeWizardImpl.js';
+export type { NFeWizardImpl, SchemaValidateMethod, SchemaValidationIssue, SchemaValidationResult } from './NFeWizardImpl.js';
 
 // Service implementation interfaces (stubs for now)
 export interface SaveFilesImpl { salvaArquivos(...args: any[]): void; }

@@ -21,6 +21,7 @@ import { NFeWizardServiceImpl } from '@nfewizard/types/shared';
 import { GerarConsulta } from '@nfewizard/shared';
 import { SaveFiles } from '@nfewizard/shared';
 import { Environment } from '@nfewizard/shared';
+import { NFE_SchemaValidate, SchemaValidateMethod } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
 import { NFEStatusServicoService } from '../NFEStatusServico/NFEStatusServicoService.js';
 import { NFEConsultaProtocolo } from '../../operations/NFEConsultaProtocolo/NFEconsultaProtocolo.js';
@@ -414,6 +415,40 @@ class NFeWizardService implements NFeWizardServiceImpl {
         }
     }
 
+    /**
+     * Valida um XML contra o schema XSD do método fiscal informado.
+     * O `environment` é injetado automaticamente a partir da configuração da lib.
+     *
+     * @param xml      - String XML a ser validada.
+     * @param metodo   - Nome do método/operação fiscal (ex.: `'NFeAutorizacao'`).
+     * @param validator - Força um validador específico. Se omitido, usa
+     *                    `lib.useForSchemaValidation` do config; caso não definido,
+     *                    usa `'validateSchemaJsBased'` como padrão.
+     */
+    async NFE_SchemaValidate(xml: string, metodo: SchemaValidateMethod, validator?: 'validateSchemaJsBased' | 'validateSchemaJavaBased') {
+        try {
+            const response = await NFE_SchemaValidate(xml, metodo, { validator, environment: this.environment });
+
+            console.log(response.report);
+            console.table(response.tableRows);
+
+            return response;
+        } catch (error: any) {
+            // Quando o erro vem do próprio NFE_SchemaValidate, é um SchemaValidationResult enriquecido.
+            if (error && typeof error === 'object' && 'errors' in error && 'report' in error) {
+                console.log(error.report);
+                console.table(error.tableRows);
+                logger.error('', { message: error.message, errors: error.errors }, { context: 'NFE_SchemaValidate' });
+                const err = new Error(`NFE_SchemaValidate: ${error.message}`);
+                (err as any).errors = error.errors;
+                (err as any).report = error.report;
+                (err as any).tableRows = error.tableRows;
+                throw err;
+            }
+            logger.error('', error, { context: 'NFE_SchemaValidate' });
+            throw new Error(`NFE_SchemaValidate: ${error?.message ?? error}`);
+        }
+    }
 
     /**
      * @deprecated A partir da v1.0.0, use o pacote @nfewizard/danfe

@@ -1,4 +1,5 @@
 import { GenericObject } from './Utils.js';
+import type { SchemaValidateMethod, SchemaValidationResult } from './NFeWizardImpl.js';
 import { Cancelamento, CartaDeCorrecao, CienciaDaOperacao, ConfirmacaoDaOperacao, ConsultaNFe, DesconhecimentoDaOperacao, DFePorChaveNFe, DFePorNSU, DFePorUltimoNSU, EPEC, EventoNFe, LayoutNFe, NFe, NFeWizardProps, OperacaoNaoRealizada, ProtNFe } from '../nfe/index.js';
 export interface NFeWizardServiceImpl {
     NFE_LoadEnvironment({ config }: {
@@ -22,6 +23,7 @@ export interface NFeWizardServiceImpl {
         NFe: LayoutNFe;
         protNFe: ProtNFe;
     }[]>;
+    NFE_SchemaValidate(xml: string, metodo: SchemaValidateMethod, validator?: 'validateSchemaJsBased' | 'validateSchemaJavaBased'): Promise<SchemaValidationResult>;
     NFe: LayoutNFe;
     protNFe: ProtNFe;
 }

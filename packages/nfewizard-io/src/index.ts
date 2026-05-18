@@ -50,8 +50,10 @@ export {
   HttpClientBuilder,
   LoadCertificate,
   ValidateEnvironment,
-  logger
+  logger,
+  NFE_SchemaValidate,
 } from '@nfewizard/shared';
+export type { SchemaValidator, SchemaValidateMethod, NFESchemaValidateOptions } from '@nfewizard/shared';
 
 // Re-export types from shared
 export type { ErrorContext, JsonArrayTransport } from '@nfewizard/shared';
