@@ -24,6 +24,50 @@ export class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoA
         super(environment, utility, xmlBuilder, 'NFERetAutorizacao', axios, saveFiles, gerarConsulta);
     }
 
+    private normalizeProtNFe(protNFe: any): any {
+        const normalizedProtNFe = {
+            ...protNFe,
+            $: {
+                xmlns: 'http://www.portalfiscal.inf.br/nfe',
+                versao: protNFe?.$?.versao ?? '4.00',
+            },
+        };
+
+        const infProtNode = Array.isArray(normalizedProtNFe?.infProt)
+            ? normalizedProtNFe.infProt[0]
+            : normalizedProtNFe?.infProt;
+
+        if (!infProtNode) {
+            return normalizedProtNFe;
+        }
+
+        const nProt = Array.isArray(infProtNode.nProt) ? infProtNode.nProt[0] : infProtNode.nProt;
+        if (!nProt) {
+            return normalizedProtNFe;
+        }
+
+        const currentId = infProtNode?.$?.Id;
+        const infProtId = typeof currentId === 'string' && currentId.startsWith('ID')
+            ? currentId
+            : `ID${nProt}`;
+
+        const normalizedInfProtNode = {
+            ...infProtNode,
+            $: {
+                ...(infProtNode?.$ ?? {}),
+                Id: infProtId,
+            },
+        };
+
+        if (Array.isArray(normalizedProtNFe.infProt)) {
+            normalizedProtNFe.infProt[0] = normalizedInfProtNode;
+        } else {
+            normalizedProtNFe.infProt = normalizedInfProtNode;
+        }
+
+        return normalizedProtNFe;
+    }
+
     protected gerarXml(data: string): string {
         const { nfe: { ambiente } } = this.environment.getConfig();
 
@@ -121,7 +165,8 @@ export class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoA
             const xmlCompleto = xmlNFe.find((item) => item.indexOf(formatedProtNFe[i].infProt[0].chNFe[0]) !== -1);
 
             if (xmlCompleto) {
-                const protTag = this.xmlBuilder.gerarXml(protNFe[i], 'protNFe', this.metodo)
+                const protNFeNormalizado = this.normalizeProtNFe(protNFe[i]);
+                const protTag = this.xmlBuilder.gerarXml(protNFeNormalizado, 'protNFe', this.metodo)
                 const xmlFinal = [xmlCompleto]
                 xmlFinal.push(protTag)
 

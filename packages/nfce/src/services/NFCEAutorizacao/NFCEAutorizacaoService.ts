@@ -570,7 +570,14 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                     xmls: xmlsGerados.map(({ NFe, xmlAssinado }) => ({
                         NFe,
                         protNFe: {
+                            $: {
+                                xmlns: 'http://www.portalfiscal.inf.br/nfe',
+                                versao: '4.00',
+                            },
                             infProt: {
+                                $: {
+                                    Id: 'IDCONTINGENCIA',
+                                },
                                 tpAmb: NFe.infNFe.ide.tpAmb,
                                 verAplic: 'contingencia',
                                 chNFe: this.chaveNfe,
