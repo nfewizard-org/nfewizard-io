@@ -27,6 +27,11 @@
     - documento processado: `<chave>-proc-<nsu>.xml`
     - evento: `<chave>-event-<tpEvento>-<nsu>.xml`
   - Campos de nome são sanitizados para filesystem e, na ausência de NSU, é usado fallback determinístico por índice (`idx-<index>`).
+
+- **Retorno de autorização (NF-e/NFC-e): normalização da estrutura de `protNFe`/`infProt`**
+  - Ajusta a montagem da tag `protNFe` para garantir os atributos `xmlns` e `versao`.
+  - Ajusta a tag `infProt` para garantir o atributo `Id` com prefixo `ID` seguido do número do protocolo (`nProt`).
+  - Aplica o mesmo padrão também no fluxo de contingência da NFC-e.
 ---
 
 ## [1.0.3] - 2026-04-23
