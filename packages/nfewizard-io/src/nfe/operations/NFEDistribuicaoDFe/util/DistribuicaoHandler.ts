@@ -34,13 +34,13 @@ export class DistribuicaoHandler {
      * Métodos para tratativas do DistribuicaoDFe
      */
 
-    protected salvaArquivos(XMLDistribuicaoInJson: GenericObject, XMLDistribuicao: string, chNFe: string): void {
+    protected salvaArquivos(XMLDistribuicaoInJson: GenericObject, XMLDistribuicao: string, fileName: string): void {
         const { pathXMLDistribuicao, baixarXMLDistribuicao, armazenarRetornoEmJSON } = this.environment.config.dfe
 
         if (baixarXMLDistribuicao) {
             this.utility.salvaXML({
                 data: XMLDistribuicao,
-                fileName: chNFe,
+                fileName,
                 metodo: this.metodo,
                 path: pathXMLDistribuicao,
             });
@@ -48,7 +48,7 @@ export class DistribuicaoHandler {
             if (armazenarRetornoEmJSON) {
                 this.utility.salvaJSON({
                     data: XMLDistribuicaoInJson,
-                    fileName: chNFe,
+                    fileName,
                     metodo: this.metodo,
                     path: pathXMLDistribuicao,
                 });
@@ -66,32 +66,58 @@ export class DistribuicaoHandler {
                 }
 
                 const docZips = this.utility.findInObj(result, 'docZip');
-                docZips.forEach((docZip: any) => {
+                docZips.forEach((docZip: any, index: number) => {
                     const xmlString = this.decodeDocZip(docZip);
                     const cleanedXml = this.removeSignatureTag(xmlString);
 
                     const parsedResult = this.parseXml(cleanedXml);
                     if (!parsedResult) return;
 
-                    let chNFe = this.getChNFe(parsedResult);
-                    let tipo = this.getTipo(parsedResult);
-                    const nsu = docZip['$'].NSU;
-
-                    if (parsedResult['procEventoNFe']) {
-                        const tpEvento = this.utility.findInObj(parsedResult, 'tpEvento');
-                        chNFe = `${chNFe}-event-${tpEvento}`;
-                        tipo = 'event';
-                    }
+                    const chNFe = this.getChNFe(parsedResult);
+                    const tipo = this.getTipo(parsedResult);
+                    const nsu = this.getDocNsu(docZip, index);
+                    const tpEvento = tipo === 'event' ? this.utility.findInObj(parsedResult, 'tpEvento') : '';
+                    const fileName = this.buildFileName(chNFe, tipo, nsu, tpEvento);
 
                     const xmlDistribuicaoInJson = json.convertXmlToJson(cleanedXml, `${metodo}_${tipo}`, nsu);
-                    this.handleResponse(xmlDistribuicaoInJson, cleanedXml, chNFe);
-                    files.push(chNFe);
+                    this.handleResponse(xmlDistribuicaoInJson, cleanedXml, fileName);
+                    files.push(fileName);
                 });
             });
             return files;
         } catch (error: any) {
             throw new Error(error.message);
         }
+    }
+
+    private getDocNsu(docZip: any, index: number): string {
+        const nsu = (docZip?.$?.NSU ?? '').toString().trim();
+        return nsu || `idx-${index}`;
+    }
+
+    private sanitizeFileNamePart(value: any): string {
+        const normalizedValue = (value ?? '').toString().trim();
+        if (!normalizedValue) {
+            return '';
+        }
+
+        return normalizedValue.replace(/[^a-zA-Z0-9_.-]/g, '_');
+    }
+
+    private buildFileName(chNFe: string, tipo: string, nsu: string, tpEvento: string): string {
+        const safeChNFe = this.sanitizeFileNamePart(chNFe) || 'sem-chave';
+        const safeNsu = this.sanitizeFileNamePart(nsu) || 'sem-nsu';
+
+        if (tipo === 'res') {
+            return `${safeChNFe}-res-${safeNsu}`;
+        }
+
+        if (tipo === 'event') {
+            const safeTpEvento = this.sanitizeFileNamePart(tpEvento) || 'sem-tpevento';
+            return `${safeChNFe}-event-${safeTpEvento}-${safeNsu}`;
+        }
+
+        return `${safeChNFe}-proc-${safeNsu}`;
     }
 
     decodeDocZip(docZip: any) {
@@ -135,14 +161,14 @@ export class DistribuicaoHandler {
         return 'proc';
     }
 
-    handleResponse(XMLDistribuicaoInJson: GenericObject, XMLDistribuicao: string, chNFe: string) {
+    handleResponse(XMLDistribuicaoInJson: GenericObject, XMLDistribuicao: string, fileName: string) {
         // Gera erro em caso de Rejeição
         const xMotivo = this.utility.findInObj(XMLDistribuicaoInJson, 'xMotivo')
         if (xMotivo && (xMotivo.includes('Rejeição') || xMotivo.includes('Rejeicao'))) {
             throw new Error(XMLDistribuicaoInJson.xMotivo)
         }
 
-        this.salvaArquivos(XMLDistribuicaoInJson, XMLDistribuicao, chNFe)
+        this.salvaArquivos(XMLDistribuicaoInJson, XMLDistribuicao, fileName)
     }
 
 }

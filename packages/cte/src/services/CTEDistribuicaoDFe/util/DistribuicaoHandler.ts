@@ -34,13 +34,13 @@ class DistribuicaoHandler {
      * Métodos para tratativas do DistribuicaoDFe do CTe
      */
 
-    protected salvaArquivos(XMLDistribuicaoInJson: GenericObject, XMLDistribuicao: string, chCTe: string): void {
+    protected salvaArquivos(XMLDistribuicaoInJson: GenericObject, XMLDistribuicao: string, fileName: string): void {
         const { pathXMLDistribuicao, baixarXMLDistribuicao, armazenarRetornoEmJSON } = this.environment.config.dfe
 
         if (baixarXMLDistribuicao) {
             this.utility.salvaXML({
                 data: XMLDistribuicao,
-                fileName: chCTe,
+                fileName,
                 metodo: this.metodo,
                 path: pathXMLDistribuicao,
             });
@@ -48,7 +48,7 @@ class DistribuicaoHandler {
             if (armazenarRetornoEmJSON) {
                 this.utility.salvaJSON({
                     data: XMLDistribuicaoInJson,
-                    fileName: chCTe,
+                    fileName,
                     metodo: this.metodo,
                     path: pathXMLDistribuicao,
                 });
@@ -68,29 +68,55 @@ class DistribuicaoHandler {
             }
 
             const docZips = this.utility.findInObj(result, 'docZip');
-            docZips.forEach((docZip: any) => {
+            docZips.forEach((docZip: any, index: number) => {
                 const xmlString = this.decodeDocZip(docZip);
                 const cleanedXml = this.removeSignatureTag(xmlString);
 
                 const parsedResult = this.parseXml(cleanedXml);
                 if (!parsedResult) return;
 
-                let chCTe = this.getChCTe(parsedResult);
-                let tipo = this.getTipo(parsedResult);
-                const nsu = docZip['$'].NSU;
-
-                if (parsedResult['procEventoCTe']) {
-                    const tpEvento = this.utility.findInObj(parsedResult, 'tpEvento');
-                    chCTe = `${chCTe}-event-${tpEvento}`;
-                    tipo = 'event';
-                }
+                const chCTe = this.getChCTe(parsedResult);
+                const tipo = this.getTipo(parsedResult);
+                const nsu = this.getDocNsu(docZip, index);
+                const tpEvento = tipo === 'event' ? this.utility.findInObj(parsedResult, 'tpEvento') : '';
+                const fileName = this.buildFileName(chCTe, tipo, nsu, tpEvento);
 
                 const xmlDistribuicaoInJson = json.convertXmlToJson(cleanedXml, `${metodo}_${tipo}`, nsu);
-                this.handleResponse(xmlDistribuicaoInJson, cleanedXml, chCTe);
-                files.push(chCTe);
+                this.handleResponse(xmlDistribuicaoInJson, cleanedXml, fileName);
+                files.push(fileName);
             });
         });
         return files;
+    }
+
+    private getDocNsu(docZip: any, index: number): string {
+        const nsu = (docZip?.$?.NSU ?? '').toString().trim();
+        return nsu || `idx-${index}`;
+    }
+
+    private sanitizeFileNamePart(value: any): string {
+        const normalizedValue = (value ?? '').toString().trim();
+        if (!normalizedValue) {
+            return '';
+        }
+
+        return normalizedValue.replace(/[^a-zA-Z0-9_.-]/g, '_');
+    }
+
+    private buildFileName(chCTe: string, tipo: string, nsu: string, tpEvento: string): string {
+        const safeChCTe = this.sanitizeFileNamePart(chCTe) || 'sem-chave';
+        const safeNsu = this.sanitizeFileNamePart(nsu) || 'sem-nsu';
+
+        if (tipo === 'res') {
+            return `${safeChCTe}-res-${safeNsu}`;
+        }
+
+        if (tipo === 'event') {
+            const safeTpEvento = this.sanitizeFileNamePart(tpEvento) || 'sem-tpevento';
+            return `${safeChCTe}-event-${safeTpEvento}-${safeNsu}`;
+        }
+
+        return `${safeChCTe}-proc-${safeNsu}`;
     }
 
     decodeDocZip(docZip: any) {
@@ -137,9 +163,9 @@ class DistribuicaoHandler {
         return 'proc';
     }
 
-    handleResponse(XMLDistribuicaoInJson: GenericObject, XMLDistribuicao: string, chCTe: string) {
+    handleResponse(XMLDistribuicaoInJson: GenericObject, XMLDistribuicao: string, fileName: string) {
 
-        this.salvaArquivos(XMLDistribuicaoInJson, XMLDistribuicao, chCTe)
+        this.salvaArquivos(XMLDistribuicaoInJson, XMLDistribuicao, fileName)
 
         // Gera erro em caso de Rejeição
         const xMotivo = this.utility.findInObj(XMLDistribuicaoInJson, 'xMotivo')

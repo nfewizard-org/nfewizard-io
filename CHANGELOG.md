@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased] — pós 1.0.3
+## [1.0.4] - 2026-06-08
 
 ### Feat
 
@@ -18,6 +18,15 @@
   - Além do objeto tipado `NFe`, o método de autorização agora aceita diretamente uma string XML (com ou sem o envelope `<enviNFe versao="4.00">`).
   - Sem breaking change: o comportamento anterior (objeto tipado) é preservado.
 
+### Fix
+
+- **Distribuição DFe (NF-e e CT-e): evita sobrescrita de arquivos no `pathXMLDistribuicao`**
+  - Ajusta a nomenclatura dos arquivos descompactados para incluir tipo do documento e NSU, evitando colisões quando múltiplos `docZip` da mesma chave são retornados no mesmo lote.
+  - Novo padrão de nome:
+    - resumo: `<chave>-res-<nsu>.xml`
+    - documento processado: `<chave>-proc-<nsu>.xml`
+    - evento: `<chave>-event-<tpEvento>-<nsu>.xml`
+  - Campos de nome são sanitizados para filesystem e, na ausência de NSU, é usado fallback determinístico por índice (`idx-<index>`).
 ---
 
 ## [1.0.3] - 2026-04-23

@@ -64,6 +64,20 @@ await nfeWizard.CTE_DistribuicaoDFePorUltNSU(ultimoNSUCTe);
 
 Quando a opção `baixarXMLDistribuicao` estiver habilitada, os documentos CT-e serão salvos na pasta configurada em `pathXMLDistribuicao`.
 
+Para evitar sobrescrita quando houver múltiplos `docZip` da mesma chave no lote, os nomes incluem tipo e NSU:
+
+- Resumo (`resCTe`): `<chave>-res-<nsu>.xml`
+- Documento processado (`cteProc`): `<chave>-proc-<nsu>.xml`
+- Evento (`procEventoCTe`): `<chave>-event-<tpEvento>-<nsu>.xml`
+
+Exemplo:
+
+```text
+3525...1234-res-000000000000101.xml
+3525...1234-proc-000000000000102.xml
+3525...1234-event-110110-000000000000103.xml
+```
+
 
 
 ## 🌐 Ambientes Suportados

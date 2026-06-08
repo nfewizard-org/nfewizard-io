@@ -132,6 +132,22 @@ const chaveNFe: DFePorChaveNFe = {
 await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 ```
 
+### Nomes dos arquivos salvos na Distribuição DFe
+
+Com `baixarXMLDistribuicao` habilitado, cada `docZip` é salvo com nome único para evitar sobrescrita quando existirem múltiplos documentos para a mesma chave no mesmo lote.
+
+- Resumo (`resNFe`): `<chave>-res-<nsu>.xml`
+- Documento processado (`nfeProc`): `<chave>-proc-<nsu>.xml`
+- Evento (`procEventoNFe`): `<chave>-event-<tpEvento>-<nsu>.xml`
+
+Exemplo:
+
+```text
+3525...1234-res-000000000000101.xml
+3525...1234-proc-000000000000102.xml
+3525...1234-event-110110-000000000000103.xml
+```
+
 ---
 
 ## 🚧 Requisitos
