@@ -25,7 +25,7 @@
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nfewizard-io/nfewizard-io",
+    "url": "https://github.com/nfewizard-org/nfewizard-io",
     "directory": "packages/nfse"
   },
   "scripts": {
