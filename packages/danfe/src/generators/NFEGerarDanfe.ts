@@ -713,7 +713,7 @@ class NFeGerarDanfe {
                     this.doc.fontSize(5).text('PESO BRUTO', left + 374, topTrnasportTitle, {
                         characterSpacing: 0.5,
                     });
-                    this.doc.fontSize(8).text(String(vol?.nVol || ''), left + 375, topTrnasportValue, {
+                    this.doc.fontSize(8).text(String(vol?.pesoB || ''), left + 375, topTrnasportValue, {
                         characterSpacing: 1,
                     });
                     //96,43
@@ -721,7 +721,7 @@ class NFeGerarDanfe {
                     this.doc.fontSize(5).text('PESO LÍQUIDO', left + 474.5, topTrnasportTitle, {
                         characterSpacing: 0.5,
                     });
-                    this.doc.fontSize(8).text(String(vol?.nVol || ''), left + 475.5, topTrnasportValue, {
+                    this.doc.fontSize(8).text(String(vol?.pesoL || ''), left + 475.5, topTrnasportValue, {
                         characterSpacing: 1,
                     });
                     /** Define posição da nova linha */
