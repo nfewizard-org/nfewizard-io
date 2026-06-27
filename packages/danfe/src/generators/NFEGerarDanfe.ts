@@ -1175,9 +1175,9 @@ class NFeGerarDanfe {
         this.doc.fontSize(5).text('RESERVADO AO FISCO', 408 + 10, topDestinatario + 4.5, {
             characterSpacing: 0.5
         });
-        this.doc.fontSize(8).text(String(this.infAdic?.infAdFisco || ''), 13, topDestinatario + 13, {
+        this.doc.fontSize(8).text(String(this.infAdic?.infAdFisco || ''), left + 408 + 10, topDestinatario + 13, {
             characterSpacing: 1,
-            width: 400,
+            width: 138,
         });
 
         if (this.exibirMarcaDaguaDanfe) {
