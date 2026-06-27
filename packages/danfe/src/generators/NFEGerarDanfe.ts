@@ -456,7 +456,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('DATA SAÍDA / ENTRADA', left + 496, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(format(new Date(), 'dd-MM-yyyy'), left + 497, topDestinatario + 158, {
+            this.doc.fontSize(8).text(this.ide.dhSaiEnt ? format(new Date(this.ide.dhSaiEnt), 'dd-MM-yyyy') : '', left + 497, topDestinatario + 158, {
                 characterSpacing: 1,
             });
         }
@@ -497,7 +497,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('HORA DA SAÍDA', left + 496, topDestinatario + 171, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(format(new Date(), 'HH:mm'), left + 497, topDestinatario + 181, {
+            this.doc.fontSize(8).text(this.ide.dhSaiEnt ? format(new Date(this.ide.dhSaiEnt), 'HH:mm') : '', left + 497, topDestinatario + 181, {
                 characterSpacing: 1,
             });
         }
