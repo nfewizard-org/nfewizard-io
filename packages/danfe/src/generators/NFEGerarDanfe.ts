@@ -999,7 +999,7 @@ class NFeGerarDanfe {
                         pICMS = (ICMS[tipoICMS] as any).pICMS
                  return {
                             vBC: parseFloat(vBC).toFixed(2),
-                            vICMS: parseFloat(vBC).toFixed(2),
+                            vICMS: parseFloat(vICMS).toFixed(2),
                             pICMS: parseFloat(pICMS).toFixed(2)
                  };
                     }
