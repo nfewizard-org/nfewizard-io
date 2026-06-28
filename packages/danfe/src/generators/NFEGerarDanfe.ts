@@ -19,8 +19,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs';
-import { ICMS, IPI, DetProd, Ide, Dest, Emit, Total, Transp, InfAdic, Vol, ProtNFe, NFEGerarDanfeProps } from '@nfewizard/types/nfe';
-import { format } from 'date-fns';
+import { ICMS, IPI, DetProd, Ide, Dest, Emit, Total, Transp, InfAdic, Vol, ProtNFe, NFEGerarDanfeProps, Cobr } from '@nfewizard/types/nfe';
+import { format, parseISO } from 'date-fns';
 import PDFDocument from 'pdfkit';
 import { ValidaCPFCNPJ } from '@nfewizard/shared';
 
@@ -48,6 +48,8 @@ class NFeGerarDanfe {
     total: Total;
     transp: Transp;
     infAdic: InfAdic | undefined;
+    cobr: Cobr | undefined;
+    faturaOffset: number;
     exibirMarcaDaguaDanfe?: boolean;
     doc: InstanceType<typeof PDFDocument>;
     barcodeBuffer: Buffer | null = null;
@@ -63,7 +65,7 @@ class NFeGerarDanfe {
         this.protNFe = data.protNFe;
 
         const nfeData = Array.isArray(data.NFe) ? data.NFe[0] : data.NFe;
-        const { det, ide, emit, dest, total, transp, infAdic } = nfeData.infNFe;
+        const { det, ide, emit, dest, total, transp, infAdic, cobr } = nfeData.infNFe;
 
         this.det = det;
         this.ide = ide;
@@ -71,6 +73,15 @@ class NFeGerarDanfe {
         this.total = total;
         this.transp = transp;
         this.infAdic = infAdic;
+        this.cobr = cobr;
+        // Espaço vertical reservado para a seção FATURA / DUPLICATAS (título + bandas)
+        if (cobr?.dup) {
+            const dups = Array.isArray(cobr.dup) ? cobr.dup : [cobr.dup];
+            const rows = Math.ceil(dups.filter(Boolean).length / 7);
+            this.faturaOffset = rows > 0 ? 7 + rows * 23 : 0;
+        } else {
+            this.faturaOffset = 0;
+        }
         if (dest) this.dest = dest;
 
         if (this.protNFe?.infProt.nProt) {
@@ -511,10 +522,64 @@ class NFeGerarDanfe {
 
     }
 
+    _buildFatura() {
+        if (!this.cobr?.dup) {
+            return;
+        }
+        const { top, left } = this.doc.page.margins;
+        this.setLineStyle(0.75, '#1c1c1c');
+        const dups = (Array.isArray(this.cobr.dup) ? this.cobr.dup : [this.cobr.dup]).filter(Boolean);
+        if (dups.length === 0) {
+            return;
+        }
+        const perRow = 7;
+        const usableWidth = 566.93;
+        const bandH = 23;
+        const topFatura = top + 283;
+        const formatVenc = (d?: string) => {
+            if (!d)
+                return '';
+            try {
+                return format(parseISO(String(d)), 'dd/MM/yyyy');
+            }
+            catch {
+                return String(d);
+            }
+        };
+        const formatValor = (v?: number | string) => parseFloat(String(v ?? '0')).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        this.doc.fontSize(6).font('Times-Bold').fillColor('black').text('FATURA / DUPLICATAS', left, topFatura, {
+            characterSpacing: 0.5,
+        });
+        const bandTop = topFatura + 7;
+        const totalRows = Math.ceil(dups.length / perRow);
+        for (let r = 0; r < totalRows; r++) {
+            const start = r * perRow;
+            const count = Math.min(perRow, dups.length - start);
+            // Distribui as células pela largura total da seção
+            const cellW = usableWidth / count;
+            const y = bandTop + r * bandH;
+            for (let c = 0; c < count; c++) {
+                const i = start + c;
+                const x = left + c * cellW;
+                const dup = dups[i];
+                this.doc.rect(x, y, cellW, bandH).stroke();
+                this.doc.font('Times-Roman').fontSize(5).text(`Núm. ${dup?.nDup || (i + 1)}`, x + 3, y + 2.5, {
+                    characterSpacing: 0.3, width: cellW - 5, lineBreak: false,
+                });
+                this.doc.fontSize(5).text(`Venc. ${formatVenc(dup?.dVenc)}`, x + 3, y + 9, {
+                    characterSpacing: 0.3, width: cellW - 5, lineBreak: false,
+                });
+                this.doc.fontSize(5).text(`Valor ${formatValor(dup?.vDup)}`, x + 3, y + 15.5, {
+                    characterSpacing: 0.3, width: cellW - 5, lineBreak: false,
+                });
+            }
+        }
+    }
+
     _builCalculoImposto() {
         const { top, left } = this.doc.page.margins;
         this.setLineStyle(0.75, '#1c1c1c');
-        const topDestinatario = top + 173;
+        const topDestinatario = top + 173 + this.faturaOffset;
 
         const _buildCalcImposto = () => {
             /** LINHA 1 */
@@ -643,7 +708,7 @@ class NFeGerarDanfe {
     _builTransporte() {
         const { top, left } = this.doc.page.margins;
         this.setLineStyle(0.75, '#1c1c1c');
-        const topDestinatario = top + 233;
+        const topDestinatario = top + 233 + this.faturaOffset;
 
         const getModFrete = () => {
             // * 0=Contratação do Frete por conta do Remetente (CIF)
@@ -829,14 +894,14 @@ class NFeGerarDanfe {
     }
 
     _buildProdutos() {
-        const { top, left } = this.doc.page.margins;
+        const { left } = this.doc.page.margins;
         this.setLineStyle(0.75, '#1c1c1c');
 
-        this.doc.fontSize(6).font('Times-Bold').fillColor('black').text('DADOS DO PRODUTO / SERVIÇOS', left, 452, {
+        this.doc.fontSize(6).font('Times-Bold').fillColor('black').text('DADOS DO PRODUTO / SERVIÇOS', left, 452 + this.faturaOffset, {
             characterSpacing: 0.5,
         });
 
-        const tableTop = 458;
+        const tableTop = 458 + this.faturaOffset;
         const defaultItemHeight = 15;
         let y = tableTop;
         let currentPage = 0;
@@ -1125,7 +1190,7 @@ class NFeGerarDanfe {
             return itemHeight;
         };
 
-        header(458);
+        header(tableTop);
 
         const createTable = (prod: DetProd) => {
             if (y + defaultItemHeight > this.doc.page.height - 160) {
@@ -1208,6 +1273,7 @@ class NFeGerarDanfe {
             this.drawHeader(true);
 
             this._buildDestinatario();
+            this._buildFatura();
             this._builCalculoImposto();
             this._builTransporte();
 
