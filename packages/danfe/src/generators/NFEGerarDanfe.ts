@@ -124,6 +124,18 @@ class NFeGerarDanfe {
         this._buildFooter();
     }
 
+    formatDecimal(value: string | number | undefined | null, minimumFractionDigits = 2, maximumFractionDigits = 2): string {
+        const valueText = String(value ?? '0').trim();
+        const normalizedValue = valueText.includes(',') ? valueText.replace(/\./g, '').replace(',', '.') : valueText;
+        const parsedValue = parseFloat(normalizedValue);
+        const numericValue = Number.isNaN(parsedValue) ? 0 : parsedValue;
+
+        return numericValue.toLocaleString('pt-BR', {
+            minimumFractionDigits,
+            maximumFractionDigits,
+        });
+    }
+
     _buildGuia() {
         const { top, left } = this.doc.page.margins;
         this.setLineStyle(0.75, '#1c1c1c');
@@ -133,7 +145,7 @@ class NFeGerarDanfe {
         this.doc.fontSize(5).text(`RECEBEMOS DE ${this.emit.xNome} OS PRODUTOS / SERVIÇOS CONSTANTES DA NOTA FISCAL INDICADO AO LADO`, 10, 26, {
             characterSpacing: 0.5
         });
-        this.doc.fontSize(6).text(`EMISSÃO: ${format(new Date(this.ide.dhEmi), 'dd-MM-yyyy')} -  DEST. / REM.: ${this.dest?.xNome || ''}  -  VALOR TOTAL: R$ ${parseFloat(String(this.total.ICMSTot.vNF)).toFixed(2)}`, 10, 33.5, {
+        this.doc.fontSize(6).text(`EMISSÃO: ${format(new Date(this.ide.dhEmi), 'dd-MM-yyyy')} -  DEST. / REM.: ${this.dest?.xNome || ''}  -  VALOR TOTAL: R$ ${this.formatDecimal(this.total.ICMSTot.vNF)}`, 10, 33.5, {
             characterSpacing: 0.5
         });
         /** RIGHT */
@@ -522,7 +534,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).font('Times-Roman').text('BASE DE CÁLCULO DO ICMS', left + 4, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vBC)).toFixed(2), left - 8, topDestinatario + 135, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vBC), left - 8, topDestinatario + 135, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -531,7 +543,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('VALOR DO ICMS', left + 90, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vICMS)).toFixed(2), left + 86 - 16, topDestinatario + 135, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vICMS), left + 86 - 16, topDestinatario + 135, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -540,7 +552,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('BASE CÁLC. ICMS SUBST', left + 169, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vBCST)).toFixed(2), left + 165 - 16, topDestinatario + 135, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vBCST), left + 165 - 16, topDestinatario + 135, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -549,7 +561,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('VALOR DO ICMS SUBST.', left + 248, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vST)).toFixed(2), left + 244 - 16, topDestinatario + 135, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vST), left + 244 - 16, topDestinatario + 135, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -558,7 +570,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('VALOR APROX. DOS TRIBUTOS', left + 327, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(this.total.ICMSTot.vTotTrib || '0').toFixed(2), left + 323 - 6, topDestinatario + 135, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vTotTrib), left + 323 - 6, topDestinatario + 135, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -568,7 +580,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('VALOR TOTAL DOS PRODUTOS', left + 418, topDestinatario + 125, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vProd)).toFixed(2), left + 480 - 8, topDestinatario + 135, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vProd), left + 480 - 8, topDestinatario + 135, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -579,7 +591,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('VALOR DO FRETE', left + 4, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vFrete)).toFixed(2), left - 8, topDestinatario + 158, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vFrete), left - 8, topDestinatario + 158, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -589,7 +601,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('VALOR DO SEGURO', left + 90, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vSeg)).toFixed(2), left + 86 - 16, topDestinatario + 158, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vSeg), left + 86 - 16, topDestinatario + 158, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -598,7 +610,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('DESCONTO', left + 169, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vDesc)).toFixed(2), left + 165 - 16, topDestinatario + 158, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vDesc), left + 165 - 16, topDestinatario + 158, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -607,7 +619,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('OUTRAS DESP. ACESS.', left + 248, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vOutro)).toFixed(2), left + 244 - 16, topDestinatario + 158, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vOutro), left + 244 - 16, topDestinatario + 158, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -616,7 +628,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('VALOR DO IPI', left + 327, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vIPI)).toFixed(2), left + 323 - 6, topDestinatario + 158, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vIPI), left + 323 - 6, topDestinatario + 158, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -626,7 +638,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('VALOR TOTAL DA NOTA', left + 418, topDestinatario + 148, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(parseFloat(String(this.total.ICMSTot.vNF)).toFixed(2), left + 480 - 8, topDestinatario + 158, {
+            this.doc.fontSize(8).text(this.formatDecimal(this.total.ICMSTot.vNF), left + 480 - 8, topDestinatario + 158, {
                 characterSpacing: 1,
                 align: 'right',
                 width: 86
@@ -713,7 +725,7 @@ class NFeGerarDanfe {
                     this.doc.fontSize(5).text('PESO BRUTO', left + 374, topTrnasportTitle, {
                         characterSpacing: 0.5,
                     });
-                    this.doc.fontSize(8).text(String(vol?.pesoB || ''), left + 375, topTrnasportValue, {
+                    this.doc.fontSize(8).text(vol?.pesoB ? this.formatDecimal(vol.pesoB, 3, 3) : '', left + 375, topTrnasportValue, {
                         characterSpacing: 1,
                     });
                     //96,43
@@ -721,7 +733,7 @@ class NFeGerarDanfe {
                     this.doc.fontSize(5).text('PESO LÍQUIDO', left + 474.5, topTrnasportTitle, {
                         characterSpacing: 0.5,
                     });
-                    this.doc.fontSize(8).text(String(vol?.pesoL || ''), left + 475.5, topTrnasportValue, {
+                    this.doc.fontSize(8).text(vol?.pesoL ? this.formatDecimal(vol.pesoL, 3, 3) : '', left + 475.5, topTrnasportValue, {
                         characterSpacing: 1,
                     });
                     /** Define posição da nova linha */
@@ -941,6 +953,8 @@ class NFeGerarDanfe {
         };
 
         const row = (top: number, item: DetProd) => {
+            const formatDecimal = this.formatDecimal.bind(this);
+
             function getCST(ICMS: ICMS): string {
                 const chavesICMS: (keyof ICMS)[] = Object.keys(ICMS) as (keyof ICMS)[];
 
@@ -998,9 +1012,9 @@ class NFeGerarDanfe {
                         vICMS = (ICMS[tipoICMS] as any).vICMS
                         pICMS = (ICMS[tipoICMS] as any).pICMS
                  return {
-                            vBC: parseFloat(vBC).toFixed(2),
-                            vICMS: parseFloat(vICMS).toFixed(2),
-                            pICMS: parseFloat(pICMS).toFixed(2)
+                            vBC: formatDecimal(vBC),
+                            vICMS: formatDecimal(vICMS),
+                            pICMS: formatDecimal(pICMS)
                  };
                     }
                 }
@@ -1014,8 +1028,8 @@ class NFeGerarDanfe {
                     }
                 }
 
-                let vIPI = parseFloat(String(IPI.IPITrib.vIPI)).toFixed(2);
-                let pIPI = parseFloat(String(IPI.IPITrib.pIPI)).toFixed(2);
+                let vIPI = formatDecimal(IPI.IPITrib.vIPI);
+                let pIPI = formatDecimal(IPI.IPITrib.pIPI);
                 return { vIPI, pIPI }
             }
             const CST = getCST(item.imposto.ICMS as ICMS);
