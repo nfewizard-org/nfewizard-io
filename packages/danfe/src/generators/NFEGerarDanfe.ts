@@ -1007,10 +1007,10 @@ class NFeGerarDanfe {
                 return { vBC, vICMS, pICMS };
             }
             function getValoresIPI(IPI: IPI | undefined): { vIPI: string, pIPI: string } {
-                if (!IPI) {
+                if (!IPI || !IPI.IPITrib) {
                     return {
-                        vIPI: '0,00',
-                        pIPI: '0,00'
+                        vIPI: '0.00',
+                        pIPI: '0.00'
                     }
                 }
 
