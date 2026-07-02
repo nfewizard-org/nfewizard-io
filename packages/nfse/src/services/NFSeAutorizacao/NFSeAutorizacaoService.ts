@@ -24,6 +24,8 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
     private dpsXmlGZipB64: string = '';
     private dpsXmlAssinadoConsulta: string = '';
 
+    private static readonly BRASILIA_OFFSET_MINUTES = 180;
+
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         super(environment, utility, xmlBuilder, 'NFSe_Autorizacao', axios, saveFiles, gerarConsulta);
     }
@@ -97,6 +99,202 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
         return idDPS;
     }
 
+    private formatarDataHoraBrasilia(dataHora: string): string {
+        const data = new Date(dataHora);
+
+        if (Number.isNaN(data.getTime())) {
+            return dataHora;
+        }
+
+        const brasilia = new Date(data.getTime() - (NFSeAutorizacaoService.BRASILIA_OFFSET_MINUTES * 60 * 1000));
+        const ano = brasilia.getUTCFullYear();
+        const mes = String(brasilia.getUTCMonth() + 1).padStart(2, '0');
+        const dia = String(brasilia.getUTCDate()).padStart(2, '0');
+        const hora = String(brasilia.getUTCHours()).padStart(2, '0');
+        const minuto = String(brasilia.getUTCMinutes()).padStart(2, '0');
+        const segundo = String(brasilia.getUTCSeconds()).padStart(2, '0');
+
+        return `${ano}-${mes}-${dia}T${hora}:${minuto}:${segundo}-03:00`;
+    }
+
+    private formatarDataCompetencia(dataCompetencia: string): string {
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dataCompetencia)) {
+            return dataCompetencia;
+        }
+
+        if (/^\d{8}$/.test(dataCompetencia)) {
+            return `${dataCompetencia.slice(0, 4)}-${dataCompetencia.slice(4, 6)}-${dataCompetencia.slice(6, 8)}`;
+        }
+
+        const data = new Date(dataCompetencia);
+
+        if (Number.isNaN(data.getTime())) {
+            return dataCompetencia;
+        }
+
+        const brasilia = new Date(data.getTime() - (NFSeAutorizacaoService.BRASILIA_OFFSET_MINUTES * 60 * 1000));
+        const ano = brasilia.getUTCFullYear();
+        const mes = String(brasilia.getUTCMonth() + 1).padStart(2, '0');
+        const dia = String(brasilia.getUTCDate()).padStart(2, '0');
+
+        return `${ano}-${mes}-${dia}`;
+    }
+
+    private normalizarEnderecoNacional(endNac: any): any {
+        if (!endNac) {
+            return endNac;
+        }
+
+        const enderecoNormalizado: any = {
+            cMun: endNac.cMun,
+            CEP: endNac.CEP,
+        };
+
+        if (endNac.UF) {
+            enderecoNormalizado.UF = endNac.UF;
+        }
+
+        return enderecoNormalizado;
+    }
+
+    private normalizarEndereco(endereco: any): any {
+        if (!endereco) {
+            return endereco;
+        }
+
+        const enderecoNormalizado: any = {};
+
+        if (endereco.endNac) {
+            enderecoNormalizado.endNac = this.normalizarEnderecoNacional(endereco.endNac);
+        }
+
+        if (endereco.endExt) {
+            enderecoNormalizado.endExt = endereco.endExt;
+        }
+
+        enderecoNormalizado.xLgr = endereco.xLgr;
+        enderecoNormalizado.nro = endereco.nro;
+
+        if (endereco.xCpl) {
+            enderecoNormalizado.xCpl = endereco.xCpl;
+        }
+
+        enderecoNormalizado.xBairro = endereco.xBairro;
+
+        return enderecoNormalizado;
+    }
+
+    private normalizarServico(servico: any): any {
+        const servicoNormalizado: any = {
+            locPrest: servico.locPrest,
+            cServ: {
+                cTribNac: servico.cServ.cTribNac,
+            },
+        };
+
+        if (servico.cServ.cTribMun) {
+            servicoNormalizado.cServ.cTribMun = servico.cServ.cTribMun;
+        }
+
+        servicoNormalizado.cServ.xDescServ = servico.cServ.xDescServ;
+
+        if (servico.cServ.cNBS) {
+            servicoNormalizado.cServ.cNBS = servico.cServ.cNBS;
+        }
+
+        if (servico.cServ.cIntContrib) {
+            servicoNormalizado.cServ.cIntContrib = servico.cServ.cIntContrib;
+        }
+
+        if (servico.comExt) {
+            servicoNormalizado.comExt = servico.comExt;
+        }
+
+        if (servico.obra) {
+            servicoNormalizado.obra = servico.obra;
+        }
+
+        if (servico.atvEvento) {
+            servicoNormalizado.atvEvento = servico.atvEvento;
+        }
+
+        if (servico.infoCompl) {
+            servicoNormalizado.infoCompl = servico.infoCompl;
+        }
+
+        return servicoNormalizado;
+    }
+
+    private normalizarInfDps(infDps: any, ambiente: number): any {
+        const dhEmi = this.formatarDataHoraBrasilia(infDps.dhEmi);
+        const dCompet = this.formatarDataCompetencia(infDps.dCompet);
+
+        if (dCompet > dhEmi.slice(0, 10)) {
+            throw new Error(`dCompet deve ser no mesmo dia ou anterior a dhEmi no fuso de Brasília. dhEmi=${dhEmi}, dCompet=${dCompet}`);
+        }
+
+        const infDpsNormalizado: any = {
+            tpAmb: ambiente,
+            dhEmi,
+            verAplic: infDps.verAplic,
+            serie: infDps.serie,
+            nDPS: infDps.nDPS,
+            dCompet,
+            tpEmit: infDps.tpEmit,
+        };
+
+        if (infDps.cMotivoEmisTI) {
+            infDpsNormalizado.cMotivoEmisTI = infDps.cMotivoEmisTI;
+        }
+
+        if (infDps.chNFSeRej) {
+            infDpsNormalizado.chNFSeRej = infDps.chNFSeRej;
+        }
+
+        infDpsNormalizado.cLocEmi = infDps.cLocEmi;
+
+        if (infDps.subst) {
+            infDpsNormalizado.subst = infDps.subst;
+        }
+
+        infDpsNormalizado.prest = {
+            ...infDps.prest,
+        };
+
+        if (infDps.prest?.end) {
+            infDpsNormalizado.prest.end = this.normalizarEndereco(infDps.prest.end);
+        }
+
+        if (infDps.toma) {
+            infDpsNormalizado.toma = {
+                ...infDps.toma,
+            };
+
+            if (infDps.toma.end) {
+                infDpsNormalizado.toma.end = this.normalizarEndereco(infDps.toma.end);
+            }
+        }
+
+        if (infDps.interm) {
+            infDpsNormalizado.interm = {
+                ...infDps.interm,
+            };
+
+            if (infDps.interm.end) {
+                infDpsNormalizado.interm.end = this.normalizarEndereco(infDps.interm.end);
+            }
+        }
+
+        infDpsNormalizado.serv = this.normalizarServico(infDps.serv);
+        infDpsNormalizado.valores = infDps.valores;
+
+        if (infDps.IBSCBS) {
+            infDpsNormalizado.IBSCBS = infDps.IBSCBS;
+        }
+
+        return infDpsNormalizado;
+    }
+
     /**
      * Monta o XML do DPS a partir do objeto JSON
      */
@@ -107,19 +305,8 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
         // Gera o ID do DPS se não foi fornecido
         const idDPS = dps.infDps.Id || this.gerarIdDPS(dps);
 
-        // Garante que o ambiente está correto e remove Id do objeto (será colocado como atributo)
-        const { Id, ...infDpsDataSemId } = dps.infDps;
-        const infDpsData = {
-            ...infDpsDataSemId,
-            tpAmb: ambiente
-        };
-
-        // Monta o objeto XML com a estrutura correta
-        // O atributo Id deve estar no $ do infDPS (maiúsculas conforme schema)
-        // Garantimos que $ seja definido por último para não ser sobrescrito
-        const infDPSObject: any = {
-            ...infDpsData
-        };
+        // Monta o objeto XML com a estrutura correta e com a ordem exigida pelo schema.
+        const infDPSObject: any = this.normalizarInfDps(dps.infDps, ambiente);
         infDPSObject.$ = {
             Id: idDPS
         };

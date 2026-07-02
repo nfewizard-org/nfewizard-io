@@ -120,14 +120,21 @@ const buildService = (axiosPost: jest.Mock) => {
   const axios = {
     post: axiosPost,
   } as any;
+  let xmlObject: any;
 
   const service = new NFSeAutorizacaoService(environment, utility, xmlBuilder, axios, saveFiles, gerarConsulta);
+
+  xmlBuilder.gerarXml.mockImplementation((currentXmlObject: any) => {
+    xmlObject = currentXmlObject;
+    return `<?xml version="1.0" encoding="UTF-8"?><DPS><infDPS Id="${currentXmlObject.infDPS.$.Id}"></infDPS></DPS>`;
+  });
 
   return {
     service,
     utility,
     saveFiles,
     xmlBuilder,
+    getXmlObject: () => xmlObject,
   };
 };
 
@@ -175,5 +182,79 @@ describe('NFSeAutorizacaoService', () => {
     expect(consultaJsonCall?.[0].data).toEqual(expect.objectContaining({
       dpsXmlGZipB64: expect.any(String),
     }));
+  });
+
+  it('normalizes DPS dates and preserves schema order for nested groups', async () => {
+    const axiosPost = jest.fn().mockResolvedValue({
+      data: {
+        chaveAcesso: 'CHAVE-TESTE',
+      },
+    });
+
+    const { service, getXmlObject } = buildService(axiosPost);
+    const baseRequest = buildRequest();
+    const baseInfDps = baseRequest.DPS as any;
+
+    await service.Exec({
+      DPS: {
+        infDps: {
+          ...baseInfDps.infDps,
+          dhEmi: '2026-02-25T11:12:28.000Z',
+          dCompet: '20260225',
+          prest: {
+            ...baseInfDps.infDps.prest,
+            end: {
+              endNac: {
+                CEP: '12040859',
+                cMun: '3554102',
+              },
+              xLgr: 'Rua Capitão Bernardo Sanches Pimenta',
+              nro: '162',
+              xBairro: 'Esplada Independência',
+            },
+          },
+          serv: {
+            locPrest: {
+              cLocPrestacao: '3554102',
+            },
+            cServ: {
+              cNBS: '106043000',
+              cIntContrib: 'INT-01',
+              xDescServ: 'SERVICOS DE DESENVOLVIMENTO DE PROGRAMAS DE COMPUTADOR SOB ENCOMENDA',
+              cTribMun: '1234',
+              cTribNac: '110101',
+            },
+          },
+        },
+      },
+    });
+
+    const xmlObject = getXmlObject();
+
+    expect(xmlObject.infDPS.dhEmi).toBe('2026-02-25T08:12:28-03:00');
+    expect(xmlObject.infDPS.dCompet).toBe('2026-02-25');
+    expect(Object.keys(xmlObject.infDPS)).toEqual([
+      'tpAmb',
+      'dhEmi',
+      'verAplic',
+      'serie',
+      'nDPS',
+      'dCompet',
+      'tpEmit',
+      'cLocEmi',
+      'prest',
+      'toma',
+      'serv',
+      'valores',
+      '$',
+    ]);
+    expect(Object.keys(xmlObject.infDPS.prest.end.endNac)).toEqual(['cMun', 'CEP']);
+    expect(Object.keys(xmlObject.infDPS.serv.cServ)).toEqual([
+      'cTribNac',
+      'cTribMun',
+      'xDescServ',
+      'cNBS',
+      'cIntContrib',
+    ]);
   });
 });

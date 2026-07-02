@@ -43,7 +43,7 @@ export type InfDPS = {
      */
     tpAmb: 1 | 2;
     /**
-     * Data e hora da emissão do DPS (formato UTC: AAAA-MM-DDThh:mm:ssTZD)
+        * Data e hora da emissão do DPS (formato UTC com offset: AAAA-MM-DDThh:mm:ss-03:00)
      */
     dhEmi: string;
     /**
@@ -59,7 +59,7 @@ export type InfDPS = {
      */
     nDPS: string;
     /**
-     * Data de competência (AAAAMMDD)
+        * Data de competência (AAAA-MM-DD)
      */
     dCompet: string;
     /**
@@ -218,13 +218,13 @@ export type Endereco = {
  */
 export type EnderecoNacional = {
     /**
-     * CEP
-     */
-    CEP: string;
-    /**
      * Código do município (IBGE)
      */
     cMun: string;
+    /**
+     * CEP
+     */
+    CEP: string;
     /**
      * UF (opcional - não deve ser informado conforme schema NFSe)
      */
