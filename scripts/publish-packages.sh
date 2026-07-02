@@ -5,6 +5,10 @@
 
 set -e
 
+# Evita que npm tente abrir browser para autenticação em ambientes headless/servidor
+export BROWSER=none
+export npm_config_browser=none
+
 # Cores para output
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -13,7 +17,8 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 # Pacotes a serem publicados (em ordem de dependência)
-PACKAGES_TO_PUBLISH=("types" "shared" "danfe" "nfce" "nfse")
+# PACKAGES_TO_PUBLISH=("types" "shared" "danfe" "nfce" "nfse")
+PACKAGES_TO_PUBLISH=("types" "shared" "nfse")
 
 echo -e "${BLUE}════════════════════════════════════════════════════════${NC}"
 echo -e "${BLUE}   📦 Publicação de Pacotes NFeWizard${NC}"
