@@ -1,5 +1,27 @@
 # Changelog
 
+## [2026-07-02]
+
+### Fix
+
+- **`@nfewizard/nfse` 1.0.3 — Normalização do XML da DPS antes da serialização**
+  - `dhEmi`: normalizado para offset de Brasília (`AAAA-MM-DDThh:mm:ss-03:00`). Valores em UTC com `Z` ou com qualquer outro offset são convertidos automaticamente antes da serialização.
+  - `dCompet`: normalizado para o formato `AAAA-MM-DD` conforme o tipo `TSData` do schema NT 2025.002 v1.01. Entradas no formato `AAAAMMDD` são convertidas automaticamente.
+  - `endNac`: a ordem de serialização de `cMun` e `CEP` agora segue o schema (`cMun` antes de `CEP`), independente da ordem informada no payload.
+  - `cServ`: a ordem de serialização segue a sequência do `TCCServ` do XSD (`cTribNac` → `cTribMun` → `xDescServ` → `cNBS` → `cIntContrib`), independente da ordem informada no payload.
+  - Validação de consistência temporal: lança erro se `dCompet` for posterior a `dhEmi` no fuso de Brasília, prevenindo rejeição E0015.
+
+- **`@nfewizard/types` 1.0.6 — Documentação de tipos corrigida**
+  - `InfDPS.dhEmi`: comentário corrigido para refletir o formato correto com offset (`AAAA-MM-DDThh:mm:ss-03:00`).
+  - `InfDPS.dCompet`: comentário corrigido de `AAAAMMDD` para `AAAA-MM-DD`.
+  - `EnderecoNacional`: ordem dos campos no tipo ajustada para refletir a sequência do schema (`cMun` antes de `CEP`).
+
+- **`@nfewizard/shared` 1.1.2 — Cadeia de CAs do servidor SEFIN Nacional**
+  - Adicionado suporte a CAs customizadas via diretório `resources/certs/` para resolver a cadeia `GlobalSign Root R46` → `SERPRO AR46`, que não está no trust store padrão do Node 24.
+  - Em ambiente de homologação sem CAs customizadas, `rejectUnauthorized` é desabilitado automaticamente, eliminando a necessidade de `NODE_TLS_REJECT_UNAUTHORIZED=0`.
+
+---
+
 ## [1.0.4] - 2026-06-08
 
 ### Feat
