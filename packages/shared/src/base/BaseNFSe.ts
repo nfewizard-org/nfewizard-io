@@ -49,6 +49,32 @@ abstract class BaseNFSe {
     }
 
     /**
+     * Texto que será salvo como XML de consulta.
+     * Subclasses podem sobrescrever para persistir o artefato realmente enviado.
+     */
+    protected getXmlConsulta(requestData?: any): string {
+        return requestData ? JSON.stringify(requestData, null, 2) : '';
+    }
+
+    protected getXmlRetornoParaSalvar(errorResponse: any, response: AxiosResponse<any, any>): AxiosResponse<any, any> {
+        const xmlRetornoParaSalvar = errorResponse || response;
+
+        if (xmlRetornoParaSalvar && xmlRetornoParaSalvar.data) {
+            return xmlRetornoParaSalvar;
+        }
+
+        return {
+            ...(response || {}),
+            data: {
+                sucesso: false,
+                metodo: this.metodo,
+                mensagem: errorResponse?.message || 'Resposta vazia do webservice NFSe',
+                dataHora: new Date().toISOString(),
+            },
+        } as AxiosResponse<any, any>;
+    }
+
+    /**
      * Método para obter a URL base do webservice
      */
     protected getWebServiceUrl(): string {
@@ -207,12 +233,12 @@ abstract class BaseNFSe {
             throw new Error(errorMessage);
         } finally {
             // Salva arquivos (se configurado)
-            // Para REST, salva o JSON da requisição
-            const xmlConsulta = requestData ? JSON.stringify(requestData, null, 2) : '';
+            const xmlConsulta = this.getXmlConsulta(requestData);
+            const xmlRetornoParaSalvar = this.getXmlRetornoParaSalvar(errorResponse, response);
             this.saveFiles.salvaArquivos(
                 xmlConsulta,
                 responseInJson,
-                errorResponse || response,
+                xmlRetornoParaSalvar,
                 this.metodo,
                 '' // xmlConsultaSoap vazio para REST
             );

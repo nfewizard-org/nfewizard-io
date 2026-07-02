@@ -22,6 +22,7 @@ import { gunzipSync, gzipSync } from 'zlib';
 
 class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceImpl {
     private dpsXmlGZipB64: string = '';
+    private dpsXmlAssinadoConsulta: string = '';
 
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         super(environment, utility, xmlBuilder, 'NFSe_Autorizacao', axios, saveFiles, gerarConsulta);
@@ -202,6 +203,7 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
     private processarDPS(data: NFSe): string {
         // Se já foi fornecido o Base64, usa diretamente
         if (data.dpsXmlGZipB64) {
+            this.dpsXmlAssinadoConsulta = '';
             return data.dpsXmlGZipB64;
         }
 
@@ -213,6 +215,7 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
             for (const dps of dpsArray) {
                 // Monta e assina o XML
                 const xml = this.gerarXmlDPS(dps);
+                this.dpsXmlAssinadoConsulta = xml;
 
                 // Compacta em GZip
                 const gzip = gzipSync(Buffer.from(xml, 'utf-8'));
@@ -256,6 +259,9 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
             NFSe: LayoutNFSe;
         }[];
     }> {
+        const config = this.environment.getConfig();
+        this.dpsXmlAssinadoConsulta = '';
+
         try {
             const response = await super.Exec(data) as NFSeAutorizacaoResponse;
 
@@ -268,7 +274,6 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
                     const nfseXml = gunzipSync(nfseBuffer).toString('utf-8');
 
                     // Salva o XML da NFSe descompactado
-                    const config = this.environment.getConfig();
                     if (config.dfe.armazenarXMLAutorizacao && response.chaveAcesso) {
                         this.utility.salvaXML({
                             data: nfseXml,
@@ -302,10 +307,42 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
                 xmls: xmls.length > 0 ? xmls : undefined
             };
         } catch (error: any) {
+            if (config.dfe.armazenarXMLRetorno) {
+                this.utility.salvaJSON({
+                    data: {
+                        sucesso: false,
+                        metodo: this.metodo,
+                        mensagem: error.message,
+                        dataHora: new Date().toISOString(),
+                    },
+                    fileName: `${this.metodo}-retorno`,
+                    metodo: this.metodo,
+                    path: config.dfe.pathXMLRetorno,
+                });
+            }
+
             logger.error('Erro na autorização de NFSe', error, {
                 context: 'NFSeAutorizacaoService',
             });
             throw error;
+        } finally {
+            if (config.dfe.armazenarXMLConsulta && this.dpsXmlAssinadoConsulta) {
+                this.utility.salvaXML({
+                    data: this.dpsXmlAssinadoConsulta,
+                    fileName: `${this.metodo}-consulta`,
+                    metodo: this.metodo,
+                    path: config.dfe.pathXMLConsulta,
+                });
+
+                this.utility.salvaJSON({
+                    data: {
+                        dpsXmlGZipB64: this.dpsXmlGZipB64,
+                    },
+                    fileName: `${this.metodo}-consulta-json`,
+                    metodo: this.metodo,
+                    path: config.dfe.pathXMLConsulta,
+                });
+            }
         }
     }
 }
