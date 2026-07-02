@@ -147,11 +147,14 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
 
 
     private anoMesEmissao(dhEmi: string) {
-        // Lógica para obter o ano e mês de emissão (AAMM)
+        // Extrai AAMM diretamente da string ISO para evitar problemas de fuso horário UTC.
+        // Em servidores UTC, getMonth()/getFullYear() podem retornar o mês/ano seguinte
+        // durante a janela 21:00-23:59 BRT no último dia do mês.
+        const match = String(dhEmi).match(/^(\d{4})-(\d{2})/);
+        if (match) return match[1].slice(-2) + match[2];
         const dataAtual = new Date(dhEmi);
-        const ano = dataAtual.getFullYear().toString().slice(-2);
-        const mes = (dataAtual.getMonth() + 1).toString().padStart(2, '0');
-
+        const ano = dataAtual.getUTCFullYear().toString().slice(-2);
+        const mes = (dataAtual.getUTCMonth() + 1).toString().padStart(2, '0');
         return ano + mes;
     }
 
