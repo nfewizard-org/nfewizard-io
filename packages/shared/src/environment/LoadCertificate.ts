@@ -20,6 +20,7 @@ import fs from 'fs';
 import pem from 'pem';
 import https from 'https';
 import forge from 'node-forge';
+import tls from 'tls';
 
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -27,8 +28,6 @@ import { Readable } from 'stream';
 import { logger } from '../exceptions/logger.js';
 
 const baseDir = path.dirname(fileURLToPath(import.meta.url));
-// From dist/ to package root, then to resources/certs
-const dir = path.join(baseDir, '../resources/certs');
 
 class LoadCertificate {
     private config: NFeWizardProps;
@@ -70,23 +69,58 @@ class LoadCertificate {
         throw new Error('pathCertificado deve ser uma string (path), Buffer ou Stream legível.');
     }
 
+    private resolveCaCertsDir(): string | null {
+        const candidates = [
+            path.resolve(baseDir, '../../resources/certs'),
+            path.resolve(baseDir, '../../../resources/certs'),
+            path.resolve(baseDir, '../resources/certs'),
+        ];
+
+        return candidates.find(candidate => fs.existsSync(candidate)) ?? null;
+    }
+
+    private loadCustomCaCerts(): Buffer[] {
+        const certsDir = this.resolveCaCertsDir();
+
+        if (!certsDir) {
+            return [];
+        }
+
+        const files = fs.readdirSync(certsDir).filter(fileName => !fileName.startsWith('.'));
+
+        return files.map(fileName => fs.readFileSync(path.join(certsDir, fileName)));
+    }
+
+    private isHomologacao(): boolean {
+        const config = this.config as unknown as { nfe?: { ambiente?: number } };
+
+        return config.nfe?.ambiente === 2;
+    }
+
+    private createHttpsAgent(key: string, cert: string): https.Agent {
+        const customCaCerts = this.loadCustomCaCerts();
+        const agentOptions: https.AgentOptions = {
+            key,
+            cert,
+        };
+
+        if (customCaCerts.length > 0) {
+            agentOptions.ca = [
+                ...tls.rootCertificates.map(rootCertificate => Buffer.from(rootCertificate)),
+                ...customCaCerts,
+            ];
+        } else if (this.isHomologacao()) {
+            agentOptions.rejectUnauthorized = false;
+        }
+
+        return new https.Agent(agentOptions);
+    }
+
     private loadCertificateWithPEM(pfxFile: Buffer): Promise<CertificateLoadResult> {
         return new Promise((resolve, reject) => {
             try {
 
                 const pfxPassword = this.config.dfe.senhaCertificado;
-
-                const certsDir = path.resolve(baseDir, dir);
-                
-                // Read CA certificates if directory exists and has files
-                let caCerts: Buffer[] = [];
-                if (fs.existsSync(certsDir)) {
-                    const files = fs.readdirSync(certsDir).filter(f => !f.startsWith('.'));
-                    caCerts = files.map(filename => {
-                        const tmp = `${certsDir}/${filename}`;
-                        return fs.readFileSync(tmp);
-                    });
-                }
 
                 pem.readPkcs12(pfxFile, { p12Password: pfxPassword }, async (error, result) => {
                     if (error) {
@@ -109,21 +143,7 @@ class LoadCertificate {
                         return reject(new Error("Erro ao carregar o certificado: O certificado fornecido expirou ou ainda não é válido."));
                     }
 
-                    // Configure HTTPS agent based on environment
-                    const agentOptions: https.AgentOptions = {
-                        key: key,
-                        cert: cert,
-                    };
-                    
-                    // Add CA certs if available, otherwise allow self-signed for homologação
-                    if (caCerts.length > 0) {
-                        agentOptions.ca = caCerts;
-                    } else if (this.config.dfe.ambiente === 2) {
-                        // Homologação: accept self-signed certificates
-                        agentOptions.rejectUnauthorized = false;
-                    }
-                    
-                    const agent = new https.Agent(agentOptions);
+                    const agent = this.createHttpsAgent(key, cert);
 
                     resolve({
                         success: true,
@@ -180,34 +200,7 @@ class LoadCertificate {
                     return reject(new Error("Erro ao carregar o certificado: O certificado fornecido expirou ou ainda não é válido."));
                 }
 
-                // Carrega os certificados da CA
-                const certsDir = path.resolve(baseDir, dir);
-                
-                // Read CA certificates if directory exists and has files
-                let caCerts: Buffer[] = [];
-                if (fs.existsSync(certsDir)) {
-                    const files = fs.readdirSync(certsDir).filter(f => !f.startsWith('.'));
-                    caCerts = files.map(filename => {
-                        const tmp = `${certsDir}/${filename}`;
-                        return fs.readFileSync(tmp);
-                    });
-                }
-
-                // Configura o agente HTTPS
-                const agentOptions: https.AgentOptions = {
-                    key: keyPem,
-                    cert: certPem,
-                };
-                
-                // Add CA certs if available, otherwise allow self-signed for homologação
-                if (caCerts.length > 0) {
-                    agentOptions.ca = caCerts;
-                } else if (this.config.dfe.ambiente === 2) {
-                    // Homologação: accept self-signed certificates
-                    agentOptions.rejectUnauthorized = false;
-                }
-                
-                const agent = new https.Agent(agentOptions);
+                const agent = this.createHttpsAgent(keyPem, certPem);
 
                 resolve({
                     success: true,
