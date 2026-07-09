@@ -351,7 +351,10 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
         }
 
         // Assina o XML (usa o nome exato do elemento conforme schema)
-        let xmlAssinado = this.xmlBuilder.assinarXML(xml, 'infDPS');
+        // NOTA: `assinaturaDPS` é uma flag EXPERIMENTAL/PROVISÓRIA (issue #93 - E0714 SEFIN Nacional)
+        // para testar diferentes perfis de algoritmo XMLDSig. Default mantém o comportamento legado.
+        const assinaturaDPS = config.lib?.assinaturaDPS ?? 'legado';
+        let xmlAssinado = this.xmlBuilder.assinarXML(xml, 'infDPS', assinaturaDPS);
 
         // Garante que o XML assinado tenha a declaração UTF-8
         if (!xmlAssinado.trim().startsWith('<?xml')) {
