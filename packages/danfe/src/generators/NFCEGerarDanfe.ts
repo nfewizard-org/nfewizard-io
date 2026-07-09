@@ -104,7 +104,7 @@ class NFCeGerarDanfe {
             const footerHeight = 170; // Altura do rodapé -> 34.22975675056
 
             // Altura total é a soma das alturas dos itens + cabeçalho + rodapé
-            return headerHeight + footerHeight + (itemsLength * itemHeight) + 5;
+            return headerHeight + footerHeight + (itemsLength * itemHeight) + 5 + (nfeData.infNFe.infAdic?.infCpl ? 14 : 0);
         }
 
         function calculateFontSize(width: number) {
@@ -572,6 +572,11 @@ class NFCeGerarDanfe {
         this.doc.text(`Tributos Totais Incidentes (Lei Federal 12.741/2012): R$ ${parseFloat(String(this.total.ICMSTot.vTotTrib) || '0').toFixed(2)}`, 0, topBeforeQrCode, {
             align: 'center'
         });
+        if (this.infAdic?.infCpl) {
+            this.doc.text(String(this.infAdic.infCpl), 0, topBeforeQrCode + 12, {
+                align: 'center'
+            });
+        }
     }
 
     async generatePDF(exibirMarcaDaguaDanfe?: boolean) {
