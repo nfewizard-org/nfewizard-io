@@ -2,12 +2,37 @@
 
 ## [2026-07-09]
 
+### Feat
+
+- **`@nfewizard/shared` / `@nfewizard/types` / `@nfewizard/nfse` — Perfis experimentais de assinatura XMLDSig para DPS (SEFIN E0714)**
+  - Adiciona a opção `lib.assinaturaDPS` para operações de NFS-e (DPS), com os perfis:
+    - `legado` (C14N + SHA-1 + RSA-SHA1)
+    - `sha256-exc-c14n` (EXC-C14N + SHA-256 + RSA-SHA256)
+    - `sha256-c14n` (C14N + SHA-256 + RSA-SHA256)
+    - `sha1-exc-c14n` (EXC-C14N + SHA-1 + RSA-SHA1)
+  - Mantém compatibilidade retroativa: quando não informado, o padrão continua `legado`.
+  - A configuração é marcada como **experimental/provisória** para investigação do erro `E0714` na SEFIN Nacional.
+
+- **`@nfewizard/nfse` — Retorno da autorização com resumo normalizado**
+  - Passa a extrair e normalizar campos-chave do XML autorizado (ex.: `cStat`, `xMotivo`, `nNFSe`, `dhProc`) para facilitar troubleshooting e observabilidade.
+  - Salva retorno estruturado com metadados adicionais (`sucesso`, `statusHttp`, `codigoRetorno`, `mensagemRetorno`) quando habilitado o armazenamento de retorno.
+
 ### Fix
 
 - **`@nfewizard/shared` 1.1.3 — Header SOAPAction em UFs SOAP 1.1 (HTTP 500 Client.NoSOAPAction)**
   - Corrige `BaseNFE.callWebService` para enviar `SOAPAction` quando o `Content-Type` for SOAP 1.1 (`text/xml; charset=utf-8`).
   - Para SOAP 1.2 (`application/soap+xml`), passa a incluir `action` no próprio `Content-Type`, removendo duplicações quando já houver `action` previamente definido.
   - Resolve falhas HTTP 500 com fault `Client.NoSOAPAction` em UFs que exigem SOAP 1.1 (ex.: PE) nas operações que utilizam `@nfewizard/shared`.
+
+- **`@nfewizard/shared` — Normalização de retorno para logs em fluxos NFSe (REST)**
+  - Melhora a padronização de códigos e mensagens de retorno em `BaseNFSe`, incluindo tratamento consistente de `erros/Erros`, `alertas/Alertas`, `cStat`, `codigoRetorno` e `mensagemRetorno`.
+  - Uniformiza o payload salvo em log/retorno para facilitar análise de rejeições e erros não catalogados.
+
+- **`@nfewizard/shared` — Parser com suporte dedicado ao retorno de autorização NFS-e**
+  - Atualiza `XmlParser` para tratar explicitamente `NFSeAutorizacao`/`NFSEAutorizacao`, com fallback robusto para `NFSe`/`infNFSe`.
+
+- **`@nfewizard/shared` — Atualização de cadeia de certificados (CA)**
+  - Atualiza certificado raiz/intermediário utilizado no bundle de CAs do projeto para manter compatibilidade com os endpoints atuais.
 
 ## [2026-07-02]
 
