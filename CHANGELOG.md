@@ -1,5 +1,14 @@
 # Changelog
 
+## [2026-07-09]
+
+### Fix
+
+- **`@nfewizard/shared` 1.1.3 — Header SOAPAction em UFs SOAP 1.1 (HTTP 500 Client.NoSOAPAction)**
+  - Corrige `BaseNFE.callWebService` para enviar `SOAPAction` quando o `Content-Type` for SOAP 1.1 (`text/xml; charset=utf-8`).
+  - Para SOAP 1.2 (`application/soap+xml`), passa a incluir `action` no próprio `Content-Type`, removendo duplicações quando já houver `action` previamente definido.
+  - Resolve falhas HTTP 500 com fault `Client.NoSOAPAction` em UFs que exigem SOAP 1.1 (ex.: PE) nas operações que utilizam `@nfewizard/shared`.
+
 ## [2026-07-02]
 
 ### Fix
