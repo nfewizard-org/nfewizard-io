@@ -811,13 +811,14 @@
   },
   "NFCe_CE_P": {
     "Usar": "NFCe_SVRS_P",
+    "URL-QRCode_2.00": "http://nfce.sefaz.ce.gov.br/pages/ShowNFCe.html",
     "URL-QRCode": "http://nfce.sefaz.ce.gov.br/pages/ShowNFCe.html",
     "URL-ConsultaNFCe": "http://nfce.sefaz.ce.gov.br/pages/consultaChaveAcesso.jsf",
     "URL-ConsultaNFCe_2.00": "www.sefaz.ce.gov.br/nfce/consulta"
   },
   "NFCe_CE_H": {
     "Usar": "NFCe_SVRS_H",
-    "URL-QRCode_2.00": "https://hom.sat.sef.sc.gov.br/nfce/consulta",
+    "URL-QRCode_2.00": "http://nfceh.sefaz.ce.gov.br/pages/ShowNFCe.html",
     "URL-QRCode": "http://nfceh.sefaz.ce.gov.br/pages/ShowNFCe.html",
     "URL-ConsultaNFCe": "http://nfceh.sefaz.ce.gov.br/pages/consultaChaveAcesso.jsf",
     "URL-ConsultaNFCe_2.00": "www.sefaz.ce.gov.br/nfce/consulta",
