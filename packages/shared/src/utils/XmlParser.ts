@@ -96,6 +96,9 @@ export class XmlParser {
     getInutilizacaoRetornoEventBody(jsonData: any): any {
         return this.findInObj(jsonData, 'infInut');
     }
+    getNFSeAutorizacaoBody(jsonData: any): any {
+        return this.findInObj(jsonData, 'NFSe') || this.findInObj(jsonData, 'infNFSe') || jsonData;
+    }
 
     convertXmlToJson(xml: string, metodo: string, nsu?: string): GenericObject {
         logger.info(`Convertendo XML para JSON [${metodo}]`, {
@@ -165,6 +168,10 @@ export class XmlParser {
                 break;
             case 'NFEInutilizacao':
                 jsonBody = this.getInutilizacaoRetornoEventBody(jsonData)
+                break;
+            case 'NFSeAutorizacao':
+            case 'NFSEAutorizacao':
+                jsonBody = this.getNFSeAutorizacaoBody(jsonData)
                 break;
             default:
                 throw new Error('Formato de XML desconhecido');

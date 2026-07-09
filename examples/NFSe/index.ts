@@ -18,6 +18,10 @@ const testNFSe = async () => {
         },
         lib: {
             useForSchemaValidation: 'validateSchemaJsBased', // Usar validação JavaScript para NFSe
+            // EXPERIMENTAL/PROVISÓRIO (issue #93 - E0714 SEFIN Nacional): troque entre
+            // 'legado' | 'sha256-exc-c14n' | 'sha256-c14n' | 'sha1-exc-c14n' para testar
+            // qual perfil de assinatura XMLDSig a SEFIN Nacional aceita para a DPS.
+            assinaturaDPS: 'legado',
             log: {
                 pathLogs: "tmp/NFSe/Logs",
                 armazenarLogs: true,

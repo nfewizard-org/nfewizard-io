@@ -29,6 +29,47 @@ export interface SoapEnvelopeObjProps {
     [key: string]: any;
 }
 
+/**
+ * Perfis de algoritmo XMLDSig disponíveis para assinatura.
+ * **EXPERIMENTAL/PROVISÓRIO** - investigação da issue #93 (E0714 - SEFIN Nacional / DPS).
+ */
+export type AssinaturaPerfil = 'legado' | 'sha256-exc-c14n' | 'sha256-c14n' | 'sha1-exc-c14n';
+
+const C14N = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
+const EXC_C14N = 'http://www.w3.org/2001/10/xml-exc-c14n#';
+const ENVELOPED = 'http://www.w3.org/2000/09/xmldsig#enveloped-signature';
+const SHA1_DIGEST = 'http://www.w3.org/2000/09/xmldsig#sha1';
+const SHA256_DIGEST = 'http://www.w3.org/2001/04/xmlenc#sha256';
+const RSA_SHA1 = 'http://www.w3.org/2000/09/xmldsig#rsa-sha1';
+const RSA_SHA256 = 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256';
+
+const ASSINATURA_PERFIS: Record<AssinaturaPerfil, {
+    canonicalizationAlgorithm: string;
+    digestAlgorithm: string;
+    signatureAlgorithm: string;
+}> = {
+    'legado': {
+        canonicalizationAlgorithm: C14N,
+        digestAlgorithm: SHA1_DIGEST,
+        signatureAlgorithm: RSA_SHA1
+    },
+    'sha256-exc-c14n': {
+        canonicalizationAlgorithm: EXC_C14N,
+        digestAlgorithm: SHA256_DIGEST,
+        signatureAlgorithm: RSA_SHA256
+    },
+    'sha256-c14n': {
+        canonicalizationAlgorithm: C14N,
+        digestAlgorithm: SHA256_DIGEST,
+        signatureAlgorithm: RSA_SHA256
+    },
+    'sha1-exc-c14n': {
+        canonicalizationAlgorithm: EXC_C14N,
+        digestAlgorithm: SHA1_DIGEST,
+        signatureAlgorithm: RSA_SHA1
+    }
+};
+
 class XmlBuilder {
     environment: Environment;
     constructor(environment: Environment) {
@@ -37,22 +78,35 @@ class XmlBuilder {
 
     /**
      * Método para assinar o XML
+     * @param {AssinaturaPerfil} perfil - **EXPERIMENTAL/PROVISÓRIO** (issue #93). Quando omitido,
+     * mantém o perfil legado (c14n-1.0 / SHA-1 / rsa-sha1) usado por NFe/NFCe/CTe.
      */
-    assinarXML(xml: string, tagAssinar: string) {
+    assinarXML(xml: string, tagAssinar: string, perfil: AssinaturaPerfil = 'legado') {
+        const { canonicalizationAlgorithm, digestAlgorithm, signatureAlgorithm } = ASSINATURA_PERFIS[perfil];
+
         const transforms = [
-            'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
-            'http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
+            ENVELOPED,
+            canonicalizationAlgorithm
         ];
+
+        logger.info('Assinando XML', {
+            context: 'XmlBuilder',
+            tagAssinar,
+            perfil,
+            canonicalizationAlgorithm,
+            digestAlgorithm,
+            signatureAlgorithm
+        });
 
         const signedXmlObj = new SignedXml({
             publicCert: this.environment.getCert(),
             privateKey: this.environment.getCertKey(),
-            canonicalizationAlgorithm: "http://www.w3.org/TR/2001/REC-xml-c14n-20010315",
-            implicitTransforms: ['http://www.w3.org/TR/2001/REC-xml-c14n-20010315']
+            canonicalizationAlgorithm,
+            implicitTransforms: [canonicalizationAlgorithm]
         });
 
-        signedXmlObj.addReference({ xpath: `//*[local-name(.)='${tagAssinar}']`, digestAlgorithm: 'http://www.w3.org/2000/09/xmldsig#sha1', transforms });
-        signedXmlObj.signatureAlgorithm = 'http://www.w3.org/2000/09/xmldsig#rsa-sha1';
+        signedXmlObj.addReference({ xpath: `//*[local-name(.)='${tagAssinar}']`, digestAlgorithm, transforms });
+        signedXmlObj.signatureAlgorithm = signatureAlgorithm;
         // Assinar o XML
         signedXmlObj.computeSignature(xml);
 

@@ -351,7 +351,10 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
         }
 
         // Assina o XML (usa o nome exato do elemento conforme schema)
-        let xmlAssinado = this.xmlBuilder.assinarXML(xml, 'infDPS');
+        // NOTA: `assinaturaDPS` é uma flag EXPERIMENTAL/PROVISÓRIA (issue #93 - E0714 SEFIN Nacional)
+        // para testar diferentes perfis de algoritmo XMLDSig. Default mantém o comportamento legado.
+        const assinaturaDPS = config.lib?.assinaturaDPS ?? 'legado';
+        let xmlAssinado = this.xmlBuilder.assinarXML(xml, 'infDPS', assinaturaDPS);
 
         // Garante que o XML assinado tenha a declaração UTF-8
         if (!xmlAssinado.trim().startsWith('<?xml')) {
@@ -438,6 +441,26 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
         return 'POST';
     }
 
+    private extrairResumoNFSeAutorizada(nfseXml: string): Record<string, any> {
+        const capturar = (tag: string): string | undefined => {
+            const match = nfseXml.match(new RegExp(`<${tag}>([^<]+)</${tag}>`));
+            return match?.[1];
+        };
+
+        const cStat = capturar('cStat');
+        const xMotivo = capturar('xMotivo');
+        const nNFSe = capturar('nNFSe');
+        const dhProc = capturar('dhProc');
+
+        return {
+            cStat,
+            codigoRetorno: cStat,
+            mensagemRetorno: xMotivo || (cStat === '100' ? 'Autorizado' : undefined),
+            nNFSe,
+            dhProc,
+        };
+    }
+
     public async Exec(data: NFSe): Promise<{
         success: boolean;
         status: number;
@@ -459,6 +482,7 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
                 try {
                     const nfseBuffer = Buffer.from(response.nfseXmlGZipB64, 'base64');
                     const nfseXml = gunzipSync(nfseBuffer).toString('utf-8');
+                    const resumoAutorizacao = this.extrairResumoNFSeAutorizada(nfseXml);
 
                     // Salva o XML da NFSe descompactado
                     if (config.dfe.armazenarXMLAutorizacao && response.chaveAcesso) {
@@ -467,6 +491,20 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
                             fileName: response.chaveAcesso,
                             metodo: this.metodo,
                             path: config.dfe.pathXMLAutorizacao,
+                        });
+                    }
+
+                    if (config.dfe.armazenarXMLRetorno) {
+                        this.utility.salvaJSON({
+                            data: {
+                                ...response,
+                                sucesso: true,
+                                statusHttp: 200,
+                                ...resumoAutorizacao,
+                            },
+                            fileName: `${this.metodo}-retorno`,
+                            metodo: this.metodo,
+                            path: config.dfe.pathXMLRetorno,
                         });
                     }
 

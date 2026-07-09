@@ -195,5 +195,13 @@ export type NFeWizardProps = {
         * Útil para utilização em ambientes sem JAVA (Ex: Lambda)
         */
         useForSchemaValidation?: 'validateSchemaJavaBased' | 'validateSchemaJsBased';
+        /**
+        * @param {legado | sha256-exc-c14n | sha256-c14n | sha1-exc-c14n} assinaturaDPS - **EXPERIMENTAL/PROVISÓRIO**
+        * (investigação da issue #93 - erro E0714 da SEFIN Nacional). Define o perfil de algoritmo
+        * XMLDSig usado para assinar a DPS (NFS-e Nacional). Não afeta a assinatura de NFe/NFCe/CTe.
+        * Quando não informado, mantém o padrão legado (c14n-1.0 / SHA-1 / rsa-sha1).
+        * Não utilizar em produção até confirmação do algoritmo correto exigido pela SEFIN.
+        */
+        assinaturaDPS?: 'legado' | 'sha256-exc-c14n' | 'sha256-c14n' | 'sha1-exc-c14n';
     };
 };
