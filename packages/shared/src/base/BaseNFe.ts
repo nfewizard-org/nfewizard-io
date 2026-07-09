@@ -65,12 +65,29 @@ abstract class BaseNFE {
         return 'text/xml; charset=utf-8'
     }
 
+    protected buildHeaders(ContentType: string, action: string): Record<string, string> {
+        const headers: Record<string, string> = {
+            'Content-Type': ContentType,
+        };
+
+        if (!action) {
+            return headers;
+        }
+
+        if (/soap\+xml/i.test(ContentType)) {
+            headers['Content-Type'] = ContentType.replace(/\s*;\s*action="[^"]*"/i, '') + `; action="${action}"`;
+            return headers;
+        }
+
+        headers.SOAPAction = `"${action}"`;
+
+        return headers;
+    }
+
     protected async callWebService(xmlConsulta: string, webServiceUrl: string, ContentType: string, action: string, agent: Agent): Promise<AxiosResponse<any, any>> {
         const startTime = Date.now();
 
-        const headers = {
-            'Content-Type': ContentType,
-        };
+        const headers = this.buildHeaders(ContentType, action);
 
         logger.http('Iniciando comunicação com o webservice', {
             context: `BaseNFE`,
