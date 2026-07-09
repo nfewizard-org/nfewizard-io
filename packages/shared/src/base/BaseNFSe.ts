@@ -56,21 +56,120 @@ abstract class BaseNFSe {
         return requestData ? JSON.stringify(requestData, null, 2) : '';
     }
 
+    protected getCodigoRetornoParaLog(responseData: any): string | number | undefined {
+        if (!responseData || typeof responseData !== 'object') {
+            return undefined;
+        }
+
+        if (responseData.cStat !== undefined) {
+            return responseData.cStat;
+        }
+
+        if (responseData.codigoRetorno !== undefined) {
+            return responseData.codigoRetorno;
+        }
+
+        const erros = responseData.erros || responseData.Erros;
+        if (Array.isArray(erros) && erros.length > 0) {
+            return erros[0]?.Codigo || erros[0]?.codigo;
+        }
+
+        return responseData.Codigo || responseData.codigo;
+    }
+
+    protected getMensagemRetornoParaLog(responseData: any): string | undefined {
+        if (!responseData || typeof responseData !== 'object') {
+            return undefined;
+        }
+
+        if (responseData.mensagemRetorno) {
+            return responseData.mensagemRetorno;
+        }
+
+        if (responseData.xMotivo) {
+            return responseData.xMotivo;
+        }
+
+        if (responseData.message) {
+            return responseData.message;
+        }
+
+        if (responseData.Descricao) {
+            return responseData.Descricao;
+        }
+
+        if (responseData.descricao) {
+            return responseData.descricao;
+        }
+
+        const erros = responseData.erros || responseData.Erros;
+        if (Array.isArray(erros) && erros.length > 0) {
+            return erros[0]?.Descricao || erros[0]?.descricao;
+        }
+
+        const alertas = responseData.alertas || responseData.Alertas;
+        if (Array.isArray(alertas) && alertas.length > 0) {
+            return alertas[0]?.Descricao || alertas[0]?.descricao || alertas[0]?.message;
+        }
+
+        if (responseData.chaveAcesso) {
+            return 'Autorizado';
+        }
+
+        return undefined;
+    }
+
+    protected normalizarRetornoParaLog(responseData: any, httpStatus?: number): any {
+        if (!responseData || typeof responseData !== 'object') {
+            return responseData;
+        }
+
+        const retornoNormalizado = { ...responseData };
+        const erros = retornoNormalizado.erros || retornoNormalizado.Erros;
+        const possuiErros = Array.isArray(erros) && erros.length > 0;
+        const codigoRetorno = this.getCodigoRetornoParaLog(retornoNormalizado);
+        const mensagemRetorno = this.getMensagemRetornoParaLog(retornoNormalizado);
+
+        if (httpStatus !== undefined) {
+            retornoNormalizado.statusHttp = httpStatus;
+        }
+
+        if (retornoNormalizado.sucesso === undefined) {
+            retornoNormalizado.sucesso = !possuiErros && (httpStatus === undefined || httpStatus < 400);
+        }
+
+        if (codigoRetorno !== undefined && retornoNormalizado.codigoRetorno === undefined) {
+            retornoNormalizado.codigoRetorno = codigoRetorno;
+        }
+
+        if (mensagemRetorno && retornoNormalizado.mensagemRetorno === undefined) {
+            retornoNormalizado.mensagemRetorno = mensagemRetorno;
+        }
+
+        return retornoNormalizado;
+    }
+
     protected getXmlRetornoParaSalvar(errorResponse: any, response: AxiosResponse<any, any>): AxiosResponse<any, any> {
         const xmlRetornoParaSalvar = errorResponse || response;
 
         if (xmlRetornoParaSalvar && xmlRetornoParaSalvar.data) {
-            return xmlRetornoParaSalvar;
+            return {
+                ...xmlRetornoParaSalvar,
+                data: this.normalizarRetornoParaLog(
+                    xmlRetornoParaSalvar.data,
+                    xmlRetornoParaSalvar.status || response?.status,
+                ),
+            } as AxiosResponse<any, any>;
         }
 
         return {
             ...(response || {}),
-            data: {
+            data: this.normalizarRetornoParaLog({
                 sucesso: false,
                 metodo: this.metodo,
                 mensagem: errorResponse?.message || 'Resposta vazia do webservice NFSe',
                 dataHora: new Date().toISOString(),
-            },
+            }, response?.status),
         } as AxiosResponse<any, any>;
     }
 

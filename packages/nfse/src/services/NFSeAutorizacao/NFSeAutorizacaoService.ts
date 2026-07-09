@@ -441,6 +441,26 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
         return 'POST';
     }
 
+    private extrairResumoNFSeAutorizada(nfseXml: string): Record<string, any> {
+        const capturar = (tag: string): string | undefined => {
+            const match = nfseXml.match(new RegExp(`<${tag}>([^<]+)</${tag}>`));
+            return match?.[1];
+        };
+
+        const cStat = capturar('cStat');
+        const xMotivo = capturar('xMotivo');
+        const nNFSe = capturar('nNFSe');
+        const dhProc = capturar('dhProc');
+
+        return {
+            cStat,
+            codigoRetorno: cStat,
+            mensagemRetorno: xMotivo || (cStat === '100' ? 'Autorizado' : undefined),
+            nNFSe,
+            dhProc,
+        };
+    }
+
     public async Exec(data: NFSe): Promise<{
         success: boolean;
         status: number;
@@ -462,6 +482,7 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
                 try {
                     const nfseBuffer = Buffer.from(response.nfseXmlGZipB64, 'base64');
                     const nfseXml = gunzipSync(nfseBuffer).toString('utf-8');
+                    const resumoAutorizacao = this.extrairResumoNFSeAutorizada(nfseXml);
 
                     // Salva o XML da NFSe descompactado
                     if (config.dfe.armazenarXMLAutorizacao && response.chaveAcesso) {
@@ -470,6 +491,20 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
                             fileName: response.chaveAcesso,
                             metodo: this.metodo,
                             path: config.dfe.pathXMLAutorizacao,
+                        });
+                    }
+
+                    if (config.dfe.armazenarXMLRetorno) {
+                        this.utility.salvaJSON({
+                            data: {
+                                ...response,
+                                sucesso: true,
+                                statusHttp: 200,
+                                ...resumoAutorizacao,
+                            },
+                            fileName: `${this.metodo}-retorno`,
+                            metodo: this.metodo,
+                            path: config.dfe.pathXMLRetorno,
                         });
                     }
 
