@@ -20,6 +20,18 @@ import { AxiosInstance } from 'axios';
 import { Buffer } from 'buffer';
 import { gunzipSync, gzipSync } from 'zlib';
 
+type NFSeErrorDetail = {
+    codigo?: string;
+    descricao?: string;
+    complemento?: string;
+    statusHttp?: number;
+    raw?: any;
+};
+
+type NFSeError = Error & {
+    nfseErrorDetail?: NFSeErrorDetail;
+};
+
 class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceImpl {
     private dpsXmlGZipB64: string = '';
     private dpsXmlAssinadoConsulta: string = '';
@@ -532,12 +544,18 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
                 xmls: xmls.length > 0 ? xmls : undefined
             };
         } catch (error: any) {
+            const erroComDetalhe = error as NFSeError;
+            const detalheErro = erroComDetalhe?.nfseErrorDetail;
+
             if (config.dfe.armazenarXMLRetorno) {
                 this.utility.salvaJSON({
                     data: {
                         sucesso: false,
                         metodo: this.metodo,
+                        codigo: detalheErro?.codigo,
                         mensagem: error.message,
+                        complemento: detalheErro?.complemento,
+                        statusHttp: detalheErro?.statusHttp,
                         dataHora: new Date().toISOString(),
                     },
                     fileName: `${this.metodo}-retorno`,

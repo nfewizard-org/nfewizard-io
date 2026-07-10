@@ -22,6 +22,18 @@ import { SaveFilesImpl, GerarConsultaImpl } from '@nfewizard/types/shared';
 import { GenericObject } from '@nfewizard/types/shared';
 import { logger } from '../exceptions/logger.js';
 
+type NFSeErroDetalhado = {
+    codigo?: string;
+    descricao?: string;
+    complemento?: string;
+    statusHttp?: number;
+    raw?: any;
+};
+
+type NFSeError = Error & {
+    nfseErrorDetail?: NFSeErroDetalhado;
+};
+
 abstract class BaseNFSe {
     environment: Environment;
     utility: Utility;
@@ -119,6 +131,94 @@ abstract class BaseNFSe {
         return undefined;
     }
 
+    protected getComplementoRetornoParaLog(responseData: any): string | undefined {
+        if (!responseData || typeof responseData !== 'object') {
+            return undefined;
+        }
+
+        if (responseData.complementoRetorno) {
+            return responseData.complementoRetorno;
+        }
+
+        if (responseData.complemento) {
+            return responseData.complemento;
+        }
+
+        if (responseData.Complemento) {
+            return responseData.Complemento;
+        }
+
+        const erros = responseData.erros || responseData.Erros;
+        if (Array.isArray(erros) && erros.length > 0) {
+            return erros[0]?.complemento || erros[0]?.Complemento;
+        }
+
+        const alertas = responseData.alertas || responseData.Alertas;
+        if (Array.isArray(alertas) && alertas.length > 0) {
+            return alertas[0]?.complemento || alertas[0]?.Complemento;
+        }
+
+        return undefined;
+    }
+
+    protected getPrimeiroErroRetorno(responseData: any): any | undefined {
+        if (!responseData || typeof responseData !== 'object') {
+            return undefined;
+        }
+
+        const erros = responseData.erros || responseData.Erros;
+        if (Array.isArray(erros) && erros.length > 0) {
+            return erros[0];
+        }
+
+        const alertas = responseData.alertas || responseData.Alertas;
+        if (Array.isArray(alertas) && alertas.length > 0) {
+            return alertas[0];
+        }
+
+        if (
+            responseData.codigo !== undefined ||
+            responseData.Codigo !== undefined ||
+            responseData.descricao !== undefined ||
+            responseData.Descricao !== undefined
+        ) {
+            return responseData;
+        }
+
+        return undefined;
+    }
+
+    protected extrairErroDetalhado(responseData: any, statusHttp?: number): NFSeErroDetalhado | undefined {
+        const primeiroErro = this.getPrimeiroErroRetorno(responseData);
+        if (!primeiroErro) {
+            return undefined;
+        }
+
+        const codigo = primeiroErro.codigo || primeiroErro.Codigo;
+        const descricao =
+            primeiroErro.descricao ||
+            primeiroErro.Descricao ||
+            primeiroErro.mensagem ||
+            primeiroErro.message;
+        const complemento = primeiroErro.complemento || primeiroErro.Complemento;
+
+        return {
+            codigo,
+            descricao,
+            complemento,
+            statusHttp,
+            raw: primeiroErro,
+        };
+    }
+
+    protected createNFSeError(message: string, detail?: NFSeErroDetalhado): NFSeError {
+        const error = new Error(message) as NFSeError;
+        if (detail) {
+            error.nfseErrorDetail = detail;
+        }
+        return error;
+    }
+
     protected normalizarRetornoParaLog(responseData: any, httpStatus?: number): any {
         if (!responseData || typeof responseData !== 'object') {
             return responseData;
@@ -129,6 +229,7 @@ abstract class BaseNFSe {
         const possuiErros = Array.isArray(erros) && erros.length > 0;
         const codigoRetorno = this.getCodigoRetornoParaLog(retornoNormalizado);
         const mensagemRetorno = this.getMensagemRetornoParaLog(retornoNormalizado);
+        const complementoRetorno = this.getComplementoRetornoParaLog(retornoNormalizado);
 
         if (httpStatus !== undefined) {
             retornoNormalizado.statusHttp = httpStatus;
@@ -144,6 +245,10 @@ abstract class BaseNFSe {
 
         if (mensagemRetorno && retornoNormalizado.mensagemRetorno === undefined) {
             retornoNormalizado.mensagemRetorno = mensagemRetorno;
+        }
+
+        if (complementoRetorno && retornoNormalizado.complementoRetorno === undefined) {
+            retornoNormalizado.complementoRetorno = complementoRetorno;
         }
 
         return retornoNormalizado;
@@ -272,16 +377,12 @@ abstract class BaseNFSe {
 
             // Verifica se há erros na resposta
             if (responseInJson) {
-                if (responseInJson.erros && Array.isArray(responseInJson.erros) && responseInJson.erros.length > 0) {
-                    const primeiroErro = responseInJson.erros[0];
-                    const mensagemErro = primeiroErro.descricao || primeiroErro.Descricao || 'Erro desconhecido';
-                    throw new Error(mensagemErro);
-                }
-
-                if (responseInJson.Erros && Array.isArray(responseInJson.Erros) && responseInJson.Erros.length > 0) {
-                    const primeiroErro = responseInJson.Erros[0];
-                    const mensagemErro = primeiroErro.Descricao || primeiroErro.descricao || 'Erro desconhecido';
-                    throw new Error(mensagemErro);
+                const detalheErroRetorno = this.extrairErroDetalhado(responseInJson, response?.status);
+                if (detalheErroRetorno) {
+                    const mensagemErro = detalheErroRetorno.codigo
+                        ? `${detalheErroRetorno.codigo}: ${detalheErroRetorno.descricao || 'Erro desconhecido'}`
+                        : detalheErroRetorno.descricao || 'Erro desconhecido';
+                    throw this.createNFSeError(mensagemErro, detalheErroRetorno);
                 }
             }
 
@@ -299,26 +400,24 @@ abstract class BaseNFSe {
                 if (error.response.data) {
                     if (typeof error.response.data === 'string') {
                         errorMessage = `HTTP ${error.response.status}: ${error.response.data}`;
-                    } else if (error.response.data.erros && Array.isArray(error.response.data.erros) && error.response.data.erros.length > 0) {
-                        // NFSe retorna erros em um array
-                        const primeiroErro = error.response.data.erros[0];
-                        const codigo = primeiroErro.codigo || primeiroErro.Codigo || '';
-                        const descricao = primeiroErro.descricao || primeiroErro.Descricao || 'Erro desconhecido';
-                        errorMessage = codigo ? `${codigo}: ${descricao}` : descricao;
-                    } else if (error.response.data.Erros && Array.isArray(error.response.data.Erros) && error.response.data.Erros.length > 0) {
-                        // Variação com E maiúsculo
-                        const primeiroErro = error.response.data.Erros[0];
-                        const codigo = primeiroErro.Codigo || primeiroErro.codigo || '';
-                        const descricao = primeiroErro.Descricao || primeiroErro.descricao || 'Erro desconhecido';
-                        errorMessage = codigo ? `${codigo}: ${descricao}` : descricao;
-                    } else if (error.response.data.message) {
-                        errorMessage = error.response.data.message;
-                    } else if (error.response.data.descricao) {
-                        errorMessage = error.response.data.descricao;
-                    } else if (error.response.data.Descricao) {
-                        errorMessage = error.response.data.Descricao;
                     } else {
-                        errorMessage = `HTTP ${error.response.status}: ${JSON.stringify(error.response.data)}`;
+                        const detalheErro = this.extrairErroDetalhado(error.response.data, error.response.status);
+                        if (detalheErro) {
+                            errorMessage = detalheErro.codigo
+                                ? `${detalheErro.codigo}: ${detalheErro.descricao || 'Erro desconhecido'}`
+                                : detalheErro.descricao || 'Erro desconhecido';
+                            error.nfseErrorDetail = detalheErro;
+                        }
+
+                        if (!detalheErro && error.response.data.message) {
+                            errorMessage = error.response.data.message;
+                        } else if (!detalheErro && error.response.data.descricao) {
+                            errorMessage = error.response.data.descricao;
+                        } else if (!detalheErro && error.response.data.Descricao) {
+                            errorMessage = error.response.data.Descricao;
+                        } else if (!detalheErro) {
+                            errorMessage = `HTTP ${error.response.status}: ${JSON.stringify(error.response.data)}`;
+                        }
                     }
                 } else {
                     errorMessage = `HTTP ${error.response.status}: ${error.response.statusText}`;
@@ -329,7 +428,14 @@ abstract class BaseNFSe {
                 context: `BaseNFSe][${this.metodo}`
             });
 
-            throw new Error(errorMessage);
+            if (error?.nfseErrorDetail) {
+                throw error;
+            }
+
+            throw this.createNFSeError(errorMessage, {
+                statusHttp: error?.response?.status,
+                raw: error?.response?.data,
+            });
         } finally {
             // Salva arquivos (se configurado)
             const xmlConsulta = this.getXmlConsulta(requestData);
