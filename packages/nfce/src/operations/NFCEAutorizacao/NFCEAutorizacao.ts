@@ -26,6 +26,13 @@ class NFCEAutorizacao {
         return await this.nfceAutorizacaoService.Exec(data);
     }
 
+    async ExecTransmitirContingencia(data?: any): Promise<any> {
+        if (typeof this.nfceAutorizacaoService.ExecTransmitirContingencia !== 'function') {
+            throw new Error('Método ExecTransmitirContingencia não implementado no serviço de autorização NFCe.');
+        }
+        return await this.nfceAutorizacaoService.ExecTransmitirContingencia(data);
+    }
+
 }
 
 

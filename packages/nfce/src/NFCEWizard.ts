@@ -100,6 +100,34 @@ export class NFCEWizard {
     }
 
     /**
+     * Retransmite uma NFCe emitida em contingência para obtenção de autorização.
+     * Regras: tpEmis permitido apenas 4 (EPEC) ou 9 (Off-line).
+     */
+    async NFCE_TransmitirContingencia(nfce?: any): Promise<any> {
+        try {
+            const nfceAutorizacaoService = new NFCEAutorizacaoService(
+                this.environment,
+                this.utility,
+                this.xmlBuilder,
+                this.axios,
+                this.saveFiles,
+                this.gerarConsulta
+            );
+            const nfceAutorizacao = new NFCEAutorizacao(nfceAutorizacaoService);
+            const response = await nfceAutorizacao.ExecTransmitirContingencia(nfce);
+
+            console.log('Retorno NFCE_TransmitirContingencia');
+            console.table(response.xMotivo);
+            console.log('===================================');
+
+            return response.xmls;
+        } catch (error: any) {
+            logger.error(``, error, { context: 'NFCE_TransmitirContingencia' });
+            throw new Error(`NFCE_TransmitirContingencia: ${error.message}`)
+        }
+    }
+
+    /**
      * Consulta o retorno da autorização de uma NFCe
      * @param recibo - Número do recibo da autorização
      * @returns Resultado da consulta
