@@ -230,6 +230,30 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         return tipoDoDocumento;
     }
 
+    private normalizaDestinatario(dest: NonNullable<LayoutNFe['infNFe']['dest']>, xNomeOverride?: string) {
+        const documentoNacional = dest.CNPJCPF || dest.CNPJ || dest.CPF;
+        const xNome = xNomeOverride !== undefined ? xNomeOverride : dest.xNome;
+
+        if (dest.idEstrangeiro != null && !documentoNacional) {
+            const { CNPJCPF, CNPJ, CPF, xNome: _xNome, idEstrangeiro, ...restoDest } = dest;
+
+            return {
+                idEstrangeiro,
+                ...(xNome !== undefined ? { xNome } : {}),
+                ...restoDest,
+            };
+        }
+
+        const tipoDocumento = this.validaDocumento(String(documentoNacional || ''), 'destinatário');
+        const { CNPJCPF, CNPJ, CPF, xNome: _xNome, ...restoDest } = dest;
+
+        return {
+            [tipoDocumento]: documentoNacional || '',
+            ...(xNome !== undefined ? { xNome } : {}),
+            ...restoDest,
+        };
+    }
+
     private extrairDigestValue(xmlAssinado: string): string {
         const match = xmlAssinado.match(/<DigestValue>([^<]+)<\/DigestValue>/);
         if (match && match[1]) {
@@ -308,19 +332,11 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             // Valida Documento do destinatário
 
             if (NFe.infNFe.dest) {
-                const tipoDocDest = this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF || ''), 'destinatário');
-                const cnpjcpfValue = NFe.infNFe.dest?.CNPJCPF || '';
                 const xNomeValue = NFe.infNFe.ide.tpAmb === 2 
                     ? 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
                     : NFe.infNFe.dest.xNome;
-                
-                // Reconstrói o objeto dest mantendo a ordem correta
-                const { CNPJCPF, xNome, ...restoDest } = NFe.infNFe.dest;
-                NFe.infNFe.dest = {
-                    [tipoDocDest]: cnpjcpfValue,
-                    ...(xNomeValue && { xNome: xNomeValue }),
-                    ...restoDest
-                };
+
+                NFe.infNFe.dest = this.normalizaDestinatario(NFe.infNFe.dest, xNomeValue);
             }
 
             // Valida Documento do transportador

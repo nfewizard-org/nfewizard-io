@@ -217,7 +217,6 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         // Valida se CPF ou CNPJ
         const nfeAutorizacaoHandler = new ValidaCPFCNPJ();
         const { documentoValido, tipoDoDocumento } = nfeAutorizacaoHandler.validarCpfCnpj(doc);
-        console.log({ documentoValido, tipoDoDocumento })
         if (!documentoValido || tipoDoDocumento === 'Desconhecido') {
             const message = tipoDoDocumento === 'Desconhecido'
                 ? `Documento do ${campo} ausente ou inválido`
@@ -226,6 +225,27 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         }
 
         return tipoDoDocumento;
+    }
+
+    private normalizaDestinatario(dest: NonNullable<LayoutNFe['infNFe']['dest']>) {
+        const documentoNacional = dest.CNPJCPF || dest.CNPJ || dest.CPF;
+
+        if (dest.idEstrangeiro != null && !documentoNacional) {
+            const { CNPJCPF, CNPJ, CPF, idEstrangeiro, ...restoDest } = dest;
+
+            return {
+                idEstrangeiro,
+                ...restoDest,
+            };
+        }
+
+        const tipoDocumento = this.validaDocumento(String(documentoNacional || ''), 'destinatário');
+        const { CNPJCPF, CNPJ, CPF, ...restoDest } = dest;
+
+        return {
+            [tipoDocumento]: documentoNacional || '',
+            ...restoDest,
+        };
     }
 
     private gerarXmlNFeAutorizacao(data: NFe) {
@@ -282,8 +302,7 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
 
             // Valida Documento do destinatário
             if (NFe.infNFe.dest) {
-                NFe.infNFe.dest = Object.assign({ [this.validaDocumento(String(NFe.infNFe.dest?.CNPJCPF || ''), 'destinatário')]: NFe.infNFe.dest?.CNPJCPF || '' }, NFe.infNFe.dest)
-                delete NFe.infNFe.dest.CNPJCPF;
+                NFe.infNFe.dest = this.normalizaDestinatario(NFe.infNFe.dest);
             }
             // Valida Documento do transportador
             if (NFe.infNFe.transp.transporta) {
