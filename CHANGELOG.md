@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.2] - 2026-08-01
+
+### Fix
+
+- **`nfewizard-io` 1.1.2 — Destinatário estrangeiro em autorização**
+  - Corrige `NFE_Autorizacao` para aceitar `dest.idEstrangeiro` sem exigir CPF/CNPJ brasileiro quando o destinatário é estrangeiro.
+  - Preserva `idEstrangeiro` no payload/XML para operações com exterior/importação, sem alterar o fluxo de validação para documentos nacionais válidos.
+
+## [1.0.5] - 2026-08-01
+
+### Fix
+
+- **`@nfewizard/nfce` 1.0.5 — Destinatário estrangeiro em autorização**
+  - Alinha `NFCE_Autorizacao` ao mesmo comportamento de `idEstrangeiro`, permitindo emissão sem CPF/CNPJ brasileiro em cenários de comprador estrangeiro.
+  - Mantém a compatibilidade com a validação normal de CPF/CNPJ para destinatários nacionais.
+
 ## [2026-07-09]
 
 ### Feat
