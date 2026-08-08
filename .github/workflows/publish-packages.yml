@@ -1,0 +1,241 @@
+name: Publish packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Publish mode"
+        required: true
+        type: choice
+        options:
+          - all
+          - single
+        default: all
+      single_package:
+        description: "Package dir when mode=single"
+        required: false
+        type: choice
+        options:
+          - types
+          - shared
+          - danfe
+          - nfce
+          - nfse
+          - cte
+          - nfewizard-io
+        default: nfse
+      packages_all:
+        description: "Comma-separated package dirs when mode=all"
+        required: false
+        type: string
+        default: "types,shared,nfse"
+      npm_tag:
+        description: "npm dist-tag"
+        required: false
+        type: string
+        default: latest
+      dry_run:
+        description: "Do not publish, only run npm pack --dry-run"
+        required: true
+        type: boolean
+        default: true
+
+concurrency:
+  group: publish-packages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      BROWSER: none
+      npm_config_browser: none
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Resolve package lists
+        id: resolve
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ORDER=(types shared danfe nfce nfse cte nfewizard-io)
+
+          trim() {
+            local s="$1"
+            s="${s#${s%%[![:space:]]*}}"
+            s="${s%${s##*[![:space:]]}}"
+            echo "$s"
+          }
+
+          is_valid_pkg() {
+            local pkg="$1"
+            for p in "${ORDER[@]}"; do
+              [[ "$p" == "$pkg" ]] && return 0
+            done
+            return 1
+          }
+
+          declare -A WANT_PUBLISH=()
+          if [[ "${{ inputs.mode }}" == "single" ]]; then
+            pkg="${{ inputs.single_package }}"
+            if ! is_valid_pkg "$pkg"; then
+              echo "Invalid package for mode=single: $pkg"
+              exit 1
+            fi
+            WANT_PUBLISH["$pkg"]=1
+          else
+            raw="${{ inputs.packages_all }}"
+            IFS=',' read -r -a arr <<< "$raw"
+            for item in "${arr[@]}"; do
+              pkg="$(trim "$item")"
+              [[ -z "$pkg" ]] && continue
+              if ! is_valid_pkg "$pkg"; then
+                echo "Invalid package in packages_all: $pkg"
+                exit 1
+              fi
+              WANT_PUBLISH["$pkg"]=1
+            done
+          fi
+
+          if [[ ${#WANT_PUBLISH[@]} -eq 0 ]]; then
+            echo "No packages selected for publish"
+            exit 1
+          fi
+
+          declare -A WANT_BUILD=()
+          add_for_build() {
+            local pkg="$1"
+            WANT_BUILD["$pkg"]=1
+            case "$pkg" in
+              shared)
+                WANT_BUILD[types]=1
+                ;;
+              danfe)
+                WANT_BUILD[types]=1
+                ;;
+              nfce|nfse|cte)
+                WANT_BUILD[types]=1
+                WANT_BUILD[shared]=1
+                ;;
+              nfewizard-io)
+                WANT_BUILD[types]=1
+                WANT_BUILD[shared]=1
+                WANT_BUILD[danfe]=1
+                ;;
+            esac
+          }
+
+          for pkg in "${!WANT_PUBLISH[@]}"; do
+            add_for_build "$pkg"
+          done
+
+          publish_list=()
+          build_list=()
+          for p in "${ORDER[@]}"; do
+            [[ -n "${WANT_PUBLISH[$p]:-}" ]] && publish_list+=("$p")
+            [[ -n "${WANT_BUILD[$p]:-}" ]] && build_list+=("$p")
+          done
+
+          if [[ ${#publish_list[@]} -eq 0 ]]; then
+            echo "No package resolved for publish"
+            exit 1
+          fi
+
+          publish_csv="$(IFS=,; echo "${publish_list[*]}")"
+          build_csv="$(IFS=,; echo "${build_list[*]}")"
+
+          echo "publish_csv=$publish_csv" >> "$GITHUB_OUTPUT"
+          echo "build_csv=$build_csv" >> "$GITHUB_OUTPUT"
+
+          echo "Packages to publish: $publish_csv"
+          echo "Packages to build:   $build_csv"
+
+      - name: Verify npm auth
+        if: ${{ !inputs.dry_run }}
+        run: npm whoami
+
+      - name: Build selected packages and dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          IFS=',' read -r -a build_pkgs <<< "${{ steps.resolve.outputs.build_csv }}"
+
+          filters=()
+          for pkg in "${build_pkgs[@]}"; do
+            if [[ "$pkg" == "nfewizard-io" ]]; then
+              filters+=("--filter=nfewizard-io")
+            else
+              filters+=("--filter=@nfewizard/$pkg")
+            fi
+          done
+
+          echo "Running build with filters: ${filters[*]}"
+          pnpm turbo run build "${filters[@]}"
+
+      - name: Dry-run publish
+        if: ${{ inputs.dry_run }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          IFS=',' read -r -a publish_pkgs <<< "${{ steps.resolve.outputs.publish_csv }}"
+
+          for pkg in "${publish_pkgs[@]}"; do
+            echo "============================================"
+            echo "Dry-run package: $pkg"
+            echo "============================================"
+            cd "packages/$pkg"
+            npm pack --dry-run
+            cd - >/dev/null
+          done
+
+      - name: Publish packages
+        if: ${{ !inputs.dry_run }}
+        shell: bash
+        env:
+          NPM_TAG: ${{ inputs.npm_tag }}
+        run: |
+          set -euo pipefail
+          IFS=',' read -r -a publish_pkgs <<< "${{ steps.resolve.outputs.publish_csv }}"
+
+          for pkg in "${publish_pkgs[@]}"; do
+            echo "============================================"
+            echo "Publishing package dir: $pkg"
+            echo "============================================"
+
+            cd "packages/$pkg"
+
+            package_name="$(node -p "require('./package.json').name")"
+            package_version="$(node -p "require('./package.json').version")"
+
+            echo "Target: ${package_name}@${package_version}"
+
+            if npm view "${package_name}@${package_version}" version >/dev/null 2>&1; then
+              echo "Version already exists on npm, skipping ${package_name}@${package_version}"
+              cd - >/dev/null
+              continue
+            fi
+
+            pnpm publish --no-git-checks --access public --tag "$NPM_TAG"
+            cd - >/dev/null
+          done
