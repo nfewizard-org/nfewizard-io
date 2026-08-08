@@ -14,6 +14,7 @@ export interface NFeWizardServiceImpl {
 }
 export interface NFEAutorizacaoServiceImpl {
     Exec(...args: any[]): Promise<any>;
+    ExecTransmitirContingencia?(...args: any[]): Promise<any>;
 }
 export interface NFEconsultaProtocoloServiceImpl {
     Exec(...args: any[]): Promise<any>;
@@ -35,6 +36,7 @@ export interface NFEStatusServicoServiceImpl {
 }
 export interface NFCEAutorizacaoServiceImpl {
     Exec(...args: any[]): Promise<any>;
+    ExecTransmitirContingencia?(...args: any[]): Promise<any>;
 }
 export interface NFCERetornoAutorizacaoServiceImpl {
     getXmlRetorno(...args: any[]): Promise<any>;

@@ -27,6 +27,31 @@ import { Agent } from 'http';
 
 class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceImpl {
     xmlNFe: string[];
+
+    private converterParaJson(data: NFe | string): NFe {
+        return typeof data === 'string'
+            ? new XmlParser().convertXmlEnvioNFeToJson(data) as NFe
+            : data;
+    }
+
+    private validarTpEmisParaTransmissaoContingencia(dataAsJson: NFe): void {
+        const notas = Array.isArray(dataAsJson.NFe) ? dataAsJson.NFe : [dataAsJson.NFe];
+
+        for (const nota of notas) {
+            const tpEmis = nota.infNFe.ide.tpEmis;
+            if (![4, 9].includes(tpEmis)) {
+                throw new Error(`NFCE_TransmitirContingencia: tpEmis=${tpEmis} inválido. Use apenas tpEmis=4 (EPEC) ou tpEmis=9 (Off-line).`);
+            }
+        }
+    }
+
+    private mapearXmlsComAssinatura(xmls: Array<{ NFe: LayoutNFe; protNFe: ProtNFe }>) {
+        return xmls.map((item, index) => ({
+            ...item,
+            xmlAssinado: this.xmlNFe[index],
+        }));
+    }
+
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         super(environment, utility, xmlBuilder, 'NFEAutorizacao', axios, saveFiles, gerarConsulta);
         this.xmlNFe = [];
@@ -36,7 +61,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         return this.gerarXmlNFCEAutorizacao(data);
     }
 
-    protected salvaArquivos(xmlConsulta: string, responseInJson: GenericObject, xmlRetorno: AxiosResponse<any, any>, options?: Record<string, any>): GenericObject {
+    protected salvaArquivos(_xmlConsulta: string, responseInJson: GenericObject, _xmlRetorno: AxiosResponse<any, any>, options?: Record<string, any>): GenericObject {
 
         // Recupera configuração do ambiente para verificar se os arquivos gerados serão gravados em disco
         const config = this.environment.getConfig();
@@ -65,7 +90,6 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             });
         };
 
-        let chNFe = ''
         let xmlAutorizacaoInJson: GenericObject = {} as GenericObject;
         let xMotivoPorXml: GenericObject[] = [];
         let xmlsInJson: GenericObject[] = [];
@@ -106,7 +130,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         }
     }
 
-    private async trataRetorno(xmlRetorno: string, indSinc: number, responseInJson: GenericObject) {
+    private async trataRetorno(xmlRetorno: string, indSinc: number, _responseInJson: GenericObject) {
         try {
             /**
              * Captura o valor nRec e protNFe
@@ -504,26 +528,24 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         return response;
     }
 
-    async Exec(data: NFe | string): Promise<{
+    private async executarAutorizacao(dataAsJson: NFe, transmitirContingencia: boolean): Promise<{
         success: boolean;
         xMotivo: GenericObject;
         xmls: {
             NFe: LayoutNFe;
-            protNFe: ProtNFe
+            protNFe: ProtNFe;
+            xmlAssinado?: string;
         }[];
         emContingencia?: boolean;
     }> {
+        this.xmlNFe = [];
+
         let xmlConsulta: string = '';
         let xmlConsultaSoap: string = '';
-        let webServiceUrlTmp: string = '';
         let responseInJson: GenericObject | undefined = undefined;
         let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
+        let houveTransmissao = false;
         const ContentType = this.setContentType();
-
-        // Se receber XML em string, converte para o JSON do padrão esperado pela lib
-        const dataAsJson: NFe = typeof data === 'string'
-            ? new XmlParser().convertXmlEnvioNFeToJson(data) as NFe
-            : data;
 
         // Verifica se está em contingência (tpEmis = 4 ou 9)
         const nfeData = Array.isArray(dataAsJson.NFe) ? dataAsJson.NFe[0] : dataAsJson.NFe;
@@ -536,7 +558,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             // Se está em contingência (tpEmis = 4 ou 9), NÃO transmite para SEFAZ
             // Conforme NT 2018.006: "As NFC-e são geradas, assinadas e os respectivos 
             // DANFE NFC-e são impressos sem a autorização prévia da SEFAZ."
-            if (emContingencia) {
+            if (emContingencia && !transmitirContingencia) {
                 logger.info('NFC-e gerada em CONTINGÊNCIA - Não será transmitida para SEFAZ', {
                     context: 'NFCEAutorizacaoService',
                     tpEmis: nfeData.infNFe.ide.tpEmis,
@@ -554,7 +576,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
 
                 // Salva os arquivos XML localmente
                 const config = this.environment.getConfig();
-                xmlsGerados.forEach(({ xmlAssinado, NFe }, index) => {
+                xmlsGerados.forEach(({ xmlAssinado }) => {
                     const chaveNFe = this.chaveNfe;
                     
                     if (config.dfe.armazenarXMLAutorizacao) {
@@ -588,6 +610,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                     }],
                     xmls: xmlsGerados.map(({ NFe, xmlAssinado }) => ({
                         NFe,
+                        xmlAssinado,
                         protNFe: {
                             $: {
                                 xmlns: 'http://www.portalfiscal.inf.br/nfe',
@@ -611,19 +634,23 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                 };
             }
 
-            // Se NÃO está em contingência (tpEmis = 1), transmite normalmente
+            if (transmitirContingencia && !emContingencia) {
+                throw new Error(`NFCE_TransmitirContingencia: tpEmis=${nfeData.infNFe.ide.tpEmis} inválido. Use apenas tpEmis=4 (EPEC) ou tpEmis=9 (Off-line).`);
+            }
+
+            // Transmite normalmente (tpEmis=1) ou em retransmissão de contingência (tpEmis=4/9)
             const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, false, '', 'NFCe');
 
             xmlConsultaSoap = xmlFormated;
-            webServiceUrlTmp = webServiceUrl;
 
             // Efetua requisição para o webservice NFCEAutorizacao
-            const xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);
+            xmlRetorno = await this.callWebService(xmlFormated, webServiceUrl, ContentType, action, agent);
+            houveTransmissao = true;
 
             /**
              * Verifica se houve rejeição no processamento do lote
              */
-            const responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
+            responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
 
             const retorno = await this.trataRetorno(xmlRetorno.data, dataAsJson.indSinc, responseInJson);
 
@@ -645,20 +672,49 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
             return {
                 success: true,
                 xMotivo: xmlFinal.xMotivo,
-                xmls: xmlFinal.response,
+                xmls: this.mapearXmlsComAssinatura(xmlFinal.response),
             }
 
         } finally {
-            // Salva XML de Consulta (apenas se não está em contingência, pois não há comunicação com SEFAZ)
-            if (!emContingencia && xmlConsulta) {
+            // Salva XML de Consulta quando houver transmissão para SEFAZ
+            if (houveTransmissao && xmlConsulta) {
                 this.utility.salvaConsulta(xmlConsulta, xmlConsultaSoap, this.metodo);
             }
 
-            // Salva XML de Retorno (apenas se não está em contingência, pois não há retorno da SEFAZ)
-            if (!emContingencia && xmlRetorno.data) {
+            // Salva XML de Retorno quando houver transmissão para SEFAZ
+            if (houveTransmissao && xmlRetorno.data) {
                 this.utility.salvaRetorno(xmlRetorno.data, responseInJson, this.metodo);
             }
         }
+    }
+
+    async Exec(data: NFe | string): Promise<{
+        success: boolean;
+        xMotivo: GenericObject;
+        xmls: {
+            NFe: LayoutNFe;
+            protNFe: ProtNFe;
+            xmlAssinado?: string;
+        }[];
+        emContingencia?: boolean;
+    }> {
+        const dataAsJson = this.converterParaJson(data);
+        return this.executarAutorizacao(dataAsJson, false);
+    }
+
+    async ExecTransmitirContingencia(data: NFe | string): Promise<{
+        success: boolean;
+        xMotivo: GenericObject;
+        xmls: {
+            NFe: LayoutNFe;
+            protNFe: ProtNFe;
+            xmlAssinado?: string;
+        }[];
+        emContingencia?: boolean;
+    }> {
+        const dataAsJson = this.converterParaJson(data);
+        this.validarTpEmisParaTransmissaoContingencia(dataAsJson);
+        return this.executarAutorizacao(dataAsJson, true);
     }
 
 }

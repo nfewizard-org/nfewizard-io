@@ -28,7 +28,10 @@ export interface GerarConsultaImpl { gerarConsulta(...args: any[]): Promise<any>
 export interface HttpClient { get(...args: any[]): Promise<any>; post(...args: any[]): Promise<any>; }
 export interface HttpClientConfig { [key: string]: any; }
 export interface NFeWizardServiceImpl { [key: string]: any; }
-export interface NFEAutorizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
+export interface NFEAutorizacaoServiceImpl {
+    Exec(...args: any[]): Promise<any>;
+    ExecTransmitirContingencia?(...args: any[]): Promise<any>;
+}
 export interface NFEconsultaProtocoloServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface NFEDistribuicaoDFeServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface NFEInutilizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
@@ -38,7 +41,10 @@ export interface NFERetornoAutorizacaoServiceImpl {
     getXmlRetorno(...args: any[]): Promise<any>;
 }
 export interface NFEStatusServicoServiceImpl { Exec(...args: any[]): Promise<any>; }
-export interface NFCEAutorizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
+export interface NFCEAutorizacaoServiceImpl {
+    Exec(...args: any[]): Promise<any>;
+    ExecTransmitirContingencia?(...args: any[]): Promise<any>;
+}
 export interface NFCERetornoAutorizacaoServiceImpl { getXmlRetorno(...args: any[]): Promise<any>; }
 export interface NFSeAutorizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface CTEDistribuicaoDFeServiceImpl { Exec(...args: any[]): Promise<any>; }

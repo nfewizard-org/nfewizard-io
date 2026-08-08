@@ -18,9 +18,15 @@ export interface NFeWizardImpl {
     NFE_DistribuicaoDFePorUltNSU(data: DFePorUltimoNSU): Promise<GenericObject>;
     NFE_DistribuicaoDFePorNSU(data: DFePorNSU): Promise<GenericObject>;
     NFE_DistribuicaoDFePorChave(data: DFePorChaveNFe): Promise<GenericObject>;
-    NFE_Autorizacao(data: NFe): Promise<{
+    NFE_Autorizacao(data: NFe | string): Promise<{
         NFe: LayoutNFe;
         protNFe: ProtNFe;
+        xmlAssinado?: string;
+    }[]>;
+    NFE_TransmitirContingencia(data: NFe | string): Promise<{
+        NFe: LayoutNFe;
+        protNFe: ProtNFe;
+        xmlAssinado?: string;
     }[]>;
     NFe: LayoutNFe;
     protNFe: ProtNFe;

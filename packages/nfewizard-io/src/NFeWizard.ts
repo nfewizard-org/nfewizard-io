@@ -193,6 +193,14 @@ export class NFeWizard implements NFeWizardImpl {
     }
 
     /**
+     * Retransmite uma NFe emitida em contingência para obtenção de autorização.
+     * Aceita apenas tpEmis 4 (EPEC) e 5 (FS-DA).
+     */
+    async NFE_TransmitirContingencia(data: NFe | string) {
+        return await this.nfeWizardService.NFE_TransmitirContingencia(data);
+    }
+
+    /**
      * Valida um XML contra o schema XSD do método fiscal informado.
      * O `environment` é injetado automaticamente a partir da configuração da lib.
      *

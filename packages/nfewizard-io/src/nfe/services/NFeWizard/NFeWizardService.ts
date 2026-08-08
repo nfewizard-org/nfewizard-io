@@ -396,6 +396,27 @@ class NFeWizardService implements NFeWizardServiceImpl {
     }
 
     /**
+     * Retransmite uma NFe emitida em contingência para obter autorização.
+     * Regras: tpEmis permitido apenas 4 (EPEC) ou 5 (FS-DA).
+     */
+    async NFE_TransmitirContingencia(data: NFe | string) {
+        try {
+            const autorizacaoService = new NFEAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const autorizacao = new NFEAutorizacao(autorizacaoService);
+            const response = await autorizacao.ExecTransmitirContingencia(data);
+
+            console.log('Retorno NFE_TransmitirContingencia');
+            console.table(response.xMotivo);
+            console.log('===================================');
+
+            return response.xmls
+        } catch (error: any) {
+            logger.error(``, error, { context: 'NFE_TransmitirContingencia', });
+            throw new Error(`NFE_TransmitirContingencia: ${error.message}`)
+        }
+    }
+
+    /**
      * Inutilização
      */
     async NFE_Inutilizacao(data: InutilizacaoData) {

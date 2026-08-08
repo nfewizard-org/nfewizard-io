@@ -199,6 +199,25 @@ const testNFCe = async () => {
     };
 
     const retornoNFe = await nfe.NFCE_Autorizacao(autorizacao);
+
+    // Exemplo de contingencia off-line (tpEmis=9): gera e assina, sem transmitir para SEFAZ.
+    const autorizacaoContingencia: NFe = JSON.parse(JSON.stringify(autorizacao));
+    const notaContingencia = Array.isArray(autorizacaoContingencia.NFe)
+        ? autorizacaoContingencia.NFe[0]
+        : autorizacaoContingencia.NFe;
+
+    notaContingencia.infNFe.ide.tpEmis = 9;
+    notaContingencia.infNFe.ide.dhCont = new Date().toISOString();
+    notaContingencia.infNFe.ide.xJust = 'Falha de conectividade com a internet no estabelecimento';
+
+    const retornoContingencia = await nfe.NFCE_Autorizacao(autorizacaoContingencia);
+    const xmlPendente = retornoContingencia?.[0]?.xmlAssinado;
+
+    // Quando a internet voltar, transmita o XML pendente para obter o protocolo real da SEFAZ.
+    if (xmlPendente) {
+        const retornoTransmitirContingencia = await nfe.NFCE_TransmitirContingencia(xmlPendente);
+        console.log('Retorno da retransmissao de contingencia:', retornoTransmitirContingencia);
+    }
 }
 
 await testNFCe();
