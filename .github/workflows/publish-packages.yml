@@ -46,6 +46,7 @@ concurrency:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   publish:
@@ -53,7 +54,6 @@ jobs:
     env:
       BROWSER: none
       npm_config_browser: none
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -169,9 +169,13 @@ jobs:
           echo "Packages to publish: $publish_csv"
           echo "Packages to build:   $build_csv"
 
-      - name: Verify npm auth
+      - name: Verify trusted publishing prerequisites
         if: ${{ !inputs.dry_run }}
-        run: npm whoami
+        run: |
+          set -euo pipefail
+          echo "Trusted publishing enabled via GitHub OIDC"
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Workflow ref: $GITHUB_WORKFLOW_REF"
 
       - name: Build selected packages and dependencies
         shell: bash
@@ -234,6 +238,6 @@ jobs:
               continue
             fi
 
-            pnpm publish --no-git-checks --access public --tag "$NPM_TAG"
+            pnpm publish --provenance --no-git-checks --access public --tag "$NPM_TAG"
             cd - >/dev/null
           done
