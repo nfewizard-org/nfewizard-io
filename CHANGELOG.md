@@ -1,5 +1,16 @@
 # Changelog
 
+## [2026-08-08]
+
+### Fix
+
+- **`@nfewizard/nfse` — Propagação de complemento em erros de autorização NFSe (`E1235`/`E0322`)**
+  - A facade pública de NFSe passa a preservar os metadados estruturados do erro ao repropagar exceções, incluindo `nfseErrorDetail.codigo`, `nfseErrorDetail.descricao`, `nfseErrorDetail.complemento` e `nfseErrorDetail.statusHttp`.
+  - Melhora a rastreabilidade no fluxo `NFSE_Autorizacao`, mantendo a mensagem com contexto do método sem perder os detalhes retornados pela SEFIN.
+
+- **`@nfewizard/nfse` — Logs de erro da autorização com contexto ampliado**
+  - O log de falha de autorização em `NFSeAutorizacaoService` passa a incluir `codigo`, `complemento` e `statusHttp`, facilitando diagnóstico de falhas de schema da DPS.
+
 ## [1.1.2] - 2026-08-01
 
 ### Fix
