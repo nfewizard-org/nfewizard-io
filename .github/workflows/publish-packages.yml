@@ -29,6 +29,22 @@ on:
         required: false
         type: string
         default: "types,shared,nfse"
+      bump_type:
+        description: "Version bump before build/publish"
+        required: true
+        type: choice
+        options:
+          - none
+          - patch
+          - minor
+          - major
+          - exact
+        default: none
+      exact_version:
+        description: "Exact version when bump_type=exact"
+        required: false
+        type: string
+        default: ""
       npm_tag:
         description: "npm dist-tag"
         required: false
@@ -176,6 +192,32 @@ jobs:
           echo "Trusted publishing enabled via GitHub OIDC"
           echo "Repository: $GITHUB_REPOSITORY"
           echo "Workflow ref: $GITHUB_WORKFLOW_REF"
+
+      - name: Apply version bump
+        if: ${{ inputs.bump_type != 'none' }}
+        shell: bash
+        env:
+          BUMP_TYPE: ${{ inputs.bump_type }}
+          EXACT_VERSION: ${{ inputs.exact_version }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$BUMP_TYPE" == "exact" ]] && [[ -z "$EXACT_VERSION" ]]; then
+            echo "exact_version is required when bump_type=exact"
+            exit 1
+          fi
+
+          source scripts/bump-version.sh
+
+          IFS=',' read -r -a publish_pkgs <<< "${{ steps.resolve.outputs.publish_csv }}"
+
+          for pkg in "${publish_pkgs[@]}"; do
+            if [[ "$BUMP_TYPE" == "exact" ]]; then
+              bump_package "$pkg" "$EXACT_VERSION"
+            else
+              bump_package "$pkg" "$BUMP_TYPE"
+            fi
+          done
 
       - name: Build selected packages and dependencies
         shell: bash
