@@ -45,6 +45,16 @@ on:
         required: false
         type: string
         default: ""
+      persist_version_bump:
+        description: "Persist bumped package.json files before publishing"
+        required: true
+        type: boolean
+        default: false
+      create_git_tags:
+        description: "Create git tags for published package versions"
+        required: true
+        type: boolean
+        default: true
       npm_tag:
         description: "npm dist-tag"
         required: false
@@ -61,7 +71,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
@@ -73,6 +83,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -219,6 +231,58 @@ jobs:
             fi
           done
 
+      - name: Enforce persisted bump for publish
+        if: ${{ !inputs.dry_run && inputs.bump_type != 'none' && !inputs.persist_version_bump }}
+        run: |
+          echo "When bump_type is used with dry_run=false, persist_version_bump must be true."
+          exit 1
+
+      - name: Persist release state before publish
+        if: ${{ !inputs.dry_run && inputs.bump_type != 'none' && inputs.persist_version_bump }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          IFS=',' read -r -a publish_pkgs <<< "${{ steps.resolve.outputs.publish_csv }}"
+
+          changed=0
+          for pkg in "${publish_pkgs[@]}"; do
+            git add "packages/$pkg/package.json"
+            if ! git diff --cached --quiet -- "packages/$pkg/package.json"; then
+              changed=1
+            fi
+          done
+
+          if [[ "$changed" -eq 0 ]]; then
+            echo "No version changes to commit"
+            exit 0
+          fi
+
+          git commit -m "chore(release): persist published package versions"
+
+          if [[ "${{ inputs.create_git_tags }}" == "true" ]]; then
+            for pkg in "${publish_pkgs[@]}"; do
+              version="$(node -p "require('./packages/$pkg/package.json').version")"
+              tag_name="${pkg}-v${version}"
+
+              if git ls-remote --exit-code --tags origin "refs/tags/${tag_name}" >/dev/null 2>&1; then
+                echo "Tag already exists on origin: ${tag_name}"
+                exit 1
+              fi
+
+              git tag -a "$tag_name" -m "Release ${pkg} ${version}"
+            done
+          fi
+
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+          if [[ "${{ inputs.create_git_tags }}" == "true" ]]; then
+            git push origin --tags
+          fi
+
       - name: Build selected packages and dependencies
         shell: bash
         run: |
@@ -260,6 +324,7 @@ jobs:
           NPM_TAG: ${{ inputs.npm_tag }}
         run: |
           set -euo pipefail
+          echo "Publishing from git ref $(git rev-parse --short HEAD)"
           IFS=',' read -r -a publish_pkgs <<< "${{ steps.resolve.outputs.publish_csv }}"
 
           for pkg in "${publish_pkgs[@]}"; do
