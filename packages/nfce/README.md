@@ -134,6 +134,79 @@ const resultadoCancelamento = await nfceWizard.NFCE_Cancelamento(eventoCancelame
 console.log(resultadoCancelamento);
 ```
 
+## Fluxo de Contingência Offline (tpEmis=9)
+
+No caso de queda de internet ou indisponibilidade técnica, a NFC-e pode ser emitida em contingência off-line com `tpEmis=9`.
+
+O fluxo correto tem 2 etapas:
+
+1. Emissão em contingência:
+- Use `NFCE_Autorizacao` com `tpEmis=9`.
+- A biblioteca gera e assina o XML, mas nao envia para a SEFAZ nesse momento.
+
+2. Transmissão posterior:
+- Quando a conexão voltar, use `NFCE_TransmitirContingencia` com o XML pendente (ou com o mesmo payload em `tpEmis=9`).
+- Nessa etapa ocorre o POST para a SEFAZ e você recebe o protocolo real.
+
+Regras importantes:
+- `tpEmis=9` so e permitido para NFC-e (`mod=65`).
+- Com `tpEmis=4` ou `tpEmis=9`, os campos `dhCont` e `xJust` sao obrigatorios.
+- `xJust` deve ter no minimo 15 caracteres.
+- O prazo de transmissão e ate o final do primeiro dia util subsequente.
+
+### Exemplo de emissão em contingência (etapa 1)
+
+```typescript
+const nfceContingencia: NFe = {
+    ...nfceData,
+    NFe: [
+        {
+            ...nfceData.NFe[0],
+            infNFe: {
+                ...nfceData.NFe[0].infNFe,
+                ide: {
+                    ...nfceData.NFe[0].infNFe.ide,
+                    tpEmis: 9,
+                    dhCont: new Date().toISOString(),
+                    xJust: 'Falha de conectividade com a internet no estabelecimento'
+                }
+            }
+        }
+    ]
+};
+
+const retornoContingencia = await nfceWizard.NFCE_Autorizacao(nfceContingencia);
+const xmlPendente = retornoContingencia?.[0]?.xmlAssinado;
+```
+
+### Exemplo de retransmissão (etapa 2)
+
+```typescript
+if (xmlPendente) {
+    const retornoAutorizacao = await nfceWizard.NFCE_TransmitirContingencia(xmlPendente);
+    console.log(retornoAutorizacao);
+}
+```
+
+### Retorno esperado na etapa offline
+
+Na emissão em contingência (`NFCE_Autorizacao` com `tpEmis=9`), o retorno sinaliza que a nota foi gerada localmente e ainda precisa ser transmitida:
+
+- `cStat = '000'` (codigo interno de contingência da biblioteca)
+- `nProt = 'CONTINGENCIA'`
+- `xmlAssinado` disponivel para armazenamento e transmissão posterior
+
+Se `dfe.armazenarXMLAutorizacao = true`, os XMLs de contingência sao salvos em `dfe.pathXMLAutorizacao`.
+
+### Checklist rapido de teste em homologação
+
+1. Configure ambiente homologação (`tpAmb=2`) e paths de log/XML.
+2. Emita uma NFC-e com `tpEmis=9`, `dhCont` e `xJust` validos.
+3. Confirme retorno com `cStat='000'` e presença de `xmlAssinado`.
+4. Confirme arquivo salvo em `pathXMLAutorizacao` (quando habilitado).
+5. Restabeleça conexão e chame `NFCE_TransmitirContingencia` com o XML pendente.
+6. Confirme retorno com protocolo real da SEFAZ.
+
 ## Documentação
 
 Para a documentação completa acesse [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
