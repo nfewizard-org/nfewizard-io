@@ -39,14 +39,14 @@ import {
   NFSeDistribuicao,
   NFSeEventos,
   NFSeParametrosMunicipais,
-} from '../operations';
+} from '../operations/index.js';
 import {
   NFSeAutorizacaoService,
   NFSeConsultaService,
   NFSeDistribuicaoService,
   NFSeEventosService,
   NFSeParametrosMunicipaisService,
-} from '../services';
+} from '../services/index.js';
 
 export default class NFSe {
   private environment: Environment;
@@ -83,6 +83,25 @@ export default class NFSe {
     })();
   }
 
+  private wrapErrorWithMethod(method: string, error: any): Error {
+    const errorMessage = error instanceof Error && error.message ? error.message : String(error);
+    const wrappedError = new Error(`${method}: ${errorMessage}`);
+
+    if (error && typeof error === 'object') {
+      Object.assign(wrappedError, error);
+
+      if (typeof error.stack === 'string') {
+        wrappedError.stack = error.stack;
+      }
+
+      if ('cause' in error) {
+        (wrappedError as any).cause = (error as any).cause;
+      }
+    }
+
+    return wrappedError;
+  }
+
   /**
    * Autorização de NFSe
    */
@@ -98,7 +117,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_Autorizacao' });
-      throw new Error(`NFSE_Autorizacao: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_Autorizacao', error);
     }
   }
 
@@ -117,7 +136,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_Consulta' });
-      throw new Error(`NFSE_Consulta: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_Consulta', error);
     }
   }
 
@@ -136,7 +155,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_ConsultaDPS' });
-      throw new Error(`NFSE_ConsultaDPS: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_ConsultaDPS', error);
     }
   }
 
@@ -155,7 +174,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_RegistrarEvento' });
-      throw new Error(`NFSE_RegistrarEvento: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_RegistrarEvento', error);
     }
   }
 
@@ -174,7 +193,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_ConsultarEvento' });
-      throw new Error(`NFSE_ConsultarEvento: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_ConsultarEvento', error);
     }
   }
 
@@ -193,7 +212,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_DistribuicaoPorNSU' });
-      throw new Error(`NFSE_DistribuicaoPorNSU: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_DistribuicaoPorNSU', error);
     }
   }
 
@@ -212,7 +231,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_EventosPorChave' });
-      throw new Error(`NFSE_EventosPorChave: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_EventosPorChave', error);
     }
   }
 
@@ -231,7 +250,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_ConsultarAliquota' });
-      throw new Error(`NFSE_ConsultarAliquota: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_ConsultarAliquota', error);
     }
   }
 
@@ -250,7 +269,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_ConsultarHistoricoAliquotas' });
-      throw new Error(`NFSE_ConsultarHistoricoAliquotas: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_ConsultarHistoricoAliquotas', error);
     }
   }
 
@@ -269,7 +288,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_ConsultarBeneficio' });
-      throw new Error(`NFSE_ConsultarBeneficio: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_ConsultarBeneficio', error);
     }
   }
 
@@ -288,7 +307,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_ConsultarConvenio' });
-      throw new Error(`NFSE_ConsultarConvenio: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_ConsultarConvenio', error);
     }
   }
 
@@ -307,7 +326,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_ConsultarRegimesEspeciais' });
-      throw new Error(`NFSE_ConsultarRegimesEspeciais: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_ConsultarRegimesEspeciais', error);
     }
   }
 
@@ -327,7 +346,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_AlterarBeneficioMunicipal' });
-      throw new Error(`NFSE_AlterarBeneficioMunicipal: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_AlterarBeneficioMunicipal', error);
     }
   }
 
@@ -347,7 +366,7 @@ export default class NFSe {
       return response;
     } catch (error: any) {
       logger.error(``, error, { context: 'NFSE_AlterarRetencoes' });
-      throw new Error(`NFSE_AlterarRetencoes: ${error.message}`);
+      throw this.wrapErrorWithMethod('NFSE_AlterarRetencoes', error);
     }
   }
 

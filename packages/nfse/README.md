@@ -24,6 +24,43 @@ Lembre-se de adicionar os logs **app.jsonl**, **error.jsonl** e **http.jsonl**.
 {"context":"NFSE_Autorizacao","error":{"message":"Rejeição: Consumo Indevido",...}
 ```
 
+## Depuração de E1235 e E0322 (schema da DPS)
+
+Quando a SEFIN retornar erros de schema como `E1235` ou `E0322`, a biblioteca preserva o detalhe estruturado no erro lançado pela API pública:
+
+- `error.message`: inclui o prefixo do método (ex.: `NFSE_Autorizacao: E1235: ...`)
+- `error.nfseErrorDetail.codigo`
+- `error.nfseErrorDetail.descricao`
+- `error.nfseErrorDetail.complemento` (quando enviado pela SEFIN)
+- `error.nfseErrorDetail.statusHttp`
+
+Exemplo de captura:
+
+```typescript
+try {
+    await nfseWizard.Autorizacao(nfseData);
+} catch (error: any) {
+    console.error('Mensagem:', error.message);
+    console.error('Codigo:', error?.nfseErrorDetail?.codigo);
+    console.error('Descricao:', error?.nfseErrorDetail?.descricao);
+    console.error('Complemento:', error?.nfseErrorDetail?.complemento);
+    console.error('HTTP:', error?.nfseErrorDetail?.statusHttp);
+}
+```
+
+Para comparação do payload enviado e do retorno completo, mantenha habilitado:
+
+- `dfe.armazenarXMLConsulta: true`
+- `dfe.armazenarXMLRetorno: true`
+- `lib.log.armazenarLogs: true`
+
+Arquivos úteis para troubleshooting:
+
+- XML assinado da DPS: `<pathXMLConsulta>/NFSe_Autorizacao-consulta.xml`
+- Payload JSON enviado (`dpsXmlGZipB64`): `<pathXMLConsulta>/NFSe_Autorizacao-consulta-json.json`
+- Retorno normalizado com metadados (inclui `complemento` quando disponível): `<pathXMLRetorno>/NFSe_Autorizacao-retorno.json`
+- Logs estruturados: `<pathLogs>/app.jsonl`, `<pathLogs>/error.jsonl`, `<pathLogs>/http.jsonl`
+
 ## Sobre a Biblioteca
 
 @nfewizard/nfse é uma biblioteca Node.js especializada em NFSe (Nota Fiscal de Serviços Eletrônica), projetada para simplificar a interação com os webservices municipais. A biblioteca oferece uma solução robusta e otimizada para automação de processos relacionados à NFSe, incluindo:

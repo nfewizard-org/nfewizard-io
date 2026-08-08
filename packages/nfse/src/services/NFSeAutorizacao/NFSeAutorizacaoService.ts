@@ -566,6 +566,9 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
 
             logger.error('Erro na autorização de NFSe', error, {
                 context: 'NFSeAutorizacaoService',
+                codigo: detalheErro?.codigo,
+                complemento: detalheErro?.complemento,
+                statusHttp: detalheErro?.statusHttp,
             });
             throw error;
         } finally {
