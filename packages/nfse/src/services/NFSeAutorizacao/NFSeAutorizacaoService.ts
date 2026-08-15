@@ -271,6 +271,38 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
         return situacaoNormalizada;
     }
 
+    private normalizarDocumentoReeRepRes(doc: any): any {
+        const documentoNormalizado: any = {};
+
+        if (doc.dFeNacional) {
+            documentoNormalizado.dFeNacional = doc.dFeNacional;
+        } else if (doc.docFiscalOutro) {
+            documentoNormalizado.docFiscalOutro = doc.docFiscalOutro;
+        } else if (doc.docOutro) {
+            documentoNormalizado.docOutro = doc.docOutro;
+        } else {
+            throw new Error('IBSCBS.valores.gReeRepRes: cada documento precisa informar dFeNacional, docFiscalOutro ou docOutro.');
+        }
+
+        if (doc.fornec) {
+            documentoNormalizado.fornec = {
+                ...doc.fornec,
+            };
+        }
+
+        documentoNormalizado.dtEmiDoc = doc.dtEmiDoc;
+        documentoNormalizado.dtCompDoc = doc.dtCompDoc;
+        documentoNormalizado.tpReeRepRes = doc.tpReeRepRes;
+
+        if (doc.xTpReeRepRes) {
+            documentoNormalizado.xTpReeRepRes = doc.xTpReeRepRes;
+        }
+
+        documentoNormalizado.vlrReeRepRes = doc.vlrReeRepRes;
+
+        return documentoNormalizado;
+    }
+
     private normalizarIBSCBS(ibscbs: any): any {
         if (!ibscbs) {
             return ibscbs;
@@ -316,8 +348,10 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
 
         const valoresNormalizados: any = {};
 
-        if (ibscbs.valores?.gReeRepRes) {
-            valoresNormalizados.gReeRepRes = ibscbs.valores.gReeRepRes;
+        if (ibscbs.valores?.gReeRepRes?.documentos?.length) {
+            valoresNormalizados.gReeRepRes = {
+                documentos: ibscbs.valores.gReeRepRes.documentos.map((doc: any) => this.normalizarDocumentoReeRepRes(doc)),
+            };
         }
 
         valoresNormalizados.trib = {

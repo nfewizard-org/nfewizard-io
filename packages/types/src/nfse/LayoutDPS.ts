@@ -164,9 +164,10 @@ export type InfoIBSCBS = {
 };
 
 /**
- * Informações do destinatário do serviço (grupo dest do IBSCBS)
+ * Identificação básica de pessoa dentro do grupo IBSCBS (compartilhada por
+ * dest e pelo fornecedor de gReeRepRes)
  */
-export type InfoDestIBSCBS = {
+export type IdentificacaoIBSCBS = {
     CNPJ?: string;
     CPF?: string;
     /**
@@ -177,6 +178,12 @@ export type InfoDestIBSCBS = {
      * Motivo para não informação do NIF: 0 - Não informado na nota de origem; 1 - Dispensado; 2 - Não exigência
      */
     cNaoNIF?: 0 | 1 | 2;
+};
+
+/**
+ * Informações do destinatário do serviço (grupo dest do IBSCBS)
+ */
+export type InfoDestIBSCBS = IdentificacaoIBSCBS & {
     xNome: string;
     end?: Endereco;
     fone?: string;
@@ -214,13 +221,70 @@ export type EnderecoObraIBSCBS = {
 };
 
 /**
+ * Documento fiscal eletrônico do Repositório Nacional (TCRTCListaDocDFe)
+ */
+export type DocumentoFiscalEletronicoReferenciado = {
+    tipoChaveDFe: 1 | 2 | 3 | 9;
+    /**
+     * Obrigatório apenas quando tipoChaveDFe = 9 (Outro)
+     */
+    xTipoChaveDFe?: string;
+    chaveDFe: string;
+};
+
+/**
+ * Documento fiscal fora do Repositório Nacional (TCRTCListaDocFiscalOutro)
+ */
+export type DocumentoFiscalOutroReferenciado = {
+    cMunDocFiscal: string;
+    nDocFiscal: string;
+    xDocFiscal: string;
+};
+
+/**
+ * Documento não fiscal (TCRTCListaDocOutro)
+ */
+export type DocumentoOutroReferenciado = {
+    nDoc: string;
+    xDoc: string;
+};
+
+export type FornecedorReeRepRes = IdentificacaoIBSCBS & {
+    xNome: string;
+};
+
+/**
+ * Documento referenciado num reembolso, repasse ou ressarcimento de valores
+ * já tributados por terceiros (TCRTCListaDoc) - exige exatamente uma das
+ * três formas de identificar o documento: dFeNacional, docFiscalOutro ou docOutro
+ */
+export type DocumentoReeRepRes = {
+    dFeNacional?: DocumentoFiscalEletronicoReferenciado;
+    docFiscalOutro?: DocumentoFiscalOutroReferenciado;
+    docOutro?: DocumentoOutroReferenciado;
+    fornec?: FornecedorReeRepRes;
+    dtEmiDoc: string;
+    dtCompDoc: string;
+    /**
+     * 01 - Reembolso; 02 - Repasse; 03 - Ressarcimento; 04 - Complementação; 99 - Outros
+     */
+    tpReeRepRes: '01' | '02' | '03' | '04' | '99';
+    /**
+     * Obrigatório apenas quando tpReeRepRes = 99 (Outros)
+     */
+    xTpReeRepRes?: string;
+    vlrReeRepRes: number;
+};
+
+/**
  * Valores do serviço prestado para IBS/CBS (grupo valores do IBSCBS)
  */
 export type InfoValoresIBSCBS = {
     /**
-     * Reembolso/repasse/ressarcimento de valores já tributados por terceiros (opcional)
+     * Reembolso/repasse/ressarcimento de valores já tributados por terceiros
+     * (opcional, até 1000 ocorrências)
      */
-    gReeRepRes?: any;
+    gReeRepRes?: { documentos: DocumentoReeRepRes[] };
     /**
      * Tributos relacionados ao IBS e à CBS
      */
