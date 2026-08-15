@@ -257,4 +257,50 @@ describe('NFSeAutorizacaoService', () => {
       'cIntContrib',
     ]);
   });
+
+  it('deriva o CST e o CSTReg a partir do cClassTrib no bloco IBSCBS (RN 627), nunca informado a parte', async () => {
+    const axiosPost = jest.fn().mockResolvedValue({
+      data: {
+        chaveAcesso: 'CHAVE-TESTE',
+      },
+    });
+
+    const { service, getXmlObject } = buildService(axiosPost);
+    const baseRequest = buildRequest();
+    const baseInfDps = baseRequest.DPS as any;
+
+    await service.Exec({
+      DPS: {
+        infDps: {
+          ...baseInfDps.infDps,
+          IBSCBS: {
+            finNFSe: 0,
+            cIndOp: '000001',
+            indDest: 0,
+            valores: {
+              trib: {
+                gIBSCBS: {
+                  cClassTrib: '000001',
+                  gTribRegular: {
+                    cClassTribReg: '200002',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const xmlObject = getXmlObject();
+    const gIBSCBS = xmlObject.infDPS.IBSCBS.valores.trib.gIBSCBS;
+
+    expect(Object.keys(xmlObject.infDPS.IBSCBS)).toEqual(['finNFSe', 'cIndOp', 'indDest', 'valores']);
+    expect(Object.keys(gIBSCBS)).toEqual(['CST', 'cClassTrib', 'gTribRegular']);
+    expect(gIBSCBS.CST).toBe('000');
+    expect(gIBSCBS.cClassTrib).toBe('000001');
+    expect(Object.keys(gIBSCBS.gTribRegular)).toEqual(['CSTReg', 'cClassTribReg']);
+    expect(gIBSCBS.gTribRegular.CSTReg).toBe('200');
+    expect(gIBSCBS.gTribRegular.cClassTribReg).toBe('200002');
+  });
 });

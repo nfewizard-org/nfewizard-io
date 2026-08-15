@@ -237,6 +237,98 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
         return servicoNormalizado;
     }
 
+    /**
+     * O Código de Situação Tributária (CST) nunca é informado à parte: são
+     * sempre os 3 primeiros dígitos do cClassTrib (regra de negócio 627 do
+     * SEFIN Nacional). Deriva aqui pra nunca gerar um par CST/cClassTrib
+     * inconsistente.
+     */
+    private derivarCstDoClassTrib(cClassTrib: string): string {
+        return cClassTrib.slice(0, 3);
+    }
+
+    private normalizarSituacaoTributariaIBSCBS(gIBSCBS: any): any {
+        const situacaoNormalizada: any = {
+            CST: this.derivarCstDoClassTrib(gIBSCBS.cClassTrib),
+            cClassTrib: gIBSCBS.cClassTrib,
+        };
+
+        if (gIBSCBS.cCredPres) {
+            situacaoNormalizada.cCredPres = gIBSCBS.cCredPres;
+        }
+
+        if (gIBSCBS.gTribRegular) {
+            situacaoNormalizada.gTribRegular = {
+                CSTReg: this.derivarCstDoClassTrib(gIBSCBS.gTribRegular.cClassTribReg),
+                cClassTribReg: gIBSCBS.gTribRegular.cClassTribReg,
+            };
+        }
+
+        if (gIBSCBS.gDif) {
+            situacaoNormalizada.gDif = gIBSCBS.gDif;
+        }
+
+        return situacaoNormalizada;
+    }
+
+    private normalizarIBSCBS(ibscbs: any): any {
+        if (!ibscbs) {
+            return ibscbs;
+        }
+
+        const ibscbsNormalizado: any = {
+            finNFSe: ibscbs.finNFSe,
+        };
+
+        if (ibscbs.indFinal !== undefined) {
+            ibscbsNormalizado.indFinal = ibscbs.indFinal;
+        }
+
+        ibscbsNormalizado.cIndOp = ibscbs.cIndOp;
+
+        if (ibscbs.tpOper !== undefined) {
+            ibscbsNormalizado.tpOper = ibscbs.tpOper;
+        }
+
+        if (ibscbs.gRefNFSe) {
+            ibscbsNormalizado.gRefNFSe = ibscbs.gRefNFSe;
+        }
+
+        if (ibscbs.tpEnteGov !== undefined) {
+            ibscbsNormalizado.tpEnteGov = ibscbs.tpEnteGov;
+        }
+
+        ibscbsNormalizado.indDest = ibscbs.indDest;
+
+        if (ibscbs.dest) {
+            ibscbsNormalizado.dest = {
+                ...ibscbs.dest,
+            };
+
+            if (ibscbs.dest.end) {
+                ibscbsNormalizado.dest.end = this.normalizarEndereco(ibscbs.dest.end);
+            }
+        }
+
+        if (ibscbs.imovel) {
+            ibscbsNormalizado.imovel = ibscbs.imovel;
+        }
+
+        const valoresNormalizados: any = {};
+
+        if (ibscbs.valores?.gReeRepRes) {
+            valoresNormalizados.gReeRepRes = ibscbs.valores.gReeRepRes;
+        }
+
+        valoresNormalizados.trib = {
+            gIBSCBS: this.normalizarSituacaoTributariaIBSCBS(ibscbs.valores.trib.gIBSCBS),
+        };
+
+        ibscbsNormalizado.valores = valoresNormalizados;
+
+        return ibscbsNormalizado;
+    }
+
     private normalizarInfDps(infDps: any, ambiente: number): any {
         const dhEmi = this.formatarDataHoraBrasilia(infDps.dhEmi);
         const dCompet = this.formatarDataCompetencia(infDps.dCompet);
@@ -301,7 +393,7 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
         infDpsNormalizado.valores = infDps.valores;
 
         if (infDps.IBSCBS) {
-            infDpsNormalizado.IBSCBS = infDps.IBSCBS;
+            infDpsNormalizado.IBSCBS = this.normalizarIBSCBS(infDps.IBSCBS);
         }
 
         return infDpsNormalizado;
