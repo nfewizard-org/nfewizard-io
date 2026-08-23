@@ -29,10 +29,13 @@ if [ -z "$1" ]; then
     echo -e "  ${BLUE}nfewizard-io${NC} - Biblioteca NFe (não publicar ainda)"
     echo ""
     echo -e "Exemplo: ${YELLOW}./scripts/publish-single.sh types${NC}"
+    echo -e "         ${YELLOW}./scripts/publish-single.sh dce${NC}"
+    echo -e "         ${YELLOW}./scripts/publish-single.sh @nfewizard/dce${NC}"
     exit 1
 fi
 
-PACKAGE_NAME=$1
+# Aceita tanto o diretório (dce) quanto o nome scoped (@nfewizard/dce)
+PACKAGE_NAME="${1#@nfewizard/}"
 PACKAGE_DIR="packages/$PACKAGE_NAME"
 
 # Verificar se o diretório do pacote existe

@@ -205,6 +205,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     echo ""
 
     PACKAGE_ARG="${1:-}"
+    PACKAGE_ARG="${PACKAGE_ARG#@nfewizard/}"
     BUMP_ARG="${2:-}"
 
     if [ -n "$PACKAGE_ARG" ]; then
