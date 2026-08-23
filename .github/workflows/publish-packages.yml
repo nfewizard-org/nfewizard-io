@@ -22,6 +22,7 @@ on:
           - nfce
           - nfse
           - cte
+          - dce
           - nfewizard-io
         default: nfse
       packages_all:
@@ -105,7 +106,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          ORDER=(types shared danfe nfce nfse cte nfewizard-io)
+          ORDER=(types shared danfe nfce nfse cte dce nfewizard-io)
 
           trim() {
             local s="$1"
@@ -160,7 +161,7 @@ jobs:
               danfe)
                 WANT_BUILD[types]=1
                 ;;
-              nfce|nfse|cte)
+              nfce|nfse|cte|dce)
                 WANT_BUILD[types]=1
                 WANT_BUILD[shared]=1
                 ;;

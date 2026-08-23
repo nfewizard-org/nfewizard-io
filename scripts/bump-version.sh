@@ -19,7 +19,7 @@ RED='\033[0;31m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-PACKAGES_ALL=("types" "shared" "danfe" "nfce" "nfse")
+PACKAGES_ALL=("types" "shared" "danfe" "nfce" "nfse" "cte" "dce")
 
 # ──────────────────────────────────────────────────────────────
 # Incrementa uma versão semver
