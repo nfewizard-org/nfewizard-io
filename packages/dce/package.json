@@ -1,6 +1,6 @@
 {
   "name": "@nfewizard/dce",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Biblioteca Node.js para DCe - Declaracao de Conteudo eletronica",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
