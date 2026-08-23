@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2025 rel. 2 (x64) (https://www.altova.com) by PROCERGS (Procergs - Centro de Tecnologia da Informação e Comunicação do Estado do Rio Grande do Sul S.A.) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/dce" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ns1="http://www.portalfiscal.inf.br/dce" targetNamespace="http://www.portalfiscal.inf.br/dce" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="tiposGeralDCe_v1.00.xsd"/>
+	<xs:simpleType name="TVerDFe">
+		<xs:annotation>
+			<xs:documentation> Tipo Versão</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="1\.00"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="TDistDFe">
+		<xs:annotation>
+			<xs:documentation>Schema XML de validação da área de dados da mensagem da solicitação de distribuição de DF-e</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tpAmb" type="TAmb">
+				<xs:annotation>
+					<xs:documentation>Identificação do Ambiente:  1 - Produção  2 - Homologação</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="verAplic" type="TVerAplic">
+				<xs:annotation>
+					<xs:documentation>Versão do Aplicativo que solicitou a distribuição de DF-e</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cOrgao" type="TCOrgaoIBGE">
+				<xs:annotation>
+					<xs:documentation>Órgao soliciitado</xs:documentation>
+					<xs:documentation>Usar código UF do IBGE, ou 90 - RFB, 91 - SUFRAMA, 94 - ANATEL</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="indDFe">
+				<xs:annotation>
+					<xs:documentation>Indicador de DF-e solicitados: 
+0 - DFe autorizados para Orgao solicitante 
+1 - DFe destinados ao solicitante
+2 - Todos DFe de interesse do solicitante</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:unsignedInt">
+						<xs:enumeration value="0"/>
+						<xs:enumeration value="1"/>
+						<xs:enumeration value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="indRetXML">
+				<xs:annotation>
+					<xs:documentation>Indicador para retornar o XML do DFe ou somente dados de controle.
+0 - Retorna o lote apenas com dados de controle de cada DFe (Substitui sincronismo de chaves)
+1 - Retorna o lote completo, contendo o proc do DFe compactado.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:unsignedInt">
+						<xs:enumeration value="0"/>
+						<xs:enumeration value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ultNSU" type="TNSU">
+				<xs:annotation>
+					<xs:documentation>último NSU recebido, caso seja informado com zero, o Ambiente Autorizador tentará localizar o primeiro DF-e existente.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NSUFin" type="TNSU" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>NSU Final que poderá ser retornado nesta requisição.
+Campo opcional, se não for informado o serviço de distribuição irá retornar os próximos 50 NSU de busca disponíveis a partir do ultNSU informado
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="versao" type="TVerDFe" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TDistDFeAut">
+		<xs:annotation>
+			<xs:documentation>Schema XML de validação da área de dados da mensagem da solicitação de distribuição de DF-e da SEFAZ Autorizadora para SVD</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tpAmb" type="TAmb">
+				<xs:annotation>
+					<xs:documentation>Identificação do Ambiente:  1 - Produção  2 - Homologação</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ultNSU" type="TNSU">
+				<xs:annotation>
+					<xs:documentation>último NSU recebido, caso seja informado com zero, o Ambiente Autorizador tentará localizar o primeiro DF-e existente.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NSUFin" type="TNSU" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>NSU Final que poderá ser retornado nesta requisição.
+Campo opcional, se não for informado o serviço de distribuição irá retornar os próximos 50 NSU de busca disponíveis a partir do ultNSU informado
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="versao" type="TVerDFe" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TRetDistDFeAut">
+		<xs:annotation>
+			<xs:documentation>Schema XML de validação do lote de retorno de documentos ficais eletronicos da SEFAZ Autorizadora para o SVD</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tpAmb" type="TAmb">
+				<xs:annotation>
+					<xs:documentation>Identificação do Ambiente:  1 - Produção  2 - Homologação</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="verAplic" type="TVerAplic">
+				<xs:annotation>
+					<xs:documentation>Versão do Aplicativo que atendeu a pedido de distribuição de DF-e</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cStat" type="TStat">
+				<xs:annotation>
+					<xs:documentation>código do status de resultado da pesquisa</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xMotivo" type="TMotivo">
+				<xs:annotation>
+					<xs:documentation>descrição do resultado do pesquisa </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ultNSU" type="TNSU" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Último NSU do Lote</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ultNSUAut" type="TNSU" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>último NSU existente para o SVD na SEFAZ Autorizadora</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="loteDist" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="50">
+						<xs:element name="proc">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="procComp" type="xs:base64Binary">
+										<xs:annotation>
+											<xs:documentation>proc Compactado (GZip)</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="cUFEmit" type="TCOrgaoIBGE">
+										<xs:annotation>
+											<xs:documentation>Código da UF do emitente</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="cUFDest" type="TCOrgaoIBGE">
+										<xs:annotation>
+											<xs:documentation>Código da UF destinatário</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:choice>
+										<xs:element name="DCe">
+											<xs:annotation>
+												<xs:documentation>informações de controle do DFe</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="chDCe" type="TChDFe">
+														<xs:annotation>
+															<xs:documentation>Chave de Acesso da DCe</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="dhRecbto" type="TDateTimeUTC">
+														<xs:annotation>
+															<xs:documentation>Data e hora de autorizacao no formato AAAA-MM-DDTHH:MM:SS TZD</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="nProt" type="TProt">
+														<xs:annotation>
+															<xs:documentation>Número de protocolo de autorização DCe</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="evento">
+											<xs:annotation>
+												<xs:documentation>informações de controle Evento</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="cOrgao" type="TCOrgaoIBGE">
+														<xs:annotation>
+															<xs:documentation>Código do Orgao de Recepcao do Evento</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="chDCe" type="TChDFe">
+														<xs:annotation>
+															<xs:documentation>Chave de Acesso do DF-e</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:choice>
+														<xs:element name="CNPJ" type="TCnpj">
+															<xs:annotation>
+																<xs:documentation>CNPJ do Autor do Evento</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+														<xs:element name="CPF" type="TCpf">
+															<xs:annotation>
+																<xs:documentation>CPF do Autor do evento</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+														<xs:element name="idOutros" type="TidOutros">
+															<xs:annotation>
+																<xs:documentation>Identificação do usuário emitente não obrigado a inscrição do CPF ou CNPJ tais como estrangeiro, indígena e quilombola</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+													</xs:choice>
+													<xs:element name="dhEvento" type="TDateTimeUTC">
+														<xs:annotation>
+															<xs:documentation>Data e Hora do Evento, formato (AAAA-MM-DDThh:mm:ss)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="tpEvento">
+														<xs:annotation>
+															<xs:documentation>Tipo do Evento</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:pattern value="[0-9]{6}"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="nSeqEvento">
+														<xs:annotation>
+															<xs:documentation>Seqüencial do evento para o mesmo tipo de evento.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:whiteSpace value="preserve"/>
+																<xs:pattern value="[0-9]{1,2}"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="dhRecbto" type="xs:dateTime">
+														<xs:annotation>
+															<xs:documentation>Data e hora de autorizacao do Evento no formato AAAA-MM-DDTHH:MM:SS</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="nProt" type="TProt">
+														<xs:annotation>
+															<xs:documentation>Número de protocolo de autorização do evento</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
+								</xs:sequence>
+								<xs:attribute name="schema" type="xs:string" use="required">
+									<xs:annotation>
+										<xs:documentation>Identificação do Schema XML de validação do proc, </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="NSU" type="TNSU" use="required">
+									<xs:annotation>
+										<xs:documentation>número sequencial único do Ambiente Autorizador</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="versao" type="TVerDFe" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TRetDistDFe">
+		<xs:annotation>
+			<xs:documentation>Schema XML de validação do lote de retorno de documentos fiscais eletronicos</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tpAmb" type="TAmb">
+				<xs:annotation>
+					<xs:documentation>Identificação do Ambiente:  1 - Produção  2 - Homologação</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="verAplic" type="TVerAplic">
+				<xs:annotation>
+					<xs:documentation>Versão do Aplicativo da SVRS</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cStat" type="TStat">
+				<xs:annotation>
+					<xs:documentation>código do status de resultado da pesquisa</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xMotivo" type="TMotivo">
+				<xs:annotation>
+					<xs:documentation>descrição do resultado do pesquisa </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ultNSU" type="TNSU" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>último NSU</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ultNSUSVD" type="TNSU" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>último NSU para a UF na SVD</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="loteDist" type="TLoteDistDFe" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="versao" type="TVerDFe" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TLoteDistDFe">
+		<xs:annotation>
+			<xs:documentation>Schema XML de validação da área de dados descompactada</xs:documentation>
+		</xs:annotation>
+		<xs:sequence maxOccurs="50">
+			<xs:element name="proc">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="procComp" type="xs:base64Binary" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Proc do DFe compactado com o método GZip.
+O tipo do campo é base64Binary.
+
+Campo opcional conforme indicado na solicitação do serviço na tag indRetXML
+</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:choice>
+							<xs:element name="DCe">
+								<xs:annotation>
+									<xs:documentation>informações de controle DCe</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="chDCe" type="TChDFe">
+											<xs:annotation>
+												<xs:documentation>Chave de Acesso do DFe</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="dhRecbto" type="TDateTimeUTC">
+											<xs:annotation>
+												<xs:documentation>Data e hora de autorizacao no formato AAAA-MM-DDTHH:MM:SS TZD</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="nProt" type="TProt">
+											<xs:annotation>
+												<xs:documentation>Número de protocolo de autorização do evento</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="evento">
+								<xs:annotation>
+									<xs:documentation>informações de controle Evento</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="cOrgao" type="TCOrgaoIBGE">
+											<xs:annotation>
+												<xs:documentation>Código do Orgao de Recepcao do Evento</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="chDCe" type="TChDFe">
+											<xs:annotation>
+												<xs:documentation>Chave de Acesso do DF-e</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:choice>
+											<xs:element name="CNPJ" type="TCnpj">
+												<xs:annotation>
+													<xs:documentation>CNPJ do Autor do Evento</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="CPF" type="TCpf">
+												<xs:annotation>
+													<xs:documentation>CPF do emissor do evento</xs:documentation>
+													<xs:documentation>Informar zeros não significativos.
+
+Usar com série específica 920-969 para emitente pessoa física com inscrição estadual</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:choice>
+										<xs:element name="dhEvento" type="TDateTimeUTC">
+											<xs:annotation>
+												<xs:documentation>Data e Hora do Evento, formato (AAAA-MM-DDThh:mm:ss)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="tpEvento">
+											<xs:annotation>
+												<xs:documentation>Tipo do Evento</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:pattern value="[0-9]{6}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="nSeqEvento">
+											<xs:annotation>
+												<xs:documentation>Seqüencial do evento para o mesmo tipo de evento.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:whiteSpace value="preserve"/>
+													<xs:pattern value="[0-9]{1,2}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="dhRecbto" type="xs:dateTime">
+											<xs:annotation>
+												<xs:documentation>Data e hora de autorizacao do Evento no formato AAAA-MM-DDTHH:MM:SS</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="nProt" type="TProt">
+											<xs:annotation>
+												<xs:documentation>Número de protocolo de autorização do evento</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:sequence>
+					<xs:attribute name="schema" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation>Identificação do Schema XML de validação do proc, Ex. procNFCom_v1.00.xsd.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="NSUSVD" type="TNSU" use="required">
+						<xs:annotation>
+							<xs:documentation>Número sequencial único do SVD para o órgão solicitante</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="NSUAut" type="TNSU" use="required">
+						<xs:annotation>
+							<xs:documentation>Número sequencial único do Ambiente autorizador do DFe</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="versao"/>
+	</xs:complexType>
+</xs:schema>

@@ -581,7 +581,7 @@ class NFCeGerarDanfe {
 
     async generatePDF(exibirMarcaDaguaDanfe?: boolean) {
         try {
-            this.exibirMarcaDaguaDanfe = exibirMarcaDaguaDanfe || true;
+            this.exibirMarcaDaguaDanfe = exibirMarcaDaguaDanfe ?? true;
 
             // await this.saveQRCode(this.infNFeSupl?.qrCode  || '')
             const qrCodeBuffer = await this.getQRCodeBuffer(this.infNFeSupl?.qrCode || '');

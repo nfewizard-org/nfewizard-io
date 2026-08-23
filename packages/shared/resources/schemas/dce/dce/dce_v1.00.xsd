@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2014 rel. 2 (http://www.altova.com) by private (private) -->
+<xs:schema xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/dce" targetNamespace="http://www.portalfiscal.inf.br/dce" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="dceTiposBasico_v1.00.xsd"/>
+	<xs:element name="DCe" type="TDCe">
+		<xs:annotation>
+			<xs:documentation>Declaração de Conteúdo Eletrônica</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+</xs:schema>

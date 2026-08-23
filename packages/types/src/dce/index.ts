@@ -15,20 +15,4 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Export all shared types
-export * from './shared/index.js';
-
-// Export NFe types
-export * from './nfe/index.js';
-
-// Export NFCe types
-export * from './nfce/index.js';
-
-// Export NFSe types
-export * from './nfse/index.js';
-
-// Export CTe types
-export * from './cte/index.js';
-
-// Export DCe types
-export * from './dce/index.js';
+export * from './DCeAutorizacao.js';
