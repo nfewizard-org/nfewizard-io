@@ -33,6 +33,7 @@ import xsdValidator from 'xsd-schema-validator';
 import NFeServicosUrl from '../config/NFeServicosUrl.json';
 import CTeServicosUrl from '../config/CTeServicosUrl.json';
 import NFSeServicosUrl from '../config/NFSeServicosUrl.json';
+import DCeServicosUrl from '../config/DCeServicosUrl.json';
 import soapMethod from '../config/soapMethod.json';
 // import cStatError from '../config/cStatError.json';
 import { getSchema } from '../adapters/SchemaLoader.js';
@@ -216,8 +217,9 @@ class Utility {
     }
 
     getSoapInfo(uf: string, method: string) {
-        // Detecta se é CTe ou NFe pelo nome do método
+        // Detecta se é CTe, DCE ou NFe pelo nome do método
         const isCTe = method.startsWith('CTe');
+        const isDCE = method.startsWith('DCE');
         const servicos = isCTe ? CTeServicosUrl as any : NFeServicosUrl as ServicesUrl;
         let chaveMethod = '';
         let chaveSoap = '';
@@ -234,6 +236,24 @@ class Utility {
                 chaveSoap,
                 chaveMethod,
                 CTeServicosUrl: 'src/core/config/CTeServicosUrl.json'
+            });
+
+            return {
+                method: soapMethodConfig.method,
+                action: soapMethodConfig.action,
+            };
+        }
+
+        if (isDCE) {
+            const soapMethodConfig = (soapMethod as any)[method];
+            if (!soapMethodConfig) {
+                throw new Error('Metodo DCE nao encontrado no arquivo de configuracao SOAP.');
+            }
+
+            logger.info(`Buscando URL's do webservice DCE`, {
+                context: 'GerarConsulta',
+                method,
+                DCeServicosUrl: 'src/config/DCeServicosUrl.json'
             });
 
             return {
@@ -390,6 +410,7 @@ class Utility {
     getWebServiceUrl(metodo: string, ambienteNacional = false, versao = "", mod = "NFe"): string {
         // Detecta se é NFSe
         const isNFSe = metodo.startsWith('NFSe_');
+        const isDCE = metodo.startsWith('DCE');
         
         if (isNFSe) {
             const nfseUrls = NFSeServicosUrl as any;
@@ -415,6 +436,19 @@ class Utility {
             const url = cteUrls[chave] && cteUrls[chave][metodoComVersao];
             if (!url) {
                 throw new Error(`Não foi possível recuperar a url para o webservice CTe: ${metodoComVersao} no ambiente ${ambiente}`);
+            }
+            return url;
+        }
+
+        if (isDCE) {
+            const dceUrls = DCeServicosUrl as any;
+            const ambiente = this.environment.config.nfe.ambiente === 1 ? 'P' : 'H';
+            const chave = `DCE_AN_${ambiente}`;
+            const metodoComVersao = `${metodo}_${versao}`;
+
+            const url = dceUrls[chave] && dceUrls[chave][metodoComVersao];
+            if (!url) {
+                throw new Error(`Nao foi possivel recuperar a url para o webservice DCE: ${metodoComVersao} no ambiente ${ambiente}. Configure packages/shared/src/config/DCeServicosUrl.json`);
             }
             return url;
         }
@@ -469,6 +503,13 @@ class Utility {
         return new Promise(async (resolve, reject) => {
             try {
                 const { basePath, schemaPath } = getSchema(metodo);
+                if (!schemaPath) {
+                    reject({
+                        success: false,
+                        message: `Schema XSD não encontrado para o método '${metodo}'.`,
+                    });
+                    return;
+                }
                 const completeXSD = await xsdAssembler.assemble(schemaPath);
 
                 const xmlDoc = libxmljs.parseXml(xml);
@@ -500,6 +541,13 @@ class Utility {
         return new Promise(async (resolve, reject) => {
             try {
                 const { schemaPath } = getSchema(metodo);
+                if (!schemaPath) {
+                    reject({
+                        success: false,
+                        message: `Schema XSD não encontrado para o método '${metodo}'.`,
+                    });
+                    return;
+                }
 
                 xsdValidator.validateXML(xml, schemaPath, (err: any, validationResult: any) => {
                     if (err) {

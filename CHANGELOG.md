@@ -1,5 +1,15 @@
 # Changelog
 
+## [2026-08-23]
+
+### Feat
+
+- **`@nfewizard/dce` — módulo experimental de DCe adicionado ao monorepo**
+  - Adiciona o pacote `@nfewizard/dce` com a facade `DCEWizard`, `DCE_Autorizacao` e `DCE_AutorizacaoZip`.
+  - O módulo já está disponível para uso em testes/homologação e foi validado com testes do pacote e checagem de tipos.
+  - ⚠️ Aviso de BETA: este módulo ainda está em teste e pode sofrer alterações na API, no retorno do serviço ou na serialização XML conforme a evolução dos schemas e dos endpoints da SEFAZ/PR.
+  - Documento de uso e exemplo foram adicionados ao README do monorepo para orientar integração inicial.
+
 ## [2026-08-08]
 
 ### Fix

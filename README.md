@@ -15,6 +15,7 @@ A partir da versão 1.0.0, o **NFeWizard-io foi modularizado** em pacotes indepe
 | `@nfewizard/nfse` | 🆕 Operações NFSe | 578.0 KB |
 | `@nfewizard/danfe` | 🆕 Geração de DANFE (NFe e NFCe) | 2.31 MB |
 | `@nfewizard/cte` | 🆕 Operações CTe | 801.9 KB |
+| `@nfewizard/dce` | 🧪 Operações DCe (beta) | em validação |
 | `@nfewizard/types` | 📦 Tipos TypeScript | 542.4 KB |
 | `@nfewizard/shared` | 📦 Utilitários compartilhados | 4.03 MB |
 
@@ -24,6 +25,7 @@ A partir da versão 1.0.0, o **NFeWizard-io foi modularizado** em pacotes indepe
 - ⚠️ **NFSe**: Novo pacote `@nfewizard/nfse` para Nota Fiscal de Serviços Eletrônica
 - ⚠️ **DANFE**: Removido do pacote principal, use `@nfewizard/danfe` com funções `NFE_GerarDanfe()` e `NFCE_GerarDanfe()`
 - ⚠️ **CTe**: Movido para `@nfewizard/cte` (use `new CTEWizard()`)
+- 🧪 **DCe**: Novo pacote experimental `@nfewizard/dce` com `DCEWizard`, `DCE_Autorizacao` e `DCE_AutorizacaoZip`
 - ✅ **NFe**: Permanece 100% compatível no pacote `nfewizard-io`
 - 🎁 **Novo**: Cancelamento de NFCe disponível em `@nfewizard/nfce`
 - 📉 **Benefício**: Redução de até 77% no bundle 
@@ -201,11 +203,69 @@ await nfeWizard.NFE_LoadEnvironment({
     await nfeWizard.NFE_DistribuicaoDFePorChave(chaveNFe);
 ```
 
+## 🧪 DCe (beta): uso inicial
+
+O módulo `@nfewizard/dce` já está disponível para uso em testes e homologação, mas ainda deve ser tratado como **beta / experimental**. A API pública foi implementada e validada por testes do pacote, mas pode sofrer ajustes de contrato ou retorno conforme a padronização dos endpoints da SEFAZ/PR.
+
+### Instalação
+
+```bash
+npm i @nfewizard/dce
+# ou
+pnpm add @nfewizard/dce
+```
+
+### Como usar
+
+```ts
+import { DCEWizard } from '@nfewizard/dce';
+
+const wizard = new DCEWizard();
+
+await wizard.NFE_LoadEnvironment({
+  config: {
+    dfe: {
+      UF: 'PR',
+      CPFCNPJ: '99999999999999',
+      pathCertificado: 'certificado.pfx',
+      senhaCertificado: '123456',
+      armazenarXMLAutorizacao: true,
+      pathXMLAutorizacao: 'tmp/Autorizacao',
+      armazenarXMLRetorno: true,
+      pathXMLRetorno: 'tmp/RequestLogs',
+      pathLogs: 'tmp/Logs',
+    },
+    lib: {
+      connection: { timeout: 30000 },
+      log: {
+        exibirLogNoConsole: true,
+        armazenarLogs: true,
+        pathLogs: 'tmp/Logs',
+      },
+      useForSchemaValidation: 'validateSchemaJsBased',
+    },
+  },
+});
+
+const retorno = await wizard.DCE_Autorizacao({
+  xml: '<DCe><infDCe Id="DCe123" /></DCe>',
+});
+
+console.log(retorno.xMotivo);
+```
+
+### Operações atualmente disponíveis
+
+- `DCE_Autorizacao(data?)`
+- `DCE_AutorizacaoZip(data?)`
+
+> ⚠️ Aviso de BETA: o módulo DCe ainda está em teste e pode receber ajustes na serialização, validação de schema e na resposta bruta dos serviços antes da estabilização da API.
+
 ## Documentação
 
 - **Documentação completa**: [NFeWizard-io - Docs](https://nfewizard-org.github.io/)
 - **Guia de Migração Completo**: [BREAKING_CHANGES.md](BREAKING_CHANGES.md)
-- **Exemplos de Uso**: Consulte a pasta [examples/](examples/) com exemplos práticos para NFe, NFCe, NFSe e CTe
+- **Exemplos de Uso**: Consulte a pasta [examples/](examples/) com exemplos práticos para NFe, NFCe, NFSe, CTe e DCe
   - [Guia de Build](examples/BUILD.md)
   - [Instalação Local para Testes](examples/INSTALACAO_LOCAL.md)
   - [Exemplos de NFe](examples/NFe/)

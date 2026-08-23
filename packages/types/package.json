@@ -25,6 +25,10 @@
       "types": "./dist/src/cte/index.d.ts",
       "default": "./dist/src/cte/index.js"
     },
+    "./dce": {
+      "types": "./dist/src/dce/index.d.ts",
+      "default": "./dist/src/dce/index.js"
+    },
     "./shared": {
       "types": "./dist/src/shared/index.d.ts",
       "default": "./dist/src/shared/index.js"
@@ -43,6 +47,9 @@
       ],
       "cte": [
         "./dist/src/cte/index.d.ts"
+      ],
+      "dce": [
+        "./dist/src/dce/index.d.ts"
       ],
       "shared": [
         "./dist/src/shared/index.d.ts"

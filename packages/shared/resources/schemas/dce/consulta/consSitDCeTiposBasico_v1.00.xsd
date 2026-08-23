@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2014 rel. 2 (http://www.altova.com) by private (private) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/dce" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" targetNamespace="http://www.portalfiscal.inf.br/dce" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="tiposGeralDCe_v1.00.xsd"/>
+	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema_v1.01.xsd"/>
+	<xs:complexType name="TConsSitDCe">
+		<xs:annotation>
+			<xs:documentation>Tipo Pedido de Consulta da Situação Atual da DCe</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tpAmb" type="TAmb">
+				<xs:annotation>
+					<xs:documentation>Identificação do Ambiente:
+1 - Produção; 
+2 - Homologação;</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xServ" type="TServ" fixed="CONSULTAR">
+				<xs:annotation>
+					<xs:documentation>Serviço Solicitado</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="chDCe" type="TChDFe">
+				<xs:annotation>
+					<xs:documentation>Chaves de acesso do DCe</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="versao" type="TVerConsSitDCe" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TRetConsSitDCe">
+		<xs:annotation>
+			<xs:documentation>Tipo Retorno de Pedido de Consulta da Situação Atual de DCe</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tpAmb" type="TAmb">
+				<xs:annotation>
+					<xs:documentation>Identificação do Ambiente:
+1 - Produção
+2 - Homologação</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="verAplic" type="TVerAplic">
+				<xs:annotation>
+					<xs:documentation>Versão do Aplicativo que processou o DCe</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cStat" type="TStat">
+				<xs:annotation>
+					<xs:documentation>Código do status da mensagem enviada.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xMotivo" type="TMotivo">
+				<xs:annotation>
+					<xs:documentation>Descrição literal do status do serviço solicitado.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cUF" type="TCodUfIBGE">
+				<xs:annotation>
+					<xs:documentation>código da UF de atendimento</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="dhRecbto" type="TDateTimeUTC">
+				<xs:annotation>
+					<xs:documentation>Preenchido com a data e hora do processamento (informado também no caso de rejeição).
+Formato: “AAAA-MM-DDThh:mm:ssTZD” (UTC –  Universal Coordinated Time).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="chDCe" type="TChDFe">
+				<xs:annotation>
+					<xs:documentation>Chaves de acesso do DCe</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="protDCe" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:any processContents="skip">
+							<xs:annotation>
+								<xs:documentation>Retornar protDCe da versão correspondente da DCe autorizada</xs:documentation>
+							</xs:annotation>
+						</xs:any>
+					</xs:sequence>
+					<xs:attribute name="versao" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:whiteSpace value="preserve"/>
+								<xs:enumeration value="1.00"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="procEventoDCe" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:any processContents="skip">
+							<xs:annotation>
+								<xs:documentation>Retornar procEventoDCe da versão correspondente do evento DCe autorizado</xs:documentation>
+							</xs:annotation>
+						</xs:any>
+					</xs:sequence>
+					<xs:attribute name="versao" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:whiteSpace value="preserve"/>
+								<xs:enumeration value="1.00"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="versao" type="TVerConsSitDCe" use="required"/>
+	</xs:complexType>
+	<xs:simpleType name="TVerConsSitDCe">
+		<xs:annotation>
+			<xs:documentation> Tipo Versão do Consulta situação de DCe - 1.00</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="1\.00"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

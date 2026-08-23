@@ -15,20 +15,20 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Export all shared types
-export * from './shared/index.js';
+export interface DCEAutorizacaoPayload {
+    xml?: string;
+    dce?: Record<string, unknown>;
+    DCe?: Record<string, unknown>;
+    versao?: string;
+}
 
-// Export NFe types
-export * from './nfe/index.js';
+export interface DCEAutorizacaoResponse {
+    success: boolean;
+    xMotivo: string;
+    response: Record<string, unknown>;
+}
 
-// Export NFCe types
-export * from './nfce/index.js';
-
-// Export NFSe types
-export * from './nfse/index.js';
-
-// Export CTe types
-export * from './cte/index.js';
-
-// Export DCe types
-export * from './dce/index.js';
+export interface DCEAutorizacaoServiceImpl {
+    Exec(data?: DCEAutorizacaoPayload): Promise<DCEAutorizacaoResponse>;
+    ExecZip?(data?: DCEAutorizacaoPayload): Promise<DCEAutorizacaoResponse>;
+}

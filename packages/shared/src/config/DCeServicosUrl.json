@@ -1,0 +1,18 @@
+{
+  "DCE_AN_P": {
+    "DCEStatusServico_1.00": "https://dce.fazenda.pr.gov.br/dce/DCeStatusServico?wsdl",
+    "DCEAutorizacao_1.00": "https://dce.fazenda.pr.gov.br/dce/DCeAutorizacao?wsdl",
+    "DCEAutorizacaoZip_1.00": "https://dce.fazenda.pr.gov.br/dce/DCeAutorizacao?wsdl",
+    "DCEConsultaProtocolo_1.00": "https://dce.fazenda.pr.gov.br/dce/DCeConsulta?wsdl",
+    "DCERecepcaoEvento_1.00": "https://dce.fazenda.pr.gov.br/dce/DCeRecepcaoEvento?wsdl",
+    "DCECancelamento_1.00": "https://dce.fazenda.pr.gov.br/dce/DCeRecepcaoEvento?wsdl"
+  },
+  "DCE_AN_H": {
+    "DCEStatusServico_1.00": "https://homologacao.dce.fazenda.pr.gov.br/dce/DCeStatusServico?wsdl",
+    "DCEAutorizacao_1.00": "https://homologacao.dce.fazenda.pr.gov.br/dce/DCeAutorizacao?wsdl",
+    "DCEAutorizacaoZip_1.00": "https://homologacao.dce.fazenda.pr.gov.br/dce/DCeAutorizacao?wsdl",
+    "DCEConsultaProtocolo_1.00": "https://homologacao.dce.fazenda.pr.gov.br/dce/DCeConsulta?wsdl",
+    "DCERecepcaoEvento_1.00": "https://homologacao.dce.fazenda.pr.gov.br/dce/DCeRecepcaoEvento?wsdl",
+    "DCECancelamento_1.00": "https://homologacao.dce.fazenda.pr.gov.br/dce/DCeRecepcaoEvento?wsdl"
+  }
+}
