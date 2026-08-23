@@ -43,6 +43,14 @@
         "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe",
         "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe/cteDistDFeInteresse"
     },
+    "DCEAutorizacao": {
+        "method": "http://www.portalfiscal.inf.br/dce/wsdl/DCeAutorizacao",
+        "action": "http://www.portalfiscal.inf.br/dce/wsdl/DCeAutorizacao/dceAutorizacao"
+    },
+    "DCEAutorizacaoZip": {
+        "method": "http://www.portalfiscal.inf.br/dce/wsdl/DCeAutorizacao",
+        "action": "http://www.portalfiscal.inf.br/dce/wsdl/DCeAutorizacao/DCeAutorizacaoZip"
+    },
     "NFSe_Autorizacao": {
         "method": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeRecepcao",
         "action": "http://www.sped.fazenda.gov.br/nfse/wsdl/NFSeRecepcao/recepcionar"

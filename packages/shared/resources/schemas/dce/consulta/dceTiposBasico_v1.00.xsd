@@ -1,0 +1,1388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2024 (x64) (http://www.altova.com) by sefa (REPR - RECEITA ESTADUAL DO PARANA) -->
+<xs:schema xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/dce" targetNamespace="http://www.portalfiscal.inf.br/dce" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema_v1.01.xsd"/>
+	<xs:include schemaLocation="tiposGeralDCe_v1.00.xsd"/>
+	<xs:complexType name="TDCe">
+		<xs:annotation>
+			<xs:documentation>Tipo Declaração de Conteúdo Eletrônica</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="infDCe">
+				<xs:annotation>
+					<xs:documentation>Informações da DCe</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ide">
+							<xs:annotation>
+								<xs:documentation>Identificação da DCe</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="cUF" type="TCodUfIBGE">
+										<xs:annotation>
+											<xs:documentation>Código da UF de emissão e autorização da DCe</xs:documentation>
+											<xs:documentation>Código da UF de emissão e autorização do Documento Fiscal. Utilizar a
+Tabela do IBGE de código de unidades da federação</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="cDC">
+										<xs:annotation>
+											<xs:documentation>Código numérico que compõe a Chave de Acesso.</xs:documentation>
+											<xs:documentation>Código aleatório gerado pelo emitente, com o objetivo de evitar acessos indevidos ao documento</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:whiteSpace value="preserve"/>
+												<xs:pattern value="[0-9]{6}"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="mod" type="TModDCe">
+										<xs:annotation>
+											<xs:documentation>Modelo da DCe</xs:documentation>
+											<xs:documentation>Utilizar o código 99 para identificação da DCe</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="serie" type="TSerie">
+										<xs:annotation>
+											<xs:documentation>Série do documento fiscal</xs:documentation>
+											<xs:documentation>Informar a série do documento fiscal (informar zero para série única)</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="nDC" type="TNF">
+										<xs:annotation>
+											<xs:documentation>Número do documento fiscal</xs:documentation>
+											<xs:documentation>Número que identifica o documento fiscal 1 a 999999999</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="dhEmi" type="TDateTimeUTC">
+										<xs:annotation>
+											<xs:documentation>Data e hora de emissão do documento fiscal</xs:documentation>
+											<xs:documentation>Formato UTC (AAAA-MM-DDThh:mm:ssTZD, onde TZD = +hh:mm ou -hh:mm)</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="tpEmis" type="TtpEmis">
+										<xs:annotation>
+											<xs:documentation>Forma de emissão do Documento Fiscal</xs:documentation>
+											<xs:documentation>1 - Normal (não contingência); 9 - Contingência off-line da DCe</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="tpEmit">
+										<xs:annotation>
+											<xs:documentation>Tipo do Emitente da DCe</xs:documentation>
+											<xs:documentation>0 - App Fisco
+1 - Marketplace
+2 - Emissor próprio
+3 - Transportadora ou ECT
+</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:whiteSpace value="preserve" />
+												<xs:minLength value="1" />
+												<xs:maxLength value="1" />
+												<xs:pattern value="[0-3]{1}" />
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="nSiteAutoriz">
+										<xs:annotation>
+											<xs:documentation>Identificação do número do Site do Autorizador de recepção da DCe</xs:documentation>
+											<xs:documentation>Se o autorizador da DCe possuir apenas um site deverá ser informado com Zero (0), em caso de Autorizador trabalhar com múltiplos sites indicar o número do site para qual foi endereçada a DCE (1 a 9).
+
+Observação: o ambiente autorizador que trabalhar com mais de um Site deverá divulgar para cada endereço de site qual número correspondente de nSiteAutoriz o contribuinte pode usar</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:whiteSpace value="preserve"/>
+												<xs:pattern value="[0-9]{1}"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="cDV">
+										<xs:annotation>
+											<xs:documentation>Digito verificador da chave de acesso</xs:documentation>
+											<xs:documentation>Informar o dígito de controle da chave de acesso documento fiscal, que deve ser calculado com a aplicação do algoritmo módulo 11 (base 2,9) da chave de acesso</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:whiteSpace value="preserve"/>
+												<xs:pattern value="[0-9]{1}"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="tpAmb" type="TAmb">
+										<xs:annotation>
+											<xs:documentation>Tipo do Ambiente</xs:documentation>
+											<xs:documentation>1 - Produção
+2 - Homologação</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="verProc">
+										<xs:annotation>
+											<xs:documentation>Versão do processo de emissão</xs:documentation>
+											<xs:documentation>Informar a versão do aplicativo emissor de DCe</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:minLength value="1"/>
+												<xs:maxLength value="20"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="emit">
+							<xs:annotation>
+								<xs:documentation>Identificação da DCe</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:choice>
+										<xs:element name="CNPJ" type="TCnpjOpc">
+											<xs:annotation>
+												<xs:documentation>Número do CNPJ do emitente</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CPF" type="TCpf">
+											<xs:annotation>
+												<xs:documentation>Número do CPF do emitente</xs:documentation>
+												<xs:documentation>Informar os zeros não significativos</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="idOutros">
+											<xs:annotation>
+												<xs:documentation>Identificação do destinatário outros</xs:documentation>
+												<xs:documentation>Identificação do emitente não obrigado a inscrição do CPF ou CNPJ tais como estrangeiro, indígena e quilombola. Observação: Campo aceita algarismos, letras (maiúsculas e minúsculas) e os caracteres do conjunto que segue: [:.+-/()]</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:whiteSpace value="preserve"/>
+													<xs:minLength value="2"/>
+													<xs:maxLength value="20"/>
+													<xs:pattern value="([!-ÿ]{0}|[!-ÿ]{2,20})?"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:choice>
+									<xs:element name="xNome">
+										<xs:annotation>
+											<xs:documentation>Razão social ou Nome do emitente</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:maxLength value="60"/>
+												<xs:minLength value="2"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="enderEmit" type="TEndeEmi">
+										<xs:annotation>
+											<xs:documentation>Endereço do emitente</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:choice minOccurs="0">
+							<xs:element name="Fisco">
+								<xs:annotation>
+									<xs:documentation>Identificação do Fisco (uso exclusivo fisco)</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CNPJ" type="TCnpjOpc">
+											<xs:annotation>
+												<xs:documentation>Número do CNPJ do órgão</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="xOrgao">
+											<xs:annotation>
+												<xs:documentation>Nome do órgão</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="TString">
+													<xs:maxLength value="60"/>
+													<xs:minLength value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="UF" type="TUf">
+											<xs:annotation>
+												<xs:documentation>Sigla da UF</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Marketplace">
+								<xs:annotation>
+									<xs:documentation>Identificação do Marketplace (uso exclusivo Marketplace)</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CNPJ" type="TCnpjOpc">
+											<xs:annotation>
+												<xs:documentation>Número do CNPJ do Marketplace</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="xNome">
+											<xs:annotation>
+												<xs:documentation>Razão Social ou Nome do Marketplace</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="TString">
+													<xs:maxLength value="60"/>
+													<xs:minLength value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Site">
+											<xs:annotation>
+												<xs:documentation>Endereço ou site do Marketplace</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="TString">
+													<xs:maxLength value="120"/>
+													<xs:minLength value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Transportadora">
+								<xs:annotation>
+									<xs:documentation>Identificação da Transportadora (uso exclusivo Transportadora)</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CNPJ" type="TCnpjOpc">
+											<xs:annotation>
+												<xs:documentation>Número do CNPJ da Transportadora</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="xNome">
+											<xs:annotation>
+												<xs:documentation>Razão Social ou Nome da Transportadora</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="TString">
+													<xs:maxLength value="60"/>
+													<xs:minLength value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="ECT">
+								<xs:annotation>
+									<xs:documentation>Identificação dos correios</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CNPJ" type="TCnpjOpc">
+											<xs:annotation>
+												<xs:documentation>Número do CNPJ dos correios</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="xNome">
+											<xs:annotation>
+												<xs:documentation>Razão Social ou Nome dos correios</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="TString">
+													<xs:maxLength value="60"/>
+													<xs:minLength value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+						<xs:element name="dest">
+							<xs:annotation>
+								<xs:documentation>Identificação do destinatário da DCe</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:choice>
+										<xs:element name="CNPJ" type="TCnpjOpc">
+											<xs:annotation>
+												<xs:documentation>Número do CNPJ</xs:documentation>
+												<xs:documentation>Em caso de empresa não estabelecida no Brasil, será informado o CNPJ com zeros.
+							Informar os zeros não significativos</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CPF" type="TCpf">
+											<xs:annotation>
+												<xs:documentation>Número do CPF</xs:documentation>
+												<xs:documentation>Informar os zeros não significativos</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="idOutros">
+											<xs:annotation>
+												<xs:documentation>Identificação do destinatário outros</xs:documentation>
+												<xs:documentation>Identificação do destinatário não obrigado a inscrição do CPF tais como estrangeiro, indígena e quilombola;
+Em caso de não contar CPF do assinante, informar o RG</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:whiteSpace value="preserve"/>
+													<xs:minLength value="2"/>
+													<xs:maxLength value="20"/>
+													<xs:pattern value="([!-ÿ]{0}|[!-ÿ]{2,20})?"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:choice>
+									<xs:element name="xNome">
+										<xs:annotation>
+											<xs:documentation>Razão social ou Nome do destinatário</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:maxLength value="60"/>
+												<xs:minLength value="2"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="enderDest" type="TEndeDest">
+										<xs:annotation>
+											<xs:documentation>Endereço do destinatário / assinante</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="autXML" minOccurs="0" maxOccurs="10">
+							<xs:annotation>
+								<xs:documentation>Autorizados para acessar o XML da DCe</xs:documentation>
+								<xs:documentation>Informar CNPJ ou CPF. Preencher os zeros não significativos</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:choice>
+										<xs:element name="CNPJ" type="TCnpj">
+											<xs:annotation>
+												<xs:documentation>CNPJ do autorizado</xs:documentation>
+												<xs:documentation>Informar zeros não significativos</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CPF" type="TCpf">
+											<xs:annotation>
+												<xs:documentation>CPF do autorizado</xs:documentation>
+												<xs:documentation>Informar zeros não significativos</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:choice>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="det" maxOccurs="999">
+							<xs:annotation>
+								<xs:documentation>Detalhamento de itens da DCe</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="prod">
+										<xs:annotation>
+											<xs:documentation>Dados do Produto ou Serviço</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="xProd">
+													<xs:annotation>
+														<xs:documentation>Descrição do produto, bem ou mercadoria</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="TString">
+															<xs:maxLength value="120"/>
+															<xs:minLength value="1"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="NCM">
+													<xs:annotation>
+														<xs:documentation>Código NCM</xs:documentation>
+														<xs:documentation>Capítulo do Código NCM com 2 dígitos ou NCM completo</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:whiteSpace value="preserve"/>
+															<xs:pattern value="[0-9]{2}|[0-9]{8}"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="qCom" type="TDec_1104Opc">
+													<xs:annotation>
+														<xs:documentation>Quantidade</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="vUnCom">
+													<xs:annotation>
+														<xs:documentation>Valor unitário do item</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="TDec_1302_1308"/>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="vProd">
+													<xs:annotation>
+														<xs:documentation>Valor total brutp do item</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="TDec_1302_1308"/>
+													</xs:simpleType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="infAdProd" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Informações adicionais do item</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:minLength value="1"/>
+												<xs:maxLength value="500"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="nItem" use="required">
+									<xs:annotation>
+										<xs:documentation>Número do item da DCe</xs:documentation>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:whiteSpace value="preserve"/>
+											<xs:pattern value="[1-9]{1}[0-9]{0,3}"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="total">
+							<xs:annotation>
+								<xs:documentation>Dados dos totais da DCe</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="vDC" type="TDec_1302">
+										<xs:annotation>
+											<xs:documentation>Valor Total da DCe</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="transp">
+							<xs:annotation>
+								<xs:documentation>Dados dos transportes da DCe</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="modTrans">
+										<xs:annotation>
+											<xs:documentation>Modalidade do transporte</xs:documentation>
+											<xs:documentation>0 - Transporte pelos correios;
+1 - Transporte por contra própria;
+2 - Transporte por empresa transportadora
+</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:whiteSpace value="preserve"/>
+												<xs:enumeration value="0"/>
+												<xs:enumeration value="1"/>
+												<xs:enumeration value="2"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="CNPJTransp" type="TCnpjOpc">
+										<xs:annotation>
+											<xs:documentation>Número do CNPJ da Transportadora</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="infAdic" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Informações Adicionais</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:annotation>
+										<xs:documentation>Sequencia XML</xs:documentation>
+									</xs:annotation>
+									<xs:element name="infAdFisco" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Informações adicionais de interesse do Fisco</xs:documentation>
+											<xs:documentation>Norma referenciada, informações complementares, etc</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:maxLength value="2000"/>
+												<xs:minLength value="1"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="infCpl" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Informações complementares de interesse do Emitente</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:minLength value="1"/>
+												<xs:maxLength value="5000"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="infAdMarketplace" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Informações Adicionais do MarketPlace</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:minLength value="1"/>
+												<xs:maxLength value="5000"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="infAdECT" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Informações Adicionais do Correio</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:minLength value="1"/>
+												<xs:maxLength value="5000"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="obsEmit" minOccurs="0" maxOccurs="10">
+										<xs:annotation>
+											<xs:documentation>Grupo Campo de uso livre do Emitente</xs:documentation>
+											<xs:documentation>Informar o nome do campo no atributo xCampo e o conteúdo do campo no xTexto</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:annotation>
+													<xs:documentation>Sequencia XML</xs:documentation>
+												</xs:annotation>
+												<xs:element name="xTexto">
+													<xs:annotation>
+														<xs:documentation>Conteúdo do Campo</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="TString">
+															<xs:minLength value="1"/>
+															<xs:maxLength value="60"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+											</xs:sequence>
+											<xs:attribute name="xCampo"/>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="obsFisco" minOccurs="0" maxOccurs="10">
+										<xs:annotation>
+											<xs:documentation>Grupo Campo de uso livre do Fisco</xs:documentation>
+											<xs:documentation>Informar o nome do campo no atributo xCampo e o conteúdo do campo no xTexto</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:annotation>
+													<xs:documentation>Sequencia XML</xs:documentation>
+												</xs:annotation>
+												<xs:element name="xTexto">
+													<xs:annotation>
+														<xs:documentation>Conteúdo do Campo</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="TString">
+															<xs:minLength value="1"/>
+															<xs:maxLength value="60"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+											</xs:sequence>
+											<xs:attribute name="xCampo"/>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="obsMarketplace" minOccurs="0" maxOccurs="10">
+										<xs:annotation>
+											<xs:documentation>Grupo Campo de uso livre do MarketPlace</xs:documentation>
+											<xs:documentation>Informar o nome do campo no atributo xCampo e o conteúdo do campo no xTexto</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:annotation>
+													<xs:documentation>Sequencia XML</xs:documentation>
+												</xs:annotation>
+												<xs:element name="xTexto">
+													<xs:annotation>
+														<xs:documentation>Conteúdo do Campo</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="TString">
+															<xs:minLength value="1"/>
+															<xs:maxLength value="60"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+											</xs:sequence>
+											<xs:attribute name="xCampo"/>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="obsECT" minOccurs="0" maxOccurs="10">
+										<xs:annotation>
+											<xs:documentation>Grupo Campo de uso livre dos Correios</xs:documentation>
+											<xs:documentation>Informar o nome do campo no atributo xCampo e o conteúdo do campo no xTexto</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:annotation>
+													<xs:documentation>Sequencia XML</xs:documentation>
+												</xs:annotation>
+												<xs:element name="xTexto">
+													<xs:annotation>
+														<xs:documentation>Conteúdo do Campo</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="TString">
+															<xs:minLength value="1"/>
+															<xs:maxLength value="60"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+											</xs:sequence>
+											<xs:attribute name="xCampo"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="infDec">
+							<xs:annotation>
+								<xs:documentation>Grupo para Declaraçao do usuário emitente</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:annotation>
+										<xs:documentation>Sequencia XML</xs:documentation>
+									</xs:annotation>
+									<xs:element name="xObs1">
+										<xs:annotation>
+											<xs:documentation>Observação 1 ao usuário emitente</xs:documentation>
+											<xs:documentation>Deverá conter o texto fixo “É contribuinte de ICMS qualquer pessoa física ou jurídica, que realize, com habitualidade ou em volume que caracterize intuito comercial, operações de circulação de mercadoria ou prestações de serviços de transportes interestadual e intermunicipal e de comunicação, ainda que as operações e prestações de iniciem no exterior (Lei Complementar nº 87/96, Art. 4º)”</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:maxLength value="2000"/>
+												<xs:minLength value="1"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="xObs2">
+										<xs:annotation>
+											<xs:documentation>Observação 2 ao usuário emitente</xs:documentation>
+											<xs:documentation>Deverá conter o texto fixo “Constitui crime contra a ordem tributária suprimir ou reduzir tributo, ou contribuição social e qualquer acessório: quando negar ou deixar de fornecer, quando obrigatório, nota fiscal ou documento equivalente, relativa a venda de mercadoria ou prestação de serviço, efetivamente realizada ou fornece-la em desacordo com a legislação. Sob pena de reclusão de 2 (dois) e 5 (cinco) anos, e multa (Lei 8.137/90, Art 1ª, V)”.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="TString">
+												<xs:maxLength value="5000"/>
+												<xs:minLength value="1"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="versao" type="TVerDCe" use="required">
+						<xs:annotation>
+							<xs:documentation>Versão do leiaute</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Id" use="required">
+						<xs:annotation>
+							<xs:documentation>Identificador da tag a ser assinada</xs:documentation>
+							<xs:documentation>Informar a chave de acesso precedida do literal "DCe"</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:ID">
+								<xs:pattern value="DCe(1[1-7]{1}|2[1-9]{1}|3[1-3]{1}|3[5]{1}|4[1-3]{1}|5[0-3]{1})[0-9]{42}"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+				<xs:unique name="pk_nItem">
+					<xs:selector xpath="./*"/>
+					<xs:field xpath="@nItem"/>
+				</xs:unique>
+			</xs:element>
+			<xs:element name="infDCeSupl">
+				<xs:annotation>
+					<xs:documentation>Informações suplementares da DCe</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="qrCodDCe">
+							<xs:annotation>
+								<xs:documentation>Texto com o QR-Code impresso da DCe</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="preserve"/>
+									<xs:minLength value="94"/>
+									<xs:maxLength value="600"/>
+									<xs:pattern value="((HTTPS?|https?)://.*\?chDCe=(1[1-7]{1}|2[1-9]{1}|3[1-3]{1}|3[5]{1}|4[1-3]{1}|5[0-3]{1})[0-9]{42}&amp;tpAmb=[1-2](&amp;sign=[!-ÿ]{1}[ -ÿ]{0,}[!-ÿ]{1}|[!-ÿ]{1})?)"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="urlChave">
+							<xs:annotation>
+								<xs:documentation>URL para consulta chave de acesso</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="preserve"/>
+									<xs:minLength value="21"/>
+									<xs:maxLength value="85"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="ds:Signature"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TEndeEmi">
+		<xs:annotation>
+			<xs:documentation>Tipo Dados do Endereço</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="xLgr">
+				<xs:annotation>
+					<xs:documentation>Logradouro</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="nro">
+				<xs:annotation>
+					<xs:documentation>Número</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="xCpl" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Complemento</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="xBairro">
+				<xs:annotation>
+					<xs:documentation>Bairro</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="cMun" type="TCodMunIBGE">
+				<xs:annotation>
+					<xs:documentation>Código do município (utilizar a tabela do IBGE)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xMun">
+				<xs:annotation>
+					<xs:documentation>Nome do município</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="UF" type="TUf">
+				<xs:annotation>
+					<xs:documentation>Sigla da UF</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CEP">
+				<xs:annotation>
+					<xs:documentation>CEP</xs:documentation>
+					<xs:documentation>Informar zeros não significativos</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="preserve"/>
+						<xs:pattern value="[0-9]{8}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="cPais">
+				<xs:annotation>
+					<xs:documentation>Código do País</xs:documentation>
+					<xs:documentation>1058=Brasil</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:enumeration value="1058"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="xPais">
+				<xs:annotation>
+					<xs:documentation>Nome do País exemplo: Brasil ou BRASIL</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:enumeration value="Brasil"/>
+						<xs:enumeration value="BRASIL"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="fone" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Telefone</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="preserve"/>
+						<xs:pattern value="[0-9]{7,12}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TEndeDest">
+		<xs:annotation>
+			<xs:documentation>Tipo Dados do Endereço Destinatario</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="xLgr">
+				<xs:annotation>
+					<xs:documentation>Logradouro</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="nro">
+				<xs:annotation>
+					<xs:documentation>Número</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="xCpl" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Complemento</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="xBairro">
+				<xs:annotation>
+					<xs:documentation>Bairro</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="cMun" type="TCodMunIBGE">
+				<xs:annotation>
+					<xs:documentation>Código do município (utilizar a tabela do IBGE)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xMun">
+				<xs:annotation>
+					<xs:documentation>Nome do município</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="UF" type="TUf">
+				<xs:annotation>
+					<xs:documentation>Sigla da UF</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CEP">
+				<xs:annotation>
+					<xs:documentation>CEP</xs:documentation>
+					<xs:documentation>Informar zeros não significativos</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="preserve"/>
+						<xs:pattern value="[0-9]{8}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="cPais" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Código do país</xs:documentation>
+					<xs:documentation>Utilizar a tabela do BACEN</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="preserve"/>
+						<xs:pattern value="[0-9]{1,4}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="xPais" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Nome do país</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="fone" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Telefone</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="preserve"/>
+						<xs:pattern value="[0-9]{7,12}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="email" type="TEmail" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Endereço de E-mail</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TEndereco">
+		<xs:annotation>
+			<xs:documentation>Tipo Dados do Endereço</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="xLgr">
+				<xs:annotation>
+					<xs:documentation>Logradouro</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="255"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="nro">
+				<xs:annotation>
+					<xs:documentation>Número</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="xCpl" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Complemento</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="xBairro">
+				<xs:annotation>
+					<xs:documentation>Bairro</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="cMun" type="TCodMunIBGE">
+				<xs:annotation>
+					<xs:documentation>Código do município (utilizar a tabela do IBGE), informar 9999999 para operações com o exterior</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xMun">
+				<xs:annotation>
+					<xs:documentation>Nome do município, informar EXTERIOR para operações com o exterior</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CEP" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>CEP</xs:documentation>
+					<xs:documentation>Informar os zeros não significativos</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="preserve"/>
+						<xs:pattern value="[0-9]{8}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="UF" type="TUf">
+				<xs:annotation>
+					<xs:documentation>Sigla da UF, informar EX para operações com o exterior</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cPais" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Código do país</xs:documentation>
+					<xs:documentation>Utilizar a tabela do BACEN</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="preserve"/>
+						<xs:pattern value="[0-9]{1,4}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="xPais" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Nome do país</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="TString">
+						<xs:maxLength value="60"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="fone" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Telefone</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="preserve"/>
+						<xs:pattern value="[0-9]{7,12}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="email" type="TEmail" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Endereço de E-mail</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TProtDCe">
+		<xs:annotation>
+			<xs:documentation>Tipo Protocolo de status resultado do processamento da DCe (Modelo 99)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="infProt">
+				<xs:annotation>
+					<xs:documentation>Dados do protocolo de status</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="tpAmb" type="TAmb">
+							<xs:annotation>
+								<xs:documentation>Identificação do Ambiente:
+1 - Produção
+2 - Homologação</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="verAplic" type="TVerAplic">
+							<xs:annotation>
+								<xs:documentation>Versão do Aplicativo que processou a DCe</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="chDCe" type="TChDFe">
+							<xs:annotation>
+								<xs:documentation>Chave de acesso da DCe</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="dhRecbto" type="TDateTimeUTC">
+							<xs:annotation>
+								<xs:documentation>Data e hora de processamento, no formato AAAA-MM-DDTHH:MM:SS TZD</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="nProt" type="TProt" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Número do Protocolo de Status da DCe</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="digVal" type="ds:DigestValueType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Digest Value da DCe processado. Utilizado para conferir a integridade da DCe original</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="cStat">
+							<xs:annotation>
+								<xs:documentation>Código do status da DCe</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="TStat"/>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="xMotivo" type="TMotivo">
+							<xs:annotation>
+								<xs:documentation>Descrição literal do status da DCe</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="Id" type="xs:ID" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="infFisco" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Mensagem do Fisco</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="cMsg">
+							<xs:annotation>
+								<xs:documentation>Código do status da mensagem do fisco</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="TStat"/>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="xMsg" type="TMotivo">
+							<xs:annotation>
+								<xs:documentation>Mensagem do Fisco</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="ds:Signature" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="versao" type="TVerDCe" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TRetDCe">
+		<xs:annotation>
+			<xs:documentation>Tipo Retorno do Pedido de Autorização de DCe</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tpAmb" type="TAmb">
+				<xs:annotation>
+					<xs:documentation>Identificação do Ambiente:
+1 - Produção
+2 - Homologação</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="verAplic" type="TVerAplic">
+				<xs:annotation>
+					<xs:documentation>Versão do Aplicativo que processou a DCe</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cStat" type="TStat">
+				<xs:annotation>
+					<xs:documentation>código do status da resposta</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xMotivo" type="TMotivo">
+				<xs:annotation>
+					<xs:documentation>Descrição literal do status do do retorno da consulta</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cUF" type="TCodUfIBGE">
+				<xs:annotation>
+					<xs:documentation>Identificação da UF</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="dhRecbto" type="TDateTimeUTC">
+				<xs:annotation>
+					<xs:documentation>Preenchido com a data e hora do processamento (informado também no caso de rejeição).
+Formato: “AAAA-MM-DDThh:mm:ssTZD” (UTC – Universal Coordinated Time)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="protDCe" type="TProtDCe" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Resposta ao processamento da DCe</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="versao" type="TVerDCe" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TImp">
+		<xs:annotation>
+			<xs:documentation>Tipo Dados do Imposto DCe</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:simpleType name="TProcEmi">
+		<xs:annotation>
+			<xs:documentation>Tipo processo de emissão do DCe</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:enumeration value="0"/>
+			<xs:enumeration value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TVerDCe">
+		<xs:annotation>
+			<xs:documentation>Tipo Versão da DCe</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:pattern value="1\.00"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TTime">
+		<xs:annotation>
+			<xs:documentation>Tipo hora</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:pattern value="(([0-1][0-9])|([2][0-3])):([0-5][0-9]):([0-5][0-9])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TEmail">
+		<xs:annotation>
+			<xs:documentation>Tipo Email</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:minLength value="1"/>
+			<xs:maxLength value="60"/>
+			<xs:pattern value="[^@]+@[^\.]+\..+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TFinDCe">
+		<xs:annotation>
+			<xs:documentation>Finalidade da DCe</xs:documentation>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="0"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TDoc">
+		<xs:annotation>
+			<xs:documentation>Tipo de Documento de Identificação</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+			<xs:enumeration value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TCRT">
+		<xs:annotation>
+			<xs:documentation>Tipo Código Regime Tributário</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TtpEmis">
+		<xs:annotation>
+			<xs:documentation>Tipo de emissão da DCe</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TUtilizacao">
+		<xs:annotation>
+			<xs:documentation>Tipo utilização</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:whiteSpace value="preserve"/>
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+			<xs:enumeration value="5"/>
+			<xs:enumeration value="6"/>
+			<xs:enumeration value="7"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TCompet">
+		<xs:annotation>
+			<xs:documentation>Tipo Competência</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="6"/>
+			<xs:maxLength value="6"/>
+			<xs:whiteSpace value="preserve"/>
+			<xs:pattern value="[0-9]{1,6}"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

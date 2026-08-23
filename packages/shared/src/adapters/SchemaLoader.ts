@@ -27,7 +27,7 @@ const dir = path.join(baseDir, '../resources/schemas');
  */
 
 interface SchemaProps {
-  [key: string]: string;
+  [key: string]: string | undefined;
 }
 
 export const getSchema = (metodo: string) => {
@@ -49,6 +49,15 @@ export const getSchema = (metodo: string) => {
     NFSe_Distribuicao: `${pathSchemas}/nfse/NFSe_v1.01.xsd`,
     NFSe_Eventos: `${pathSchemas}/nfse/pedRegEvento_v1.01.xsd`,
     NFSe_ParametrosMunicipais: undefined, // API REST - não usa XML schema
+    // DCE - Declaração de Conteúdo eletrônica
+    DCEAutorizacao: `${pathSchemas}/dce/dce/dce_v1.00.xsd`,
+    DCEAutorizacaoZip: `${pathSchemas}/dce/dce/dce_v1.00.xsd`,
+    DCEStatusServico: `${pathSchemas}/dce/consulta/consStatServDCe_v1.00.xsd`,
+    DCEConsultaProtocolo: `${pathSchemas}/dce/consulta/consSitDCe_v1.00.xsd`,
+    DCERecepcaoEvento: `${pathSchemas}/dce/evento/eventoDCe_v1.00.xsd`,
+    DCECancelamento: `${pathSchemas}/dce/evento/eventoDCe_v1.00.xsd`,
+    DCEDistribuicao: `${pathSchemas}/dce/distribuicao/distDCe_v1.00.xsd`,
+    DCEDistribuicaoAut: `${pathSchemas}/dce/distribuicao/distDCeAut_v1.00.xsd`,
   }
 
   try {
