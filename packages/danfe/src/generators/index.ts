@@ -24,8 +24,10 @@
 import { NFeGerarDanfe } from './NFEGerarDanfe.js';
 import { NFCeGerarDanfe } from './NFCEGerarDanfe.js';
 import { NFSeGerarDanfe } from './NFSeGerarDanfe.js';
+import { CTeGerarDacte } from './CTEGerarDacte.js';
 import { XmlParser } from '@nfewizard/shared';
 import type { NFEGerarDanfeProps } from '@nfewizard/types/nfe';
+import type { CTEGerarDacteProps } from '@nfewizard/types/cte';
 import type { NFSeGerarDanfeProps } from './NFSeGerarDanfe.js';
 
 // `NFCEGerarDanfeProps` n\u00e3o existe como tipo separado: o gerador de NFCe
@@ -33,7 +35,7 @@ import type { NFSeGerarDanfeProps } from './NFSeGerarDanfe.js';
 type NFCEGerarDanfePropsLocal = NFEGerarDanfeProps;
 
 // Exporta as classes originais
-export { NFeGerarDanfe, NFCeGerarDanfe, NFSeGerarDanfe };
+export { NFeGerarDanfe, NFCeGerarDanfe, NFSeGerarDanfe, CTeGerarDacte };
 
 /**
  * Variante de input que aceita o XML autorizado (`nfeProc`) ou a `NFe`
@@ -94,6 +96,51 @@ export async function NFCE_GerarDanfe(params: NFCEGerarDanfePropsLocal | NFEGera
     const normalized = normalizeDanfeParams(params as NFEGerarDanfeProps | NFEGerarDanfePropsFromXml);
     const danfe = new NFCeGerarDanfe(normalized);
     return await danfe.generatePDF();
+}
+
+/**
+ * Variante de input que aceita o XML autorizado (`cteProc`) ou o `CTe`
+ * solo em string. Internamente, o XML é convertido para o JSON do padrão
+ * esperado pelo gerador antes de prosseguir com o fluxo normal.
+ */
+export type CTEGerarDactePropsFromXml = Omit<CTEGerarDacteProps, 'data' | 'chave'> & {
+    /** XML autorizado (`cteProc`) ou XML do `CTe`. */
+    data: string;
+    /** Chave de acesso. Opcional quando o XML contém `protCTe.infProt.chCTe` ou `infCte.Id`. */
+    chave?: string;
+};
+
+function isCteXmlInput(params: CTEGerarDacteProps | CTEGerarDactePropsFromXml): params is CTEGerarDactePropsFromXml {
+    return typeof (params as CTEGerarDactePropsFromXml).data === 'string';
+}
+
+function normalizeDacteParams(params: CTEGerarDacteProps | CTEGerarDactePropsFromXml): CTEGerarDacteProps {
+    if (!isCteXmlInput(params)) return params;
+
+    const { data: xml, chave: chaveOverride, ...rest } = params;
+    const { data, chave } = new XmlParser().convertXmlCteProcToJson(xml);
+
+    return {
+        ...rest,
+        data: data as CTEGerarDacteProps['data'],
+        chave: chaveOverride || chave,
+    } as CTEGerarDacteProps;
+}
+
+/**
+ * Gera DACTE (Documento Auxiliar do Conhecimento de Transporte Eletrônico).
+ *
+ * Aceita tanto o JSON do padrão da lib (`CTEGerarDacteProps`) quanto um XML
+ * autorizado em string (`CTEGerarDactePropsFromXml`); neste último caso, o
+ * XML é convertido em JSON antes de gerar o PDF.
+ *
+ * @param params - Parâmetros para geração do DACTE.
+ * @returns Promise com o resultado da geração do PDF.
+ */
+export async function CTE_GerarDacte(params: CTEGerarDacteProps | CTEGerarDactePropsFromXml) {
+    const normalized = normalizeDacteParams(params);
+    const dacte = new CTeGerarDacte(normalized);
+    return await dacte.generatePDF();
 }
 
 /**
