@@ -274,6 +274,38 @@ export class XmlParser {
     }
 
     /**
+     * Converte um XML de NFSe (padrão nacional — nó `NFSe`/`infNFSe`) em uma
+     * estrutura JSON compatível com o gerador de DANFSe, além de retornar a
+     * chave de acesso quando disponível (atributo `Id` do nó `infNFSe`).
+     *
+     * Formatos aceitos:
+     *  - `NFSe` completa (retorno da autorização/consulta/distribuição).
+     *  - `infNFSe` solo.
+     *
+     * @param xml String XML de entrada.
+     */
+    convertXmlNFSeToJson(xml: string): { data: GenericObject; chave: string } {
+        logger.info('Convertendo NFSe para JSON', {
+            context: 'XmlParser',
+            method: 'convertXmlNFSeToJson',
+        });
+
+        const jsonData = this.parseNfeLikeXml(xml);
+
+        const NFSe = this.findInObj(jsonData, 'NFSe');
+        const infNFSe = NFSe ? this.findInObj(NFSe, 'infNFSe') : this.findInObj(jsonData, 'infNFSe');
+        if (!infNFSe || typeof infNFSe !== 'object') {
+            throw new Error('XML inválido: não foi possível localizar `NFSe` ou `infNFSe`.');
+        }
+
+        // A chave de acesso da NFSe é o atributo `Id` prefixado com "NFS".
+        const idAttr: string = typeof infNFSe.Id === 'string' ? infNFSe.Id : '';
+        const chave = idAttr.replace(/^NFS/, '');
+
+        return { data: { infNFSe }, chave };
+    }
+
+    /**
      * Faz o parse de um XML de NFe/NFCe (envio, retorno ou solo) preservando
      * atributos e elevando-os para o nível do elemento (ex.: `Id` em `infNFe`,
      * `versao` em `NFe`, `nItem` em `det`). Necessário para alimentar o

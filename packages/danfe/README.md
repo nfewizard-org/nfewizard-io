@@ -99,35 +99,11 @@ await NFCE_GerarDanfe({
 
 ```typescript
 import { NFSE_GerarDanfe } from '@nfewizard/danfe';
-import { Environment } from '@nfewizard/shared';
-import axios from 'axios';
 
-// Configurar environment com certificado
-const environment = new Environment({
-    dfe: {
-        pathCertificado: "certificado.pfx",
-        senhaCertificado: "1234",
-        UF: "SP",
-    },
-    nfse: {
-        ambiente: 2, // 1=Produção, 2=Homologação
-    }
-});
-
-// Carregar environment
-await environment.loadEnvironment();
-
-// Criar axios instance
-const axiosInstance = axios.create();
-
-// Gerar DANFSe
+// Gerar DANFSe localmente a partir do XML autorizado
 const resultado = await NFSE_GerarDanfe({
-    environment,
-    axios: axiosInstance,
-    data: {
-        chaveAcesso: '35000000000000000000000000000000000000000001',
-        outputPath: './danfse.pdf' // Caminho onde o PDF será salvo
-    }
+    data: xmlDaNFSe,
+    outputPath: './danfse.pdf'
 });
 
 console.log(resultado.message); // DANFSe gerada em './danfse.pdf'
