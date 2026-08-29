@@ -25,7 +25,8 @@ export default [
       'date-fns/locale',
       'fs',
       'path',
-      'url'
+      'url',
+      'zlib'
     ],
     plugins: [
       json(),
@@ -63,7 +64,8 @@ export default [
       'date-fns/locale',
       'fs',
       'path',
-      'url'
+      'url',
+      'zlib'
     ],
     plugins: [
       json(),

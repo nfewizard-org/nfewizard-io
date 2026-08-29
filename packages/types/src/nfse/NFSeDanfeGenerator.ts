@@ -17,11 +17,17 @@
 
 export type NFSeGerarDanfeProps = {
     /**
-     * @param {string} chaveAcesso - Chave de acesso da NFSe
+     * @param {string} data - XML da NFSe, XML em Base64 ou GZip + Base64
      */
-    chaveAcesso: string;
+    data: string;
     /**
      * @param {string} outputPath - Local onde a DANFSe será gravada
      */
     outputPath: string;
+    /** Chave de acesso, caso não esteja disponível no atributo `Id` do XML. */
+    chave?: string;
+    /** Exibe a marca d'água "NFeWizard-io" no rodapé. */
+    exibirMarcaDaguaDanfe?: boolean;
+    /** URL base usada na consulta de autenticidade e no QR Code. */
+    urlConsulta?: string;
 };
