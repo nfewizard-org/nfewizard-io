@@ -17,6 +17,7 @@
 import { Environment, GerarConsulta, logger, NFE_SchemaValidate, SaveFiles, SchemaValidateMethod, Utility, XmlBuilder } from '@nfewizard/shared';
 import {
   DpsConsultaPorId,
+  NFeWizardProps,
   NFSeAlteracaoBeneficioMunicipal,
   NFSeAlteracaoRetencoes,
   NFSeConfig,
@@ -59,12 +60,14 @@ export default class NFSe {
 
   constructor(config: NFSeConfig) {
     // Valida se a configuração obrigatória foi fornecida
-    if (!config.nfe?.ambiente) {
-      throw new Error('Configuração NFSe incompleta. Por favor, forneça "nfe.ambiente".');
+    if (!config.nfse?.ambiente) {
+      throw new Error('Configuração NFSe incompleta. Por favor, forneça "nfse.ambiente".');
     }
 
-    // Cria o environment próprio - passa a config diretamente
-    const environment = new Environment(config);
+    // Environment é compartilhado com os pacotes NFe/NFCe e é tipado com a
+    // chave "nfe" (comum a esses pacotes). O restante da config (dfe, lib,
+    // email) é idêntico, então repassamos como está.
+    const environment = new Environment(config as unknown as NFeWizardProps);
     this.environment = environment;
 
     // Carrega o environment automaticamente

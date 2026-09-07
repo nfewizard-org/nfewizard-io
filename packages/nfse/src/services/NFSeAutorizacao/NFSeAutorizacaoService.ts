@@ -15,7 +15,7 @@
  * along with Treeunfe DFe. If not, see <https://www.gnu.org/licenses/>.
  */
 import { XmlBuilder, Environment, Utility, logger, XmlParser, BaseNFSe } from '@nfewizard/shared';
-import { GerarConsultaImpl, NFSeAutorizacaoServiceImpl, SaveFilesImpl, GenericObject, LayoutDPS, LayoutNFSe, NFSe, NFSeAutorizacaoResponse } from '@nfewizard/types';
+import { GerarConsultaImpl, NFSeAutorizacaoServiceImpl, SaveFilesImpl, GenericObject, LayoutDPS, LayoutNFSe, NFSe, NFSeAutorizacaoResponse, NFSeConfig } from '@nfewizard/types';
 import { AxiosInstance } from 'axios';
 import { Buffer } from 'buffer';
 import { gunzipSync, gzipSync } from 'zlib';
@@ -311,8 +311,8 @@ class NFSeAutorizacaoService extends BaseNFSe implements NFSeAutorizacaoServiceI
      * Monta o XML do DPS a partir do objeto JSON
      */
     private gerarXmlDPS(dps: LayoutDPS): string {
-        const config = this.environment.getConfig();
-        const ambiente = config.nfe.ambiente || 2;
+        const config = this.environment.getConfig() as unknown as NFSeConfig;
+        const ambiente = config.nfse.ambiente || 2;
 
         // Gera o ID do DPS se não foi fornecido
         const idDPS = dps.infDps.Id || this.gerarIdDPS(dps);

@@ -104,7 +104,7 @@ useForSchemaValidation: 'validateSchemaJsBased'
 
 ```typescript
 import NFSe from '@nfewizard/nfse';
-import { NFSe as NFSeType } from '@nfewizard/types';
+import { NFSe as NFSeType, NFSeEventoRequest } from '@nfewizard/types';
 
 // Instanciar com configuração
 const nfseWizard = new NFSe({
@@ -163,10 +163,25 @@ const distribuicao = await nfseWizard.DistribuicaoPorNSU({
 });
 
 // Exemplo 5: Cancelamento de NFSe
-const eventoCancelamento = {
+// O corpo do evento segue o layout pedRegEvento/infPedReg da SEFIN Nacional,
+// não um objeto plano. O evento específico (ex.: cancelamento) fica na chave
+// "e101101", nomeada conforme o código do tipo de evento (TipoEventoNFSe).
+const eventoCancelamento: NFSeEventoRequest = {
     chaveAcesso: '35000000000000000000000000000000000000000001',
-    tpEvento: '101101', // Cancelamento
-    motivo: 'Motivo do cancelamento com no mínimo 15 caracteres'
+    pedRegEvento: {
+        infPedReg: {
+            tpAmb: 2, // 1=Produção, 2=Homologação
+            verAplic: '1.00',
+            // dhEvento: AAAA-MM-DDThh:mm:ss±hh:00 (sem milissegundos; offset com minutos "00")
+            dhEvento: '2026-01-25T22:00:00-03:00',
+            chNFSe: '35000000000000000000000000000000000000000001',
+            e101101: {
+                xDesc: 'Cancelamento de NFS-e',
+                cMotivo: 1, // 1=Erro na Emissão, 2=Serviço não Prestado, 9=Outros
+                xMotivo: 'Motivo do cancelamento com no mínimo 15 caracteres'
+            }
+        }
+    }
 };
 
 const resultadoCancelamento = await nfseWizard.RegistrarEvento(eventoCancelamento);

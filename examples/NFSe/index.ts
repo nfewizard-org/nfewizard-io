@@ -12,9 +12,9 @@ const testNFSe = async () => {
             armazenarXMLRetorno: true,
             pathXMLRetorno: "tmp/NFSe/Retorno",
         },
-        nfe: {
+        nfse: {
             ambiente: 2, // 1 = Produção, 2 = Homologação
-            versaoDF: "1.0.0",
+            versao: "1.0.0",
         },
         lib: {
             useForSchemaValidation: 'validateSchemaJsBased', // Usar validação JavaScript para NFSe

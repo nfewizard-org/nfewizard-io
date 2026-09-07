@@ -109,7 +109,7 @@ const environment = new Environment({
         senhaCertificado: "1234",
         UF: "SP",
     },
-    nfse: {
+    nfe: {
         ambiente: 2, // 1=Produção, 2=Homologação
     }
 });

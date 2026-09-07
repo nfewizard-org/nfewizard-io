@@ -93,7 +93,7 @@ const buildEnvironment = () => ({
       pathXMLAutorizacao: 'tmp/NFSe/Autorizacao',
       incluirTimestampNoNomeDosArquivos: false,
     },
-    nfe: {
+    nfse: {
       ambiente: 2,
     },
   }),
