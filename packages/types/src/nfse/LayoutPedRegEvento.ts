@@ -65,5 +65,7 @@ export type EventoCancelamento = {
  */
 export type EventoCancelamentoSubstituicao = {
   xDesc: 'Cancelamento de NFS-e por Substituição';
-  chNFSeSubst: string; // Chave da NFSe substituta
+  cMotivo: '01' | '02' | '03' | '04' | '05' | '99'; // TSCodJustSubst
+  xMotivo?: string; // Descrição do motivo
+  chSubstituta: string; // Chave da NFSe substituta
 };
