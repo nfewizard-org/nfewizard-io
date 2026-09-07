@@ -103,9 +103,226 @@ export type InfDPS = {
      */
     subst?: InfoSubstituicao;
     /**
-     * Informações de IBS/CBS (opcional)
+     * Informações de IBS/CBS declaradas pelo emitente (opcional - obrigatório
+     * a partir da competência de corte da reforma tributária)
      */
-    IBSCBS?: any;
+    IBSCBS?: InfoIBSCBS;
+};
+
+/**
+ * Informações de IBS/CBS declaradas pelo emitente (grupo IBSCBS da DPS,
+ * TCRTCInfoIBSCBS no schema NFSe 1.01)
+ */
+export type InfoIBSCBS = {
+    /**
+     * Indicador da finalidade de emissão da NFS-e: 0 - NFS-e regular
+     */
+    finNFSe: 0;
+    /**
+     * Indica operação de uso ou consumo pessoal (art. 57): 0 - Não; 1 - Sim (opcional)
+     */
+    indFinal?: 0 | 1;
+    /**
+     * Código indicador da operação de fornecimento (6 dígitos), conforme tabela oficial
+     */
+    cIndOp: string;
+    /**
+     * Tipo de operação com entes governamentais ou bens imóveis (opcional):
+     * 1 - Fornecimento com pagamento posterior;
+     * 2 - Recebimento do pagamento com fornecimento já realizado;
+     * 3 - Fornecimento com pagamento já realizado;
+     * 4 - Recebimento do pagamento com fornecimento posterior;
+     * 5 - Fornecimento e recebimento do pagamento concomitantes
+     */
+    tpOper?: 1 | 2 | 3 | 4 | 5;
+    /**
+     * Chaves de acesso das NFS-e referenciadas (opcional, até 99 ocorrências)
+     */
+    gRefNFSe?: { refNFSe: string[] };
+    /**
+     * Tipo de ente governamental (opcional): 1 - União; 2 - Estado; 3 - Distrito Federal; 4 - Município
+     */
+    tpEnteGov?: 1 | 2 | 3 | 4;
+    /**
+     * A respeito do destinatário dos serviços:
+     * 0 - o destinatário é o próprio tomador/adquirente;
+     * 1 - o destinatário não é o próprio adquirente
+     */
+    indDest: 0 | 1;
+    /**
+     * Informações do destinatário (opcional, esperado quando indDest = 1)
+     */
+    dest?: InfoDestIBSCBS;
+    /**
+     * Informações de bem imóvel, exceto obra (opcional)
+     */
+    imovel?: InfoImovelIBSCBS;
+    /**
+     * Valores do serviço prestado para IBS e CBS
+     */
+    valores: InfoValoresIBSCBS;
+};
+
+/**
+ * Identificação básica de pessoa dentro do grupo IBSCBS (compartilhada por
+ * dest e pelo fornecedor de gReeRepRes)
+ */
+export type IdentificacaoIBSCBS = {
+    CNPJ?: string;
+    CPF?: string;
+    /**
+     * Número de Identificação Fiscal emitido por administração tributária no exterior
+     */
+    NIF?: string;
+    /**
+     * Motivo para não informação do NIF: 0 - Não informado na nota de origem; 1 - Dispensado; 2 - Não exigência
+     */
+    cNaoNIF?: 0 | 1 | 2;
+};
+
+/**
+ * Informações do destinatário do serviço (grupo dest do IBSCBS)
+ */
+export type InfoDestIBSCBS = IdentificacaoIBSCBS & {
+    xNome: string;
+    end?: Endereco;
+    fone?: string;
+    email?: string;
+};
+
+/**
+ * Informações de bem imóvel do IBSCBS (grupo imovel) - exige cCIB ou end
+ */
+export type InfoImovelIBSCBS = {
+    /**
+     * Inscrição imobiliária fiscal (opcional)
+     */
+    inscImobFisc?: string;
+    /**
+     * Código do Cadastro Imobiliário Brasileiro
+     */
+    cCIB?: string;
+    /**
+     * Endereço da obra do serviço prestado
+     */
+    end?: EnderecoObraIBSCBS;
+};
+
+/**
+ * Endereço do imóvel do IBSCBS (TCEnderObraEvento) - exige CEP (nacional) ou endExt (exterior)
+ */
+export type EnderecoObraIBSCBS = {
+    CEP?: string;
+    endExt?: any;
+    xLgr: string;
+    nro: string;
+    xCpl?: string;
+    xBairro: string;
+};
+
+/**
+ * Documento fiscal eletrônico do Repositório Nacional (TCRTCListaDocDFe)
+ */
+export type DocumentoFiscalEletronicoReferenciado = {
+    tipoChaveDFe: 1 | 2 | 3 | 9;
+    /**
+     * Obrigatório apenas quando tipoChaveDFe = 9 (Outro)
+     */
+    xTipoChaveDFe?: string;
+    chaveDFe: string;
+};
+
+/**
+ * Documento fiscal fora do Repositório Nacional (TCRTCListaDocFiscalOutro)
+ */
+export type DocumentoFiscalOutroReferenciado = {
+    cMunDocFiscal: string;
+    nDocFiscal: string;
+    xDocFiscal: string;
+};
+
+/**
+ * Documento não fiscal (TCRTCListaDocOutro)
+ */
+export type DocumentoOutroReferenciado = {
+    nDoc: string;
+    xDoc: string;
+};
+
+export type FornecedorReeRepRes = IdentificacaoIBSCBS & {
+    xNome: string;
+};
+
+/**
+ * Documento referenciado num reembolso, repasse ou ressarcimento de valores
+ * já tributados por terceiros (TCRTCListaDoc) - exige exatamente uma das
+ * três formas de identificar o documento: dFeNacional, docFiscalOutro ou docOutro
+ */
+export type DocumentoReeRepRes = {
+    dFeNacional?: DocumentoFiscalEletronicoReferenciado;
+    docFiscalOutro?: DocumentoFiscalOutroReferenciado;
+    docOutro?: DocumentoOutroReferenciado;
+    fornec?: FornecedorReeRepRes;
+    dtEmiDoc: string;
+    dtCompDoc: string;
+    /**
+     * 01 - Reembolso; 02 - Repasse; 03 - Ressarcimento; 04 - Complementação; 99 - Outros
+     */
+    tpReeRepRes: '01' | '02' | '03' | '04' | '99';
+    /**
+     * Obrigatório apenas quando tpReeRepRes = 99 (Outros)
+     */
+    xTpReeRepRes?: string;
+    vlrReeRepRes: number;
+};
+
+/**
+ * Valores do serviço prestado para IBS/CBS (grupo valores do IBSCBS)
+ */
+export type InfoValoresIBSCBS = {
+    /**
+     * Reembolso/repasse/ressarcimento de valores já tributados por terceiros
+     * (opcional, até 1000 ocorrências)
+     */
+    gReeRepRes?: { documentos: DocumentoReeRepRes[] };
+    /**
+     * Tributos relacionados ao IBS e à CBS
+     */
+    trib: InfoTributosIBSCBS;
+};
+
+export type InfoTributosIBSCBS = {
+    gIBSCBS: InfoSitClasIBSCBS;
+};
+
+/**
+ * Situação e classificação tributária do IBS e da CBS (grupo gIBSCBS)
+ */
+export type InfoSitClasIBSCBS = {
+    /**
+     * Código de Classificação Tributária do IBS e da CBS (6 dígitos).
+     * O Código de Situação Tributária (CST) NÃO é informado à parte: são
+     * sempre os 3 primeiros dígitos do cClassTrib (regra de negócio 627 do
+     * SEFIN Nacional) - é derivado automaticamente ao montar o XML, pra
+     * nunca gerar um par CST/cClassTrib inconsistente.
+     */
+    cClassTrib: string;
+    /**
+     * Código e classificação do crédito presumido (2 dígitos, opcional)
+     */
+    cCredPres?: string;
+    /**
+     * Tributação regular (opcional). CSTReg também é derivado do cClassTribReg.
+     */
+    gTribRegular?: { cClassTribReg: string };
+    /**
+     * Diferimento para IBS e CBS (opcional)
+     */
+    gDif?: {
+        pDifUF: number;
+        pDifMun: number;
+        pDifCBS: number;
+    };
 };
 
 /**
