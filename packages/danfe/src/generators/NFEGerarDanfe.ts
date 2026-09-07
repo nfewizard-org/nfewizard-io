@@ -23,6 +23,7 @@ import { ICMS, IPI, DetProd, Ide, Dest, Emit, Total, Transp, InfAdic, Vol, ProtN
 import { format, parseISO } from 'date-fns';
 import PDFDocument from 'pdfkit';
 import { ValidaCPFCNPJ } from '@nfewizard/shared';
+import { getCstOrCsosn } from './utils/getCstOrCsosn';
 
 // Suporte para módulos ES
 const __filename = fileURLToPath(import.meta.url);
@@ -939,7 +940,7 @@ class NFeGerarDanfe {
             });
             this.doc.rect(left + 208, top, 17, defaultItemHeight).fillAndStroke('#DDDDDD', '#1c1c1c');
             this.setLineStyle(0.75, '#1c1c1c');
-            this.doc.text('CST', left + 208, top + 5.9, {
+            this.doc.font('Times-Roman').fontSize(5.7).text('CST/\nCSOSN', left + 208, top + 2.8, {
                 width: 17,
                 align: 'center'
             });
@@ -1020,29 +1021,6 @@ class NFeGerarDanfe {
         const row = (top: number, item: DetProd) => {
             const formatDecimal = this.formatDecimal.bind(this);
 
-            function getCST(ICMS: ICMS): string {
-                const chavesICMS: (keyof ICMS)[] = Object.keys(ICMS) as (keyof ICMS)[];
-
-                const listaIcmsSemCST = [
-                    'ICMSSN101',
-                    'ICMSSN102',
-                    'ICMSSN201',
-                    'ICMSSN202',
-                    'ICMSSN500',
-                    'ICMSSN900'
-                ];
-
-                const icmsSemCST = listaIcmsSemCST.includes(chavesICMS[0]);
-
-                let CST = '';
-                if (chavesICMS.length > 0) {
-                const tipoICMS = chavesICMS[0];
-                    if (!icmsSemCST) {
-                        CST = (ICMS[tipoICMS] as any).CST;
-                    }
-                }
-                return CST;
-            }
             function getValoresItem(ICMS: ICMS): {
                 vBC: string,
                 vICMS: string,
@@ -1097,7 +1075,7 @@ class NFeGerarDanfe {
                 let pIPI = formatDecimal(IPI.IPITrib.pIPI);
                 return { vIPI, pIPI }
             }
-            const CST = getCST(item.imposto.ICMS as ICMS);
+            const CST = getCstOrCsosn(item.imposto.ICMS as ICMS);
             const { vIPI, pIPI } = getValoresIPI(item.imposto.IPI);
             const { vBC, vICMS, pICMS } = getValoresItem(item.imposto.ICMS as ICMS);
 

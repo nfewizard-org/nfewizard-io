@@ -37,7 +37,8 @@
   "scripts": {
     "build": "rollup -c",
     "clean": "rm -rf dist",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
   },
   "dependencies": {
     "@nfewizard/types": "workspace:*",
