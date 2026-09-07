@@ -6,7 +6,7 @@ Ao abrir issue ou PR, inclua:
 
 ```markdown
 ## Parametrização
-- Tipo de DANFE: NFe / NFCe / NFSe
+- Tipo de DANFE: NFe / NFCe / NFSe / CTe
 ```
 
 ## Logs Relevantes
@@ -41,11 +41,19 @@ Inclua também informações detalhadas sobre o erro:
     - Autenticação mútua TLS com certificado digital
     - Suporte para diferentes municípios
 
+- **DACTE para CTe**: Geração do Documento Auxiliar do Conhecimento de Transporte Eletrônico com:
+    - Código de barras e QR Code (`infCTeSupl`)
+    - Remetente, destinatário, expedidor, recebedor e tomador do serviço
+    - Dados da carga e componentes do valor da prestação
+    - Informações relativas ao imposto (ICMS)
+    - Documentos originários (NF-e, NF em papel e outros) com múltiplas páginas
+    - Quadro específico por modal (rodoviário, aéreo, aquaviário, ferroviário, dutoviário e multimodal)
+
 ## Características
 
-- ✅ **Suporta NFe, NFCe e NFSe**
-- ✅ **QR Code** para NFCe
-- ✅ **Código de barras** para NFe
+- ✅ **Suporta NFe, NFCe, NFSe e CTe**
+- ✅ **QR Code** para NFCe e CTe
+- ✅ **Código de barras** para NFe e CTe
 - ✅ **Download via webservice** para NFSe
 - ✅ **TypeScript** - Tipos completos incluídos
 - ✅ **Alta qualidade** - PDFs profissionais e bem formatados
@@ -92,6 +100,36 @@ await NFCE_GerarDanfe({
     chave,
     outputPath: './nfce-danfe.pdf', // Caminho onde o PDF será salvo
     pageWidth: 226.772 // Largura para NFCe (80mm)
+});
+```
+
+### DACTE para CTe
+
+```typescript
+import { CTE_GerarDacte } from '@nfewizard/danfe';
+
+// Json de retorno da lib @nfewizard/cte
+const data = {} as any;
+const chave = '99999999999999999999999999999999999999999999';
+
+// Gerar DACTE
+await CTE_GerarDacte({
+    data, // Objeto completo com CTe e protCTe
+    chave,
+    outputPath: './dacte.pdf' // Caminho onde o PDF será salvo
+});
+```
+
+Também é possível informar diretamente o XML autorizado (`cteProc`) ou o `CTe` solo.
+Neste caso a `chave` é opcional, pois é lida de `protCTe.infProt.chCTe` ou de `infCte.Id`:
+
+```typescript
+import fs from 'fs';
+import { CTE_GerarDacte } from '@nfewizard/danfe';
+
+await CTE_GerarDacte({
+    data: fs.readFileSync('./cte.xml', 'utf8'),
+    outputPath: './dacte.pdf'
 });
 ```
 

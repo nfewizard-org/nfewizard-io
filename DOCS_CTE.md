@@ -7,6 +7,7 @@ A biblioteca NFeWizard-io agora oferece suporte para consulta e distribuição d
 - **Consulta por NSU**: Busca documentos CT-e a partir de um NSU específico
 - **Consulta por Último NSU**: Busca documentos CT-e a partir do último NSU consultado
 - **Download Automático**: Salvamento automático de documentos CT-e descompactados
+- **Geração do DACTE**: Emissão em PDF do Documento Auxiliar do Conhecimento de Transporte Eletrônico
 
 ## 🚀 Como Utilizar
 
@@ -59,6 +60,60 @@ const ultimoNSUCTe: DFePorUltimoNSUCTe = {
 
 await nfeWizard.CTE_DistribuicaoDFePorUltNSU(ultimoNSUCTe);
 ```
+
+## 🖨️ Geração do DACTE
+
+O DACTE é gerado pelo pacote `@nfewizard/danfe`, através da função `CTE_GerarDacte`.
+
+```bash
+npm install @nfewizard/danfe
+```
+
+### A partir do XML autorizado
+
+Aceita o `cteProc` (CT-e + protocolo) ou o `CTe` solo. Neste formato a `chave` é
+opcional, pois é lida de `protCTe.infProt.chCTe` ou de `infCte.Id`:
+
+```typescript
+import fs from 'fs';
+import { CTE_GerarDacte } from '@nfewizard/danfe';
+
+const resultado = await CTE_GerarDacte({
+    data: fs.readFileSync('./tmp/DistribuicaoDFe/3525...1234-proc-000000000000102.xml', 'utf8'),
+    outputPath: './dacte.pdf'
+});
+
+console.log(resultado.message); // DACTE Gerado em './dacte.pdf'
+```
+
+### A partir do JSON
+
+```typescript
+import { CTE_GerarDacte } from '@nfewizard/danfe';
+import { CTEGerarDacteProps } from '@nfewizard/types/cte';
+
+const params: CTEGerarDacteProps = {
+    data: {
+        CTe: { /* infCte */ } as any,
+        protCTe: { /* infProt */ } as any
+    },
+    chave: '99999999999999999999999999999999999999999999',
+    outputPath: './dacte.pdf'
+};
+
+await CTE_GerarDacte(params);
+```
+
+### O que o DACTE contém
+
+- Canhoto de recebimento, código de barras da chave de acesso e QR Code (`infCTeSupl.qrCodCTe`)
+- Identificação do emitente, modal, tipo do CT-e e protocolo de autorização
+- Origem e destino da prestação, CFOP e natureza da prestação
+- Remetente, destinatário, expedidor, recebedor e tomador do serviço
+- Dados da carga (produto predominante, quantidades) e componentes do valor da prestação
+- Informações relativas ao ICMS (`ICMS00`, `ICMS20`, `ICMS45`, `ICMS60`, `ICMS90`, `ICMSOutraUF` e `ICMSSN`)
+- Documentos originários (NF-e, notas em papel e outros), com quebra automática de página
+- Quadro específico do modal informado (rodoviário, aéreo, aquaviário, ferroviário, dutoviário ou multimodal)
 
 ## 📂 Estrutura de Arquivos Salvos
 
@@ -113,8 +168,11 @@ A biblioteca lança exceções em caso de:
 import { 
     DFePorNSUCTe, 
     DFePorUltimoNSUCTe,
-    ConsultaCTe 
-} from 'nfewizard-io';
+    ConsultaCTe,
+    CTEGerarDacteProps,
+    LayoutCTe,
+    ProtCTe
+} from '@nfewizard/types/cte';
 ```
 
 ## 🤝 Contribua
