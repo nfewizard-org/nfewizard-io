@@ -1,30 +1,31 @@
 /*
  * This file is part of NFeWizard-io.
- * 
+ *
  * NFeWizard-io is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * NFeWizard-io is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
+import { NFEConsultaCadastroServiceImpl } from '@nfewizard/types/shared';
 
-export * from './NFEAutorizacao.js';
-export * from './NFEDistribuicaoDFe.js';
-export * from './NFEInutilizacao.js';
-export * from './NFEConsultaCadastro.js';
-export * from './NFERecepcaoEvento.js';
-export * from './EmailConfig.js';
-export * from './NFEDanfeGenerator.js';
+export class NFEConsultaCadastro implements NFEConsultaCadastroServiceImpl {
+    nfeConsultaCadastroService: NFEConsultaCadastroServiceImpl;
+    constructor(nfeConsultaCadastroService: NFEConsultaCadastroServiceImpl) {
+        this.nfeConsultaCadastroService = nfeConsultaCadastroService;
+    }
 
-// Re-export GenericObject from shared
-export type { GenericObject } from '../shared/Utils.js';
+    async Exec(data?: any): Promise<any> {
+        return await this.nfeConsultaCadastroService.Exec(data);
+    }
 
-// Re-export CTe types for compatibility
-export * from '../cte/CTEDistribuicaoDFe.js';
+}
+
+export default NFEConsultaCadastro;

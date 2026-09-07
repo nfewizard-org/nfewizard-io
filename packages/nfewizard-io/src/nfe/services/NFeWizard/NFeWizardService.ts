@@ -45,6 +45,7 @@ import {
     CartaDeCorrecao,
     CienciaDaOperacao,
     ConfirmacaoDaOperacao,
+    ConsultaCadastroData,
     ConsultaNFe,
     DesconhecimentoDaOperacao,
     DFePorChaveNFe,
@@ -59,6 +60,8 @@ import {
 } from '@nfewizard/types/nfe';
 import { NFeWizardProps } from '@nfewizard/types/shared';
 import { NFEconsultaProtocoloService } from '../NFEConsultaProtocolo/NFEconsultaProtocoloService.js';
+import { NFEConsultaCadastroService } from '../NFEConsultaCadastro/NFEConsultaCadastroService.js';
+import { NFEConsultaCadastro } from '../../operations/NFEConsultaCadastro/NFEConsultaCadastro.js';
 import { NFEStatusServico } from '../../operations/NFEStatusServico/NFEStatusServico.js';
 import { NFERecepcaoEvento } from '../../operations/NFERecepcaoEvento/NFERecepcaoEvento.js';
 import { NFERecepcaoEventoService } from '../NFERecepcaoEvento/NFERecepcaoEventoService.js';
@@ -172,6 +175,27 @@ class NFeWizardService implements NFeWizardServiceImpl {
         } catch (error: any) {
             logger.error(``, error, { context: 'NFE_ConsultaProtocolo', });
             throw new Error(`NFE_ConsultaProtocolo: ${error.message}`)
+        }
+    }
+
+    /**
+     * Consulta Cadastro de Contribuintes (CNPJ/CPF/IE)
+     */
+    async NFE_ConsultaCadastro(data: ConsultaCadastroData) {
+        try {
+            const nfeConsultaCadastroService = new NFEConsultaCadastroService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const nfeConsultaCadastro = new NFEConsultaCadastro(nfeConsultaCadastroService);
+
+            const response = await nfeConsultaCadastro.Exec(data);
+
+            console.log('Retorno NFE_ConsultaCadastro');
+            console.log(`   ${response.xMotivo}`);
+            console.log('===================================');
+
+            return response
+        } catch (error: any) {
+            logger.error(``, error, { context: 'NFE_ConsultaCadastro', });
+            throw new Error(`NFE_ConsultaCadastro: ${error.message}`)
         }
     }
 

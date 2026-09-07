@@ -42,6 +42,7 @@ export const getSchema = (metodo: string) => {
     NFeAutorizacao: `${pathSchemas}/enviNFe_v4.00.xsd`,
     NFEInutilizacao: `${pathSchemas}/inutNFe_v4.00.xsd`,
     NFERetAutorizacao: `${pathSchemas}/consReciNFe_v4.00.xsd`,
+    NfeConsultaCadastro: `${pathSchemas}/consCad_v2.00.xsd`,
     CTeDistribuicaoDFe: `${pathSchemas}/cte/distDFeInt_v1.00.xsd`,
     // NFSe - Schemas da Nota Fiscal de Serviços Eletrônica
     NFSe_Autorizacao: `${pathSchemas}/nfse/DPS_v1.01.xsd`,

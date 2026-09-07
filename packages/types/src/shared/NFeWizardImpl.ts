@@ -22,6 +22,8 @@ import {
     CartaDeCorrecao,
     CienciaDaOperacao,
     ConfirmacaoDaOperacao,
+    ConsultaCadastroData,
+    ConsultaCadastroResponse,
     ConsultaNFe,
     DesconhecimentoDaOperacao,
     DFePorChaveNFe,
@@ -50,6 +52,7 @@ export type SchemaValidateMethod =
     | 'NFeAutorizacao'
     | 'NFEInutilizacao'
     | 'NFERetAutorizacao'
+    | 'NfeConsultaCadastro'
     | 'CTeDistribuicaoDFe'
     | 'NFSe_Autorizacao'
     | 'NFSe_Consulta'
@@ -83,6 +86,7 @@ export interface NFeWizardImpl {
     NFE_LoadEnvironment({ config }: { config: NFeWizardProps }): Promise<void>;
     NFE_ConsultaStatusServico(): Promise<any>;
     NFE_ConsultaProtocolo(chave: string): Promise<any>;
+    NFE_ConsultaCadastro(data: ConsultaCadastroData): Promise<ConsultaCadastroResponse>;
     NFE_RecepcaoEvento(evento: EventoNFe): Promise<GenericObject[]>;
     NFE_EventoPrevioDeEmissaoEmContingencia(evento: EPEC): Promise<GenericObject[]>;
     NFE_Cancelamento(evento: Cancelamento): Promise<GenericObject[]>;

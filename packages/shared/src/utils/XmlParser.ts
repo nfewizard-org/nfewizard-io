@@ -58,6 +58,9 @@ export class XmlParser {
     getConsultaProtocoloBody(jsonData: any): any {
         return this.findInObj(jsonData, 'retConsSitNFe');
     }
+    getConsultaCadastroBody(jsonData: any): any {
+        return this.findInObj(jsonData, 'retConsCad');
+    }
     getRecepcaoEventoBody(jsonData: any): any {
         return this.findInObj(jsonData, 'retEnvEvento');
     }
@@ -126,6 +129,9 @@ export class XmlParser {
                 break;
             case 'NFEConsultaProtocolo':
                 jsonBody = this.getConsultaProtocoloBody(jsonData)
+                break;
+            case 'NfeConsultaCadastro':
+                jsonBody = this.getConsultaCadastroBody(jsonData)
                 break;
             case 'RecepcaoEvento':
                 jsonBody = this.getRecepcaoEventoBody(jsonData)

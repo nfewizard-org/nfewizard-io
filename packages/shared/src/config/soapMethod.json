@@ -31,7 +31,7 @@
         "method": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4",
         "action": "http://www.portalfiscal.inf.br/nfe/wsdl/NFeConsultaProtocolo4/nfeConsultaNF"
     },
-    "consultarCadastro": {
+    "NfeConsultaCadastro": {
         "method": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4/",
         "action": "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro4/consultaCadastro"
     },
