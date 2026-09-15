@@ -37,7 +37,7 @@ Substitui o trabalho de baixo nível de:
 |-----------|----------------------|
 | **Status** | `NFE_ConsultaStatusServico` |
 | **Autorização** | `NFE_Autorizacao`, `NFCE_Autorizacao`, `NFSe_Autorizacao` (síncrona) |
-| **Consulta** | `NFE_ConsultaProtocolo`, `NFE_DistribuicaoDFe` (por NSU, ÚltNSU, Chave) |
+| **Consulta** | `NFE_ConsultaProtocolo`, `NFE_ConsultaCadastro` (CNPJ/CPF/IE), `NFE_DistribuicaoDFe` (por NSU, ÚltNSU, Chave) |
 | **Inutilização** | `NFE_Inutilizacao` |
 | **Eventos NFe** | Cancelamento, Carta de Correção, Ciência/Confirmação/Desconhecimento da Operação, Operação Não Realizada, **EPEC** |
 | **Eventos NFCe** | Cancelamento (no pacote `@nfewizard/nfce`) |

@@ -16,6 +16,7 @@
  */
 import {
     EventoNFe,
+    ConsultaCadastroData,
     ConsultaNFe,
     NFe,
     InutilizacaoData,
@@ -57,6 +58,13 @@ export class NFeWizard implements NFeWizardImpl {
      */
     async NFE_ConsultaProtocolo(chave: string) {
         return this.nfeWizardService.NFE_ConsultaProtocolo(chave);
+    }
+
+    /**
+     * Consulta Cadastro de Contribuintes do ICMS (por CNPJ, CPF ou IE)
+     */
+    async NFE_ConsultaCadastro(data: ConsultaCadastroData) {
+        return this.nfeWizardService.NFE_ConsultaCadastro(data);
     }
 
     /**

@@ -107,10 +107,10 @@ describe('NFSe adapter', () => {
       dfe: {
         pathCertificado: 'certificado.pfx',
         senhaCertificado: '123456',
-        CPFCNPJ: '23903417000160',
+        CPFCNPJ: '00000000000000',
         UF: 'SP',
       },
-      nfe: {
+      nfse: {
         ambiente: 2,
       },
       lib: {

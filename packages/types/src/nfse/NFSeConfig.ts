@@ -18,7 +18,25 @@
 import { NFeWizardProps } from '../shared/NFeWizardProps.js';
 
 /**
- * Configuração para NFSeWizard
- * Herda toda estrutura de NFeWizardProps
+ * Configuração para NFSeWizard.
+ * Herda toda a estrutura de NFeWizardProps (dfe, email, lib), exceto o bloco
+ * de parametrização do documento fiscal: aqui a chave é "nfse" (em vez de
+ * "nfe", usada por NFe/NFCe), pois é o nome mais adequado ao contexto deste pacote.
  */
-export type NFSeConfig = NFeWizardProps;
+export type NFSeConfig = Omit<NFeWizardProps, 'nfe'> & {
+    /**
+     * @param {obj} nfse - Configurações relacionadas ao processo de NFSe
+     */
+    nfse: {
+        /**
+         * @param {number} ambiente - Define o ambiente que receberá o DPS:
+         * 1 = Produção
+         * 2 = Homologação
+         */
+        ambiente: number;
+        /**
+         * @param {string} versao - Versão do aplicativo emissor (verAplic)
+         */
+        versao?: string;
+    };
+};

@@ -62,6 +62,7 @@ export type { ErrorContext, JsonArrayTransport } from '@nfewizard/shared';
 export { NFEAutorizacao } from './nfe/operations/NFEAutorizacao/NFEAutorizacao.js';
 export { NFEStatusServico } from './nfe/operations/NFEStatusServico/NFEStatusServico.js';
 export { NFEConsultaProtocolo } from './nfe/operations/NFEConsultaProtocolo/NFEconsultaProtocolo.js';
+export { NFEConsultaCadastro } from './nfe/operations/NFEConsultaCadastro/NFEConsultaCadastro.js';
 export { NFERetornoAutorizacao } from './nfe/operations/NFERetornoAutorizacao/NFERetornoAutorizacao.js';
 export { NFEInutilizacao } from './nfe/operations/NFEInutilizacao/NFEInutilizacao.js';
 export { NFEDistribuicaoDFe } from './nfe/operations/NFEDistribuicaoDFe/NFEDistribuicaoDFe.js';

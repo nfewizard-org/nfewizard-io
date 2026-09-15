@@ -95,7 +95,9 @@ class NFSeEventosService extends BaseNFSe implements NFSeEventosServiceImpl {
         } else if (pedRegEvento.infPedReg.e105102) {
             infPedRegObj.e105102 = {
                 xDesc: pedRegEvento.infPedReg.e105102.xDesc,
-                chNFSeSubst: pedRegEvento.infPedReg.e105102.chNFSeSubst
+                cMotivo: pedRegEvento.infPedReg.e105102.cMotivo,
+                xMotivo: pedRegEvento.infPedReg.e105102.xMotivo,
+                chSubstituta: pedRegEvento.infPedReg.e105102.chSubstituta
             };
         }
 

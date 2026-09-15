@@ -16,3 +16,4 @@
  */
 
 export * from './CTEDistribuicaoDFe.js';
+export * from './CTEDacteGenerator.js';

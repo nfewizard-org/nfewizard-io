@@ -58,6 +58,9 @@ export class XmlParser {
     getConsultaProtocoloBody(jsonData: any): any {
         return this.findInObj(jsonData, 'retConsSitNFe');
     }
+    getConsultaCadastroBody(jsonData: any): any {
+        return this.findInObj(jsonData, 'retConsCad');
+    }
     getRecepcaoEventoBody(jsonData: any): any {
         return this.findInObj(jsonData, 'retEnvEvento');
     }
@@ -126,6 +129,9 @@ export class XmlParser {
                 break;
             case 'NFEConsultaProtocolo':
                 jsonBody = this.getConsultaProtocoloBody(jsonData)
+                break;
+            case 'NfeConsultaCadastro':
+                jsonBody = this.getConsultaCadastroBody(jsonData)
                 break;
             case 'RecepcaoEvento':
                 jsonBody = this.getRecepcaoEventoBody(jsonData)
@@ -303,6 +309,41 @@ export class XmlParser {
         const chave = idAttr.replace(/^NFS/, '');
 
         return { data: { infNFSe }, chave };
+    }
+
+    /**
+     * Converte um XML autorizado (`cteProc`) ou um `CTe` solo em uma
+     * estrutura JSON compatível com o gerador de DACTE
+     * (`{ CTe, protCTe? }`), além de retornar a chave de acesso quando
+     * disponível.
+     *
+     * @param xml String XML de entrada.
+     */
+    convertXmlCteProcToJson(xml: string): { data: GenericObject; chave: string } {
+        logger.info('Convertendo cteProc para JSON', {
+            context: 'XmlParser',
+            method: 'convertXmlCteProcToJson',
+        });
+
+        const jsonData = this.parseNfeLikeXml(xml);
+
+        const cteProc = this.findInObj(jsonData, 'cteProc');
+        const CTe = cteProc ? this.findInObj(cteProc, 'CTe') : this.findInObj(jsonData, 'CTe');
+        if (!CTe) {
+            throw new Error('XML inválido: não foi possível localizar `CTe` ou `cteProc`.');
+        }
+
+        const protCTe = cteProc ? this.findInObj(cteProc, 'protCTe') : this.findInObj(jsonData, 'protCTe');
+
+        const chFromProt = protCTe?.infProt?.chCTe;
+        const idAttr: string = CTe?.infCte?.Id ?? '';
+        const chFromId = typeof idAttr === 'string' ? idAttr.replace(/^CTe/, '') : '';
+        const chave = chFromProt || chFromId || '';
+
+        const data: GenericObject = { CTe };
+        if (protCTe) data.protCTe = protCTe;
+
+        return { data, chave };
     }
 
     /**

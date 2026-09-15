@@ -222,6 +222,22 @@ build:
 
 ## ✨ Novidades recentes (pós 1.0.0)
 
+### NFE_ConsultaCadastro — Consulta Cadastro de Contribuintes (CNPJ/CPF/IE)
+
+Consulta os dados cadastrais de um contribuinte (razão social, situação cadastral, IE, endereço, indicadores de credenciamento em NF-e/CT-e, etc.) diretamente no webservice `CadConsultaCadastro4` da SEFAZ, informando CNPJ, CPF ou Inscrição Estadual:
+
+```typescript
+// Por CNPJ (usa a UF configurada em dfe.UF quando `uf` é omitida)
+const resultado = await nfeWizard.NFE_ConsultaCadastro({ cnpj: '99999999999999' });
+
+// Por IE, consultando explicitamente outra UF
+const resultado2 = await nfeWizard.NFE_ConsultaCadastro({ uf: 'SP', ie: '123456789012' });
+
+// resultado.infCad — dados cadastrais retornados pela SEFAZ (xNome, cSit, ender, etc.)
+```
+
+> Deve ser informado exatamente um dos campos `cnpj`, `cpf` ou `ie`. A disponibilidade e os dados retornados dependem da SEFAZ de cada UF.
+
 ### Autorização aceita XML string
 
 `NFE_Autorizacao` agora aceita diretamente uma string XML (além do objeto tipado), tanto com o envelope `<enviNFe>` quanto apenas com o elemento `<NFe>`:
@@ -267,6 +283,7 @@ const result: SchemaValidationResult = await nfeWizard.NFE_SchemaValidate(
 | `'NFeAutorizacao'` / `'NFEAutorizacao'` | `enviNFe_v4.00.xsd` |
 | `'NFEStatusServico'` | `consStatServ_v4.00.xsd` |
 | `'NFEConsultaProtocolo'` | `consSitNFe_v4.00.xsd` |
+| `'NfeConsultaCadastro'` | `consCad_v2.00.xsd` |
 | `'RecepcaoEvento'` | `envEvento_v1.00.xsd` |
 | `'NFeDistribuicaoDFe'` | `distDFeInt_v1.01.xsd` |
 | `'NFEInutilizacao'` | `inutNFe_v4.00.xsd` |
