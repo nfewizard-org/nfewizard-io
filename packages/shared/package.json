@@ -33,7 +33,8 @@
     "build": "rollup -c",
     "build:types": "tsc --project tsconfig.types.json",
     "clean": "rm -rf dist",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
   },
   "dependencies": {
     "@nfewizard/types": "workspace:*",

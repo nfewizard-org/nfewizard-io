@@ -301,13 +301,16 @@ class NFSeDanfeGenerator {
             .trim();
     }
 
-    formatDecimal(value: Escalar, minimumFractionDigits = 2, maximumFractionDigits = 2): string {
+    /** Converte um `Escalar` (string em formato BR ou já numérico) para `number`. */
+    parseDecimal(value: Escalar): number {
         const valueText = this.str(value) || '0';
         const normalizedValue = valueText.includes(',') ? valueText.replace(/\./g, '').replace(',', '.') : valueText;
         const parsedValue = parseFloat(normalizedValue);
-        const numericValue = Number.isNaN(parsedValue) ? 0 : parsedValue;
+        return Number.isNaN(parsedValue) ? 0 : parsedValue;
+    }
 
-        return numericValue.toLocaleString('pt-BR', {
+    formatDecimal(value: Escalar, minimumFractionDigits = 2, maximumFractionDigits = 2): string {
+        return this.parseDecimal(value).toLocaleString('pt-BR', {
             minimumFractionDigits,
             maximumFractionDigits,
         });
@@ -818,15 +821,10 @@ class NFSeDanfeGenerator {
         const valores = this.infDPS.valores;
         const valoresNota = this.infNFSe.valores;
 
-        const toNumber = (value: Escalar) => {
-            const parsed = parseFloat(this.str(value) || '0');
-            return Number.isNaN(parsed) ? 0 : parsed;
-        };
-
-        const vServ = toNumber(valores?.vServPrest?.vServ);
-        const vDescontos = toNumber(valores?.vDescCondIncond?.vDescIncond)
-            + toNumber(valores?.vDescCondIncond?.vDescCond)
-            + toNumber(valores?.vDedRed?.vDR);
+        const vServ = this.parseDecimal(valores?.vServPrest?.vServ);
+        const vDescontos = this.parseDecimal(valores?.vDescCondIncond?.vDescIncond)
+            + this.parseDecimal(valores?.vDescCondIncond?.vDescCond)
+            + this.parseDecimal(valores?.vDedRed?.vDR);
 
         this.sectionTitle('VALORES DA NFS-e');
 
@@ -1061,7 +1059,10 @@ export async function NFSeGerarDanfeFromXml(params: NFSeGerarDanfeFromXmlProps):
         logger.error('Erro ao gerar DANFSe', error, {
             context: 'NFSeGerarDanfe',
         });
-        throw new Error(`Erro ao gerar DANFSe: ${error.message}`);
+        // normalizeXmlInput/convertXmlNFSeToJson/generatePDF já lançam erros
+        // com mensagem descritiva (generatePDF já prefixa com "Erro ao gerar
+        // DANFSe: "); repropagamos sem embrulhar de novo para não duplicar o prefixo.
+        throw error;
     }
 }
 

@@ -300,12 +300,15 @@ export class XmlParser {
 
         const NFSe = this.findInObj(jsonData, 'NFSe');
         const infNFSe = NFSe ? this.findInObj(NFSe, 'infNFSe') : this.findInObj(jsonData, 'infNFSe');
-        if (!infNFSe || typeof infNFSe !== 'object') {
+        if (!infNFSe || typeof infNFSe !== 'object' || Array.isArray(infNFSe)) {
             throw new Error('XML inválido: não foi possível localizar `NFSe` ou `infNFSe`.');
         }
 
         // A chave de acesso da NFSe é o atributo `Id` prefixado com "NFS".
         const idAttr: string = typeof infNFSe.Id === 'string' ? infNFSe.Id : '';
+        if (!idAttr) {
+            throw new Error('XML inválido: `infNFSe` não possui o atributo `Id` (chave de acesso).');
+        }
         const chave = idAttr.replace(/^NFS/, '');
 
         return { data: { infNFSe }, chave };
