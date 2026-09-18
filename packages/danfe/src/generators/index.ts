@@ -23,19 +23,34 @@
 
 import { NFeGerarDanfe } from './NFEGerarDanfe.js';
 import { NFCeGerarDanfe } from './NFCEGerarDanfe.js';
-import { NFSeGerarDanfe } from './NFSeGerarDanfe.js';
+import { NFSeGerarDanfe, NFSeGerarDanfeFromXml, NFSeDanfeGenerator } from './NFSeGerarDanfe.js';
 import { CTeGerarDacte } from './CTEGerarDacte.js';
 import { XmlParser } from '@nfewizard/shared';
 import type { NFEGerarDanfeProps } from '@nfewizard/types/nfe';
 import type { CTEGerarDacteProps } from '@nfewizard/types/cte';
-import type { NFSeGerarDanfeProps } from './NFSeGerarDanfe.js';
+import type { NFSeGerarDanfeFromXmlProps, NFSeGerarDanfeProps } from './NFSeGerarDanfe.js';
 
 // `NFCEGerarDanfeProps` n\u00e3o existe como tipo separado: o gerador de NFCe
 // reutiliza a mesma forma de `NFEGerarDanfeProps`.
 type NFCEGerarDanfePropsLocal = NFEGerarDanfeProps;
 
 // Exporta as classes originais
-export { NFeGerarDanfe, NFCeGerarDanfe, NFSeGerarDanfe, CTeGerarDacte };
+export { NFeGerarDanfe, NFCeGerarDanfe, NFSeGerarDanfe, NFSeGerarDanfeFromXml, NFSeDanfeGenerator, CTeGerarDacte };
+export type { NFSeGerarDanfeProps, NFSeGerarDanfeFromXmlProps };
+export type {
+    InfNFSe,
+    NFSeDocumento,
+    NFSeEndereco,
+    NFSeEnderecoNacional,
+    NFSeInfDPS,
+    NFSePessoa,
+    NFSeServico,
+    NFSeTotTrib,
+    NFSeTribFed,
+    NFSeTribMun,
+    NFSeValoresDPS,
+    NFSeValoresNota,
+} from './NFSeGerarDanfe.js';
 
 /**
  * Variante de input que aceita o XML autorizado (`nfeProc`) ou a `NFe`
@@ -98,6 +113,7 @@ export async function NFCE_GerarDanfe(params: NFCEGerarDanfePropsLocal | NFEGera
     return await danfe.generatePDF();
 }
 
+
 /**
  * Variante de input que aceita o XML autorizado (`cteProc`) ou o `CTe`
  * solo em string. Internamente, o XML é convertido para o JSON do padrão
@@ -144,14 +160,14 @@ export async function CTE_GerarDacte(params: CTEGerarDacteProps | CTEGerarDacteP
 }
 
 /**
- * Gera DANFSe (Documento Auxiliar da NFSe)
+ * Gera DANFSe (Documento Auxiliar da NFSe).
+ *
+ * Aceita o XML da NFSe em string (`{ data: xml, outputPath }`) e monta o PDF
+ * localmente.
+ *
  * @param params - Parâmetros para geração do DANFSe
  * @returns Promise com o resultado da geração do PDF
  */
-export async function NFSE_GerarDanfe(params: {
-    environment: any;
-    axios: any;
-    data: NFSeGerarDanfeProps;
-}) {
+export async function NFSE_GerarDanfe(params: NFSeGerarDanfeProps) {
     return await NFSeGerarDanfe(params);
 }
