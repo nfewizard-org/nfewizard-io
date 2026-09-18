@@ -65,9 +65,17 @@ export default class NFSe {
     }
 
     // Environment é compartilhado com os pacotes NFe/NFCe e é tipado com a
-    // chave "nfe" (comum a esses pacotes). O restante da config (dfe, lib,
-    // email) é idêntico, então repassamos como está.
-    const environment = new Environment(config as unknown as NFeWizardProps);
+    // chave "nfe" (comum a esses pacotes), enquanto o NFSeConfig expõe "nfse".
+    // Mapeamos nfse -> nfe aqui para que o shared (que lê config.nfe.ambiente)
+    // funcione sem exigir que o consumidor informe as duas chaves.
+    const environmentConfig: NFeWizardProps = {
+      ...(config as unknown as NFeWizardProps),
+      nfe: {
+        ambiente: config.nfse.ambiente,
+        versaoDF: config.nfse.versao ?? '',
+      },
+    };
+    const environment = new Environment(environmentConfig);
     this.environment = environment;
 
     // Carrega o environment automaticamente
@@ -91,14 +99,25 @@ export default class NFSe {
     const wrappedError = new Error(`${method}: ${errorMessage}`);
 
     if (error && typeof error === 'object') {
-      Object.assign(wrappedError, error);
-
+      // Não usar Object.assign(wrappedError, error): erros do axios trazem
+      // `config`/`request`/`response`, que referenciam o https.Agent usado na
+      // requisição TLS (certificado e chave privada do cliente). Copiamos só
+      // os campos conhecidos e seguros para não vazar material criptográfico
+      // nem estruturas circulares para quem serializar o erro (loggers, etc).
       if (typeof error.stack === 'string') {
         wrappedError.stack = error.stack;
       }
 
       if ('cause' in error) {
         (wrappedError as any).cause = (error as any).cause;
+      }
+
+      if ('nfseErrorDetail' in error) {
+        (wrappedError as any).nfseErrorDetail = (error as any).nfseErrorDetail;
+      }
+
+      if ('code' in error) {
+        (wrappedError as any).code = (error as any).code;
       }
     }
 

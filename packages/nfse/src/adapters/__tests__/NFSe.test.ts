@@ -136,4 +136,59 @@ describe('NFSe adapter', () => {
       expect.objectContaining({ context: 'NFSE_Autorizacao' }),
     );
   });
+
+  it('maps nfse.ambiente to nfe.ambiente when building the shared Environment', () => {
+    const nfse: any = new NFSe({
+      dfe: {
+        pathCertificado: 'certificado.pfx',
+        senhaCertificado: '123456',
+        CPFCNPJ: '00000000000000',
+        UF: 'SP',
+      },
+      nfse: {
+        ambiente: 2,
+        versao: '1.0.0',
+      },
+    } as any);
+
+    expect(nfse.environment.config.nfe).toMatchObject({
+      ambiente: 2,
+      versaoDF: '1.0.0',
+    });
+  });
+
+  it('does not leak axios config/request/response (e.g. TLS agent/cert) into the wrapped error', async () => {
+    const originalError: any = new Error('Request failed with status code 500');
+    originalError.isAxiosError = true;
+    originalError.config = { httpsAgent: { cert: 'FAKE_CERT', key: 'FAKE_PRIVATE_KEY' } };
+    originalError.request = { agent: { cert: 'FAKE_CERT', key: 'FAKE_PRIVATE_KEY' } };
+    originalError.response = { status: 500, data: {}, request: originalError.request };
+    mockServiceExec.mockRejectedValue(originalError);
+
+    const nfse = new NFSe({
+      dfe: {
+        pathCertificado: 'certificado.pfx',
+        senhaCertificado: '123456',
+        CPFCNPJ: '00000000000000',
+        UF: 'SP',
+      },
+      nfse: {
+        ambiente: 2,
+      },
+    } as any);
+
+    let caught: any;
+    try {
+      await nfse.Autorizacao({ DPS: { infDps: {} } } as any);
+    } catch (error) {
+      caught = error;
+    }
+
+    expect(caught).toBeDefined();
+    expect(caught.config).toBeUndefined();
+    expect(caught.request).toBeUndefined();
+    expect(caught.response).toBeUndefined();
+    // Não deve lançar por referência circular ao ser serializado.
+    expect(() => JSON.stringify(caught, Object.getOwnPropertyNames(caught))).not.toThrow();
+  });
 });
