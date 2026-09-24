@@ -193,7 +193,7 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         let somatoria = 0;
 
         for (let i = 0; i < sequencia.length; i++) {
-            somatoria += parseInt(sequencia.charAt(i)) * pesos[i];
+            somatoria += (sequencia.charCodeAt(i) - 48) * pesos[i];
         }
 
         const restoDivisao = somatoria % 11;

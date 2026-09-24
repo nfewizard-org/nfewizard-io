@@ -69,3 +69,44 @@ describe('NFEAutorizacaoService - normalização do destinatário', () => {
         expect(result.CNPJCPF).toBeUndefined();
     });
 });
+
+describe('NFEAutorizacaoService - DV da chave de acesso com CNPJ alfanumérico', () => {
+    // CNPJ de exemplo da Receita (12.ABC.345/01DE-35); os DVs esperados foram
+    // conferidos com o Keys::verifyingDigit do sped-common
+    const buildNFeComEmitente = (CNPJCPF: string) => ({
+        infNFe: {
+            Id: undefined,
+            ide: {
+                cUF: 35,
+                mod: 55,
+                serie: '1',
+                nNF: '123',
+                tpEmis: 1,
+                cNF: '12345678',
+                dhEmi: '2026-09-23T10:00:00-03:00',
+            },
+            emit: {
+                CNPJCPF,
+            },
+        },
+    });
+
+    it('deve calcular o DV com o valor ASCII menos 48 quando o CNPJ tem letras', () => {
+        const service = new NFEAutorizacaoService();
+        expect(service['calcularModulo11']('35260912ABC34501DE3555001000000123112345678')).toBe(4);
+    });
+
+    it('deve manter o DV das chaves com CNPJ numérico', () => {
+        const service = new NFEAutorizacaoService();
+        expect(service['calcularModulo11']('3526091122233300018155001000000123112345678')).toBe(3);
+    });
+
+    it('deve montar a chave de acesso completa para emitente com CNPJ alfanumérico', () => {
+        const service = new NFEAutorizacaoService();
+        const nfe = buildNFeComEmitente('12ABC34501DE35');
+        const { chaveAcesso, dv } = service['calcularDigitoVerificador'](nfe);
+        expect(dv).toBe(4);
+        expect(chaveAcesso).toBe('NFe35260912ABC34501DE35550010000001231123456784');
+        expect(chaveAcesso.replace('NFe', '')).toMatch(/^[0-9]{6}[0-9A-Z]{12}[0-9]{26}$/);
+    });
+});
