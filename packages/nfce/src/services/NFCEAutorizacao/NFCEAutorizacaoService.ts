@@ -224,7 +224,7 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
         const anoMes = this.anoMesEmissao(dhEmi);
 
         // Montando a sequência para o cálculo do dígito verificador
-        const sequencia = `${cUF}${anoMes}${CNPJCPF}${mod}${String(serie).padStart(3, '0')}${String(nNF).padStart(9, '0')}${tpEmis}${cNF}`;
+        const sequencia = `${cUF}${anoMes}${String(CNPJCPF).padStart(14, '0')}${mod}${String(serie).padStart(3, '0')}${String(nNF).padStart(9, '0')}${tpEmis}${cNF}`;
 
         // Calculando o dígito verificador
         const dv = this.calcularModulo11(sequencia);
