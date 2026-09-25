@@ -949,7 +949,7 @@ class CTeGerarDacte {
         const documentos: DocumentoOriginario[] = [];
 
         for (const item of this.toArray<InfNFeCTe>(infDoc.infNFe)) {
-            const chave = String(item.chave || '').replace(/\D/g, '');
+            const chave = String(item.chave || '').replace(/[^0-9A-Z]/gi, '');
             documentos.push({
                 tipo: 'NF-e',
                 documentoEmitente: chave.length === 44 ? this.documento.mascaraCnpjCpf(chave.substring(6, 20)) : '',
