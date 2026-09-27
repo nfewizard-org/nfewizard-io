@@ -23,11 +23,18 @@ export { CTEWizard as default } from './CTEWizard.js';
 export { CTEDistribuicaoDFe } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFe.js';
 export { CTEDistribuicaoDFePorNSU } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorNSU.js';
 export { CTEDistribuicaoDFePorUltNSU } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorUltNSU.js';
+export { CTEStatusServico } from './operations/CTEStatusServico/CTEStatusServico.js';
+export { CTEConsultaProtocolo } from './operations/CTEConsultaProtocolo/CTEConsultaProtocolo.js';
+export { CTEAutorizacao } from './operations/CTEAutorizacao/CTEAutorizacao.js';
 
 // CTe Services
 export { CTEDistribuicaoDFeService } from './services/CTEDistribuicaoDFe/CTEDistribuicaoDFeService.js';
 export { CTEDistribuicaoDFePorNSUService } from './services/CTEDistribuicaoDFe/CTEDistribuicaoDFePorNSU.js';
 export { CTEDistribuicaoDFePorUltNSUService } from './services/CTEDistribuicaoDFe/CTEDistribuicaoDFePorUltNSU.js';
+export { CTEStatusServicoService } from './services/CTEStatusServico/CTEStatusServicoService.js';
+export { CTEConsultaProtocoloService } from './services/CTEConsultaProtocolo/CTEConsultaProtocoloService.js';
+export { CTEAutorizacaoService } from './services/CTEAutorizacao/CTEAutorizacaoService.js';
+export { CTEBaseService, CTE_VERSAO } from './services/util/CTEBaseService.js';
 
 // CTe Utilities
 export { DistribuicaoHandler } from './services/CTEDistribuicaoDFe/util/DistribuicaoHandler.js';

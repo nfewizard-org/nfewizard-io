@@ -430,12 +430,24 @@ class Utility {
         if (isCTe) {
             const cteUrls = CTeServicosUrl as any;
             const ambiente = this.environment.config.nfe.ambiente === 1 ? 'P' : 'H';
-            const chave = `CTe_AN_${ambiente}`; // AN = Ambiente Nacional
             const metodoComVersao = `${metodo}_${versao}`;
+
+            // CTeDistribuicaoDFe é um serviço nacional único (Ambiente Nacional).
+            // Os demais métodos (Autorização, Status, Consulta, Eventos, GTV-e, Simplificado, OS)
+            // são resolvidos pela UF de circunscrição do emitente, com indireção "Usar" para
+            // quem opera via SEFAZ Virtual (ex.: CTe_SVRS_P) — mesmo padrão do NFe.
+            let chave = `CTe_AN_${ambiente}`;
+            if (metodo !== 'CTeDistribuicaoDFe') {
+                const UF = this.environment.config.dfe.UF;
+                chave = `CTe_${UF}_${ambiente}`;
+                if (cteUrls[chave] && 'Usar' in cteUrls[chave]) {
+                    chave = cteUrls[chave].Usar;
+                }
+            }
 
             const url = cteUrls[chave] && cteUrls[chave][metodoComVersao];
             if (!url) {
-                throw new Error(`Não foi possível recuperar a url para o webservice CTe: ${metodoComVersao} no ambiente ${ambiente}`);
+                throw new Error(`Não foi possível recuperar a url para o webservice CTe: ${metodoComVersao} no ambiente ${ambiente} (chave: ${chave})`);
             }
             return url;
         }

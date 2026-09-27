@@ -43,6 +43,34 @@
         "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe",
         "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeDistribuicaoDFe/cteDistDFeInteresse"
     },
+    "CTeAutorizacao": {
+        "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeRecepcaoSincV4",
+        "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeRecepcaoSincV4/cteRecepcao"
+    },
+    "CTeAutorizacaoOS": {
+        "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeRecepcaoOSV4",
+        "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeRecepcaoOSV4/cteRecepcaoOS"
+    },
+    "CTeGTVeAutorizacao": {
+        "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeRecepcaoGTVeV4",
+        "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeRecepcaoGTVeV4/cteRecepcaoGTVe"
+    },
+    "CTeSimplificadoAutorizacao": {
+        "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeRecepcaoSimpV4",
+        "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeRecepcaoSimpV4/cteRecepcaoSimp"
+    },
+    "CTeStatusServico": {
+        "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeStatusServicoV4",
+        "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeStatusServicoV4/cteStatusServicoCT"
+    },
+    "CTeConsultaProtocolo": {
+        "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeConsultaV4",
+        "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeConsultaV4/cteConsultaCT"
+    },
+    "CTeRecepcaoEvento": {
+        "method": "http://www.portalfiscal.inf.br/cte/wsdl/CTeRecepcaoEventoV4",
+        "action": "http://www.portalfiscal.inf.br/cte/wsdl/CTeRecepcaoEventoV4/cteRecepcaoEvento"
+    },
     "DCEAutorizacao": {
         "method": "http://www.portalfiscal.inf.br/dce/wsdl/DCeAutorizacao",
         "action": "http://www.portalfiscal.inf.br/dce/wsdl/DCeAutorizacao/dceAutorizacao"

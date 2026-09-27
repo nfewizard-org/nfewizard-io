@@ -49,3 +49,14 @@ export interface NFCEAutorizacaoServiceImpl {
 export interface NFCERetornoAutorizacaoServiceImpl { getXmlRetorno(...args: any[]): Promise<any>; }
 export interface NFSeAutorizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface CTEDistribuicaoDFeServiceImpl { Exec(...args: any[]): Promise<any>; }
+export interface CTEStatusServicoServiceImpl { Exec(...args: any[]): Promise<any>; }
+export interface CTEConsultaProtocoloServiceImpl { Exec(...args: any[]): Promise<any>; }
+export interface CTEConsultaCadastroServiceImpl { Exec(...args: any[]): Promise<any>; }
+export interface CTEAutorizacaoServiceImpl {
+    Exec(...args: any[]): Promise<any>;
+    ExecTransmitirContingencia?(...args: any[]): Promise<any>;
+}
+export interface CTERecepcaoEventoServiceImpl { Exec(...args: any[]): Promise<any>; }
+export interface CTEAutorizacaoOSServiceImpl { Exec(...args: any[]): Promise<any>; }
+export interface GTVeAutorizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }
+export interface CTESimplificadoAutorizacaoServiceImpl { Exec(...args: any[]): Promise<any>; }

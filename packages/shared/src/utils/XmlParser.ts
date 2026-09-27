@@ -102,6 +102,27 @@ export class XmlParser {
     getNFSeAutorizacaoBody(jsonData: any): any {
         return this.findInObj(jsonData, 'NFSe') || this.findInObj(jsonData, 'infNFSe') || jsonData;
     }
+    getStatusServicoBodyCTe(jsonData: any): any {
+        return this.findInObj(jsonData, 'retConsStatServCTe');
+    }
+    getConsultaProtocoloBodyCTe(jsonData: any): any {
+        return this.findInObj(jsonData, 'retConsSitCTe');
+    }
+    getRecepcaoEventoBodyCTe(jsonData: any): any {
+        return this.findInObj(jsonData, 'retEventoCTe');
+    }
+    getAutorizacaoBodyCTe(jsonData: any): any {
+        return this.findInObj(jsonData, 'retCTe');
+    }
+    getAutorizacaoBodyCTeOS(jsonData: any): any {
+        return this.findInObj(jsonData, 'retCTeOS');
+    }
+    getAutorizacaoBodyGTVe(jsonData: any): any {
+        return this.findInObj(jsonData, 'retGTVe');
+    }
+    getAutorizacaoBodyCTeSimp(jsonData: any): any {
+        return this.findInObj(jsonData, 'retCTeSimp');
+    }
 
     convertXmlToJson(xml: string, metodo: string, nsu?: string): GenericObject {
         logger.info(`Convertendo XML para JSON [${metodo}]`, {
@@ -178,6 +199,27 @@ export class XmlParser {
             case 'NFSeAutorizacao':
             case 'NFSEAutorizacao':
                 jsonBody = this.getNFSeAutorizacaoBody(jsonData)
+                break;
+            case 'CTeStatusServico':
+                jsonBody = this.getStatusServicoBodyCTe(jsonData)
+                break;
+            case 'CTeConsultaProtocolo':
+                jsonBody = this.getConsultaProtocoloBodyCTe(jsonData)
+                break;
+            case 'CTeRecepcaoEvento':
+                jsonBody = this.getRecepcaoEventoBodyCTe(jsonData)
+                break;
+            case 'CTeAutorizacao':
+                jsonBody = this.getAutorizacaoBodyCTe(jsonData)
+                break;
+            case 'CTeAutorizacaoOS':
+                jsonBody = this.getAutorizacaoBodyCTeOS(jsonData)
+                break;
+            case 'CTeGTVeAutorizacao':
+                jsonBody = this.getAutorizacaoBodyGTVe(jsonData)
+                break;
+            case 'CTeSimplificadoAutorizacao':
+                jsonBody = this.getAutorizacaoBodyCTeSimp(jsonData)
                 break;
             default:
                 throw new Error('Formato de XML desconhecido');

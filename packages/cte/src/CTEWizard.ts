@@ -23,6 +23,13 @@ import { CTEDistribuicaoDFeService } from './services/CTEDistribuicaoDFe/CTEDist
 import { CTEDistribuicaoDFe } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFe.js';
 import { CTEDistribuicaoDFePorNSU } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorNSU.js';
 import { CTEDistribuicaoDFePorUltNSU } from './operations/CTEDistribuicaoDFe/CTEDistribuicaoDFePorUltNSU.js';
+import { CTEStatusServicoService } from './services/CTEStatusServico/CTEStatusServicoService.js';
+import { CTEStatusServico } from './operations/CTEStatusServico/CTEStatusServico.js';
+import { CTEConsultaProtocoloService } from './services/CTEConsultaProtocolo/CTEConsultaProtocoloService.js';
+import { CTEConsultaProtocolo } from './operations/CTEConsultaProtocolo/CTEConsultaProtocolo.js';
+import { CTEAutorizacaoService } from './services/CTEAutorizacao/CTEAutorizacaoService.js';
+import { CTEAutorizacao } from './operations/CTEAutorizacao/CTEAutorizacao.js';
+import { CTe as CTeAutorizacaoData } from '@nfewizard/types/cte';
 
 /**
  * Classe principal para operações CTe
@@ -169,6 +176,105 @@ export class CTEWizard {
             return response;
         } catch (error) {
             logger.error(``, error, { context: 'CTE_DistribuicaoDFePorUltNSU' });
+            throw error;
+        }
+    }
+
+    /**
+     * Consulta o status do serviço de autorização do CT-e (disponibilidade da SEFAZ/UF do emitente)
+     * @returns Resultado da consulta (cStat 107=em operação, 108/109=paralisado)
+     */
+    async CTE_ConsultaStatusServico(): Promise<any> {
+        try {
+            const cteStatusServicoService = new CTEStatusServicoService(
+                this.environment,
+                this.utility,
+                this.xmlBuilder,
+                this.axios,
+                this.saveFiles,
+                this.gerarConsulta
+            );
+            const cteStatusServico = new CTEStatusServico(cteStatusServicoService);
+            const response = await cteStatusServico.Exec();
+
+            if (response?.retConsStatServCTe) {
+                console.table([{
+                    Status: response.retConsStatServCTe.cStat,
+                    Motivo: response.retConsStatServCTe.xMotivo,
+                    TempoMedio: response.retConsStatServCTe.tMed || '-',
+                }]);
+            }
+
+            return response;
+        } catch (error) {
+            logger.error(``, error, { context: 'CTE_ConsultaStatusServico' });
+            throw error;
+        }
+    }
+
+    /**
+     * Consulta a situação/protocolo de um CT-e já transmitido
+     * @param chCTe - Chave de acesso do CT-e (44 dígitos)
+     * @returns Resultado da consulta (cStat 100=autorizado, 101=cancelamento homologado, 217=não consta na base)
+     */
+    async CTE_ConsultaProtocolo(chCTe: string): Promise<any> {
+        try {
+            const cteConsultaProtocoloService = new CTEConsultaProtocoloService(
+                this.environment,
+                this.utility,
+                this.xmlBuilder,
+                this.axios,
+                this.saveFiles,
+                this.gerarConsulta
+            );
+            const cteConsultaProtocolo = new CTEConsultaProtocolo(cteConsultaProtocoloService);
+            const response = await cteConsultaProtocolo.Exec(chCTe);
+
+            if (response?.retConsSitCTe) {
+                console.table([{
+                    Status: response.retConsSitCTe.cStat,
+                    Motivo: response.retConsSitCTe.xMotivo,
+                }]);
+            }
+
+            return response;
+        } catch (error) {
+            logger.error(``, error, { context: 'CTE_ConsultaProtocolo' });
+            throw error;
+        }
+    }
+
+    /**
+     * Autoriza um ou mais CT-e de Transporte de Carga (modelo 57) junto à SEFAZ da UF do emitente.
+     * Aceita o payload em JSON (`{ CTe: LayoutCTe | LayoutCTe[] }`) ou um XML já montado
+     * (`cteProc`/`CTe` solo). Cada CT-e é transmitido em uma chamada síncrona separada.
+     * @param data - Dados do(s) CT-e a autorizar, ou XML string
+     * @returns Resultado da autorização (success, xMotivo por CT-e, xmls com CTe/protCTe/xmlAssinado)
+     */
+    async CTE_Autorizacao(data: CTeAutorizacaoData | string): Promise<any> {
+        try {
+            const cteAutorizacaoService = new CTEAutorizacaoService(
+                this.environment,
+                this.utility,
+                this.xmlBuilder,
+                this.axios,
+                this.saveFiles,
+                this.gerarConsulta
+            );
+            const cteAutorizacao = new CTEAutorizacao(cteAutorizacaoService);
+            const response = await cteAutorizacao.Exec(data);
+
+            if (response?.xMotivo?.length) {
+                console.table(response.xMotivo.map((item: any) => ({
+                    Chave: item.chCTe || '-',
+                    Status: item.cStat,
+                    Motivo: item.xMotivo,
+                })));
+            }
+
+            return response;
+        } catch (error) {
+            logger.error(``, error, { context: 'CTE_Autorizacao' });
             throw error;
         }
     }
