@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
-const NFCEAutorizacaoService = require('../NFCEAutorizacaoService').default;
+const NFCEAutorizacaoService = require('../NFCEAutorizacaoService').NFCEAutorizacaoService;
 
 /**
  * Monta um objeto LayoutNFe mínimo para testar o cálculo da chave de acesso.
@@ -78,5 +78,49 @@ describe('NFCEAutorizacaoService - cálculo de chave de acesso', () => {
             const aamm = chaveAcesso.replace('NFe', '').substring(2, 6);
             expect(aamm).toBe('2607');
         });
+    });
+});
+
+describe('NFCEAutorizacaoService - DV da chave de acesso com CNPJ alfanumérico', () => {
+    let service: any;
+
+    // CNPJ de exemplo da Receita (12.ABC.345/01DE-35); os DVs esperados foram
+    // conferidos com o Keys::verifyingDigit do sped-common
+    const buildNFeComEmitente = (CNPJCPF: string) => ({
+        infNFe: {
+            Id: undefined,
+            ide: {
+                cUF: 35,
+                mod: 65,
+                serie: '1',
+                nNF: '123',
+                tpEmis: 1,
+                cNF: '12345678',
+                dhEmi: '2026-09-23T10:00:00-03:00',
+            },
+            emit: {
+                CNPJCPF,
+            },
+        },
+    });
+
+    beforeEach(() => {
+        service = new NFCEAutorizacaoService();
+    });
+
+    it('deve calcular o DV com o valor ASCII menos 48 quando o CNPJ tem letras', () => {
+        expect(service['calcularModulo11']('35260912ABC34501DE3565001000000123112345678')).toBe(7);
+    });
+
+    it('deve manter o DV das chaves com CNPJ numérico', () => {
+        expect(service['calcularModulo11']('3526091122233300018165001000000123112345678')).toBe(6);
+    });
+
+    it('deve montar a chave de acesso completa para emitente com CNPJ alfanumérico', () => {
+        const nfe = buildNFeComEmitente('12ABC34501DE35');
+        const { chaveAcesso, dv } = service['calcularDigitoVerificador'](nfe);
+        expect(dv).toBe(7);
+        expect(chaveAcesso).toBe('NFe35260912ABC34501DE35650010000001231123456787');
+        expect(chaveAcesso.replace('NFe', '')).toMatch(/^[0-9]{6}[0-9A-Z]{12}[0-9]{26}$/);
     });
 });
