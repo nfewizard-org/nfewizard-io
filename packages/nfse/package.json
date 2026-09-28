@@ -29,6 +29,7 @@
     "directory": "packages/nfse"
   },
   "scripts": {
+    "test": "jest",
     "build": "rollup -c",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
