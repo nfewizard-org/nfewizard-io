@@ -124,3 +124,44 @@ describe('NFCEAutorizacaoService - DV da chave de acesso com CNPJ alfanumérico'
         expect(chaveAcesso.replace('NFe', '')).toMatch(/^[0-9]{6}[0-9A-Z]{12}[0-9]{26}$/);
     });
 });
+
+describe('NFCEAutorizacaoService - chave de acesso com emitente pessoa física (CPF)', () => {
+    let service: any;
+
+    // CPF fictício 111.444.777-35; a chave esperada foi conferida com o
+    // Keys::build do sped-common, que completa o CPF com zeros até 14 posições
+    const buildNFeComCpf = (CNPJCPF: string) => ({
+        infNFe: {
+            Id: undefined,
+            ide: {
+                cUF: 51,
+                mod: 65,
+                serie: '1',
+                nNF: '123',
+                tpEmis: 1,
+                cNF: '12345678',
+                dhEmi: '2026-09-24T10:00:00-04:00',
+            },
+            emit: {
+                CNPJCPF,
+            },
+        },
+    });
+
+    beforeEach(() => {
+        service = new NFCEAutorizacaoService();
+    });
+
+    it('deve completar o CPF do emitente com zeros à esquerda na chave de acesso', () => {
+        const nfe = buildNFeComCpf('11144477735');
+        const { chaveAcesso, dv } = service['calcularDigitoVerificador'](nfe);
+        expect(dv).toBe(5);
+        expect(chaveAcesso).toBe('NFe51260900011144477735650010000001231123456785');
+    });
+
+    it('deve gerar a chave com 44 posições quando o emitente é CPF', () => {
+        const nfe = buildNFeComCpf('11144477735');
+        const { chaveAcesso } = service['calcularDigitoVerificador'](nfe);
+        expect(chaveAcesso.replace('NFe', '')).toMatch(/^[0-9]{44}$/);
+    });
+});
