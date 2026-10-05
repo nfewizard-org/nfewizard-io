@@ -15,11 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
+const { XmlBuilder } = require('@nfewizard/shared');
 const NFEConsultaCadastroService = require('../NFEConsultaCadastroService').default;
 
 function createService(uf = 'SP') {
     const environment = { getConfig: () => ({ dfe: { UF: uf } }) };
-    return new NFEConsultaCadastroService(environment);
+    return new NFEConsultaCadastroService(environment, undefined, new XmlBuilder(environment));
 }
 
 describe('NFEConsultaCadastroService - gerarXml', () => {
