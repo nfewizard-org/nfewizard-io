@@ -59,4 +59,16 @@ describe('CTeGerarDacte - documentos originários (NF-e)', () => {
         expect(documento.documentoEmitente).toBe('12.ABC.345/01DE-35');
         expect(documento.serieNumero).toBe('001 / 123');
     });
+
+    it('deve ignorar o prefixo NFe da chave', () => {
+        const [numerica, alfanumerica] = buildDacte([
+            'NFe35260911222333000181550010000001231123456783',
+            'NFe35260912ABC34501DE35550010000001231123456784',
+        ]).getDocumentosOriginarios();
+
+        expect(numerica.documentoEmitente).toBe('11.222.333/0001-81');
+        expect(numerica.serieNumero).toBe('001 / 123');
+        expect(alfanumerica.documentoEmitente).toBe('12.ABC.345/01DE-35');
+        expect(alfanumerica.serieNumero).toBe('001 / 123');
+    });
 });
