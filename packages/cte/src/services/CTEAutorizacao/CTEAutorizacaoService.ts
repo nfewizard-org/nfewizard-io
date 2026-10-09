@@ -20,8 +20,15 @@ import { Environment, Utility, XmlBuilder, XmlParser, ValidaCPFCNPJ, BaseNFE, lo
 import { GerarConsultaImpl, SaveFilesImpl, CTEAutorizacaoServiceImpl } from '@nfewizard/types/shared';
 import { CTe, CTeAutorizacaoResultado, CTeAutorizacaoResultadoItem, LayoutCTe } from '@nfewizard/types/cte';
 import { CTE_VERSAO } from '../util/CTEBaseService.js';
+import { TP_EMIS, TP_EMIS_CONTINGENCIA } from '../util/CTeContingencia.js';
+import { gerarQrCodeCTe } from '../util/CTeQrCode.js';
 
 const METHOD_NAME = 'CTeAutorizacao';
+
+/** Campos iniciais de `ide`, na ordem do schema (idêntica em CT-e 57, OS, GTV-e e Simplificado). */
+const ORDEM_INICIAL_IDE = ['cUF', 'cCT', 'CFOP', 'natOp', 'mod', 'serie', 'nCT', 'dhEmi', 'tpImp', 'tpEmis', 'cDV', 'tpAmb', 'tpCTe', 'procEmi', 'verProc'];
+
+const emSvc = (tpEmis: number) => tpEmis === TP_EMIS.SVC_RS || tpEmis === TP_EMIS.SVC_SP;
 
 /**
  * Autorização do CT-e de Transporte de Carga (modelo 57).
@@ -35,8 +42,13 @@ const METHOD_NAME = 'CTeAutorizacao';
  *    (Status, Consulta, Evento), que trafegam XML puro sem compactação.
  */
 export class CTEAutorizacaoService extends BaseNFE implements CTEAutorizacaoServiceImpl {
-    constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
-        super(environment, utility, xmlBuilder, METHOD_NAME, axios, saveFiles, gerarConsulta);
+    /** Tag raiz do XML assinado (`CTe`, `CTeOS`, `GTVe`, `CTeSimp`). */
+    protected rootTag = 'CTe';
+    /** Modelo do documento usado na chave de acesso quando `ide.mod` não é informado. */
+    protected modeloPadrao: number | string = 57;
+
+    constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl, metodo: string = METHOD_NAME) {
+        super(environment, utility, xmlBuilder, metodo, axios, saveFiles, gerarConsulta);
     }
 
     private converterParaJson(data: CTe | string): CTe {
@@ -83,7 +95,7 @@ export class CTEAutorizacaoService extends BaseNFE implements CTEAutorizacaoServ
         }
 
         const cUF = ide.cUF;
-        const mod = ide.mod ?? 57;
+        const mod = ide.mod ?? this.modeloPadrao;
         const serie = ide.serie;
         const nCT = ide.nCT;
         const tpEmis = ide.tpEmis ?? 1;
@@ -123,7 +135,7 @@ export class CTEAutorizacaoService extends BaseNFE implements CTEAutorizacaoServ
      * recebedor ou tomador) trocando o campo interno `CNPJCPF`/`CNPJ`/`CPF` pelo campo
      * correto (`CNPJ` ou `CPF`) exigido no XML, validando o documento informado.
      */
-    private normalizaParticipante<T extends { CNPJCPF?: string; CNPJ?: string; CPF?: string }>(participante: T, campo: string): T {
+    protected normalizaParticipante<T extends { CNPJCPF?: string; CNPJ?: string; CPF?: string }>(participante: T, campo: string): T {
         const documento = participante.CNPJCPF || participante.CNPJ || participante.CPF;
         if (!documento) return participante;
 
@@ -145,6 +157,78 @@ export class CTEAutorizacaoService extends BaseNFE implements CTEAutorizacaoServ
         return btoa(binaryString);
     }
 
+    protected static readonly TEXTO_HOMOLOGACAO = 'CTE EMITIDO EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL';
+
+    /**
+     * Valida/normaliza os documentos dos participantes do CT-e modelo 57. Subclasses de outros
+     * documentos (CT-e OS, GTV-e, Simplificado) sobrescrevem com os participantes do seu leiaute.
+     */
+    protected normalizarParticipantes(infCte: LayoutCTe['infCte']): void {
+        if (infCte.rem) infCte.rem = this.normalizaParticipante(infCte.rem, 'remetente');
+        if (infCte.dest) infCte.dest = this.normalizaParticipante(infCte.dest, 'destinatário');
+        if (infCte.exped) infCte.exped = this.normalizaParticipante(infCte.exped, 'expedidor');
+        if (infCte.receb) infCte.receb = this.normalizaParticipante(infCte.receb, 'recebedor');
+        if (infCte.ide.toma4) infCte.ide.toma4 = this.normalizaParticipante(infCte.ide.toma4, 'tomador');
+    }
+
+    /**
+     * Em homologação o MOC exige a razão social (xNome) de cada participante existente
+     * igual a "CTE EMITIDO EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL" (modelo 57: rem, exped, receb e dest).
+     */
+    protected aplicarTextoHomologacao(infCte: LayoutCTe['infCte']): void {
+        for (const participante of [infCte.rem, infCte.exped, infCte.receb, infCte.dest]) {
+            if (participante) participante.xNome = CTEAutorizacaoService.TEXTO_HOMOLOGACAO;
+        }
+    }
+
+    /**
+     * Contingência: dhCont e xJust são obrigatórios (e só nela). Nas SVC, o tpEmis precisa corresponder
+     * à SVC da UF do emitente (7=SVC-RS para SP/MT/MS; 8=SVC-SP para as demais).
+     */
+    protected validarContingencia(ide: LayoutCTe['infCte']['ide']): void {
+        const tpEmis = Number(ide.tpEmis ?? TP_EMIS.NORMAL);
+        const emContingencia = TP_EMIS_CONTINGENCIA.includes(tpEmis);
+
+        if (emContingencia && (!ide.dhCont || !ide.xJust)) {
+            throw new Error(`Emissão em contingência (tpEmis=${tpEmis}) exige dhCont e xJust em ide.`);
+        }
+        if (tpEmis === TP_EMIS.NORMAL && (ide.dhCont || ide.xJust)) {
+            throw new Error('dhCont e xJust não devem ser informados na emissão normal (tpEmis=1).');
+        }
+        if (tpEmis === TP_EMIS.SVC_RS || tpEmis === TP_EMIS.SVC_SP) {
+            const esperado = this.utility.getSvcCTe() === 'SVC-RS' ? TP_EMIS.SVC_RS : TP_EMIS.SVC_SP;
+            if (tpEmis !== esperado) {
+                throw new Error(`A UF do emitente é atendida pela ${this.utility.getSvcCTe()}: use tpEmis=${esperado}.`);
+            }
+        }
+    }
+
+    /**
+     * Texto do QR Code (`infCTeSupl/qrCodCTe`). Em contingência FS-DA/EPEC a chave é assinada
+     * com o certificado do emitente (`sign`), conforme o MOC.
+     */
+    protected gerarQrCode(chCTe: string, tpAmb: number | string, tpEmis: number): string {
+        const url = this.utility.getWebServiceUrl('CTeQrCode', false, CTE_VERSAO, 'CTe');
+        const assina = tpEmis === TP_EMIS.EPEC || tpEmis === TP_EMIS.FSDA;
+        return gerarQrCodeCTe({ url, chCTe, tpAmb, privateKey: assina ? this.environment.getCertKey() : undefined });
+    }
+
+    /**
+     * Campos calculados pela lib (cDV, cCT, mod, tpEmis, verProc) podem não vir no payload e seriam
+     * acrescentados ao fim de `ide`; o schema exige a sequência, então reposiciona os campos iniciais.
+     */
+    private ordenarIde<T extends object>(ide: T): T {
+        const origem = ide as Record<string, any>;
+        const ordenado: Record<string, any> = {};
+        for (const chave of ORDEM_INICIAL_IDE) {
+            if (chave in origem) ordenado[chave] = origem[chave];
+        }
+        for (const chave of Object.keys(origem)) {
+            if (!(chave in ordenado)) ordenado[chave] = origem[chave];
+        }
+        return ordenado as T;
+    }
+
     /**
      * Monta e assina o XML de um único CT-e, mutando `cte` com os campos calculados
      * (`cDV`, `cCT`, `mod`, `verProc`) para que o objeto original reflita o que foi
@@ -155,29 +239,27 @@ export class CTEAutorizacaoService extends BaseNFE implements CTEAutorizacaoServ
             context: 'CTEAutorizacaoService',
         });
 
+        this.validarContingencia(cte.infCte.ide);
+
         const { chaveAcesso, dv } = this.calcularDigitoVerificador(cte);
 
         cte.infCte.ide.cDV = dv;
         cte.infCte.ide.verProc = cte.infCte.ide.verProc || '1.0.0.0';
+        cte.infCte.ide = this.ordenarIde(cte.infCte.ide);
         delete cte.infCte.Id;
 
         // Valida documento do emitente (sempre obrigatório)
         const emitDoc = (cte.infCte.emit as any).CNPJCPF || cte.infCte.emit.CNPJ || cte.infCte.emit.CPF;
         cte.infCte.emit = this.normalizaParticipante(Object.assign({ CNPJCPF: emitDoc }, cte.infCte.emit), 'emitente');
 
-        // Valida documentos dos demais participantes (opcionais conforme o modal/serviço)
-        if (cte.infCte.rem) cte.infCte.rem = this.normalizaParticipante(cte.infCte.rem, 'remetente');
-        if (cte.infCte.dest) cte.infCte.dest = this.normalizaParticipante(cte.infCte.dest, 'destinatário');
-        if (cte.infCte.exped) cte.infCte.exped = this.normalizaParticipante(cte.infCte.exped, 'expedidor');
-        if (cte.infCte.receb) cte.infCte.receb = this.normalizaParticipante(cte.infCte.receb, 'recebedor');
-        if (cte.infCte.ide.toma4) cte.infCte.ide.toma4 = this.normalizaParticipante(cte.infCte.ide.toma4, 'tomador');
+        this.normalizarParticipantes(cte.infCte);
 
-        // Ambiente de homologação: texto obrigatório de identificação (destinatário, ou tomador quando não há destinatário próprio)
         if (String(cte.infCte.ide.tpAmb) === '2') {
-            const textoHomologacao = 'CTE EMITIDO EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL';
-            if (cte.infCte.dest) cte.infCte.dest.xNome = textoHomologacao;
-            else if (cte.infCte.ide.toma4) cte.infCte.ide.toma4.xNome = textoHomologacao;
+            this.aplicarTextoHomologacao(cte.infCte);
         }
+
+        const qrCodCTe = cte.infCTeSupl?.qrCodCTe
+            || this.gerarQrCode(chaveAcesso.replace('CTe', ''), cte.infCte.ide.tpAmb, Number(cte.infCte.ide.tpEmis));
 
         const xmlObject = {
             $: {
@@ -189,10 +271,11 @@ export class CTEAutorizacaoService extends BaseNFE implements CTEAutorizacaoServ
                     Id: chaveAcesso,
                 },
                 ...cte.infCte
-            }
+            },
+            infCTeSupl: { qrCodCTe },
         };
 
-        const cteXML = this.xmlBuilder.gerarXml(xmlObject, 'CTe', this.metodo);
+        const cteXML = this.xmlBuilder.gerarXml(xmlObject, this.rootTag, this.metodo);
         return this.xmlBuilder.assinarXML(cteXML, 'infCte');
     }
 
@@ -234,7 +317,7 @@ export class CTEAutorizacaoService extends BaseNFE implements CTEAutorizacaoServ
                 this.metodo,
                 false,
                 CTE_VERSAO,
-                'CTe',
+                emSvc(Number(cte.infCte.ide.tpEmis)) ? 'CTeSVC' : 'CTe',
                 false,
                 '',
                 'cteDadosMsg'
@@ -257,13 +340,33 @@ export class CTEAutorizacaoService extends BaseNFE implements CTEAutorizacaoServ
         }
     }
 
-    async Exec(data: CTe | string): Promise<CTeAutorizacaoResultado> {
+    async Exec(data: CTe | string | any): Promise<CTeAutorizacaoResultado<any>> {
+        const dataAsJson = this.converterParaJson(data);
+        const ctes = Array.isArray(dataAsJson.CTe) ? dataAsJson.CTe : [dataAsJson.CTe];
+        return this.autorizar(ctes);
+    }
+
+    /**
+     * Transmite ao autorizador normal os CT-e emitidos em contingência EPEC (tpEmis=4) ou FS-DA (tpEmis=5),
+     * após o restabelecimento do serviço. CT-e de SVC (7/8) já são autorizados na própria SVC via `Exec`.
+     */
+    async ExecTransmitirContingencia(data: CTe | string | any): Promise<CTeAutorizacaoResultado<any>> {
         const dataAsJson = this.converterParaJson(data);
         const ctes = Array.isArray(dataAsJson.CTe) ? dataAsJson.CTe : [dataAsJson.CTe];
 
-        const resultados: CTeAutorizacaoResultadoItem[] = [];
         for (const cte of ctes) {
-            resultados.push(await this.autorizarUmCTe(cte));
+            const tpEmis = Number(cte.infCte.ide.tpEmis);
+            if (tpEmis !== TP_EMIS.EPEC && tpEmis !== TP_EMIS.FSDA) {
+                throw new Error(`CTE_TransmitirContingencia: tpEmis=${tpEmis} inválido. Use apenas tpEmis=4 (EPEC) ou tpEmis=5 (FS-DA).`);
+            }
+        }
+        return this.autorizar(ctes);
+    }
+
+    protected async autorizar<T = LayoutCTe>(ctes: T[]): Promise<CTeAutorizacaoResultado<T>> {
+        const resultados: CTeAutorizacaoResultadoItem<T>[] = [];
+        for (const cte of ctes) {
+            resultados.push(await this.autorizarUmCTe(cte as unknown as LayoutCTe) as unknown as CTeAutorizacaoResultadoItem<T>);
         }
 
         const xMotivo = resultados.map(r => ({

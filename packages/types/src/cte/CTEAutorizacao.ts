@@ -32,15 +32,15 @@ export interface CTe {
 }
 
 /** Resultado da autorização de um único CT-e. */
-export interface CTeAutorizacaoResultadoItem {
-    CTe: LayoutCTe;
+export interface CTeAutorizacaoResultadoItem<T = LayoutCTe> {
+    CTe: T;
     protCTe?: ProtCTe;
     xmlAssinado?: string;
 }
 
 /** Retorno de `CTE_Autorizacao`. */
-export interface CTeAutorizacaoResultado {
+export interface CTeAutorizacaoResultado<T = LayoutCTe> {
     success: boolean;
     xMotivo: Array<{ chCTe?: string; cStat?: number | string; xMotivo?: string }>;
-    xmls: CTeAutorizacaoResultadoItem[];
+    xmls: CTeAutorizacaoResultadoItem<T>[];
 }

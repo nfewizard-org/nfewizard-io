@@ -126,3 +126,27 @@ describe('CTEAutorizacaoService - normalizaParticipante / validaDocumento', () =
         );
     });
 });
+
+describe('CTEAutorizacaoService - gerarXml em homologação', () => {
+    it('troca a razão social de remetente, expedidor, recebedor e destinatário pelo texto oficial', () => {
+        const { XmlBuilder } = require('@nfewizard/shared');
+        const real = new XmlBuilder({});
+        const service = new CTEAutorizacaoService(undefined, { getWebServiceUrl: () => 'https://qr.example/qrcode', getSvcCTe: () => 'SVC-SP' }, { gerarXml: real.gerarXml.bind(real), assinarXML: (x) => x });
+        const part = (nome) => ({ CNPJCPF: '11222333000181', xNome: nome });
+
+        const xml = service['gerarXml']({
+            infCte: {
+                ide: { cUF: 41, dhEmi: '2024-01-15T10:00:00-03:00', serie: 1, nCT: 1, cCT: '12345678', tpAmb: 2 },
+                emit: part('EMITENTE'),
+                rem: part('REM REAL'),
+                exped: part('EXPED REAL'),
+                receb: part('RECEB REAL'),
+                dest: part('DEST REAL'),
+            },
+        });
+
+        expect(xml.match(/CTE EMITIDO EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL/g)).toHaveLength(4);
+        expect(xml).not.toContain('REAL');
+        expect(xml).toContain('<xNome>EMITENTE</xNome>');
+    });
+});

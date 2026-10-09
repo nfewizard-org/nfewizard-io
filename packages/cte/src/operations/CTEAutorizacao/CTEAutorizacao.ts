@@ -25,6 +25,13 @@ class CTEAutorizacao implements CTEAutorizacaoServiceImpl {
     async Exec(data?: any): Promise<any> {
         return await this.cteAutorizacaoService.Exec(data);
     }
+
+    async ExecTransmitirContingencia(data?: any): Promise<any> {
+        if (!this.cteAutorizacaoService.ExecTransmitirContingencia) {
+            throw new Error('Método ExecTransmitirContingencia não implementado no serviço de autorização CT-e.');
+        }
+        return await this.cteAutorizacaoService.ExecTransmitirContingencia(data);
+    }
 }
 
 export { CTEAutorizacao };

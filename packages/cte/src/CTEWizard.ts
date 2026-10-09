@@ -29,7 +29,40 @@ import { CTEConsultaProtocoloService } from './services/CTEConsultaProtocolo/CTE
 import { CTEConsultaProtocolo } from './operations/CTEConsultaProtocolo/CTEConsultaProtocolo.js';
 import { CTEAutorizacaoService } from './services/CTEAutorizacao/CTEAutorizacaoService.js';
 import { CTEAutorizacao } from './operations/CTEAutorizacao/CTEAutorizacao.js';
-import { CTe as CTeAutorizacaoData } from '@nfewizard/types/cte';
+import { CTe as CTeAutorizacaoData, CancelamentoCTe, CartaDeCorrecaoCTe, EpecCTe, CTeOS, GTVe, CTeSimp, RegistroMultimodalCTe, PrestacaoDesacordoCTe, CancelamentoPrestacaoDesacordoCTe, ComprovanteEntregaCTe, CancelamentoComprovanteEntregaCTe, InsucessoEntregaCTe, CancelamentoInsucessoEntregaCTe, VinculacaoPagamentoCTe, CancelamentoVinculacaoPagamentoCTe } from '@nfewizard/types/cte';
+import { CTECancelamentoService } from './services/CTERecepcaoEvento/CTECancelamentoService.js';
+import { CTECancelamento } from './operations/CTERecepcaoEvento/CTECancelamento.js';
+import { CTECartaDeCorrecaoService } from './services/CTERecepcaoEvento/CTECartaDeCorrecaoService.js';
+import { CTECartaDeCorrecao } from './operations/CTERecepcaoEvento/CTECartaDeCorrecao.js';
+import { CTEEpecService } from './services/CTERecepcaoEvento/CTEEpecService.js';
+import { CTEEpec } from './operations/CTERecepcaoEvento/CTEEpec.js';
+import { CTEAutorizacaoOSService } from './services/CTEAutorizacaoOS/CTEAutorizacaoOSService.js';
+import { CTEAutorizacaoOS } from './operations/CTEAutorizacaoOS/CTEAutorizacaoOS.js';
+import { GTVeAutorizacaoService } from './services/GTVeAutorizacao/GTVeAutorizacaoService.js';
+import { GTVeAutorizacao } from './operations/GTVeAutorizacao/GTVeAutorizacao.js';
+import { CTESimplificadoAutorizacaoService } from './services/CTESimplificadoAutorizacao/CTESimplificadoAutorizacaoService.js';
+import { CTESimplificadoAutorizacao } from './operations/CTESimplificadoAutorizacao/CTESimplificadoAutorizacao.js';
+import { CTEConsultaCadastroService } from './services/CTEConsultaCadastro/CTEConsultaCadastroService.js';
+import { CTEConsultaCadastro } from './operations/CTEConsultaCadastro/CTEConsultaCadastro.js';
+import { ConsultaCadastroData } from '@nfewizard/types/nfe';
+import { CTERegistroMultimodalService } from './services/CTERecepcaoEvento/CTERegistroMultimodalService.js';
+import { CTERegistroMultimodal } from './operations/CTERecepcaoEvento/CTERegistroMultimodal.js';
+import { CTEPrestacaoDesacordoService } from './services/CTERecepcaoEvento/CTEPrestacaoDesacordoService.js';
+import { CTEPrestacaoDesacordo } from './operations/CTERecepcaoEvento/CTEPrestacaoDesacordo.js';
+import { CTECancelamentoPrestacaoDesacordoService } from './services/CTERecepcaoEvento/CTECancelamentoPrestacaoDesacordoService.js';
+import { CTECancelamentoPrestacaoDesacordo } from './operations/CTERecepcaoEvento/CTECancelamentoPrestacaoDesacordo.js';
+import { CTEComprovanteEntregaService } from './services/CTERecepcaoEvento/CTEComprovanteEntregaService.js';
+import { CTEComprovanteEntrega } from './operations/CTERecepcaoEvento/CTEComprovanteEntrega.js';
+import { CTECancelamentoComprovanteEntregaService } from './services/CTERecepcaoEvento/CTECancelamentoComprovanteEntregaService.js';
+import { CTECancelamentoComprovanteEntrega } from './operations/CTERecepcaoEvento/CTECancelamentoComprovanteEntrega.js';
+import { CTEInsucessoEntregaService } from './services/CTERecepcaoEvento/CTEInsucessoEntregaService.js';
+import { CTEInsucessoEntrega } from './operations/CTERecepcaoEvento/CTEInsucessoEntrega.js';
+import { CTECancelamentoInsucessoEntregaService } from './services/CTERecepcaoEvento/CTECancelamentoInsucessoEntregaService.js';
+import { CTECancelamentoInsucessoEntrega } from './operations/CTERecepcaoEvento/CTECancelamentoInsucessoEntrega.js';
+import { CTEVinculacaoPagamentoService } from './services/CTERecepcaoEvento/CTEVinculacaoPagamentoService.js';
+import { CTEVinculacaoPagamento } from './operations/CTERecepcaoEvento/CTEVinculacaoPagamento.js';
+import { CTECancelamentoVinculacaoPagamentoService } from './services/CTERecepcaoEvento/CTECancelamentoVinculacaoPagamentoService.js';
+import { CTECancelamentoVinculacaoPagamento } from './operations/CTERecepcaoEvento/CTECancelamentoVinculacaoPagamento.js';
 
 /**
  * Classe principal para operações CTe
@@ -275,6 +308,170 @@ export class CTEWizard {
             return response;
         } catch (error) {
             logger.error(``, error, { context: 'CTE_Autorizacao' });
+            throw error;
+        }
+    }
+
+    private logEventoResultado(response: any) {
+        if (response?.xMotivos?.length) {
+            console.table(response.xMotivos.map((item: any) => ({
+                Chave: item.chCTe || '-',
+                Evento: item.tpEvento,
+                Status: item.cStat,
+                Motivo: item.xMotivo,
+            })));
+        }
+    }
+
+    /**
+     * Cancela um CT-e (evento 110111). Prazo: 168h após a autorização (CT-e 57/67) ou 45 dias (GTV-e),
+     * salvo liberação do Fisco.
+     */
+    async CTE_Cancelamento(data: CancelamentoCTe): Promise<any> {
+        try {
+            const service = new CTECancelamentoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const response = await new CTECancelamento(service).Exec(data);
+            this.logEventoResultado(response);
+            return response;
+        } catch (error) {
+            logger.error(``, error, { context: 'CTE_Cancelamento' });
+            throw error;
+        }
+    }
+
+    /**
+     * Registra uma Carta de Correção Eletrônica (evento 110110) para CT-e 57/67.
+     * Campos que alteram valores, cadastro de partes ou datas são bloqueados antes do envio.
+     */
+    async CTE_CartaDeCorrecao(data: CartaDeCorrecaoCTe): Promise<any> {
+        try {
+            const service = new CTECartaDeCorrecaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const response = await new CTECartaDeCorrecao(service).Exec(data);
+            this.logEventoResultado(response);
+            return response;
+        } catch (error) {
+            logger.error(``, error, { context: 'CTE_CartaDeCorrecao' });
+            throw error;
+        }
+    }
+
+    private async executarEvento(contexto: string, operation: { Exec(data?: any): Promise<any> }, data: any): Promise<any> {
+        try {
+            const response = await operation.Exec(data);
+            this.logEventoResultado(response);
+            return response;
+        } catch (error) {
+            logger.error(``, error, { context: contexto });
+            throw error;
+        }
+    }
+
+    /** Registra informações do multimodal (110160) em CT-e multimodal autorizado. */
+    async CTE_RegistroMultimodal(data: RegistroMultimodalCTe): Promise<any> {
+        return this.executarEvento('CTE_RegistroMultimodal', new CTERegistroMultimodal(new CTERegistroMultimodalService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /** Prestação do Serviço em Desacordo (610110). Autor é o tomador: informe CNPJ/CPF do tomador. Prazo: 45 dias da autorização. */
+    async CTE_PrestacaoDesacordo(data: PrestacaoDesacordoCTe): Promise<any> {
+        return this.executarEvento('CTE_PrestacaoDesacordo', new CTEPrestacaoDesacordo(new CTEPrestacaoDesacordoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /** Cancela o evento de Prestação do Serviço em Desacordo (610111). Autor é o tomador. */
+    async CTE_CancelamentoPrestacaoDesacordo(data: CancelamentoPrestacaoDesacordoCTe): Promise<any> {
+        return this.executarEvento('CTE_CancelamentoPrestacaoDesacordo', new CTECancelamentoPrestacaoDesacordo(new CTECancelamentoPrestacaoDesacordoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /** Comprovante de Entrega (110180) — somente CT-e 57. */
+    async CTE_ComprovanteEntrega(data: ComprovanteEntregaCTe): Promise<any> {
+        return this.executarEvento('CTE_ComprovanteEntrega', new CTEComprovanteEntrega(new CTEComprovanteEntregaService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /** Cancela um Comprovante de Entrega (110181). */
+    async CTE_CancelamentoComprovanteEntrega(data: CancelamentoComprovanteEntregaCTe): Promise<any> {
+        return this.executarEvento('CTE_CancelamentoComprovanteEntrega', new CTECancelamentoComprovanteEntrega(new CTECancelamentoComprovanteEntregaService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /** Insucesso na Entrega (110190) — somente CT-e 57, leiaute 4.00. */
+    async CTE_InsucessoEntrega(data: InsucessoEntregaCTe): Promise<any> {
+        return this.executarEvento('CTE_InsucessoEntrega', new CTEInsucessoEntrega(new CTEInsucessoEntregaService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /** Cancela um Insucesso na Entrega (110191). */
+    async CTE_CancelamentoInsucessoEntrega(data: CancelamentoInsucessoEntregaCTe): Promise<any> {
+        return this.executarEvento('CTE_CancelamentoInsucessoEntrega', new CTECancelamentoInsucessoEntrega(new CTECancelamentoInsucessoEntregaService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /** Vincula transação de pagamento ao CT-e (110300, NT 2026.001). */
+    async CTE_VinculacaoPagamento(data: VinculacaoPagamentoCTe): Promise<any> {
+        return this.executarEvento('CTE_VinculacaoPagamento', new CTEVinculacaoPagamento(new CTEVinculacaoPagamentoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /** Cancela uma Vinculação de Pagamento (110301). */
+    async CTE_CancelamentoVinculacaoPagamento(data: CancelamentoVinculacaoPagamentoCTe): Promise<any> {
+        return this.executarEvento('CTE_CancelamentoVinculacaoPagamento', new CTECancelamentoVinculacaoPagamento(new CTECancelamentoVinculacaoPagamentoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /**
+     * Registra o EPEC (110113) — Evento Prévio de Emissão em Contingência, somente CT-e 57.
+     * Enviado à SVC da UF do emitente. A chave informada deve ter tpEmis=4; depois, transmita o CT-e
+     * ao autorizador normal em até 7 dias com `CTE_TransmitirContingencia`.
+     */
+    async CTE_Epec(data: EpecCTe): Promise<any> {
+        return this.executarEvento('CTE_Epec', new CTEEpec(new CTEEpecService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /**
+     * Transmite ao autorizador normal CT-e emitidos em contingência EPEC (tpEmis=4) ou FS-DA (tpEmis=5)
+     * depois que o serviço voltou. CT-e em SVC (tpEmis 7/8) são autorizados direto na SVC por `CTE_Autorizacao`.
+     */
+    async CTE_TransmitirContingencia(data: CTeAutorizacaoData | string): Promise<any> {
+        try {
+            const service = new CTEAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            return await new CTEAutorizacao(service).ExecTransmitirContingencia(data);
+        } catch (error) {
+            logger.error(``, error, { context: 'CTE_TransmitirContingencia' });
+            throw error;
+        }
+    }
+
+    /** Autoriza CT-e Outros Serviços (modelo 67). Um documento por chamada; arrays são transmitidos em sequência. */
+    async CTE_AutorizacaoOS(data: CTeOS): Promise<any> {
+        return this.executarAutorizacao('CTE_AutorizacaoOS', new CTEAutorizacaoOS(new CTEAutorizacaoOSService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /** Autoriza Guia de Transporte de Valores eletrônica (GTV-e, modelo 64). */
+    async CTE_GTVeAutorizacao(data: GTVe): Promise<any> {
+        return this.executarAutorizacao('CTE_GTVeAutorizacao', new GTVeAutorizacao(new GTVeAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /** Autoriza CT-e Simplificado (NT 2024.002): um único tomador e múltiplos remetentes/destinatários. */
+    async CTE_SimplificadoAutorizacao(data: CTeSimp): Promise<any> {
+        return this.executarAutorizacao('CTE_SimplificadoAutorizacao', new CTESimplificadoAutorizacao(new CTESimplificadoAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta)), data);
+    }
+
+    /**
+     * Consulta cadastro de contribuintes do ICMS. O CT-e usa o mesmo serviço da NF-e (`NfeConsultaCadastro`).
+     * Esse serviço tem disponibilidade menor que os demais: use como alternativa, fora do fluxo de emissão.
+     */
+    async CTE_ConsultaCadastro(data: ConsultaCadastroData): Promise<any> {
+        try {
+            const service = new CTEConsultaCadastroService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            return await new CTEConsultaCadastro(service).Exec(data);
+        } catch (error) {
+            logger.error(``, error, { context: 'CTE_ConsultaCadastro' });
+            throw error;
+        }
+    }
+
+    private async executarAutorizacao(contexto: string, operation: { Exec(data?: any): Promise<any> }, data: any): Promise<any> {
+        try {
+            const response = await operation.Exec(data);
+            if (response?.xMotivo?.length) {
+                console.table(response.xMotivo.map((item: any) => ({ Chave: item.chCTe || '-', Status: item.cStat, Motivo: item.xMotivo })));
+            }
+            return response;
+        } catch (error) {
+            logger.error(``, error, { context: contexto });
             throw error;
         }
     }

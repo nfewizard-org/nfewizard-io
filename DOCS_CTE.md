@@ -1,6 +1,62 @@
-# Distribuição de CT-e (Conhecimento de Transporte Eletrônico)
+# CT-e (Conhecimento de Transporte Eletrônico)
 
-A biblioteca NFeWizard-io agora oferece suporte para consulta e distribuição de documentos CT-e através dos webservices da SEFAZ.
+O pacote `@nfewizard/cte` cobre o MOC 4.00 do CT-e: autorização (CT-e 57, CT-e OS 67, GTV-e 64 e CT-e Simplificado), eventos, status do serviço, consulta de protocolo/cadastro, contingência (EPEC, FS-DA, SVC), QR Code e distribuição DFe. O DACTE (PDF) é gerado pelo pacote `@nfewizard/danfe`.
+
+Exemplos executáveis: [examples/CTe](examples/CTe).
+
+## 📋 Operações do `CTEWizard`
+
+Inicialize com `new CTEWizard()` + `await cte.NFE_LoadEnvironment({ config })` (mesmo `config` da NF-e; o ambiente vem de `nfe.ambiente` e a UF de `dfe.UF`).
+
+| Método | O que faz |
+|---|---|
+| `CTE_ConsultaStatusServico()` | Status do autorizador da UF (cStat 107 = em operação) |
+| `CTE_ConsultaProtocolo(chCTe)` | Situação/protocolo e eventos de um CT-e |
+| `CTE_ConsultaCadastro({ cnpj \| cpf \| ie, uf? })` | Cadastro de contribuintes (mesmo serviço da NF-e) |
+| `CTE_Autorizacao(data)` | Autoriza CT-e 57 (JSON `{ CTe }` ou XML) |
+| `CTE_AutorizacaoOS(data)` | Autoriza CT-e Outros Serviços (modelo 67) |
+| `CTE_GTVeAutorizacao(data)` | Autoriza GTV-e (modelo 64) |
+| `CTE_SimplificadoAutorizacao(data)` | Autoriza CT-e Simplificado |
+| `CTE_Cancelamento` / `CTE_CartaDeCorrecao` | Eventos 110111 / 110110 |
+| `CTE_RegistroMultimodal` | Evento 110160 |
+| `CTE_PrestacaoDesacordo` / `CTE_CancelamentoPrestacaoDesacordo` | Eventos 610110 / 610111 (autor: tomador) |
+| `CTE_ComprovanteEntrega` / `CTE_CancelamentoComprovanteEntrega` | Eventos 110180 / 110181 |
+| `CTE_InsucessoEntrega` / `CTE_CancelamentoInsucessoEntrega` | Eventos 110190 / 110191 |
+| `CTE_VinculacaoPagamento` / `CTE_CancelamentoVinculacaoPagamento` | Eventos 110300 / 110301 |
+| `CTE_Epec(data)` | EPEC 110113, enviado à SVC |
+| `CTE_TransmitirContingencia(data)` | Envia ao autorizador normal CT-e emitidos em EPEC (tpEmis 4) ou FS-DA (5) |
+| `CTE_DistribuicaoDFe*` | Distribuição DFe (ver abaixo) |
+
+### Autorização
+
+- O serviço é **síncrono, um documento por chamada** (sem lote nem recibo). Se `CTe` for um array, a lib transmite um a um.
+- A lib calcula a chave de acesso e `cDV`, gera `cCT` se omitido, assina o `infCte`, preenche `infCTeSupl/qrCodCTe` e envia o XML compactado (GZip + Base64), como exige o MOC.
+- Em homologação (`tpAmb=2`) a razão social de remetente, expedidor, recebedor e destinatário (no CT-e OS e no Simplificado, do tomador; na GTV-e, de remetente e destinatário) é substituída por `CTE EMITIDO EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL`.
+- Retorno: `{ success, xMotivo: [{ chCTe, cStat, xMotivo }], xmls: [{ CTe, protCTe, xmlAssinado }] }`.
+- Modais: o grupo `infModal` é repassado como informado (rodoviário, aéreo, aquaviário, ferroviário, dutoviário e multimodal estão tipados).
+
+### Eventos
+
+Um evento por chamada (sem `idLote`); `evento` pode ser um objeto ou um array (chamadas sequenciais). Por padrão a lib deriva `cOrgao` (UF) e o CNPJ do autor da chave de acesso, usa `nSeqEvento=1`, `versaoEvento="4.00"` e a hora atual. Nos eventos do tomador (610110/610111) informe `CNPJ` ou `CPF` do tomador. A Carta de Correção bloqueia, antes do envio, os campos que o MOC proíbe corrigir (valores, partes, datas) e preenche a condição de uso oficial.
+
+### Contingência e QR Code
+
+| `tpEmis` | Modalidade | Como usar |
+|---|---|---|
+| 1 | Normal | `CTE_Autorizacao` |
+| 4 | EPEC | `CTE_Epec` (SVC) e depois `CTE_TransmitirContingencia` (em até 7 dias) |
+| 5 | FS-DA | Imprima o DACTE no formulário de segurança e transmita com `CTE_TransmitirContingencia` |
+| 7 / 8 | SVC-RS / SVC-SP | `CTE_Autorizacao`: a lib envia à SVC. SP, MT e MS usam a SVC-RS (7); as demais UFs, a SVC-SP (8) |
+
+Em contingência `ide.dhCont` e `ide.xJust` são obrigatórios (e proibidos na emissão normal). O QR Code usa o endereço de consulta da UF e, em EPEC/FS-DA, inclui `sign` (RSA-SHA1 da chave com o certificado do emitente).
+
+### Endpoints por UF
+
+`packages/shared/src/config/CTeServicosUrl.json` traz os endpoints oficiais de MG, MS, MT, PR, SP e SVRS (as demais UFs usam a SVRS), produção e homologação, além dos endereços de QR Code. A Distribuição DFe usa o Ambiente Nacional.
+
+### Validação de schema
+
+Os XSDs de autorização/eventos/consultas do CT-e 4.00 **ainda não estão no repositório** (veja `packages/shared/resources/schemas/cte/README.md`). Sem eles a validação local é ignorada e a SEFAZ valida o XML no recebimento.
 
 ## 📦 Funcionalidades Disponíveis
 
@@ -151,7 +207,7 @@ O ambiente é selecionado automaticamente com base na configuração `nfe.ambien
    - `http.jsonl` - Logs de comunicação HTTP
    - `error.jsonl` - Logs de erros
 
-2. **Versão**: A versão do CT-e implementada é **1.00**.
+2. **Versão**: o leiaute do CT-e é o **4.00**; a Distribuição DFe usa a versão **1.00** (a vigente no Portal Nacional).
 
 ## 🐛 Tratamento de Erros
 

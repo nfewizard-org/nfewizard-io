@@ -18,12 +18,18 @@ import { Environment, XmlBuilder, Utility, logger } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
 import { SaveFilesImpl, GerarConsultaImpl, CTEConsultaProtocoloServiceImpl } from '@nfewizard/types/shared';
 import { CTEBaseService, CTE_VERSAO } from '../util/CTEBaseService.js';
+import { chaveEmSvc } from '../util/CTeContingencia.js';
 
 const METHOD_NAME = 'CTeConsultaProtocolo';
 
 export class CTEConsultaProtocoloService extends CTEBaseService implements CTEConsultaProtocoloServiceImpl {
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
         super(environment, utility, xmlBuilder, METHOD_NAME, axios, saveFiles, gerarConsulta);
+    }
+
+    /** CT-e autorizado em SVC (tpEmis 7/8) só é consultado no ambiente da SVC. */
+    protected getModelo(chCTe?: string): string {
+        return chCTe && chaveEmSvc(chCTe) ? 'CTeSVC' : 'CTe';
     }
 
     protected gerarXml(chCTe: string): string {

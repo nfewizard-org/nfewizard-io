@@ -32,6 +32,14 @@ export const CTE_VERSAO = '4.00';
  * porque tem regras próprias de compactação/decompactação de lote.
  */
 abstract class CTEBaseService extends BaseNFE {
+    /**
+     * Valor repassado como `mod` ao resolver a URL. `'CTe'` usa o autorizador normal da UF;
+     * `'CTeSVC'` direciona à Sefaz Virtual de Contingência (ver `Utility.getWebServiceUrl`).
+     */
+    protected getModelo(_data?: any): string {
+        return 'CTe';
+    }
+
     async Exec(data?: any): Promise<any> {
         let xmlConsulta = '';
         let xmlConsultaSoap = '';
@@ -47,7 +55,7 @@ abstract class CTEBaseService extends BaseNFE {
                 this.metodo,
                 false,
                 CTE_VERSAO,
-                'CTe',
+                this.getModelo(data),
                 false,
                 '',
                 'cteDadosMsg'

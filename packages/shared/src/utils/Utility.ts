@@ -405,7 +405,16 @@ class Utility {
     }
 
     /**
-     * Retorna a url correta do webservice
+     * Sefaz Virtual de Contingência (SVC) do CT-e que atende a UF configurada:
+     * SP, MT e MS usam a SVC-RS (tpEmis 7); as demais UFs (SVRS, MG, PR e RS) usam a SVC-SP (tpEmis 8).
+     */
+    getSvcCTe(): 'SVC-RS' | 'SVC-SP' {
+        return ['SP', 'MT', 'MS'].includes(this.environment.config.dfe.UF) ? 'SVC-RS' : 'SVC-SP';
+    }
+
+    /**
+     * Retorna a url correta do webservice.
+     * Para métodos de CT-e, `mod = 'CTeSVC'` direciona a chamada à Sefaz Virtual de Contingência da UF.
      */
     getWebServiceUrl(metodo: string, ambienteNacional = false, versao = "", mod = "NFe"): string {
         // Detecta se é NFSe
@@ -439,9 +448,14 @@ class Utility {
             let chave = `CTe_AN_${ambiente}`;
             if (metodo !== 'CTeDistribuicaoDFe') {
                 const UF = this.environment.config.dfe.UF;
-                chave = `CTe_${UF}_${ambiente}`;
-                if (cteUrls[chave] && 'Usar' in cteUrls[chave]) {
-                    chave = cteUrls[chave].Usar;
+                if (mod === 'CTeSVC') {
+                    // Contingência: SVC-RS opera nos endpoints da SVRS e SVC-SP nos da SVSP (mapa CTe_SP)
+                    chave = this.getSvcCTe() === 'SVC-RS' ? `CTe_SVRS_${ambiente}` : `CTe_SP_${ambiente}`;
+                } else {
+                    chave = `CTe_${UF}_${ambiente}`;
+                    if (cteUrls[chave] && 'Usar' in cteUrls[chave]) {
+                        chave = cteUrls[chave].Usar;
+                    }
                 }
             }
 

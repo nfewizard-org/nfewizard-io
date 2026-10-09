@@ -12,7 +12,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://cte.fazenda.mg.gov.br/cte/services/CTeRecepcaoSimpV4",
         "CTeStatusServico_4.00": "https://cte.fazenda.mg.gov.br/cte/services/CTeStatusServicoV4",
         "CTeConsultaProtocolo_4.00": "https://cte.fazenda.mg.gov.br/cte/services/CTeConsultaV4",
-        "CTeRecepcaoEvento_4.00": "https://cte.fazenda.mg.gov.br/cte/services/CTeRecepcaoEventoV4"
+        "CTeRecepcaoEvento_4.00": "https://cte.fazenda.mg.gov.br/cte/services/CTeRecepcaoEventoV4",
+        "CTeQrCode_4.00": "https://portalcte.fazenda.mg.gov.br/portalcte/sistema/qrcode.xhtml"
     },
     "CTe_MG_H": {
         "CTeAutorizacao_4.00": "https://hcte.fazenda.mg.gov.br/cte/services/CTeRecepcaoSincV4",
@@ -21,7 +22,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://hcte.fazenda.mg.gov.br/cte/services/CTeRecepcaoSimpV4",
         "CTeStatusServico_4.00": "https://hcte.fazenda.mg.gov.br/cte/services/CTeStatusServicoV4",
         "CTeConsultaProtocolo_4.00": "https://hcte.fazenda.mg.gov.br/cte/services/CTeConsultaV4",
-        "CTeRecepcaoEvento_4.00": "https://hcte.fazenda.mg.gov.br/cte/services/CTeRecepcaoEventoV4"
+        "CTeRecepcaoEvento_4.00": "https://hcte.fazenda.mg.gov.br/cte/services/CTeRecepcaoEventoV4",
+        "CTeQrCode_4.00": "https://portalcte.fazenda.mg.gov.br/portalcte/sistema/qrcode.xhtml"
     },
     "CTe_MS_P": {
         "CTeAutorizacao_4.00": "https://producao.cte.ms.gov.br/ws/CTeRecepcaoSincV4",
@@ -30,7 +32,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://producao.cte.ms.gov.br/ws/CTeRecepcaoSimpV4",
         "CTeStatusServico_4.00": "https://producao.cte.ms.gov.br/ws/CTeStatusServicoV4",
         "CTeConsultaProtocolo_4.00": "https://producao.cte.ms.gov.br/ws/CTeConsultaV4",
-        "CTeRecepcaoEvento_4.00": "https://producao.cte.ms.gov.br/ws/CTeRecepcaoEventoV4"
+        "CTeRecepcaoEvento_4.00": "https://producao.cte.ms.gov.br/ws/CTeRecepcaoEventoV4",
+        "CTeQrCode_4.00": "http://www.dfe.ms.gov.br/cte/qrcode"
     },
     "CTe_MS_H": {
         "CTeAutorizacao_4.00": "https://homologacao.cte.ms.gov.br/ws/CTeRecepcaoSincV4",
@@ -39,7 +42,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://homologacao.cte.ms.gov.br/ws/CTeRecepcaoSimpV4",
         "CTeStatusServico_4.00": "https://homologacao.cte.ms.gov.br/ws/CTeStatusServicoV4",
         "CTeConsultaProtocolo_4.00": "https://homologacao.cte.ms.gov.br/ws/CTeConsultaV4",
-        "CTeRecepcaoEvento_4.00": "https://homologacao.cte.ms.gov.br/ws/CTeRecepcaoEventoV4"
+        "CTeRecepcaoEvento_4.00": "https://homologacao.cte.ms.gov.br/ws/CTeRecepcaoEventoV4",
+        "CTeQrCode_4.00": "http://www.dfe.ms.gov.br/cte/qrcode"
     },
     "CTe_MT_P": {
         "CTeAutorizacao_4.00": "https://cte.sefaz.mt.gov.br/ctews2/services/CTeRecepcaoSincV4",
@@ -48,7 +52,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://cte.sefaz.mt.gov.br/cte-ws/services/CTeRecepcaoSimpV4",
         "CTeStatusServico_4.00": "https://cte.sefaz.mt.gov.br/ctews2/services/CTeStatusServicoV4",
         "CTeConsultaProtocolo_4.00": "https://cte.sefaz.mt.gov.br/ctews2/services/CTeConsultaV4",
-        "CTeRecepcaoEvento_4.00": "https://cte.sefaz.mt.gov.br/ctews2/services/CTeRecepcaoEventoV4"
+        "CTeRecepcaoEvento_4.00": "https://cte.sefaz.mt.gov.br/ctews2/services/CTeRecepcaoEventoV4",
+        "CTeQrCode_4.00": "https://www.sefaz.mt.gov.br/cte/qrcode"
     },
     "CTe_MT_H": {
         "CTeAutorizacao_4.00": "https://homologacao.sefaz.mt.gov.br/ctews2/services/CTeRecepcaoSincV4",
@@ -57,7 +62,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://homologacao.sefaz.mt.gov.br/cte-ws/services/CTeRecepcaoSimpV4",
         "CTeStatusServico_4.00": "https://homologacao.sefaz.mt.gov.br/ctews2/services/CTeStatusServicoV4",
         "CTeConsultaProtocolo_4.00": "https://homologacao.sefaz.mt.gov.br/ctews2/services/CTeConsultaV4",
-        "CTeRecepcaoEvento_4.00": "https://homologacao.sefaz.mt.gov.br/ctews2/services/CTeRecepcaoEventoV4"
+        "CTeRecepcaoEvento_4.00": "https://homologacao.sefaz.mt.gov.br/ctews2/services/CTeRecepcaoEventoV4",
+        "CTeQrCode_4.00": "https://homologacao.sefaz.mt.gov.br/cte/qrcode"
     },
     "CTe_PR_P": {
         "CTeAutorizacao_4.00": "https://cte.fazenda.pr.gov.br/cte4/CTeRecepcaoSincV4",
@@ -66,7 +72,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://cte.fazenda.pr.gov.br/cte4/CTeRecepcaoSimpV4",
         "CTeStatusServico_4.00": "https://cte.fazenda.pr.gov.br/cte4/CTeStatusServicoV4",
         "CTeConsultaProtocolo_4.00": "https://cte.fazenda.pr.gov.br/cte4/CTeConsultaV4",
-        "CTeRecepcaoEvento_4.00": "https://cte.fazenda.pr.gov.br/cte4/CTeRecepcaoEventoV4"
+        "CTeRecepcaoEvento_4.00": "https://cte.fazenda.pr.gov.br/cte4/CTeRecepcaoEventoV4",
+        "CTeQrCode_4.00": "http://www.fazenda.pr.gov.br/cte/qrcode"
     },
     "CTe_PR_H": {
         "CTeAutorizacao_4.00": "https://homologacao.cte.fazenda.pr.gov.br/cte4/CTeRecepcaoSincV4",
@@ -75,7 +82,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://homologacao.cte.fazenda.pr.gov.br/cte4/CTeRecepcaoSimpV4",
         "CTeStatusServico_4.00": "https://homologacao.cte.fazenda.pr.gov.br/cte4/CTeStatusServicoV4",
         "CTeConsultaProtocolo_4.00": "https://homologacao.cte.fazenda.pr.gov.br/cte4/CTeConsultaV4",
-        "CTeRecepcaoEvento_4.00": "https://homologacao.cte.fazenda.pr.gov.br/cte4/CTeRecepcaoEventoV4"
+        "CTeRecepcaoEvento_4.00": "https://homologacao.cte.fazenda.pr.gov.br/cte4/CTeRecepcaoEventoV4",
+        "CTeQrCode_4.00": "http://www.fazenda.pr.gov.br/cte/qrcode"
     },
     "CTe_SP_P": {
         "CTeAutorizacao_4.00": "https://nfe.fazenda.sp.gov.br/CTeWS/WS/CTeRecepcaoSincV4.asmx",
@@ -84,7 +92,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://nfe.fazenda.sp.gov.br/CTeWS/WS/CTeRecepcaoSimpV4.asmx",
         "CTeStatusServico_4.00": "https://nfe.fazenda.sp.gov.br/CTeWS/WS/CTeStatusServicoV4.asmx",
         "CTeConsultaProtocolo_4.00": "https://nfe.fazenda.sp.gov.br/CTeWS/WS/CTeConsultaV4.asmx",
-        "CTeRecepcaoEvento_4.00": "https://nfe.fazenda.sp.gov.br/CTeWS/WS/CTeRecepcaoEventoV4.asmx"
+        "CTeRecepcaoEvento_4.00": "https://nfe.fazenda.sp.gov.br/CTeWS/WS/CTeRecepcaoEventoV4.asmx",
+        "CTeQrCode_4.00": "https://nfe.fazenda.sp.gov.br/CTeConsulta/qrCode"
     },
     "CTe_SP_H": {
         "CTeAutorizacao_4.00": "https://homologacao.nfe.fazenda.sp.gov.br/CTeWS/WS/CTeRecepcaoSincV4.asmx",
@@ -93,7 +102,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://homologacao.nfe.fazenda.sp.gov.br/CTeWS/WS/CTeRecepcaoSimpV4.asmx",
         "CTeStatusServico_4.00": "https://homologacao.nfe.fazenda.sp.gov.br/CTeWS/WS/CTeStatusServicoV4.asmx",
         "CTeConsultaProtocolo_4.00": "https://homologacao.nfe.fazenda.sp.gov.br/CTeWS/WS/CTeConsultaV4.asmx",
-        "CTeRecepcaoEvento_4.00": "https://homologacao.nfe.fazenda.sp.gov.br/CTeWS/WS/CTeRecepcaoEventoV4.asmx"
+        "CTeRecepcaoEvento_4.00": "https://homologacao.nfe.fazenda.sp.gov.br/CTeWS/WS/CTeRecepcaoEventoV4.asmx",
+        "CTeQrCode_4.00": "https://homologacao.nfe.fazenda.sp.gov.br/CTeConsulta/qrCode"
     },
     "CTe_SVRS_P": {
         "CTeAutorizacao_4.00": "https://cte.svrs.rs.gov.br/ws/CTeRecepcaoSincV4/CTeRecepcaoSincV4.asmx",
@@ -102,7 +112,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://cte.svrs.rs.gov.br/ws/CTeRecepcaoSimpV4/CTeRecepcaoSimpV4.asmx",
         "CTeStatusServico_4.00": "https://cte.svrs.rs.gov.br/ws/CTeStatusServicoV4/CTeStatusServicoV4.asmx",
         "CTeConsultaProtocolo_4.00": "https://cte.svrs.rs.gov.br/ws/CTeConsultaV4/CTeConsultaV4.asmx",
-        "CTeRecepcaoEvento_4.00": "https://cte.svrs.rs.gov.br/ws/CTeRecepcaoEventoV4/CTeRecepcaoEventoV4.asmx"
+        "CTeRecepcaoEvento_4.00": "https://cte.svrs.rs.gov.br/ws/CTeRecepcaoEventoV4/CTeRecepcaoEventoV4.asmx",
+        "CTeQrCode_4.00": "https://dfe-portal.svrs.rs.gov.br/cte/qrCode"
     },
     "CTe_SVRS_H": {
         "CTeAutorizacao_4.00": "https://cte-homologacao.svrs.rs.gov.br/ws/CTeRecepcaoSincV4/CTeRecepcaoSincV4.asmx",
@@ -111,7 +122,8 @@
         "CTeSimplificadoAutorizacao_4.00": "https://cte-homologacao.svrs.rs.gov.br/ws/CTeRecepcaoSimpV4/CTeRecepcaoSimpV4.asmx",
         "CTeStatusServico_4.00": "https://cte-homologacao.svrs.rs.gov.br/ws/CTeStatusServicoV4/CTeStatusServicoV4.asmx",
         "CTeConsultaProtocolo_4.00": "https://cte-homologacao.svrs.rs.gov.br/ws/CTeConsultaV4/CTeConsultaV4.asmx",
-        "CTeRecepcaoEvento_4.00": "https://cte-homologacao.svrs.rs.gov.br/ws/CTeRecepcaoEventoV4/CTeRecepcaoEventoV4.asmx"
+        "CTeRecepcaoEvento_4.00": "https://cte-homologacao.svrs.rs.gov.br/ws/CTeRecepcaoEventoV4/CTeRecepcaoEventoV4.asmx",
+        "CTeQrCode_4.00": "https://dfe-portal.svrs.rs.gov.br/cte/qrCode"
     },
     "CTe_RS_P": { "Usar": "CTe_SVRS_P" },
     "CTe_RS_H": { "Usar": "CTe_SVRS_H" },

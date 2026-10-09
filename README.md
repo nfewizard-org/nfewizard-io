@@ -14,7 +14,7 @@ A partir da versão 1.0.0, o **NFeWizard-io foi modularizado** em pacotes indepe
 | `@nfewizard/nfce` | 🆕 Operações NFCe + Cancelamento | 997.7 KB |
 | `@nfewizard/nfse` | 🆕 Operações NFSe | 578.0 KB |
 | `@nfewizard/danfe` | 🆕 Geração de DANFE (NFe, NFSe e NFCe) | 2.31 MB |
-| `@nfewizard/cte` | 🆕 Operações CTe | 801.9 KB |
+| `@nfewizard/cte` | 🆕 CTe completo: autorização, eventos, contingência e distribuição | 801.9 KB |
 | `@nfewizard/dce` | 🧪 Operações DCe (beta) | em validação |
 | `@nfewizard/types` | 📦 Tipos TypeScript | 542.4 KB |
 | `@nfewizard/shared` | 📦 Utilitários compartilhados | 4.03 MB |
