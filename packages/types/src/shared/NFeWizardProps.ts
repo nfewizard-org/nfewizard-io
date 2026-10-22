@@ -120,6 +120,11 @@ export type NFeWizardProps = {
          * Utilizado para gerar automaticamente o hashCSRT quando infRespTec.idCSRT for informado
          */
         CSRT?: string;
+        /**
+         * @param {boolean} contribuinteExclusivoIBSCBS - Emitente contribuinte exclusivo do IBS/CBS, sem Inscrição Estadual (NT 2026.007)
+         * Direciona os eventos do emitente para a SVRS (regra 1P10-40). A autorização de NF-e sem emit/IE é direcionada à SVRS automaticamente.
+         */
+        contribuinteExclusivoIBSCBS?: boolean;
     };
     /**
     * @param email -Preencher para casos onde for necessário utilizar envio de e-mail;

@@ -39,14 +39,14 @@ export class XmlParser {
 
     removeJsonTextAttribute(value: string, parentElement: any) {
         const pOpKeys = Object.keys(parentElement._parent);
-        const keyNo = pOpKeys.length;
-        const keyName = pOpKeys[keyNo - 1];
+        const keyName = pOpKeys.find(key => {
+            const element = parentElement._parent[key];
+            return element === parentElement || (Array.isArray(element) && element.includes(parentElement));
+        }) ?? pOpKeys[pOpKeys.length - 1];
         const arrOfKey = parentElement._parent[keyName];
-        const arrOfKeyLen = arrOfKey.length;
-        if (arrOfKeyLen > 0) {
-            const arr = arrOfKey;
-            const arrIndex = arrOfKey.length - 1;
-            arr[arrIndex] = value;
+        if (Array.isArray(arrOfKey)) {
+            const arrIndex = arrOfKey.lastIndexOf(parentElement);
+            arrOfKey[arrIndex >= 0 ? arrIndex : arrOfKey.length - 1] = value;
         } else {
             parentElement._parent[keyName] = value;
         }

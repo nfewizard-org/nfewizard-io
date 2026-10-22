@@ -51,3 +51,60 @@ describe('Utility - URLs de CT-e', () => {
             .toBe('https://portalcte.fazenda.mg.gov.br/portalcte/sistema/qrcode.xhtml');
     });
 });
+
+function utilityNFe(UF: string, ambiente = 2) {
+    const config = { dfe: { UF }, nfe: { ambiente, versaoDF: '4.00' } };
+    return new Utility({ config, getConfig: () => config } as any);
+}
+
+describe('Utility - URLs de NF-e para contribuinte exclusivo do IBS/CBS (NT 2026.007)', () => {
+    it('direciona a autorização e o retorno da autorização para a SVRS, independentemente da UF', () => {
+        expect(utilityNFe('SP').getWebServiceUrl('NFEAutorizacao', false, '4.00', 'NFeSVRS'))
+            .toBe('https://nfe-homologacao.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao4.asmx');
+        expect(utilityNFe('MG', 1).getWebServiceUrl('NFERetAutorizacao', false, '4.00', 'NFeSVRS'))
+            .toBe('https://nfe.svrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao4.asmx');
+    });
+
+    it('direciona os eventos regionais para a SVRS e mantém os eventos nacionais no Ambiente Nacional', () => {
+        expect(utilityNFe('SP', 1).getWebServiceUrl('RecepcaoEvento', false, '4.00', 'NFeSVRS'))
+            .toBe('https://nfe.svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx');
+        expect(utilityNFe('SP', 1).getWebServiceUrl('RecepcaoEvento', true, '4.00', 'NFeSVRS'))
+            .toBe(utilityNFe('SP', 1).getWebServiceUrl('RecepcaoEvento', true, '4.00', 'NFe'));
+    });
+
+    it('mantém a UF do emitente quando o modelo é NFe', () => {
+        expect(utilityNFe('SP').getWebServiceUrl('NFEAutorizacao', false, '4.00', 'NFe'))
+            .toBe('https://homologacao.nfe.fazenda.sp.gov.br/ws/nfeautorizacao4.asmx');
+    });
+});
+
+describe('Utility - Autorização com alerta (NT 2026.002)', () => {
+    const retornoConsulta = (cStat: string, xMotivo: string, mensagens = '') =>
+        `<retConsSitNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00"><tpAmb>2</tpAmb><verAplic>SVRS</verAplic><cStat>${cStat}</cStat><xMotivo>${xMotivo}</xMotivo><cUF>35</cUF><chNFe>35261012345678000199650010000000011000000019</chNFe><protNFe versao="4.00"><infProt><tpAmb>2</tpAmb><verAplic>SVRS</verAplic><chNFe>35261012345678000199650010000000011000000019</chNFe><dhRecbto>2026-10-05T10:00:00-03:00</dhRecbto><nProt>135260000000001</nProt><digVal>aGFzaA==</digVal><cStat>${cStat}</cStat><xMotivo>${xMotivo}</xMotivo>${mensagens}</infProt></protNFe></retConsSitNFe>`;
+
+    it('não trata o cStat 120 como rejeição', () => {
+        const retorno = utilityNFe('SP').verificaRejeicao(retornoConsulta('120', 'Autorizado o uso da NF-e, com alerta'), 'NFEConsultaProtocolo');
+        expect(retorno.cStat).toBe('120');
+    });
+
+    it('continua tratando rejeições como erro', () => {
+        expect(() => utilityNFe('SP').verificaRejeicao(retornoConsulta('539', 'Rejeição: Duplicidade de NF-e'), 'NFEConsultaProtocolo'))
+            .toThrow('Rejeição: Duplicidade de NF-e');
+    });
+
+    it('retorna os alertas do grupo PR13 com cMsg e xMsg pareados', () => {
+        const mensagens = '<cMsg>172</cMsg><xMsg>Alerta: Situação do CNPJ destinatário inabilitado no momento da autorização</xMsg><cMsg>173</cMsg><xMsg>Alerta: Outro alerta</xMsg>';
+        const retorno = utilityNFe('SP').verificaRejeicao(retornoConsulta('120', 'Autorizado o uso da NF-e, com alerta', mensagens), 'NFEConsultaProtocolo');
+
+        expect(utilityNFe('SP').getAlertas(retorno.protNFe.infProt)).toEqual([
+            { cMsg: '172', xMsg: 'Alerta: Situação do CNPJ destinatário inabilitado no momento da autorização' },
+            { cMsg: '173', xMsg: 'Alerta: Outro alerta' },
+        ]);
+    });
+
+    it('retorna um único alerta e lista vazia quando não há mensagens', () => {
+        const u = utilityNFe('SP');
+        expect(u.getAlertas({ cMsg: '172', xMsg: 'Alerta' })).toEqual([{ cMsg: '172', xMsg: 'Alerta' }]);
+        expect(u.getAlertas({ cStat: '100' })).toEqual([]);
+    });
+});

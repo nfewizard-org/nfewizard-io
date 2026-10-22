@@ -370,6 +370,10 @@ class Utility {
 
         const versaoDF = versao !== "" ? versao : config.nfe.versaoDF;
 
+        if (mod === 'NFeSVRS') {
+            return { chaveMae: `NFe_${ambienteNacional ? 'AN' : 'SVRS'}_${ambiente}`, chaveFilha: `${metodo}_${versaoDF}` };
+        }
+
         if (ambienteNacional) {
             const chaveMae = `${mod}_AN_${ambiente}`;
             const chaveFilha = `${metodo}_${versaoDF}`;
@@ -614,7 +618,7 @@ class Utility {
         // Códigos de status de sucesso/processamento válidos
         const codigosValidos = [
             100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
-            124, 128, 135, 136, 137, 138, 139, 140, 142, 150, 151
+            120, 124, 128, 135, 136, 137, 138, 139, 140, 142, 150, 151
         ];
 
         // Busca o cStat no retorno
@@ -685,6 +689,13 @@ class Utility {
             protNFe,
             nRec
         };
+    }
+
+    getAlertas(infProt: GenericObject): { cMsg: string; xMsg: string }[] {
+        const cMsg = ([] as string[]).concat(infProt?.cMsg ?? []);
+        const xMsg = ([] as string[]).concat(infProt?.xMsg ?? []);
+
+        return xMsg.map((mensagem, index) => ({ cMsg: cMsg[index], xMsg: mensagem }));
     }
 
     private getRequestLogFileName(metodo: string, tipo: string) {

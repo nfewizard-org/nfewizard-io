@@ -353,7 +353,7 @@ class NFeGerarDanfe {
             this.doc.fontSize(5).text('INSCRIÇÃO ESTADUAL', left + 4, topIdentificacao_1 + 125, {
                 characterSpacing: 0.5,
             });
-            this.doc.fontSize(8).text(this.emit.IE, left + 5, topIdentificacao_1 + 135, {
+            this.doc.fontSize(8).text(String(this.emit.IE || ''), left + 5, topIdentificacao_1 + 135, {
                 characterSpacing: 1,
             });
 

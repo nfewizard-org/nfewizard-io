@@ -74,6 +74,10 @@ export class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEven
         return id; // Retorna o ID validado
     }
 
+    protected getModelo(): string {
+        return this.modelo === 'NFe' && this.environment.getConfig().nfe.contribuinteExclusivoIBSCBS ? 'NFeSVRS' : super.getModelo();
+    }
+
     /**
      * Verifica se o evento será disparado para o ambiente nacional ou para o estado pré-definido
      */
@@ -290,7 +294,7 @@ export class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEven
             // Gerando XML para consulta de Status do Serviço
             xmlConsulta = this.gerarXmlRecepcaoEvento(evento, idLote, ambienteNacional);
 
-            const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, ambienteNacional || this.isAmbienteNacional(this.tpEvento), '', this.modelo);
+            const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, ambienteNacional || this.isAmbienteNacional(this.tpEvento), '', this.getModelo());
 
             xmlConsultaSoap = xmlFormated;
 
