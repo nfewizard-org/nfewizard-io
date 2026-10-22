@@ -35,6 +35,7 @@ npm install nfewizard-io
 Este pacote fornece métodos para operações de NFe, incluindo:
 
 - ✅ **Autorização (Emissão de NFe)**: Submissão de Notas Fiscais Eletrônicas para autorização. Aceita tanto o **objeto tipado `NFe`** quanto uma **string XML** (com ou sem o envelope `<enviNFe>`)
+- ✅ **Geração do XML sem transmitir (`NFE_GerarXml`)**: Monta e assina o XML da NFe com a mesma lógica da autorização, sem enviar à SEFAZ. Útil para prévia do DANFE, validação do schema, gravação do XML antes do envio e contingência
 - ✅ **Distribuição DFe**: Consulta e Download de documentos fiscais eletrônicos
 - ✅ **Consulta de Protocolo**: Verificação da situação da NFe na SEFAZ
 - ✅ **Inutilização**: Inutilização de números de NFe não utilizados
@@ -254,6 +255,49 @@ await nfeWizard.NFE_Autorizacao(xmlComEnvelope);
 const xmlSemEnvelope = '<NFe xmlns="http://www.portalfiscal.inf.br/nfe">...</NFe>';
 await nfeWizard.NFE_Autorizacao(xmlSemEnvelope);
 ```
+
+### NFE_GerarXml — XML assinado sem transmitir
+
+Monta e assina o XML da NFe com a mesma lógica do `NFE_Autorizacao` (chave de acesso, cDV, hashCSRT, nItem, CPF/CNPJ e assinatura), mas **não valida o schema, não chama o webservice e não grava arquivos**. Aceita os mesmos dados do `NFE_Autorizacao`: o objeto tipado `NFe` ou uma string XML.
+
+```typescript
+const { xmlEnviNFe, nfes } = await nfeWizard.NFE_GerarXml(nfeObject);
+
+// xmlEnviNFe — envelope <enviNFe> completo, igual ao que seria transmitido
+// nfes       — uma entrada por NF-e do lote: { chNFe, xmlAssinado }
+
+// Valide o XML como ele será enviado
+await nfeWizard.NFE_SchemaValidate(xmlEnviNFe, 'NFEAutorizacao');
+
+// Guarde o XML assinado antes do envio (auditoria ou recuperação após timeout)
+fs.writeFileSync(`NFe-${nfes[0].chNFe}.xml`, nfes[0].xmlAssinado);
+
+// Transmita depois: a chave de acesso é preservada
+await nfeWizard.NFE_Autorizacao(xmlEnviNFe);
+```
+
+**Prévia do DANFE**, sem protocolo de autorização e sem valor fiscal. Em produção (`tpAmb=1`), o DANFE sai com o aviso "NF-E NÃO ENVIADA PARA SEFAZ":
+
+```typescript
+import { NFE_GerarDanfe } from '@nfewizard/danfe';
+
+await NFE_GerarDanfe({
+    data: nfes[0].xmlAssinado,
+    chave: nfes[0].chNFe,
+    outputPath: './previa-danfe.pdf',
+});
+```
+
+**Contingência EPEC (`tpEmis=4`) e FS-DA (`tpEmis=5`)**: gere o XML com `dhCont` e `xJust` preenchidos.
+
+- **EPEC**: registre em seguida o evento com `NFE_EventoPrevioDeEmissaoEmContingencia`, usando o `chNFe` gerado e os mesmos dados da nota (`dhEmi`, `tpNF`, `IE`, destinatário, `vNF`, `vICMS` e `vST`). Imprima o DANFE e libere a mercadoria só depois que o EPEC for autorizado.
+- **FS-DA**: imprima o DANFE em formulário de segurança.
+
+Quando a SEFAZ autorizadora voltar, transmita o mesmo `xmlEnviNFe`, sem alterar a nota, com `NFE_TransmitirContingencia(xmlEnviNFe)`.
+
+> - Se o envio falhar por timeout, consulte a chave com `NFE_ConsultaProtocolo(chNFe)` antes de reenviar, para não receber a rejeição 204 (duplicidade de NF-e).
+> - Gerar o XML não reserva o número na SEFAZ. Se o número for abandonado, inutilize-o com `NFE_Inutilizacao`.
+> - O DANFE da NF-e gerado pelo `@nfewizard/danfe` ainda não imprime as informações de contingência (tipo de emissão, `dhCont` e `xJust`).
 
 ### NFE_SchemaValidate — Validação de Schema XSD
 

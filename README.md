@@ -76,6 +76,7 @@ npm i @nfewizard-io/nfce
 NFeWizard-io é uma biblioteca Node.js projetada para simplificar a interação com os webservices da SEFAZ, proporcionando uma solução robusta para automação de processos relacionados à Nota Fiscal Eletrônica (NF-e), Nota Fiscal de Consumidor Eletrônica (NFC-e), Nota Fiscal de Serviços Eletrônica (NFS-e) e Conhecimento de Transporte Eletrônico (CT-e). A biblioteca oferece métodos abrangentes para diversas operações fiscais, incluindo:
 
 - **Autorização (Emissão de NFe, NFCe e NFSe)**: Submissão de Notas Fiscais Eletrônicas, Notas Fiscais de Consumidor Eletrônica e Notas Fiscais de Serviços Eletrônica para autorização.
+- **Geração do XML da NFe sem transmitir (`NFE_GerarXml`)**: Monta e assina o XML da NF-e com a mesma lógica da autorização, sem enviar à SEFAZ, para prévia do DANFE, validação, gravação do XML antes do envio e contingência.
 - **Distribuição DFe (NF-e, NFS-e e CT-e)**: Consulta e Download de DF-e (Documentos fiscais eletrônicos), facilitando o acesso a documentos fiscais eletrônicos de NF-e, NFS-e e CT-e.
 - **Consulta de Protocolo**: Verificação da situação atual da NF-e na Base de Dados do Portal da Secretaria de Fazenda Estadual.
 - **Inutilização de NFe**: Processo de inutilização de números de NF-e que não serão utilizados, assegurando a conformidade fiscal.
@@ -298,6 +299,11 @@ console.log(retorno.xMotivo);
   - Retorna `SchemaValidationResult` com `errors[]` (humanizados + raw), `report` textual estilo SEFAZ-RS e `tableRows` prontos para `console.table`.
   - Seleção de validador: `validateSchemaJsBased` (padrão, sem JDK) ou `validateSchemaJavaBased`.
   - Em caso de erro, o `Error` lançado também carrega `err.errors`, `err.report` e `err.tableRows`.
+- **`NFE_GerarXml`** (novo — `nfewizard-io`):
+  - Monta e assina o XML da NF-e (chave de acesso, cDV, hashCSRT, nItem, CPF/CNPJ e assinatura) sem transmitir à SEFAZ.
+  - Retorna `xmlEnviNFe` (envelope completo) e `nfes[]` com `chNFe` e `xmlAssinado` de cada nota do lote.
+  - Não valida o schema, não chama o webservice e não grava arquivos. Para validar, use `NFE_SchemaValidate`.
+  - Para transmitir depois, passe o `xmlEnviNFe` para `NFE_Autorizacao` ou `NFE_TransmitirContingencia`: a chave de acesso é preservada.
 
 ## Observações
 

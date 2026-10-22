@@ -17,6 +17,27 @@
 
 import { XmlParser } from '../XmlParser';
 
+describe('XmlParser.convertXmlEnvioNFeToJson', () => {
+  const buildXml = (chave: string, CNPJ: string) =>
+    `<NFe xmlns="http://www.portalfiscal.inf.br/nfe"><infNFe versao="4.00" Id="NFe${chave}"><ide/><emit><CNPJ>${CNPJ}</CNPJ></emit></infNFe></NFe>`;
+
+  it('removes the NFe prefix from the Id of a numeric access key', () => {
+    const chave = '35261012345678000195550010000000011123456781';
+
+    const json = new XmlParser().convertXmlEnvioNFeToJson(buildXml(chave, '12345678000195'));
+
+    expect(json.NFe.infNFe.Id).toBe(chave);
+  });
+
+  it('removes the NFe prefix from the Id of an access key with an alphanumeric CNPJ', () => {
+    const chave = '35261012ABC34501DE35550010000000011123456781';
+
+    const json = new XmlParser().convertXmlEnvioNFeToJson(buildXml(chave, '12ABC34501DE35'));
+
+    expect(json.NFe.infNFe.Id).toBe(chave);
+  });
+});
+
 describe('XmlParser.convertXmlNFSeToJson', () => {
   it('extracts data and chave when infNFSe has a valid Id', () => {
     const xml = `

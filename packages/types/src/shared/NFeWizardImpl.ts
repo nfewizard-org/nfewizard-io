@@ -34,6 +34,7 @@ import {
     InutilizacaoData,
     LayoutNFe,
     NFe,
+    NFeGerarXmlResponse,
     OperacaoNaoRealizada,
     ProtNFe,
     EmailParams
@@ -101,6 +102,7 @@ export interface NFeWizardImpl {
     NFE_DistribuicaoDFePorChave(data: DFePorChaveNFe): Promise<GenericObject>;
     NFE_Autorizacao(data: NFe | string): Promise<{ NFe: LayoutNFe, protNFe: ProtNFe, xmlAssinado?: string }[]>;
     NFE_TransmitirContingencia(data: NFe | string): Promise<{ NFe: LayoutNFe, protNFe: ProtNFe, xmlAssinado?: string }[]>;
+    NFE_GerarXml(data: NFe | string): Promise<NFeGerarXmlResponse>;
     NFE_Inutilizacao(data: InutilizacaoData): Promise<any>;
     NFE_EnviaEmail(mailParams: EmailParams): any;
     NFE_SchemaValidate(xml: string, metodo: SchemaValidateMethod, validator?: 'validateSchemaJsBased' | 'validateSchemaJavaBased'): Promise<SchemaValidationResult>;

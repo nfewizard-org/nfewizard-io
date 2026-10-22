@@ -31,6 +31,7 @@ export interface NFeWizardServiceImpl { [key: string]: any; }
 export interface NFEAutorizacaoServiceImpl {
     Exec(...args: any[]): Promise<any>;
     ExecTransmitirContingencia?(...args: any[]): Promise<any>;
+    ExecGerarXml?(...args: any[]): Promise<any>;
 }
 export interface NFEconsultaProtocoloServiceImpl { Exec(...args: any[]): Promise<any>; }
 export interface NFEConsultaCadastroServiceImpl { Exec(...args: any[]): Promise<any>; }
