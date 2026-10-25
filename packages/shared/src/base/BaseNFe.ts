@@ -57,7 +57,7 @@ abstract class BaseNFE {
     protected setContentType() {
         const UF = this.environment.config.dfe.UF;
 
-        const ufsAppSoad = ['MG', 'GO', 'MT', 'MS', 'AM', 'DF'];
+        const ufsAppSoad = ['MG', 'GO', 'MT', 'MS', 'AM', 'DF', 'RS'];
 
         if (ufsAppSoad.includes(UF)) {
             return 'application/soap+xml'
