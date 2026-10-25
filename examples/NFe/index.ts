@@ -1,4 +1,5 @@
 import NFeWizard, { NFe } from 'nfewizard-io';
+import { mkdirSync, writeFileSync } from 'fs';
 
 const testNFe = async () => {
     const nfe = new NFeWizard();
@@ -270,6 +271,24 @@ const testNFe = async () => {
     };
 
     const retornoNFe = await nfe.NFE_Autorizacao(autorizacao3)
+
+    const autorizacaoGerarXml: NFe = JSON.parse(JSON.stringify(autorizacao3));
+    const notaGerarXml = Array.isArray(autorizacaoGerarXml.NFe)
+        ? autorizacaoGerarXml.NFe[0]
+        : autorizacaoGerarXml.NFe;
+
+    notaGerarXml.infNFe.ide.nNF = '3404'; // Próximo número da série, para não repetir a nota autorizada acima
+
+    const { xmlEnviNFe, nfes } = await nfe.NFE_GerarXml(autorizacaoGerarXml);
+
+    await nfe.NFE_SchemaValidate(xmlEnviNFe, 'NFEAutorizacao');
+
+    mkdirSync('tmp/GerarXml', { recursive: true });
+    for (const { chNFe, xmlAssinado } of nfes) {
+        writeFileSync(`tmp/GerarXml/NFe-${chNFe}.xml`, xmlAssinado);
+    }
+
+    const retornoXmlGerado = await nfe.NFE_Autorizacao(xmlEnviNFe);
 }
 
 await testNFe();

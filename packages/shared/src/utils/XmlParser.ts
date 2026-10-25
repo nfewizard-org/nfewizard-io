@@ -465,9 +465,10 @@ export class XmlParser {
         delete infNFe.versao;
 
         // O atributo `Id` no XML vem com prefixo "NFe" (ex.: "NFe4126..."),
-        // mas a lib espera apenas a chave de 44 dígitos em `infNFe.Id` —
+        // mas a lib espera apenas a chave de 44 posições em `infNFe.Id`
+        // (com letras quando o CNPJ do emitente é alfanumérico) —
         // ela própria re-prefixa com "NFe" ao calcular `chaveAcesso`.
-        if (typeof infNFe.Id === 'string' && /^NFe\d{44}$/.test(infNFe.Id)) {
+        if (typeof infNFe.Id === 'string' && /^NFe[0-9A-Z]{44}$/.test(infNFe.Id)) {
             infNFe.Id = infNFe.Id.slice(3);
         }
 

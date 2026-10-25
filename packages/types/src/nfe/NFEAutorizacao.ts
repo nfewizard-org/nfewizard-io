@@ -6036,3 +6036,28 @@ export type NFeDanfe = {
     NFe: LayoutNFe[] | LayoutNFe;
     protNFe?: ProtNFe;
 } & Record<string, any>;
+
+/**
+ * Retorno do NFE_GerarXml: XML da NFe montado e assinado, sem transmissão à SEFAZ
+ */
+export type NFeGerarXmlResponse = {
+    /**
+     * @param {string} xmlEnviNFe - Envelope enviNFe completo, igual ao que seria transmitido à SEFAZ
+     */
+    xmlEnviNFe: string;
+    /**
+     * @param {Array} nfes - Uma entrada por NF-e do lote, na mesma ordem em que foram informadas
+     */
+    nfes: {
+        /**
+         * @param {string} chNFe - Chave de acesso da NF-e (44 posições).
+         *  Vem vazia quando a chave montada não tem 44 posições, o que indica dados inválidos
+         *  (por exemplo, cNF sem 8 dígitos); valide o XML com NFE_SchemaValidate.
+         */
+        chNFe: string;
+        /**
+         * @param {string} xmlAssinado - XML da NF-e (tag NFe) assinado
+         */
+        xmlAssinado: string;
+    }[];
+}

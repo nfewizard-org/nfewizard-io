@@ -33,6 +33,13 @@ export class NFEAutorizacao {
         return await this.nfeAutorizacaoService.ExecTransmitirContingencia(data);
     }
 
+    async ExecGerarXml(data?: any): Promise<any> {
+        if (typeof this.nfeAutorizacaoService.ExecGerarXml !== 'function') {
+            throw new Error('Método ExecGerarXml não implementado no serviço de autorização NFe.');
+        }
+        return await this.nfeAutorizacaoService.ExecGerarXml(data);
+    }
+
 }
 
 export default NFEAutorizacao;

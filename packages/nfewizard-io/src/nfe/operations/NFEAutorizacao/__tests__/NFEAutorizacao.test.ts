@@ -45,4 +45,32 @@ describe('NFEAutorizacao operation', () => {
             'Método ExecTransmitirContingencia não implementado no serviço de autorização NFe.'
         );
     });
+
+    it('deve delegar ExecGerarXml para o service', async () => {
+        const retornoEsperado = { xmlEnviNFe: '<enviNFe/>', nfes: [] };
+        const service = {
+            Exec: jest.fn(),
+            ExecGerarXml: jest.fn().mockResolvedValue(retornoEsperado),
+        };
+
+        const operation = new NFEAutorizacao(service);
+        const payload = { foo: 'bar' };
+
+        const response = await operation.ExecGerarXml(payload);
+
+        expect(service.ExecGerarXml).toHaveBeenCalledWith(payload);
+        expect(response).toBe(retornoEsperado);
+    });
+
+    it('deve lançar erro quando service não implementar ExecGerarXml', async () => {
+        const service = {
+            Exec: jest.fn(),
+        };
+
+        const operation = new NFEAutorizacao(service);
+
+        await expect(operation.ExecGerarXml({})).rejects.toThrow(
+            'Método ExecGerarXml não implementado no serviço de autorização NFe.'
+        );
+    });
 });

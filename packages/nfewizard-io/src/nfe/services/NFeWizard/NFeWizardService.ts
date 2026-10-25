@@ -441,6 +441,27 @@ class NFeWizardService implements NFeWizardServiceImpl {
     }
 
     /**
+     * Monta e assina o XML da NFe sem transmitir à SEFAZ.
+     * Não valida o schema XSD, não chama o webservice e não grava arquivos.
+     */
+    async NFE_GerarXml(data: NFe | string) {
+        try {
+            const autorizacaoService = new NFEAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const autorizacao = new NFEAutorizacao(autorizacaoService);
+            const response = await autorizacao.ExecGerarXml(data);
+
+            console.log('Retorno NFE_GerarXml');
+            console.table(response.nfes, ['chNFe']);
+            console.log('===================================');
+
+            return response
+        } catch (error: any) {
+            logger.error(``, error, { context: 'NFE_GerarXml', });
+            throw new Error(`NFE_GerarXml: ${error.message}`)
+        }
+    }
+
+    /**
      * Inutilização
      */
     async NFE_Inutilizacao(data: InutilizacaoData) {

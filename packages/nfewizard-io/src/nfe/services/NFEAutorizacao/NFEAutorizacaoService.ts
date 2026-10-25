@@ -17,7 +17,7 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { NFERetornoAutorizacao } from '../../operations/NFERetornoAutorizacao/NFERetornoAutorizacao.js';
 import { XmlParser, Environment, Utility, XmlBuilder, ValidaCPFCNPJ, BaseNFE, mountCOFINS, mountICMS, mountPIS } from '@nfewizard/shared';
-import { GenericObject, LayoutNFe, NFe, ProtNFe } from '@nfewizard/types/nfe';
+import { GenericObject, LayoutNFe, NFe, NFeGerarXmlResponse, ProtNFe } from '@nfewizard/types/nfe';
 import { format } from 'date-fns';
 import { GerarConsultaImpl, NFEAutorizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 import { NFERetornoAutorizacaoService } from '../NFERetornoAutorizacao/NFERetornoAutorizacaoService.js';
@@ -30,9 +30,23 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
     xmlNFe: string[];
 
     private converterParaJson(data: NFe | string): NFe {
-        return typeof data === 'string'
-            ? new XmlParser().convertXmlEnvioNFeToJson(data) as NFe
-            : data;
+        if (typeof data !== 'string') {
+            return JSON.parse(JSON.stringify(data));
+        }
+
+        const dataAsJson = new XmlParser().convertXmlEnvioNFeToJson(data) as NFe;
+
+        const notas = Array.isArray(dataAsJson.NFe) ? dataAsJson.NFe : [dataAsJson.NFe];
+        for (const nota of notas) {
+            const ide = nota?.infNFe?.ide;
+            if (!ide) continue;
+
+            for (const campo of ['tpAmb', 'tpImp', 'tpEmis'] as const) {
+                if (typeof ide[campo] === 'string') ide[campo] = Number(ide[campo]);
+            }
+        }
+
+        return dataAsJson;
     }
 
     private validarTpEmisParaTransmissaoContingencia(dataAsJson: NFe): void {
@@ -526,6 +540,26 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         const dataAsJson = this.converterParaJson(data);
         this.validarTpEmisParaTransmissaoContingencia(dataAsJson);
         return this.executarAutorizacao(dataAsJson);
+    }
+
+    public async ExecGerarXml(data: NFe | string): Promise<NFeGerarXmlResponse> {
+        const dataAsJson = this.converterParaJson(data);
+        this.xmlNFe = [];
+
+        // Monta e assina o XML sem validar o schema, transmitir à SEFAZ ou gravar arquivos
+        const xmlEnviNFe = this.gerarXmlNFeAutorizacao(dataAsJson);
+
+        logger.info('XML da NFe gerado sem transmissão', {
+            context: 'NFEAutorizacaoService',
+        });
+
+        return {
+            xmlEnviNFe,
+            nfes: this.xmlNFe.map(xmlAssinado => ({
+                chNFe: xmlAssinado.match(/Id="NFe([0-9A-Z]{44})"/)?.[1] || '',
+                xmlAssinado,
+            })),
+        };
     }
 }
 
