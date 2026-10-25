@@ -87,3 +87,24 @@ describe('XmlParser.convertXmlNFSeToJson', () => {
     expect(() => new XmlParser().convertXmlNFSeToJson(xml)).toThrow(/NFSe.*infNFSe/);
   });
 });
+
+describe('XmlParser.convertXmlToJson', () => {
+  it('keeps interleaved repeated elements (cMsg/xMsg of protNFe) in their own arrays', () => {
+    const xml = '<protNFe versao="4.00"><infProt><cStat>120</cStat><xMotivo>Autorizado o uso da NF-e, com alerta</xMotivo><cMsg>172</cMsg><xMsg>Alerta 1</xMsg><cMsg>173</cMsg><xMsg>Alerta 2</xMsg><cMsg>174</cMsg><xMsg>Alerta 3</xMsg></infProt></protNFe>';
+
+    const json = new XmlParser().convertXmlToJson(xml, 'NFERetAutorizacao');
+
+    expect(json.infProt.cStat).toBe('120');
+    expect(json.infProt.cMsg).toEqual(['172', '173', '174']);
+    expect(json.infProt.xMsg).toEqual(['Alerta 1', 'Alerta 2', 'Alerta 3']);
+  });
+
+  it('keeps consecutive repeated elements in a single array', () => {
+    const xml = '<retEnviNFe><cStat>104</cStat><protNFe><infProt><chNFe>1</chNFe></infProt></protNFe><protNFe><infProt><chNFe>2</chNFe></infProt></protNFe></retEnviNFe>';
+
+    const json = new XmlParser().convertXmlToJson(xml, 'NFEAutorizacao');
+
+    expect(json.cStat).toBe('104');
+    expect(json.protNFe.map((p: any) => p.infProt.chNFe)).toEqual(['1', '2']);
+  });
+});

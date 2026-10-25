@@ -78,7 +78,7 @@ class GerarConsulta implements GerarConsultaImpl {
             }
 
             // Capturando a url do método para o namespace xmlns
-            const { method, action } = this.utility.getSoapInfo(config.dfe.UF, metodo);
+            const { method, action } = this.utility.getSoapInfo(mod === 'NFeSVRS' ? 'SVRS' : config.dfe.UF, metodo);
 
             const xmlFormated = this.createSoapEnvelop(xmlConsulta, metodo, method, rootTag, tag, dadosMsgTag);
 

@@ -100,7 +100,7 @@ export class NFERetornoAutorizacaoService extends BaseNFE implements NFERetornoA
          */
         const xmlConsulta = this.gerarXml(nRec);
 
-        const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
+        const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, false, '', this.modelo);
 
         // Salva XML de Consulta
         this.utility.salvaConsulta(xmlConsulta, xmlFormated, this.metodo);

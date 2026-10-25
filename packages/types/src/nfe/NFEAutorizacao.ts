@@ -463,14 +463,15 @@ export type Ide = {
     cMunFGIBS?: number;
     /**
      * @param {number} tpImp - Formato de Impressão do DANFE
-     * 0=Sem geração de DANFE; 1=DANFE normal, Retrato; 2=DANFE normal, Paisagem; 3=DANFE Simplificado; 4=DANFE NFC-e; 5=DANFE NFC-e em mensagem eletrônica (o envio de mensagem eletrônica pode ser feita de forma simultânea com a impressão do DANFE; usar o tpImp=5 quando esta for a única forma de disponibilização do DANFE).
-     * 
+     * 0=Sem geração de DANFE; 1=DANFE normal, Retrato; 2=DANFE normal, Paisagem; 3=DANFE Simplificado; 4=DANFE NFC-e; 5=DANFE NFC-e em mensagem eletrônica (o envio de mensagem eletrônica pode ser feita de forma simultânea com a impressão do DANFE; usar o tpImp=5 quando esta for a única forma de disponibilização do DANFE); 6=DANFE Simplificado Tipo 2 (nas condições do Ajuste SINIEF 13/26).
+     *
      * NT_2024.002
+     * NT_2026.002 - Adiciona tpImp 6
      */
     tpImp: number;
     /**
      * @param {number} tpEmis - Tipo de Emissão da NF-e
-     * 1=Emissão normal (não em contingência); 2=Contingência FS-IA, com impressão do DANFE em Formulário de Segurança - Impressor Autônomo; 3= Regime Especial NFF (NT 2021.002) 4=Contingência EPEC (Evento Prévio da Emissão em Contingência); 5=Contingência FS-DA, com impressão do DANFE em Formulário de Segurança - Documento Auxiliar; 6=Contingência SVC-AN (SEFAZ Virtual de Contingência do AN); 7=Contingência SVC-RS (SEFAZ Virtual de Contingência do RS); <8>9=Contingência off-line da NFC-e; Para a NFC-e somente é válida a opção de contingência: 9-Contingência Off-Line e, a critério da UF, opção 4-Contingência EPEC. (NT 2015/002)
+     * 1=Emissão normal (não em contingência); 2=Contingência FS-IA, com impressão do DANFE em Formulário de Segurança - Impressor Autônomo; 3= Regime Especial NFF (NT 2021.002) 4=Contingência EPEC (Evento Prévio da Emissão em Contingência); 5=Contingência FS-DA, com impressão do DANFE em Formulário de Segurança - Documento Auxiliar; 6=Contingência SVC-AN (SEFAZ Virtual de Contingência do AN); 7=Contingência SVC-RS (SEFAZ Virtual de Contingência do RS); 9=Contingência off-line da NFC-e e da NF-e com DANFE Simplificado Tipo 2 (tpImp=6); Para a NFC-e somente é válida a opção de contingência: 9-Contingência Off-Line e, a critério da UF, opção 4-Contingência EPEC. (NT 2015/002) (NT 2026.002)
      */
     tpEmis: number;
     /**
@@ -522,7 +523,7 @@ export type Ide = {
      * 1=Operação presencial;
      * 2=Operação não presencial, pela Internet;
      * 3=Operação não presencial, Teleatendimento;
-     * 4=NFC-e em operação com entrega a domicílio;
+     * 4=Operações não presenciais com NFC-e e NF-e com DANFE Simplificado Tipo 2 (com entrega) (NT 2026.002);
      * 5=Operação presencial, fora do estabelecimento (incluído NT 2016/002);
      * 9=Operação não presencial, outros.
      */
@@ -795,8 +796,9 @@ export type Emit = {
     /**
      * @param {string} IE - Inscrição Estadual do Emitente
      * Informar somente os algarismos, sem os caracteres de formatação (ponto, barra, hífen, etc.).
+     * Para emitente contribuinte exclusivo do IBS/CBS sem Inscrição Estadual na UF (não contribuinte do ICMS), não informar a IE. (NT 2026.007)
      */
-    IE: string;
+    IE?: string;
     /**
      * @param {string} IEST - IE do Substituto Tributário
      * IE do Substituto Tributário da UF de destino da mercadoria, quando houver a retenção do ICMS ST para a UF de destino.
@@ -1391,6 +1393,16 @@ export type Prod = {
      * O valor do ICMS faz parte do Valor Total Bruto, exceto nas notas de importação (NT 2020.005)
      */
     vProd: string;
+    /**
+     * @param {string} vUnComLiq - Valor Líquido Unitário do Produto ou Serviço (sem tributos) - [I11b]
+     * Informar junto com vProdLiq. (NT 2026.008)
+     */
+    vUnComLiq?: string;
+    /**
+     * @param {string} vProdLiq - Valor Líquido do Produto ou Serviço (sem tributos) - [I11c]
+     * Informar junto com vUnComLiq. (NT 2026.008)
+     */
+    vProdLiq?: string;
     /**
      * @param {string} cEANTrib - GTIN (Global Trade Item Number) da unidade tributável, antigo código EAN ou código de barras
      * O GTIN da unidade tributável deve corresponder àquele da menor unidade comercializável identificada por código GTIN.
@@ -2513,6 +2525,11 @@ export type ICMS = {
      * Tributação ICMS pelo Simples Nacional, CSOSN=900 (v2.0)
      */
     ICMSSN900?: ICMSSN900;
+    /**
+     * @param {ICMSPrevistoPagtoAntecip} ICMSPrevistoPagtoAntecip - Grupo do ICMS Previsto no Pagamento Antecipado - [NB01]
+     * Utilizado quando tpNFDebito = 06-Pagamento antecipado ou tpOperGov = 4-Recebimento do pagamento com fornecimento posterior. (NT 2026.008)
+     */
+    ICMSPrevistoPagtoAntecip?: ICMSPrevistoPagtoAntecip;
     /**
      * @param {dadosICMS} data - Caso não tenha certeza do grupo do ICMS a ser utilizado
      * Informe os dados dentro da tag 'dadosICMS' que a lib tentará definir automaticamente.
@@ -3920,6 +3937,14 @@ export type ICMSSN900 = {
      */
     vCredICMSSN?: number;
 }
+/** [ICMSPrevistoPagtoAntecip] - Grupo do ICMS Previsto no Pagamento Antecipado - [NB01] */
+export type ICMSPrevistoPagtoAntecip = {
+    /**
+     * @param {number | string} vICMSPrevisto - Valor do ICMS Previsto - [NB02]
+     * Valor do ICMS que incidirá no momento do fornecimento futuro. Em cenários onde não haverá valor de ICMS devido no fornecimento, informar 0.
+     */
+    vICMSPrevisto: number | string;
+}
 /** [ICMSUFDest] - Informação do ICMS Interestadual	 */
 export type ICMSUFDest = {
     /**
@@ -4923,6 +4948,11 @@ export type ObsFisco = {
  * GRUPO W
  */
 export type Total = {
+    /**
+     * @param {number | string} vProdLiqTot - Valor Total Líquido dos Produtos ou Serviços (sem tributos) - [W01a]
+     * Soma dos valores líquidos (vProdLiq) dos itens. Deve ser informado antes do grupo ICMSTot. (NT 2026.008)
+     */
+    vProdLiqTot?: number | string;
     /**
      * @param {ICMSTot} ICMSTot - Grupo Totais referentes ao ICMS
      * O grupo de valores totais da NF-e deve ser informado com o somatório do campo correspondente dos itens.
@@ -6001,6 +6031,8 @@ export type ProtNFe = {
         digVal: string;
         cStat: string;
         xMotivo: string;
+        cMsg?: string | string[];
+        xMsg?: string | string[];
     }
 }
 

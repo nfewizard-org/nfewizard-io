@@ -105,10 +105,12 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                 const chNFe = xmlAutorizacaoInJson.protNFe.infProt.chNFe;
                 const xMotivo = xmlAutorizacaoInJson.protNFe.infProt.xMotivo;
                 const cStat = xmlAutorizacaoInJson.protNFe.infProt.cStat;
+                const alertas = this.utility.getAlertas(xmlAutorizacaoInJson.protNFe.infProt);
                 xMotivoPorXml.push({
                     chNFe,
                     xMotivo,
                     cStat,
+                    ...(alertas.length > 0 ? { alertas } : {}),
                 })
 
                 if (config.dfe.armazenarXMLAutorizacao) {

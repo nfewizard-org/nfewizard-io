@@ -23,6 +23,7 @@ import { GerarConsultaImpl, NFEAutorizacaoServiceImpl, SaveFilesImpl } from '@nf
 import { NFERetornoAutorizacaoService } from '../NFERetornoAutorizacao/NFERetornoAutorizacaoService.js';
 import { logger } from '@nfewizard/shared';
 import { Agent } from 'http';
+import { generateQRCodeURLOffline, generateQRCodeURLOnline } from './util/NFEQRCode.js';
 
 const T_MED = 5; // Tempo médio de resposta padrão em segundos
 
@@ -54,8 +55,8 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
 
         for (const nota of notas) {
             const tpEmis = nota.infNFe.ide.tpEmis;
-            if (![4, 5].includes(tpEmis)) {
-                throw new Error(`NFE_TransmitirContingencia: tpEmis=${tpEmis} inválido. Use apenas tpEmis=4 (EPEC) ou tpEmis=5 (FS-DA).`);
+            if (![4, 5, 9].includes(tpEmis)) {
+                throw new Error(`NFE_TransmitirContingencia: tpEmis=${tpEmis} inválido. Use apenas tpEmis=4 (EPEC), tpEmis=5 (FS-DA) ou tpEmis=9 (Off-line).`);
             }
         }
     }
@@ -65,6 +66,57 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
             ...item,
             xmlAssinado: this.xmlNFe[index],
         }));
+    }
+
+    protected getModelo(data: NFe): string {
+        const notas = Array.isArray(data.NFe) ? data.NFe : [data.NFe];
+        return notas.some(nota => !nota.infNFe.emit.IE) ? 'NFeSVRS' : super.getModelo(data);
+    }
+
+    private retornarContingenciaOffline(notas: LayoutNFe[]) {
+        const config = this.environment.getConfig();
+        const xMotivo = 'NF-e gerada em Contingência Off-line (tpEmis=9)';
+
+        const xmls = this.xmlNFe.map((xmlAssinado, index) => {
+            const chNFe = xmlAssinado.match(/Id="NFe([0-9A-Z]{44})"/)?.[1] || '';
+
+            if (config.dfe.armazenarXMLAutorizacao) {
+                this.utility.salvaXML({
+                    data: xmlAssinado,
+                    fileName: `NFe-Contingencia-${chNFe}`,
+                    metodo: this.metodo,
+                    path: config.dfe.pathXMLAutorizacao,
+                });
+            }
+
+            return {
+                NFe: notas[index],
+                xmlAssinado,
+                protNFe: {
+                    infProt: {
+                        tpAmb: notas[index].infNFe.ide.tpAmb,
+                        verAplic: 'contingencia',
+                        chNFe,
+                        dhRecbto: new Date().toISOString(),
+                        nProt: 'CONTINGENCIA',
+                        digVal: '',
+                        cStat: '000',
+                        xMotivo,
+                    }
+                } as ProtNFe,
+            };
+        });
+
+        return {
+            success: true,
+            emContingencia: true,
+            xMotivo: xmls.map(({ protNFe }) => ({
+                chNFe: protNFe.infProt.chNFe,
+                xMotivo: `${xMotivo}. Transmita para autorização com NFE_TransmitirContingencia.`,
+                cStat: '000',
+            })),
+            xmls,
+        };
     }
 
     constructor(environment: Environment, utility: Utility, xmlBuilder: XmlBuilder, axios: AxiosInstance, saveFiles: SaveFilesImpl, gerarConsulta: GerarConsultaImpl) {
@@ -120,10 +172,12 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
                 const chNFe = xmlAutorizacaoInJson.protNFe.infProt.chNFe;
                 const xMotivo = xmlAutorizacaoInJson.protNFe.infProt.xMotivo;
                 const cStat = xmlAutorizacaoInJson.protNFe.infProt.cStat;
+                const alertas = this.utility.getAlertas(xmlAutorizacaoInJson.protNFe.infProt);
                 xMotivoPorXml.push({
                     chNFe,
                     xMotivo,
                     cStat,
+                    ...(alertas.length > 0 ? { alertas } : {}),
                 })
 
                 if (config.dfe.armazenarXMLAutorizacao) {
@@ -145,7 +199,7 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         }
     }
 
-    private async trataRetorno(xmlRetorno: string, indSinc: number, responseInJson: GenericObject) {
+    private async trataRetorno(xmlRetorno: string, indSinc: number, responseInJson: GenericObject, modelo: string) {
         /**
          * Captura o valor nRec e protNFe
          */
@@ -161,6 +215,7 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         }
 
         const nfeRetornoAutService = new NFERetornoAutorizacaoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+        nfeRetornoAutService.modelo = modelo;
         const nfeRetornoAut = new NFERetornoAutorizacao(nfeRetornoAutService);
 
         /**
@@ -194,6 +249,27 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         const ano = dataAtual.getUTCFullYear().toString().slice(-2);
         const mes = (dataAtual.getUTCMonth() + 1).toString().padStart(2, '0');
         return ano + mes;
+    }
+
+    private diaEmissao(dhEmi: string) {
+        return String(dhEmi).slice(8, 10);
+    }
+
+    private gerarInfNFeSupl(NFe: LayoutNFe, chaveAcesso: string) {
+        const { tpEmis, tpAmb, dhEmi } = NFe.infNFe.ide;
+        const dest = NFe.infNFe.dest;
+
+        let qrCode = generateQRCodeURLOnline(chaveAcesso, tpAmb, this.utility);
+        if (tpEmis === 9) {
+            const tpIdDest = dest?.CNPJ ? '1' : dest?.CPF ? '2' : dest?.idEstrangeiro !== undefined ? '3' : '';
+            const idDest = String(dest?.CNPJ || dest?.CPF || '');
+            qrCode = generateQRCodeURLOffline(chaveAcesso, tpAmb, this.diaEmissao(dhEmi), String(NFe.infNFe.total.ICMSTot.vNF), tpIdDest, idDest, this.environment.getCertKey(), this.utility);
+        }
+
+        return {
+            qrCode,
+            urlChave: this.utility.getUrlNFCe('URL-ConsultaNFCe', false, ''),
+        };
     }
 
     // private _gerarCodigoNumerico() {
@@ -291,6 +367,10 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
             context: 'NFEAutorizacaoService',
         });
         const createXML = (NFe: LayoutNFe) => {
+            if (NFe.infNFe.ide.tpEmis === 9 && NFe.infNFe.ide.tpImp !== 6) {
+                throw new Error('Contingência off-line (tpEmis=9) na NF-e só é permitida com DANFE Simplificado Tipo 2 (tpImp=6)');
+            }
+
             // Verificando se existe mais de um produto
             if (NFe?.infNFe?.det instanceof Array) {
                 // Adicionando indice ao item
@@ -389,7 +469,8 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
                         Id: chaveAcesso,
                     },
                     ...NFe.infNFe
-                }
+                },
+                ...(NFe.infNFe.ide.tpImp === 6 ? { infNFeSupl: this.gerarInfNFeSupl(NFe, chaveAcesso) } : {}),
             }
 
             const eventoXML = this.xmlBuilder.gerarXml(xmlObject, 'NFe', this.metodo)
@@ -455,7 +536,7 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         return response;
     }
 
-    private async executarAutorizacao(dataAsJson: NFe): Promise<{
+    private async executarAutorizacao(dataAsJson: NFe, transmitirContingencia: boolean): Promise<{
         success: boolean;
         xMotivo: GenericObject;
         xmls: {
@@ -463,6 +544,7 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
             protNFe: ProtNFe;
             xmlAssinado?: string;
         }[];
+        emContingencia?: boolean;
     }> {
         this.xmlNFe = [];
 
@@ -471,12 +553,18 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
         let responseInJson: GenericObject | undefined = undefined;
         let xmlRetorno: AxiosResponse<any, any> = {} as AxiosResponse<any, any>;
         const ContentType = this.setContentType();
+        const modelo = this.getModelo(dataAsJson);
+        const notas = Array.isArray(dataAsJson.NFe) ? dataAsJson.NFe : [dataAsJson.NFe];
 
         try {
             // Gerando XML para consulta de Status do Serviço
             xmlConsulta = this.gerarXmlNFeAutorizacao(dataAsJson);
 
-            const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo);
+            if (!transmitirContingencia && notas.some(nota => nota.infNFe.ide.tpEmis === 9)) {
+                return this.retornarContingenciaOffline(notas);
+            }
+
+            const { xmlFormated, agent, webServiceUrl, action } = await this.gerarConsulta.gerarConsulta(xmlConsulta, this.metodo, false, '', modelo);
 
             xmlConsultaSoap = xmlFormated;
 
@@ -488,7 +576,7 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
              */
             responseInJson = this.utility.verificaRejeicao(xmlRetorno.data, this.metodo);
 
-            const retorno = await this.trataRetorno(xmlRetorno.data, dataAsJson.indSinc, responseInJson);
+            const retorno = await this.trataRetorno(xmlRetorno.data, dataAsJson.indSinc, responseInJson, modelo);
 
             const xmlFinal = this.salvaArquivos(xmlConsulta, responseInJson, xmlRetorno.data,
                 {
@@ -523,9 +611,10 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
             protNFe: ProtNFe;
             xmlAssinado?: string;
         }[];
+        emContingencia?: boolean;
     }> {
         const dataAsJson = this.converterParaJson(data);
-        return this.executarAutorizacao(dataAsJson);
+        return this.executarAutorizacao(dataAsJson, false);
     }
 
     public async ExecTransmitirContingencia(data: NFe | string): Promise<{
@@ -536,10 +625,11 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
             protNFe: ProtNFe;
             xmlAssinado?: string;
         }[];
+        emContingencia?: boolean;
     }> {
         const dataAsJson = this.converterParaJson(data);
         this.validarTpEmisParaTransmissaoContingencia(dataAsJson);
-        return this.executarAutorizacao(dataAsJson);
+        return this.executarAutorizacao(dataAsJson, true);
     }
 
     public async ExecGerarXml(data: NFe | string): Promise<NFeGerarXmlResponse> {

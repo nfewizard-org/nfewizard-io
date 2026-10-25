@@ -202,7 +202,7 @@ export class NFeWizard implements NFeWizardImpl {
 
     /**
      * Retransmite uma NFe emitida em contingência para obtenção de autorização.
-     * Aceita apenas tpEmis 4 (EPEC) e 5 (FS-DA).
+     * Aceita apenas tpEmis 4 (EPEC), 5 (FS-DA) e 9 (Off-line, com tpImp 6).
      */
     async NFE_TransmitirContingencia(data: NFe | string) {
         return await this.nfeWizardService.NFE_TransmitirContingencia(data);
