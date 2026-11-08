@@ -50,9 +50,9 @@
   "dependencies": {
     "@nfewizard/types": "workspace:*",
     "@nfewizard/shared": "workspace:*",
-    "axios": "^1.15.0",
+    "axios": "^1.21.0",
     "date-fns": "^2.30.0",
-    "nodemailer": "^8.0.5",
+    "nodemailer": "^10.3.1",
     "node-fetch": "^3.3.2",
     "pako": "^2.1.0"
   },
@@ -68,5 +68,8 @@
     "rollup": "^4.59.0",
     "ts-jest": "^29.1.4",
     "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }

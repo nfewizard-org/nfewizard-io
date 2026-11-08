@@ -1,3 +1,24 @@
+# 🚨 Breaking Changes - nfewizard-io 2.0.0
+
+## Node.js 20 ou superior
+
+A partir da versão 2.0.0, o pacote **`nfewizard-io`** exige **Node.js 20 ou superior**.
+
+**Motivo:** o `nodemailer` (usado no envio de e-mail do `MailAdapter`) foi atualizado de `^8.0.5` para `^10.3.1` para corrigir vulnerabilidades de segurança que só têm correção a partir da 10.1.4. O `nodemailer` 10 declara `"engines": { "node": ">=20.0.0" }`.
+
+**O que muda para você:**
+- Node.js 16 e 18 não são mais suportados no `nfewizard-io` (ambos já estão fora do suporte oficial do Node.js).
+- A API pública não muda: `NFeWizard`, `MailAdapter` e as configurações de e-mail continuam iguais.
+- Os demais pacotes (`@nfewizard/shared`, `@nfewizard/nfce`, `@nfewizard/nfse`, `@nfewizard/cte`, `@nfewizard/dce`) receberam apenas atualizações de segurança em versões patch.
+
+**Como migrar:**
+```bash
+node -v   # deve ser v20.x ou superior
+npm install nfewizard-io@^2.0.0
+```
+
+---
+
 # 🚨 Breaking Changes - Versão 1.0.0
 
 ## Modularização do Projeto
