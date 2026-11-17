@@ -352,6 +352,62 @@ try {
 }
 ```
 
+### NT 2026.006 — Vinculação com a Transação de Pagamento (split payment)
+
+A NT 2026.006 v1.01 cria, na NF-e e na NFC-e, o grupo `gPgtoVinc` (YC) e o evento **110300 – Vinculação Pagamento**, validados pelo Pacote de Liberação 010h. Em 2026 o preenchimento não é exigido em produção: os campos preparam o split payment previsto para 2027.
+
+**Na emissão:** informe `gPgtoVinc` quando a transação de pagamento começar antes da nota, como um boleto ou um QR Code Pix dinâmico gerado antes da emissão. Vale para `NFE_Autorizacao`, `NFCE_Autorizacao` e `NFE_GerarXml`.
+
+```typescript
+pag: { detPag: [{ indPag: 1, tPag: '15', vPag: '100.00' }] },
+gPgtoVinc: {
+    gPgto: [
+        { nPag: 1, idTransacao: 'BOLETO-0001', tpMeioPgto: '15', CNPJReceb: '11222333000181', CNPJBasePSP: '11222333' },
+        { nPag: 2, idTransacao: 'PIX-0002', tpMeioPgto: '17', CNPJReceb: '11222333000181', CNPJBasePSP: '11222333' },
+    ],
+},
+```
+
+- `nPag` e `idTransacao` são atributos do `gPgto` no XML. A lib os grava assim, inclusive quando a nota chega como XML em string.
+- A lib coloca o grupo entre `infIntermed` e `infAdic`, mesmo que ele esteja em outra posição no objeto.
+- `tpMeioPgto` segue o Informe Técnico 2026.001: `15` boleto, `17` Pix QR Code, `18` TED, `20` Pix chave ou QR Code estático, `23` Pix automático e `24` TEF/booktransfer.
+- O grupo não substitui o `pag` (YA) nem o `infIntermed` (YB).
+
+**Depois da autorização:** `NFE_VinculacaoPagamento` envia o evento 110300 à SEFAZ autorizadora. Cada evento leva um único `gPgto`, sem `nPag`; para vincular outra transação, envie outro evento com o próximo `nSeqEvento`.
+
+```typescript
+await nfeWizard.NFE_VinculacaoPagamento({
+    idLote: 1,
+    evento: [{
+        cOrgao: 41, tpAmb: 2, CNPJ: '12345678000195', chNFe: '41261112345678000195550010000034041833418270',
+        dhEvento: '2026-11-17T11:00:00-03:00', tpEvento: '110300', nSeqEvento: 1, verEvento: '1.00',
+        detEvento: {
+            descEvento: 'Vinculação Pagamento', cOrgaoAutor: 41, tpAutor: 1, verAplic: '1.0.0',
+            nProt: '141260000000001',
+            gPgto: { idTransacao: 'PIX-0003', tpMeioPgto: '17', CNPJReceb: '11222333000181', CNPJBasePSP: '11222333' },
+        },
+    }],
+});
+```
+
+O cancelamento usa o evento genérico **110001 – Cancelamento de Evento** (NT 2025.002), com o mesmo `nSeqEvento` e o protocolo do evento cancelado:
+
+```typescript
+await nfeWizard.NFE_CancelamentoEvento({
+    idLote: 2,
+    evento: [{
+        cOrgao: 41, tpAmb: 2, CNPJ: '12345678000195', chNFe: '41261112345678000195550010000034041833418270',
+        dhEvento: '2026-11-17T12:00:00-03:00', tpEvento: '110001', nSeqEvento: 1, verEvento: '1.00',
+        detEvento: {
+            descEvento: 'Cancelamento de Evento', cOrgaoAutor: 41, verAplic: '1.0.0',
+            tpEventoAut: '110300', nProtEvento: '141260000000002',
+        },
+    }],
+});
+```
+
+Na NFC-e, use `NFCE_VinculacaoPagamento` e `NFCE_CancelamentoEvento` do `@nfewizard/nfce`. Os dois eventos também podem ser enviados por `NFE_RecepcaoEvento`.
+
 ---
 
 ## ⚙️ Configuração TypeScript

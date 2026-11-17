@@ -15,7 +15,7 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
-import { Environment, Utility, XmlBuilder, BaseNFE } from '@nfewizard/shared';
+import { Environment, Utility, XmlBuilder, BaseNFE, formatarDetEventoVinculacaoPagamento } from '@nfewizard/shared';
 import { EventoNFe, GenericObject, TipoEvento } from '@nfewizard/types/nfe';
 import { GerarConsultaImpl, NFERecepcaoEventoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 import { logger } from '@nfewizard/shared';
@@ -119,6 +119,10 @@ export class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEven
                 return 'Cancelamento';
             case '110140':
                 return 'EPEC';
+            case '110300':
+                return 'Vinculação Pagamento';
+            case '110001':
+                return 'Cancelamento de Evento';
             default:
                 return 'Desconhecido';
         }
@@ -184,7 +188,7 @@ export class NFERecepcaoEventoService extends BaseNFE implements NFERecepcaoEven
                         $: {
                             versao: "1.00",
                         },
-                        ...detEvento,
+                        ...(tpEvento === '110300' ? formatarDetEventoVinculacaoPagamento(detEvento) : detEvento),
                     },
                 }
             }
