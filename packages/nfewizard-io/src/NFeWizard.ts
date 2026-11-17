@@ -96,11 +96,9 @@ export class NFeWizard implements NFeWizardImpl {
     async NFE_DesconhecimentoDaOperacao(evento: DesconhecimentoDaOperacao) {
         return await this.nfeWizardService.NFE_DesconhecimentoDaOperacao(evento);
     }
-    /** Vincula uma transação de pagamento (split payment) a uma NF-e autorizada (110300, NT 2026.006). */
     async NFE_VinculacaoPagamento(evento: VinculacaoPagamento) {
         return await this.nfeWizardService.NFE_VinculacaoPagamento(evento);
     }
-    /** Cancela um evento autorizado, como a Vinculação Pagamento (110001, NT 2025.002). */
     async NFE_CancelamentoEvento(evento: CancelamentoEvento) {
         return await this.nfeWizardService.NFE_CancelamentoEvento(evento);
     }
