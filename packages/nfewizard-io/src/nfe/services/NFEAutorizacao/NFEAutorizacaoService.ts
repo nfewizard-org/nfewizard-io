@@ -16,7 +16,7 @@
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { NFERetornoAutorizacao } from '../../operations/NFERetornoAutorizacao/NFERetornoAutorizacao.js';
-import { XmlParser, Environment, Utility, XmlBuilder, ValidaCPFCNPJ, BaseNFE, mountCOFINS, mountICMS, mountPIS } from '@nfewizard/shared';
+import { XmlParser, Environment, Utility, XmlBuilder, ValidaCPFCNPJ, BaseNFE, mountCOFINS, mountICMS, mountPIS, ordenarCamposSimplesNacional } from '@nfewizard/shared';
 import { GenericObject, LayoutNFe, NFe, NFeGerarXmlResponse, ProtNFe } from '@nfewizard/types/nfe';
 import { format } from 'date-fns';
 import { GerarConsultaImpl, NFEAutorizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
@@ -458,6 +458,8 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
                     NFe.infNFe.dest.xNome = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL';
                 }
             }
+
+            ordenarCamposSimplesNacional(NFe.infNFe);
 
             const xmlObject = {
                 $: {

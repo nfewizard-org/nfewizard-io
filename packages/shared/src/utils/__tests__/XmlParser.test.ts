@@ -107,4 +107,32 @@ describe('XmlParser.convertXmlToJson', () => {
     expect(json.cStat).toBe('104');
     expect(json.protNFe.map((p: any) => p.infProt.chNFe)).toEqual(['1', '2']);
   });
+
+  it('exposes the detEvento of event 412140 (Tributação do Simples Nacional, NT 2026.005) returned by NFEConsultaProtocolo', () => {
+    const chave = '41261112345678000195550010000034031833418270';
+    const xml = '<retConsSitNFe versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe"><tpAmb>2</tpAmb><verAplic>SVRS202611</verAplic><cStat>100</cStat>'
+      + `<xMotivo>Autorizado o uso da NF-e</xMotivo><cUF>41</cUF><dhRecbto>2026-12-01T10:00:02-03:00</dhRecbto><chNFe>${chave}</chNFe>`
+      + `<procEventoNFe versao="1.00"><evento versao="1.00"><infEvento Id="ID412140${chave}01"><cOrgao>91</cOrgao><tpAmb>2</tpAmb>`
+      + `<CNPJ>12345678000195</CNPJ><chNFe>${chave}</chNFe><dhEvento>2026-12-01T10:00:00-03:00</dhEvento><tpEvento>412140</tpEvento>`
+      + '<nSeqEvento>1</nSeqEvento><verEvento>1.00</verEvento><detEvento versao="1.00"><descEvento>Tributação do Simples Nacional</descEvento>'
+      + '<cOrgaoAutor>41</cOrgaoAutor><tpAutor>5</tpAutor><verAplic>SVRS202611</verAplic><gTribItemSN nItem="1"><vRBSNitem>100.00</vRBSNitem>'
+      + '<tpRBSN>1</tpRBSN><pIBSSN>2.0000</pIBSSN><vIBSSN>2.00</vIBSSN><pCBSSN>5.0000</pCBSSN><vCBSSN>5.00</vCBSSN></gTribItemSN>'
+      + '<gTotalSN><vRBSNtot>100.00</vRBSNtot><vIBSSNtot>2.00</vIBSSNtot><vCBSSNtot>5.00</vCBSSNtot></gTotalSN></detEvento></infEvento></evento>'
+      + '<retEvento versao="1.00"><infEvento><tpAmb>2</tpAmb><verAplic>SVRS202611</verAplic><cOrgao>91</cOrgao><cStat>135</cStat>'
+      + `<xMotivo>Evento registrado e vinculado a NF-e</xMotivo><chNFe>${chave}</chNFe><tpEvento>412140</tpEvento>`
+      + '<nSeqEvento>1</nSeqEvento><dhRegEvento>2026-12-01T10:00:01-03:00</dhRegEvento><nProt>141260000000001</nProt></infEvento></retEvento>'
+      + '</procEventoNFe></retConsSitNFe>';
+
+    const json = new XmlParser().convertXmlToJson(xml, 'NFEConsultaProtocolo');
+
+    expect(json.procEventoNFe.evento.infEvento.tpEvento).toBe('412140');
+    expect(json.procEventoNFe.evento.infEvento.detEvento).toEqual({
+      descEvento: 'Tributação do Simples Nacional',
+      cOrgaoAutor: '41',
+      tpAutor: '5',
+      verAplic: 'SVRS202611',
+      gTribItemSN: { vRBSNitem: '100.00', tpRBSN: '1', pIBSSN: '2.0000', vIBSSN: '2.00', pCBSSN: '5.0000', vCBSSN: '5.00' },
+      gTotalSN: { vRBSNtot: '100.00', vIBSSNtot: '2.00', vCBSSNtot: '5.00' },
+    });
+  });
 });
