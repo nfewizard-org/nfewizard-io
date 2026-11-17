@@ -27,6 +27,7 @@ export { ValidaCPFCNPJ } from './ValidaCPFCNPJ.js';
 export { getCodIBGE } from './getCodIBGE.js';
 export { getDesTipoPag } from './getDesTipoPag.js';
 export { mountICMS, mountPIS, mountCOFINS } from './NFEImposto.js';
+export { ordenarCamposSimplesNacional } from './ordenarCamposSimplesNacional.js';
 export { NFE_SchemaValidate } from './validateSchema.js';
 export type {
     SchemaValidator,

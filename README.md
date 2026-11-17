@@ -292,6 +292,10 @@ console.log(retorno.xMotivo);
 
 ### Novidades recentes (pós 1.0.0)
 
+- **NT 2026.005 v1.00 — Simples Nacional na Reforma Tributária** (`nfewizard-io` e `@nfewizard/nfce`):
+  - Novos campos `emit.tpRegimeIBSCBS`, `prod.cAtivSN`, `IBSCBS.gTribSN` e `IBSCBSTot.gTribSN`, validados pelo Pacote de Liberação 010h.
+  - A lib coloca esses campos na posição do leiaute mesmo que cheguem em outra ordem no objeto.
+  - Tipo `DetEventoTributacaoSimplesNacional` para ler o evento 412140, gerado pelo fisco, nos retornos de consulta e distribuição.
 - **`NFE_Autorizacao` / `NFCE_Autorizacao` aceitam XML string**: além do objeto tipado `NFe`, os métodos de autorização agora aceitam diretamente uma string XML completa (com ou sem o envelope `<enviNFe>`).
 - **`NFE_SchemaValidate`** (novo — `nfewizard-io` e `@nfewizard/nfse`):
   - Valida qualquer XML contra o schema XSD oficial da SEFAZ.

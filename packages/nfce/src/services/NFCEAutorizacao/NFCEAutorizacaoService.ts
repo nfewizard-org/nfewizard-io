@@ -15,7 +15,7 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 import { AxiosInstance, AxiosResponse } from 'axios';
-import { XmlParser, Environment, Utility, XmlBuilder, ValidaCPFCNPJ, BaseNFE, mountCOFINS, mountICMS, mountPIS, logger } from '@nfewizard/shared';
+import { XmlParser, Environment, Utility, XmlBuilder, ValidaCPFCNPJ, BaseNFE, mountCOFINS, mountICMS, mountPIS, ordenarCamposSimplesNacional, logger } from '@nfewizard/shared';
 import { GenericObject, LayoutNFe, NFe, ProtNFe } from '@nfewizard/types/nfe';
 import { GerarConsultaImpl, NFCEAutorizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 import { format } from 'date-fns';
@@ -412,6 +412,8 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                 }
             }
             NFe = nfeWithQrCode;
+
+            ordenarCamposSimplesNacional(NFe.infNFe);
 
             const xmlObject = {
                 $: {

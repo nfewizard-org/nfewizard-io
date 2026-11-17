@@ -20,6 +20,7 @@ export * from './NFEDistribuicaoDFe.js';
 export * from './NFEInutilizacao.js';
 export * from './NFEConsultaCadastro.js';
 export * from './NFERecepcaoEvento.js';
+export * from './NFEEventoTributacaoSimplesNacional.js';
 export * from './EmailConfig.js';
 export * from './NFEDanfeGenerator.js';
 

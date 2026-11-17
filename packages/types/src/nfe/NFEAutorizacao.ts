@@ -794,6 +794,15 @@ export type Emit = {
     */
     CRT?: number;
     /**
+     * @param {1 | 2 | 3 | 4} tpRegimeIBSCBS - Tipo de Regime de Apuração do IBS e da CBS - [C21a] (NT 2026.005)
+     * 1=Contribuinte do Simples Nacional (CRT=1 ou 2) com opção pelo regime regular do IBS e da CBS;
+     * 2=Contribuinte do Regime Normal (CRT=3) com opção pendente pelo CRT="1-Simples Nacional", sem regime regular do IBS e da CBS;
+     * 3=Contribuinte do Regime Normal (CRT=3) com opção pendente pelo CRT="2-Simples Nacional, excesso sublimite de receita bruta", sem regime regular do IBS e da CBS;
+     * 4=Contribuinte do Regime Normal (CRT=3) com opção pendente pelo Simples Nacional (CRT=1 ou 2), com regime regular do IBS e da CBS.
+     * Não informar fora desses casos. No XML vem logo depois do CRT; a lib reposiciona o campo se ele estiver em outra posição do objeto.
+     */
+    tpRegimeIBSCBS?: 1 | 2 | 3 | 4;
+    /**
      * @param {string} IE - Inscrição Estadual do Emitente
      * Informar somente os algarismos, sem os caracteres de formatação (ponto, barra, hífen, etc.).
      * Para emitente contribuinte exclusivo do IBS/CBS sem Inscrição Estadual na UF (não contribuinte do ICMS), não informar a IE. (NT 2026.007)
@@ -1457,6 +1466,17 @@ export type Prod = {
      */
     indBemMovelUsado?: number;
     /**
+     * @param {'01' | '02' | '03' | '04' | '90'} cAtivSN - Código de atividade do Simples Nacional - [I17d] (NT 2026.005)
+     * 01=Revenda de mercadorias, venda de mercadorias industrializadas pelo contribuinte - Anexo I;
+     * 02=Operações com os demais bens materiais, sem incidência de ICMS - Anexo I;
+     * 03=Venda de mercadorias industrializadas pelo contribuinte, com industrialização incentivada na Zona Franca de Manaus - Anexo II;
+     * 04=Operações com os demais bens materiais, com industrialização incentivada na Zona Franca de Manaus, sem incidência de ICMS - Anexo II;
+     * 90=Operações não Tributáveis.
+     * Informar em cada item quando o emitente for optante do Simples Nacional (CRT=1 ou 2) ou estiver com opção pendente (CRT=3 e tpRegimeIBSCBS=2, 3 ou 4).
+     * No XML vem depois de indTot/indBemMovelUsado e antes de DI; a lib reposiciona o campo se ele estiver em outra posição do objeto.
+     */
+    cAtivSN?: '01' | '02' | '03' | '04' | '90';
+    /**
      * @param {number} tpCredPresIBSZFM - Classificação para subapuração do IBS na ZFM - [I05k]
         Classificação conforme percentuais definidos no art. 450, § 1º, da LC 214/25 para o cálculo do crédito presumido:
         0 - Sem Crédito Presumido
@@ -1840,6 +1860,11 @@ export type IBSCBS = {
      * @param {gAjusteCompet} gAjusteCompet - Ajuste de Competência - [UB112]
      */
     gAjusteCompet?: gAjusteCompet;
+    /**
+     * @param {gTribSN} gTribSN - Composição do valor do IBS e da CBS para o Simples Nacional - [UB115a] (NT 2026.005)
+     * Pode acompanhar o gIBSCBS. No XML vem antes de gEstornoCred; a lib reposiciona o grupo se ele estiver em outra posição do objeto.
+     */
+    gTribSN?: gTribSN;
     /**
      * @param {gEstornoCred} gEstornoCred - Estorno de Crédito - [UB116]
      */
@@ -2324,6 +2349,60 @@ export type gAjusteCompet = {
      * @param {number | string} vCBS - Valor da CBS - [UB115]
      */
     vCBS: number | string;
+};
+
+/**
+ * [gTribSN]
+ * Grupo de informações da composição do valor do IBS e da CBS para o Simples Nacional - [UB115a] (NT 2026.005)
+ * Preenchimento conforme o regime do emitente (item 2.3 da NT):
+ * - CRT=1 sem regime regular, ou CRT=3 com tpRegimeIBSCBS=2: informar gIBSSN e gCBSSN;
+ * - CRT=2 sem regime regular, ou CRT=3 com tpRegimeIBSCBS=3: informar somente gCBSSN;
+ * - tpRegimeIBSCBS=1 ou 4 (regime regular do IBS/CBS): não informar.
+ * Não informar com CST 620 (tributação monofásica de combustíveis), que usa o gIBSCBSMono.
+ * O MEI (CRT=4) não informa o grupo IBSCBS.
+ */
+export type gTribSN = {
+    /**
+     * @param {gIBSSN} gIBSSN - Composição do valor do IBS para o Simples Nacional - [UB115b]
+     */
+    gIBSSN?: gIBSSN;
+    /**
+     * @param {gCBSSN} gCBSSN - Composição do valor da CBS para o Simples Nacional - [UB115e]
+     * Obrigatório sempre que o gTribSN for informado.
+     */
+    gCBSSN: gCBSSN;
+};
+
+/**
+ * [gIBSSN]
+ * Grupo de informações da composição do valor do IBS para o Simples Nacional - [UB115b] (NT 2026.005)
+ */
+export type gIBSSN = {
+    /**
+     * @param {number | string} pIBSSN - Alíquota efetiva do IBS para os optantes do Simples Nacional - [UB115c]
+     * Formato 3v2-4. Em 2027 e 2028, na compra governamental com tpEnteGov="1-União", informar zero.
+     */
+    pIBSSN: number | string;
+    /**
+     * @param {number | string} vIBSSN - Valor do IBS para os optantes do Simples Nacional - [UB115d]
+     */
+    vIBSSN: number | string;
+};
+
+/**
+ * [gCBSSN]
+ * Grupo de informações da composição do valor da CBS para o Simples Nacional - [UB115e] (NT 2026.005)
+ */
+export type gCBSSN = {
+    /**
+     * @param {number | string} pCBSSN - Alíquota efetiva da CBS para os optantes do Simples Nacional - [UB115f]
+     * Formato 3v2-4. Em 2027 e 2028, na compra governamental com tpEnteGov="1-União", informar a soma das alíquotas efetivas de IBS e CBS.
+     */
+    pCBSSN: number | string;
+    /**
+     * @param {number | string} vCBSSN - Valor da CBS para os optantes do Simples Nacional - [UB115g]
+     */
+    vCBSSN: number | string;
 };
 
 /**
@@ -4978,6 +5057,11 @@ export type Total = {
      * O IBS e a CBS são “por fora”, por isso seus valores devem ser adicionados ao valor total da NF.
      */
     IBSCBSTot?: IBSCBSTot;
+    /**
+     * @param {number | string} vNFTot - Valor total da NF-e considerando os impostos por fora IBS, CBS e IS - [W60]
+     * Vem depois do IBSCBSTot.
+     */
+    vNFTot?: number | string;
 }
 
 export type ICMSTot = {
@@ -5246,7 +5330,13 @@ export type IBSCBSTot = {
      */
     gEstornoCred?: gEstornoCred_Totais;
     /**
-     * @param {number | string} vNFTot - Valor total da NF-e com IBS/CBS/IS - [W60]
+     * @param {gTribSN_Totais} gTribSN - Totais da composição do valor do IBS e da CBS para o Simples Nacional - [W59h] (NT 2026.005)
+     * Último grupo do IBSCBSTot; a lib reposiciona o grupo se ele estiver em outra posição do objeto.
+     */
+    gTribSN?: gTribSN_Totais;
+    /**
+     * @deprecated No leiaute, o vNFTot [W60] fica em `total`, depois do IBSCBSTot, e não dentro dele.
+     * Informado aqui, gera XML rejeitado pelo schema. Use `Total.vNFTot`.
      */
     vNFTot?: number | string;
 };
@@ -5381,6 +5471,23 @@ export type gEstornoCred_Totais = {
      * @param {number | string} vCBSEstCred - Valor total da CBS estornada - [W59g]
      */
     vCBSEstCred: number | string;
+};
+
+/**
+ * Grupo de totais da composição do valor do IBS e da CBS para o Simples Nacional - [W59h] (NT 2026.005)
+ * Obrigatório quando algum item tiver o gTribSN (rejeição 1275) e proibido quando nenhum item tiver (rejeição 1276).
+ */
+export type gTribSN_Totais = {
+    /**
+     * @param {number | string} vIBSSN - Valor total do IBS para os optantes do Simples Nacional - [W59i]
+     * Soma dos vIBSSN dos itens (rejeição 1277).
+     */
+    vIBSSN: number | string;
+    /**
+     * @param {number | string} vCBSSN - Valor total da CBS para os optantes do Simples Nacional - [W59j]
+     * Soma dos vCBSSN dos itens (rejeição 1284).
+     */
+    vCBSSN: number | string;
 };
 
 

@@ -223,6 +223,43 @@ build:
 
 ## ✨ Novidades recentes (pós 1.0.0)
 
+### NT 2026.005 — Simples Nacional na Reforma Tributária (NF-e e NFC-e)
+
+`NFE_Autorizacao`, `NFCE_Autorizacao` e `NFE_GerarXml` aceitam os campos da NT 2026.005 v1.00, validados pelo Pacote de Liberação 010h:
+
+| Campo | Onde | Quando informar |
+|---|---|---|
+| `tpRegimeIBSCBS` (C21a) | `emit` | `1`: optante do Simples (CRT 1 ou 2) no regime regular do IBS/CBS. `2`, `3` ou `4`: CRT 3 com opção pelo Simples pendente |
+| `cAtivSN` (I17d) | `det[].prod` | Em todos os itens de optantes do Simples (CRT 1 ou 2) e de CRT 3 com `tpRegimeIBSCBS` 2, 3 ou 4 |
+| `gTribSN` (UB115a) | `det[].imposto.IBSCBS` | Só fora do regime regular. CRT 1, ou `tpRegimeIBSCBS` 2: `gIBSSN` e `gCBSSN`. CRT 2, ou `tpRegimeIBSCBS` 3: só `gCBSSN`. Não informar com CST 620 (monofásico) |
+| `gTribSN` (W59h) | `total.IBSCBSTot` | Sempre que algum item tiver `gTribSN`, com a soma dos `vIBSSN` e `vCBSSN` dos itens |
+
+```typescript
+emit: { /* ... */ IE: '9012345678', CRT: 1 },
+det: [{
+    prod: { /* ... */ indTot: 1, cAtivSN: '01' },
+    imposto: {
+        /* ICMS, PIS, COFINS ... */
+        IBSCBS: {
+            CST: '000',
+            cClassTrib: '000001',
+            gTribSN: {
+                gIBSSN: { pIBSSN: '2.0000', vIBSSN: '2.00' },
+                gCBSSN: { pCBSSN: '5.0000', vCBSSN: '5.00' },
+            },
+        },
+    },
+}],
+total: {
+    ICMSTot: { /* ... */ },
+    IBSCBSTot: { vBCIBSCBS: '100.00', gTribSN: { vIBSSN: '2.00', vCBSSN: '5.00' } },
+},
+```
+
+> O XML é gerado na ordem das chaves do objeto, mas a lib move esses quatro campos para a posição do leiaute. Dá para acrescentá-los no fim de um objeto que já existe.
+
+O evento **412140 – Tributação do Simples Nacional** é gerado pelo fisco e chega pela consulta por chave e pela Distribuição DF-e (arquivo `{chave}-event-412140-{nsu}`). O tipo `DetEventoTributacaoSimplesNacional` descreve o `detEvento` desse retorno.
+
 ### NFE_ConsultaCadastro — Consulta Cadastro de Contribuintes (CNPJ/CPF/IE)
 
 Consulta os dados cadastrais de um contribuinte (razão social, situação cadastral, IE, endereço, indicadores de credenciamento em NF-e/CT-e, etc.) diretamente no webservice `CadConsultaCadastro4` da SEFAZ, informando CNPJ, CPF ou Inscrição Estadual:
