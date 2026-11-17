@@ -21,7 +21,7 @@ import { GenericObject, LayoutNFe, NFe, NFeGerarXmlResponse, ProtNFe } from '@nf
 import { format } from 'date-fns';
 import { GerarConsultaImpl, NFEAutorizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
 import { NFERetornoAutorizacaoService } from '../NFERetornoAutorizacao/NFERetornoAutorizacaoService.js';
-import { logger } from '@nfewizard/shared';
+import { logger, formatarGrupoPgtoVinc } from '@nfewizard/shared';
 import { Agent } from 'http';
 import { generateQRCodeURLOffline, generateQRCodeURLOnline } from './util/NFEQRCode.js';
 
@@ -451,6 +451,8 @@ export class NFEAutorizacaoService extends BaseNFE implements NFEAutorizacaoServ
                     )
                 }
             }
+
+            formatarGrupoPgtoVinc(NFe.infNFe);
 
             // Caso Seja hambiente de homologação
             if (NFe.infNFe.dest) {

@@ -35,3 +35,4 @@ export type {
     SchemaValidationIssue,
     SchemaValidationResult,
 } from './validateSchema.js';
+export { formatarGrupoPgtoVinc, formatarDetEventoVinculacaoPagamento } from './vinculacaoPagamento.js';

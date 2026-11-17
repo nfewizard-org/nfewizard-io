@@ -127,6 +127,11 @@ export type InfNFe = {
      */
     infIntermed?: InfIntermed;
     /**
+     * @param {gPgtoVinc} gPgtoVinc - Informações da Vinculação com a Transação de Pagamento (split payment) - [YC01] (NT 2026.006)
+     * Informar quando a transação de pagamento for iniciada antes da emissão do DF-e, como um boleto ou um QR Code Pix dinâmico gerado antes da nota.
+     */
+    gPgtoVinc?: gPgtoVinc;
+    /**
      * @param {InfAdic} infAdic - Grupo do Intermediador da Transação	
      */
     infAdic?: InfAdic;
@@ -5727,6 +5732,51 @@ export type InfIntermed = {
      */
     idCadIntTran: string;
 }
+
+/**
+ * [gPgtoVinc]
+ * Informações da Vinculação com a Transação de Pagamento do DF-e (split payment) - [YC01] (NT 2026.006)
+ * Não substitui os grupos pag (YA) e infIntermed (YB). Em 2026 o preenchimento não é exigido em produção.
+ */
+export type gPgtoVinc = {
+    /**
+     * @param {gPgto | gPgto[]} gPgto - Dados de cada pagamento previsto para o DF-e (1 a 99 ocorrências) - [YC02]
+     * O schema rejeita nPag ou idTransacao repetidos (rejeição 215).
+     */
+    gPgto: gPgto | gPgto[];
+};
+
+/**
+ * [gPgto]
+ * Dados de um pagamento previsto para o DF-e - [YC02] (NT 2026.006)
+ * nPag e idTransacao são atributos de gPgto no XML: informe-os como campos comuns que a lib os grava como atributos.
+ */
+export type gPgto = {
+    /**
+     * @param {number | string} nPag - Numerador único da ocorrência de pagamento, de 1 a 990 - [YC03]
+     */
+    nPag: number | string;
+    /**
+     * @param {string} idTransacao - Identificador da transação financeira, conforme a transação de pagamento (2 a 35 caracteres) - [YC04]
+     */
+    idTransacao: string;
+    /**
+     * @param {string} tpMeioPgto - Código do meio de pagamento, com 2 dígitos - [YC05]
+     * Tabela Nacional de Códigos de Meios de Pagamento (Informe Técnico 2026.001 dos DF-e):
+     * 15=Boleto; 17=Pix QRCode; 18=TED; 20=Pix chave ou QRCode estático; 23=Pix automático; 24=TEF/booktransfer.
+     * Código fora da tabela gera a rejeição 1273.
+     */
+    tpMeioPgto: string;
+    /**
+     * @param {string} CNPJReceb - CNPJ completo do recebedor do pagamento (fornecedor, plataforma ou outra entidade que receba o pagamento do adquirente) - [YC06]
+     * Pode ser diferente do CNPJ do emitente. CNPJ inválido gera a rejeição 1274.
+     */
+    CNPJReceb: string;
+    /**
+     * @param {string} CNPJBasePSP - CNPJ base (8 posições) da instituição financeira ou de pagamento usada pelo recebedor - [YC07]
+     */
+    CNPJBasePSP: string;
+};
 
 /**
  * [infAdic] 

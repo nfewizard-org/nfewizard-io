@@ -16,13 +16,17 @@
  */
 
 import { NFeWizardProps } from '@nfewizard/types/shared';
-import { Cancelamento } from '@nfewizard/types/nfe';
+import { Cancelamento, CancelamentoEvento, VinculacaoPagamento } from '@nfewizard/types/nfe';
 import { Environment, Utility, XmlBuilder, GerarConsulta, SaveFiles, logger } from '@nfewizard/shared';
 import { AxiosInstance } from 'axios';
 import { NFCEAutorizacaoService } from './services/NFCEAutorizacao/NFCEAutorizacaoService.js';
 import { NFCECancelamentoService } from './services/NFCERecepcaoEvento/NFCECancelamentoService.js';
 import { NFCEAutorizacao } from './operations/NFCEAutorizacao/NFCEAutorizacao.js';
 import { NFCECancelamento } from './operations/NFCERecepcaoEvento/NFCECancelamento.js';
+import { NFCEVinculacaoPagamentoService } from './services/NFCERecepcaoEvento/NFCEVinculacaoPagamentoService.js';
+import { NFCEVinculacaoPagamento } from './operations/NFCERecepcaoEvento/NFCEVinculacaoPagamento.js';
+import { NFCECancelamentoEventoService } from './services/NFCERecepcaoEvento/NFCECancelamentoEventoService.js';
+import { NFCECancelamentoEvento } from './operations/NFCERecepcaoEvento/NFCECancelamentoEvento.js';
 
 /**
  * Classe principal para operações NFCe
@@ -182,6 +186,76 @@ export class NFCEWizard {
         } catch (error: any) {
             logger.error(``, error, { context: 'NFCE_Cancelamento' });
             throw new Error(`NFCE_Cancelamento: ${error.message}`);
+        }
+    }
+
+    /**
+     * Vinculação Pagamento (110300, NT 2026.006): vincula uma transação de pagamento
+     * (split payment) a uma NFCe autorizada
+     * @param evento - Dados do evento de vinculação
+     * @returns Resultado do evento
+     */
+    async NFCE_VinculacaoPagamento(evento: VinculacaoPagamento): Promise<any> {
+        try {
+            const eventoComModelo = {
+                ...evento,
+                modelo: '65'
+            };
+
+            const nfceVinculacaoPagamentoService = new NFCEVinculacaoPagamentoService(
+                this.environment,
+                this.utility,
+                this.xmlBuilder,
+                this.axios,
+                this.saveFiles,
+                this.gerarConsulta
+            );
+            const nfceVinculacaoPagamento = new NFCEVinculacaoPagamento(nfceVinculacaoPagamentoService);
+            const response = await nfceVinculacaoPagamento.Exec(eventoComModelo);
+
+            console.log('Retorno NFCE_VinculacaoPagamento');
+            console.table(response.xMotivos);
+            console.log('===================================');
+
+            return response;
+        } catch (error: any) {
+            logger.error(``, error, { context: 'NFCE_VinculacaoPagamento' });
+            throw new Error(`NFCE_VinculacaoPagamento: ${error.message}`);
+        }
+    }
+
+    /**
+     * Cancelamento de Evento (110001, NT 2025.002): cancela um evento autorizado,
+     * como a Vinculação Pagamento
+     * @param evento - Dados do evento de cancelamento
+     * @returns Resultado do evento
+     */
+    async NFCE_CancelamentoEvento(evento: CancelamentoEvento): Promise<any> {
+        try {
+            const eventoComModelo = {
+                ...evento,
+                modelo: '65'
+            };
+
+            const nfceCancelamentoEventoService = new NFCECancelamentoEventoService(
+                this.environment,
+                this.utility,
+                this.xmlBuilder,
+                this.axios,
+                this.saveFiles,
+                this.gerarConsulta
+            );
+            const nfceCancelamentoEvento = new NFCECancelamentoEvento(nfceCancelamentoEventoService);
+            const response = await nfceCancelamentoEvento.Exec(eventoComModelo);
+
+            console.log('Retorno NFCE_CancelamentoEvento');
+            console.table(response.xMotivos);
+            console.log('===================================');
+
+            return response;
+        } catch (error: any) {
+            logger.error(``, error, { context: 'NFCE_CancelamentoEvento' });
+            throw new Error(`NFCE_CancelamentoEvento: ${error.message}`);
         }
     }
 

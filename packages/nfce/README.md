@@ -134,6 +134,61 @@ const resultadoCancelamento = await nfceWizard.NFCE_Cancelamento(eventoCancelame
 console.log(resultadoCancelamento);
 ```
 
+## Vinculação com a Transação de Pagamento (NT 2026.006)
+
+Quando o pagamento começa antes da emissão (boleto ou QR Code Pix dinâmico), informe o grupo `gPgtoVinc` no `infNFe`, como na NF-e. A lib grava `nPag` e `idTransacao` como atributos e coloca o grupo entre `infIntermed` e `infAdic`. Para vincular uma transação a uma NFC-e já autorizada, use o evento 110300; para cancelá-lo, o evento genérico 110001:
+
+```typescript
+import type { VinculacaoPagamento, CancelamentoEvento } from '@nfewizard/nfce';
+
+// 110300 – Vinculação Pagamento: um gPgto por evento, sem nPag
+const vinculacao: VinculacaoPagamento = {
+    idLote: Date.now(),
+    evento: [{
+        cOrgao: 35,
+        tpAmb: 2,
+        CNPJ: '99999999999999',
+        chNFe: '35000000000000000000000000000000000000000001',
+        dhEvento: new Date().toISOString(),
+        tpEvento: '110300',
+        nSeqEvento: 1,
+        verEvento: '1.00',
+        detEvento: {
+            descEvento: 'Vinculação Pagamento',
+            cOrgaoAutor: 35,
+            tpAutor: 1,
+            verAplic: '1.0.0',
+            nProt: '135000000000000',
+            gPgto: { idTransacao: 'PIX-0001', tpMeioPgto: '17', CNPJReceb: '99999999999999', CNPJBasePSP: '99999999' }
+        }
+    }]
+};
+await nfceWizard.NFCE_VinculacaoPagamento(vinculacao);
+
+// 110001 – Cancelamento de Evento: mesmo nSeqEvento e protocolo do evento cancelado
+const cancelamentoEvento: CancelamentoEvento = {
+    idLote: Date.now(),
+    evento: [{
+        cOrgao: 35,
+        tpAmb: 2,
+        CNPJ: '99999999999999',
+        chNFe: '35000000000000000000000000000000000000000001',
+        dhEvento: new Date().toISOString(),
+        tpEvento: '110001',
+        nSeqEvento: 1,
+        verEvento: '1.00',
+        detEvento: {
+            descEvento: 'Cancelamento de Evento',
+            cOrgaoAutor: 35,
+            verAplic: '1.0.0',
+            tpEventoAut: '110300',
+            nProtEvento: '135000000000001'
+        }
+    }]
+};
+await nfceWizard.NFCE_CancelamentoEvento(cancelamentoEvento);
+```
+
 ## Fluxo de Contingência Offline (tpEmis=9)
 
 No caso de queda de internet ou indisponibilidade técnica, a NFC-e pode ser emitida em contingência off-line com `tpEmis=9`.

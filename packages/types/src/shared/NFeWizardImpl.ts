@@ -37,7 +37,9 @@ import {
     NFeGerarXmlResponse,
     OperacaoNaoRealizada,
     ProtNFe,
-    EmailParams
+    EmailParams,
+    VinculacaoPagamento,
+    CancelamentoEvento
 } from '../nfe/index.js';
 
 /**
@@ -96,6 +98,8 @@ export interface NFeWizardImpl {
     NFE_OperacaoNaoRealizada(evento: OperacaoNaoRealizada): Promise<GenericObject[]>;
     NFE_CartaDeCorrecao(evento: CartaDeCorrecao): Promise<GenericObject[]>;
     NFE_DesconhecimentoDaOperacao(evento: DesconhecimentoDaOperacao): Promise<GenericObject[]>;
+    NFE_VinculacaoPagamento(evento: VinculacaoPagamento): Promise<GenericObject[]>;
+    NFE_CancelamentoEvento(evento: CancelamentoEvento): Promise<GenericObject[]>;
     NFE_DistribuicaoDFe(data: ConsultaNFe): Promise<GenericObject>;
     NFE_DistribuicaoDFePorUltNSU(data: DFePorUltimoNSU): Promise<GenericObject>;
     NFE_DistribuicaoDFePorNSU(data: DFePorNSU): Promise<GenericObject>;

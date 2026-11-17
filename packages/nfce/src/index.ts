@@ -23,12 +23,16 @@ export { NFCEWizard as default } from './NFCEWizard.js';
 export { NFCEAutorizacao } from './operations/NFCEAutorizacao/NFCEAutorizacao.js';
 export { NFCERetornoAutorizacao } from './operations/NFCERetornoAutorizacao/NFCERetornoAutorizacao.js';
 export { NFCECancelamento } from './operations/NFCERecepcaoEvento/NFCECancelamento.js';
+export { NFCEVinculacaoPagamento } from './operations/NFCERecepcaoEvento/NFCEVinculacaoPagamento.js';
+export { NFCECancelamentoEvento } from './operations/NFCERecepcaoEvento/NFCECancelamentoEvento.js';
 
 // NFCe Services
 export { NFCEAutorizacaoService } from './services/NFCEAutorizacao/NFCEAutorizacaoService.js';
 export { NFCERetornoAutorizacaoService } from './services/NFCERetornoAutorizacao/NFCERetornoAutorizacaoService.js';
 export { NFCECancelamentoService } from './services/NFCERecepcaoEvento/NFCECancelamentoService.js';
 export { NFCERecepcaoEventoService } from './services/NFCERecepcaoEvento/NFCERecepcaoEventoService.js';
+export { NFCEVinculacaoPagamentoService } from './services/NFCERecepcaoEvento/NFCEVinculacaoPagamentoService.js';
+export { NFCECancelamentoEventoService } from './services/NFCERecepcaoEvento/NFCECancelamentoEventoService.js';
 
 // NFCe Utilities
 export { generateQRCodeURLOnline, generateQRCodeURLOffline } from './services/NFCEAutorizacao/util/NFCEQRCode.js';

@@ -18,6 +18,7 @@ import { AxiosInstance, AxiosResponse } from 'axios';
 import { XmlParser, Environment, Utility, XmlBuilder, ValidaCPFCNPJ, BaseNFE, mountCOFINS, mountICMS, mountPIS, logger } from '@nfewizard/shared';
 import { GenericObject, LayoutNFe, NFe, ProtNFe } from '@nfewizard/types/nfe';
 import { GerarConsultaImpl, NFCEAutorizacaoServiceImpl, SaveFilesImpl } from '@nfewizard/types/shared';
+import { formatarGrupoPgtoVinc } from '@nfewizard/shared';
 import { format } from 'date-fns';
 import { generateQRCodeURLOffline, generateQRCodeURLOnline } from './util/NFCEQRCode.js';
 import xml2js, { Builder } from 'xml2js';
@@ -394,6 +395,8 @@ class NFCEAutorizacaoService extends BaseNFE implements NFCEAutorizacaoServiceIm
                     )
                 }
             }
+
+            formatarGrupoPgtoVinc(NFe.infNFe);
 
             const { nfe: { idCSC, tokenCSC } } = this.environment.getConfig();
 

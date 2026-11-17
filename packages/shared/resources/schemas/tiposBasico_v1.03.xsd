@@ -95,6 +95,15 @@
 			<xs:pattern value="[0-9]{3}"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="TCnpjBase">
+		<xs:annotation>
+			<xs:documentation>Tipo CNPJ Base</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:pattern value="[A-Z0-9]{8}"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="TCnpj">
 		<xs:annotation>
 			<xs:documentation>Tipo Número do CNPJ</xs:documentation>

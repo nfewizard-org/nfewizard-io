@@ -76,6 +76,8 @@ export { NFEConfirmacaoDaOperacao } from './nfe/operations/NFERecepcaoEvento/NFE
 export { NFEDesconhecimentoDaOperacao } from './nfe/operations/NFERecepcaoEvento/NFEDesconhecimentoDaOperacao.js';
 export { NFEOperacaoNaoRealizada } from './nfe/operations/NFERecepcaoEvento/NFEOperacaoNaoRealizada.js';
 export { NFEEpec } from './nfe/operations/NFERecepcaoEvento/NFEEpec.js';
+export { NFEVinculacaoPagamento } from './nfe/operations/NFERecepcaoEvento/NFEVinculacaoPagamento.js';
+export { NFECancelamentoEvento } from './nfe/operations/NFERecepcaoEvento/NFECancelamentoEvento.js';
 
 // Export main NFeWizard adapter
 export { NFeWizard } from './NFeWizard.js';

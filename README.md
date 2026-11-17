@@ -304,6 +304,10 @@ console.log(retorno.xMotivo);
   - Retorna `xmlEnviNFe` (envelope completo) e `nfes[]` com `chNFe` e `xmlAssinado` de cada nota do lote.
   - Não valida o schema, não chama o webservice e não grava arquivos. Para validar, use `NFE_SchemaValidate`.
   - Para transmitir depois, passe o `xmlEnviNFe` para `NFE_Autorizacao` ou `NFE_TransmitirContingencia`: a chave de acesso é preservada.
+- **NT 2026.006 v1.01 — Vinculação com a Transação de Pagamento (split payment)** (`nfewizard-io` e `@nfewizard/nfce`):
+  - Novo grupo `gPgtoVinc` na emissão da NF-e e da NFC-e, validado pelo Pacote de Liberação 010h. A lib grava `nPag` e `idTransacao` como atributos e coloca o grupo na posição do leiaute.
+  - Evento 110300 – Vinculação Pagamento: `NFE_VinculacaoPagamento` e `NFCE_VinculacaoPagamento`.
+  - Cancelamento pelo evento genérico 110001: `NFE_CancelamentoEvento` e `NFCE_CancelamentoEvento`.
 
 ## Observações
 

@@ -15,7 +15,7 @@
  * along with NFeWizard-io. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export type TipoEvento = EventoCienciaDaOperacao | EventoCartaDeCorrecao | EventoCancelamento | EventoConfirmacaoDaOperacao | EventoEPEC | EventoOperacaoNaoRealizada | EventoDesconhecimentoDaOperacao
+export type TipoEvento = EventoCienciaDaOperacao | EventoCartaDeCorrecao | EventoCancelamento | EventoConfirmacaoDaOperacao | EventoEPEC | EventoOperacaoNaoRealizada | EventoDesconhecimentoDaOperacao | EventoVinculacaoPagamento | EventoCancelamentoEvento
 
 export interface EventoNFe {
     /**
@@ -599,4 +599,203 @@ export interface DesconhecimentoDaOperacao {
      * @param {EventoDesconhecimentoDaOperacao} evento - Máximo de 20 eventos por lote
      */
     evento: EventoDesconhecimentoDaOperacao[]
+}
+
+/**
+ * Pagamento informado no evento Vinculação Pagamento (110300) - NT 2026.006.
+ * idTransacao é atributo de gPgto no XML: informe-o como campo comum que a lib o grava como atributo.
+ * Diferente do grupo gPgtoVinc da nota, o evento não tem nPag.
+ */
+export interface PagamentoVinculadoNFe {
+    /**
+     * @param {string} idTransacao - Identificador da transação financeira, conforme a transação de pagamento (2 a 35 caracteres)
+     */
+    idTransacao: string;
+    /**
+     * @param {string} tpMeioPgto - Código do meio de pagamento, com 2 dígitos (Informe Técnico 2026.001 dos DF-e):
+     * 15=Boleto; 17=Pix QRCode; 18=TED; 20=Pix chave ou QRCode estático; 23=Pix automático; 24=TEF/booktransfer.
+     * Código fora da tabela gera a rejeição 1273.
+     */
+    tpMeioPgto: string;
+    /**
+     * @param {string} CNPJReceb - CNPJ completo do recebedor do pagamento (fornecedor, plataforma ou outra entidade que receba o pagamento do adquirente)
+     * CNPJ inválido gera a rejeição 1274.
+     */
+    CNPJReceb: string;
+    /**
+     * @param {string} CNPJBasePSP - CNPJ base (8 posições) da instituição financeira ou de pagamento usada pelo recebedor
+     */
+    CNPJBasePSP: string;
+}
+
+/**
+ * Vinculação Pagamento (110300) - NT 2026.006
+ * Vincula a uma NF-e/NFC-e já autorizada uma transação de pagamento sujeita ao split payment.
+ * Cada evento leva um único gPgto: para vincular outra transação, envie outro evento com o próximo nSeqEvento.
+ */
+interface EventoVinculacaoPagamento {
+    /**
+     * @param {number} cOrgao - Código da UF do emitente. O evento é enviado à SEFAZ autorizadora.
+     */
+    cOrgao: number;
+    /**
+     * @param {number} tpAmb - Identificação do Ambiente: 1- Produção; 2- Homologação;
+     */
+    tpAmb: number;
+    /**
+     * @param {string} CNPJ - CNPJ do emitente (autor do evento)
+     */
+    CNPJ?: string;
+    /**
+     * @param {string} CPF - CPF do emitente (autor do evento)
+     */
+    CPF?: string;
+    /**
+     * @param {string} chNFe - Chave de Acesso da NF-e à qual o evento será vinculado
+     */
+    chNFe: string;
+    /**
+     * @param {string} dhEvento - Data e hora do evento no formato AAAA-MM-DD-Thh:mm:ssTZD (UTC – Universal Coordinated Time)
+     */
+    dhEvento: string;
+    /**
+     * @param {string} tpEvento - 110300 Vinculação Pagamento
+     */
+    tpEvento: '110300';
+    /**
+     * @param {number} nSeqEvento - Sequencial do evento para o mesmo tipo de evento: 1 na primeira vinculação e o próximo número a cada nova transação.
+     */
+    nSeqEvento: number;
+    /**
+     * @param {string} verEvento - Versão do grupo de detalhe do evento ("1.00").
+     */
+    verEvento: string;
+    /**
+     * @param {any} detEvento - Detalhes do evento (schema e110300_v1.00.xsd).
+     */
+    detEvento: {
+        /**
+         * @param {string} descEvento - "Vinculação Pagamento" ou "Vinculacao Pagamento"
+         */
+        descEvento: 'Vinculação Pagamento' | 'Vinculacao Pagamento';
+        /**
+         * @param {number} cOrgaoAutor - Código da UF do emitente
+         */
+        cOrgaoAutor: number;
+        /**
+         * @param {number} tpAutor - Informar 1=Empresa Emitente. Outro valor gera a rejeição 466.
+         */
+        tpAutor: 1;
+        /**
+         * @param {string} verAplic - Versão do aplicativo do autor do evento
+         */
+        verAplic: string;
+        /**
+         * @param {string} nProt - Número do protocolo de autorização da NF-e/NFC-e
+         */
+        nProt: string;
+        /**
+         * @param {PagamentoVinculadoNFe} gPgto - Dados da transação de pagamento vinculada
+         */
+        gPgto: PagamentoVinculadoNFe;
+    };
+}
+
+export interface VinculacaoPagamento {
+    /**
+     * @param {number} idLote - Identificador de controle do Lote de envio do Evento. Número sequencial único para identificação do Lote, de uso exclusivo do autor do evento. O Web Service não faz qualquer uso deste identificador.
+     */
+    idLote: number;
+    /**
+     * @param {'55' | '65'} modelo - Modelo do documento (NFE_VinculacaoPagamento usa 55 quando omitido; NFCE_VinculacaoPagamento sempre usa 65)
+     */
+    modelo?: '55' | '65';
+    /**
+     * @param {EventoVinculacaoPagamento} evento - Máximo de 20 eventos por lote
+     */
+    evento: EventoVinculacaoPagamento[]
+}
+
+/**
+ * Cancelamento de Evento (110001) - NT 2025.002 (RTC)
+ * Evento genérico que cancela um evento autorizado, como a Vinculação Pagamento (110300).
+ * O autor tem de ser o mesmo do evento cancelado.
+ */
+interface EventoCancelamentoEvento {
+    /**
+     * @param {number} cOrgao - Código da UF do autor do evento
+     */
+    cOrgao: number;
+    /**
+     * @param {number} tpAmb - Identificação do Ambiente: 1- Produção; 2- Homologação;
+     */
+    tpAmb: number;
+    /**
+     * @param {string} CNPJ - CNPJ do autor do evento (o mesmo do evento cancelado; se divergir, rejeição 1113)
+     */
+    CNPJ?: string;
+    /**
+     * @param {string} CPF - CPF do autor do evento (o mesmo do evento cancelado; se divergir, rejeição 1113)
+     */
+    CPF?: string;
+    /**
+     * @param {string} chNFe - Chave de Acesso da NF-e do evento a ser cancelado
+     */
+    chNFe: string;
+    /**
+     * @param {string} dhEvento - Data e hora do evento no formato AAAA-MM-DD-Thh:mm:ssTZD (UTC – Universal Coordinated Time)
+     */
+    dhEvento: string;
+    /**
+     * @param {string} tpEvento - 110001 Cancelamento de Evento
+     */
+    tpEvento: '110001';
+    /**
+     * @param {number} nSeqEvento - Informar o nSeqEvento do evento a ser cancelado
+     */
+    nSeqEvento: number;
+    /**
+     * @param {string} verEvento - Versão do grupo de detalhe do evento ("1.00").
+     */
+    verEvento: string;
+    /**
+     * @param {any} detEvento - Detalhes do evento (schema e110001_v1.00.xsd).
+     */
+    detEvento: {
+        /**
+         * @param {string} descEvento - "Cancelamento de Evento"
+         */
+        descEvento: 'Cancelamento de Evento';
+        /**
+         * @param {number} cOrgaoAutor - Código da UF do autor, o mesmo do evento cancelado (se divergir, rejeição 1178)
+         */
+        cOrgaoAutor: number;
+        /**
+         * @param {string} verAplic - Versão do aplicativo do autor do evento
+         */
+        verAplic: string;
+        /**
+         * @param {string} tpEventoAut - Código do evento autorizado a ser cancelado, como "110300"
+         */
+        tpEventoAut: string;
+        /**
+         * @param {string} nProtEvento - Número do protocolo de autorização do evento a ser cancelado
+         */
+        nProtEvento: string;
+    };
+}
+
+export interface CancelamentoEvento {
+    /**
+     * @param {number} idLote - Identificador de controle do Lote de envio do Evento. Número sequencial único para identificação do Lote, de uso exclusivo do autor do evento. O Web Service não faz qualquer uso deste identificador.
+     */
+    idLote: number;
+    /**
+     * @param {'55' | '65'} modelo - Modelo do documento (NFE_CancelamentoEvento usa 55 quando omitido; NFCE_CancelamentoEvento sempre usa 65)
+     */
+    modelo?: '55' | '65';
+    /**
+     * @param {EventoCancelamentoEvento} evento - Máximo de 20 eventos por lote
+     */
+    evento: EventoCancelamentoEvento[]
 }

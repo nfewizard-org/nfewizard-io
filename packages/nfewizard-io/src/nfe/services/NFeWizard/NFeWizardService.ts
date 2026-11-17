@@ -39,9 +39,12 @@ import { NFEDistribuicaoDFePorUltNSU } from '../../operations/NFEDistribuicaoDFe
 import { NFEInutilizacao } from '../../operations/NFEInutilizacao/NFEInutilizacao.js';
 import { NFECartaDeCorrecao } from '../../operations/NFERecepcaoEvento/NFECartaDeCorrecao.js';
 import { NFEDesconhecimentoDaOperacao } from '../../operations/NFERecepcaoEvento/NFEDesconhecimentoDaOperacao.js';
+import { NFEVinculacaoPagamento } from '../../operations/NFERecepcaoEvento/NFEVinculacaoPagamento.js';
+import { NFECancelamentoEvento } from '../../operations/NFERecepcaoEvento/NFECancelamentoEvento.js';
 import { NFEAutorizacaoService } from '../NFEAutorizacao/NFEAutorizacaoService.js';
 import {
     Cancelamento,
+    CancelamentoEvento,
     CartaDeCorrecao,
     CienciaDaOperacao,
     ConfirmacaoDaOperacao,
@@ -56,7 +59,8 @@ import {
     EventoNFe,
     InutilizacaoData,
     NFe,
-    OperacaoNaoRealizada
+    OperacaoNaoRealizada,
+    VinculacaoPagamento
 } from '@nfewizard/types/nfe';
 import { NFeWizardProps } from '@nfewizard/types/shared';
 import { NFEconsultaProtocoloService } from '../NFEConsultaProtocolo/NFEconsultaProtocoloService.js';
@@ -71,6 +75,8 @@ import { NFECienciaDaOperacaoService } from '../NFERecepcaoEvento/NFECienciaDaOp
 import { NFEDesconhecimentoDaOperacaoService } from '../NFERecepcaoEvento/NFEDesconhecimentoDaOperacaoService.js';
 import { NFEEpecService } from '../NFERecepcaoEvento/NFEEpecService.js';
 import { NFEOperacaoNaoRealizadaService } from '../NFERecepcaoEvento/NFEOperacaoNaoRealizadaService.js';
+import { NFEVinculacaoPagamentoService } from '../NFERecepcaoEvento/NFEVinculacaoPagamentoService.js';
+import { NFECancelamentoEventoService } from '../NFERecepcaoEvento/NFECancelamentoEventoService.js';
 import { NFEAutorizacao } from '../../operations/NFEAutorizacao/NFEAutorizacao.js';
 import { NFEDistribuicaoDFeService } from '../NFEDistribuicaoDFe/NFEDistribuicaoDFeService.js';
 import { NFEDistribuicaoDFePorUltNSUService } from '../NFEDistribuicaoDFe/NFEDistribuicaoDFePorUltNSU.js';
@@ -328,6 +334,38 @@ class NFeWizardService implements NFeWizardServiceImpl {
         } catch (error: any) {
             logger.error(``, error, { context: 'NFE_DesconhecimentoDaOperacao', });
             throw new Error(`NFE_DesconhecimentoDaOperacao: ${error.message}`)
+        }
+    }
+    async NFE_VinculacaoPagamento(evento: VinculacaoPagamento) {
+        try {
+            const nfeVinculacaoPagamentoService = new NFEVinculacaoPagamentoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const nfeVinculacaoPagamento = new NFEVinculacaoPagamento(nfeVinculacaoPagamentoService);
+            const response = await nfeVinculacaoPagamento.Exec(evento);
+
+            console.log('Retorno NFE_VinculacaoPagamento');
+            console.table(response.xMotivos);
+            console.log('===================================');
+
+            return response.response
+        } catch (error: any) {
+            logger.error(``, error, { context: 'NFE_VinculacaoPagamento', });
+            throw new Error(`NFE_VinculacaoPagamento: ${error.message}`)
+        }
+    }
+    async NFE_CancelamentoEvento(evento: CancelamentoEvento) {
+        try {
+            const nfeCancelamentoEventoService = new NFECancelamentoEventoService(this.environment, this.utility, this.xmlBuilder, this.axios, this.saveFiles, this.gerarConsulta);
+            const nfeCancelamentoEvento = new NFECancelamentoEvento(nfeCancelamentoEventoService);
+            const response = await nfeCancelamentoEvento.Exec(evento);
+
+            console.log('Retorno NFE_CancelamentoEvento');
+            console.table(response.xMotivos);
+            console.log('===================================');
+
+            return response.response
+        } catch (error: any) {
+            logger.error(``, error, { context: 'NFE_CancelamentoEvento', });
+            throw new Error(`NFE_CancelamentoEvento: ${error.message}`)
         }
     }
 
